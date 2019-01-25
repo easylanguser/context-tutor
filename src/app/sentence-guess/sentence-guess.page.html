@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-back-button></ion-back-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <p id="lesson-progress">
+    {{sentenceIndex}} of {{lessonLength}}
+  </p>
+  <p id="sentence-to-show">
+    {{sentenceIndex}}. {{sentenceToShow}}
+  </p>
+  <div id="characters-row-guessed">
+    <div id="first-letter-guessed">
+      {{firstCharacter}}
+    </div>
+    <div id="second-letter-guessed">
+      {{secondCharacter}}
+    </div>
+    <div id="third-letter-guessed">
+      {{thirdCharacter}}
+    </div>
+  </div>
+  <div id="lines">
+    <div id="first-letter-line"></div>
+    <div id="second-letter-line"></div>
+    <div id="third-letter-line"></div>
+  </div>
+  <div id="characters-row">
+    <span id="first-letter">
+      {{firstCharacter}}
+    </span>
+    <span id="second-letter">
+      {{secondCharacter}}
+    </span>
+    <span id="third-letter">
+      {{thirdCharacter}}
+    </span>
+  </div>
+</ion-content>

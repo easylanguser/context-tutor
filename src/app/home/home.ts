@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { AlertController, NavController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { LessonsListService } from '../lessons-list.service';
 import { Router } from '@angular/router';
@@ -10,12 +9,13 @@ import { Router } from '@angular/router';
 	styleUrls: ['home.scss']
 })
 
-export class HomePage {
+export class HomePage implements OnInit {
 
-	private lessons: any;
+	public lessons: any;
 
-	private constructor(private alertCtrl: AlertController,
-		private api: LessonsListService, private loadingController: LoadingController,
+	constructor(
+		private api: LessonsListService,
+		private loadingController: LoadingController,
 		private router: Router) { }
 
 	ngOnInit() {
