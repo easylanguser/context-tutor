@@ -1,0 +1,19 @@
+.toolbar-background {
+	background-color: #C0C0C0;
+}
+
+.lesson-card {
+	background-color: #FFF;
+	border-radius: 6px;
+	padding: 4px;
+	margin: 8px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.16), 0 2px 4px rgba(0,0,0,0.23);
+	cursor: pointer;
+	text-align: center;
+}
+
+.lesson-name {
+	width: 100%;
+	font-size: 24px;
+	font-weight: bold;
+}

@@ -1,0 +1,13 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-back-button></ion-back-button>
+	</ion-toolbar>
+</ion-header>
+<ion-content padding>
+	<div class="sentence-with-underscore" 
+		*ngFor="let sentence of sentencesToShow; index as i" 
+		[ngClass]="{'selected-color' : i===selectedIndex}"
+		(click)="changeHighlight(i)">
+		{{i+1}}. {{sentence}}
+	</div>
+</ion-content>
