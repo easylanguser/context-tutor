@@ -1,0 +1,102 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
+import { UtilsService } from '../utils.service';
+import { LessonByNameService } from '../lesson-by-name.service';
+
+@Component({
+	selector: 'app-sentence-guess',
+	templateUrl: './sentence-guess.page.html',
+	styleUrls: ['./sentence-guess.page.scss'],
+	host: {
+		'(document:keypress)': 'handleKeyboardEvent($event)'
+	}
+})
+
+export class SentenceGuessPage implements OnInit {
+
+	private hiddenCharacters: Array<string> = [];
+	private sentenceToShow: string;
+	private fullSentence: string;
+	private numberOfGuesses: number = 0;
+	private indexes: Array<number>;
+	private sentenceIndex: number;
+	private lessonLength: number;
+
+	private firstCharacter: string = 'V';
+	private secondCharacter: string = 'D';
+	private thirdCharacter: string = 'L';
+
+	constructor(private api: LessonByNameService,
+		private route: ActivatedRoute,
+		private loadingController: LoadingController,
+		private util: UtilsService) { }
+
+	ngOnInit() {
+		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('first')) + 1;
+		this.getData(this.route.snapshot.queryParamMap.get('lesson'));
+	};
+
+	// Get selected lesson from API
+	private async getData(lessonName) {
+		const loading = await this.loadingController.create({
+			message: 'Loading'
+		});
+		await loading.present();
+		this.api.getData(lessonName)
+			.subscribe(res => {
+				this.processLesson((res[0]).response);
+				loading.dismiss();
+			}, err => {
+				console.log(err);
+				loading.dismiss();
+			});
+	}
+
+	// Get hidden characters of the lesson, their 
+	// indexes and create sentence with underscores
+	private processLesson(lesson: any) {
+		this.lessonLength = lesson.length;
+		this.indexes = lesson[this.sentenceIndex - 1][0].hidenWords;
+		this.fullSentence = lesson[this.sentenceIndex - 1][0].text;
+		this.sentenceToShow = this.util.replaceLettersWithUnderscore(
+			this.fullSentence, this.indexes);
+
+		for (var i = 0; i < this.indexes.length; i++) {
+			this.hiddenCharacters.push(
+				(<string>(this.fullSentence)).charAt(this.indexes[i]))
+		}
+	}
+
+	// Show if lesson if over
+	private async presentLoadingDefault() {
+		const loading = await this.loadingController.create({
+			message: 'Lesson is over'
+		});
+		await loading.present();
+
+		setTimeout(() => {
+			loading.dismiss();
+		}, 1000);
+	}
+
+	// Filling in characters into underscores by keyboard
+	// If input is wrong - replace with sentence with underscores
+	// If lesson is over - show info
+	handleKeyboardEvent(event: KeyboardEvent) {
+		if (this.numberOfGuesses === this.hiddenCharacters.length) {
+			this.presentLoadingDefault();
+			return;
+		}
+		if (event.key === this.hiddenCharacters[this.numberOfGuesses]) {
+			this.sentenceToShow = this.util.showTextWithGuessedCharacter(this.sentenceToShow,
+				this.hiddenCharacters[this.numberOfGuesses],
+				this.indexes[this.numberOfGuesses]);
+			++this.numberOfGuesses;
+		} else {
+			this.sentenceToShow = this.util.showTextWithGuessedCharacter(
+				this.sentenceToShow, "_", this.indexes[0]);
+			this.numberOfGuesses = 0;
+		}
+	}
+}

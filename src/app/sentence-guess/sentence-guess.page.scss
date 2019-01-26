@@ -1,0 +1,127 @@
+ion-content {
+    text-align: center;
+}
+
+#lesson-progress {
+    font-size: 8vmin;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 1vmin;
+}
+
+#sentence-to-show {
+    font-size: 3vmin;
+    font-weight: bold;
+    text-align: start;
+    margin: 0;
+    padding: 0;
+}
+
+#characters-row-guessed {
+    width: 100%; 
+    display: table;
+    margin-top: 1%;
+    -webkit-touch-callout: none; 
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+
+#first-letter-guessed {
+    width: 25%;
+    font-size: 20vw;
+    display: inline-block;
+    letter-spacing: 0.6em;
+    padding-left: 5%;
+}
+
+#second-letter-guessed {
+    width: 25%;
+    font-size: 20vw;
+    display: inline-block;
+    letter-spacing: 0.6em;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-left: 5%;
+}
+
+#third-letter-guessed {
+    width: 25%;
+    font-size: 20vw;
+    display: inline-block;
+    letter-spacing: 0.6em;
+    padding-left: 5%;
+}
+
+#characters-row {
+    width: 100%; 
+    display: table;
+    display: inline-block;
+    margin-top: 5vh;
+    margin-left: 10px;
+    -webkit-touch-callout: none; 
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+            
+}
+
+#first-letter {
+    font-size: 20vw;
+    transform: rotate(-15deg);
+    display: inline-block;
+    position: relative;
+    text-align: left;
+    letter-spacing: 0.4em;
+}
+
+#second-letter {
+    font-size: 20vw;
+    transform: rotate(15deg);
+    display: inline-block;
+    position:relative;
+    text-align: center;
+    letter-spacing: 0.4em;
+}
+
+#third-letter {
+    font-size: 20vw;
+    transform: rotate(5deg);
+    display: inline-block;
+    position:relative;
+    text-align: right;
+    letter-spacing: 0.4em;
+}
+
+#lines {
+    width: 100%;
+    height: 2vh;
+    display: table;
+}
+
+#first-letter-line {
+    width: 25%;
+    height: 1vh;
+    background-color: black;
+    display: inline-block;
+}
+
+#second-letter-line {
+    width: 25%;
+    height: 1vh;
+    background-color: orangered;    
+    display: inline-block;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+#third-letter-line {
+    width: 25%;
+    height: 1vh;
+    background-color: black;
+    display: inline-block;
+}
