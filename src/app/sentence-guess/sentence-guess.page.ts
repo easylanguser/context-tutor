@@ -41,6 +41,22 @@ export class SentenceGuessPage implements OnInit {
 		this.getData(this.route.snapshot.queryParamMap.get('lesson'));
 	};
 
+	previousSentence() {
+		if (this.sentenceIndex === 1) {
+			return;
+		}
+		--this.sentenceIndex;
+		this.getData(this.lessonName);
+	}
+
+	nextSentence() {
+		if (this.sentenceIndex === this.lessonLength) {
+			return;
+		}
+		++this.sentenceIndex;
+		this.getData(this.lessonName);
+	}	
+
 	// Get selected lesson from API
 	private async getData(lesson) {
 		this.lessonName = lesson;

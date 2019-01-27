@@ -5,9 +5,13 @@
 </ion-header>
 
 <ion-content padding>
-  <p id="lesson-progress">
-    {{sentenceIndex}} of {{lessonLength}}
-  </p>
+  <div>
+    <ion-button id="previous-sentence-button" (click)="previousSentence()"><</ion-button>
+    <span id="lesson-progress">
+      {{sentenceIndex}} of {{lessonLength}}
+    </span>
+    <ion-button id="next-sentence-button" (click)="nextSentence()">></ion-button>
+  </div>
   <p id="sentence-to-show">
     {{sentenceIndex}}. {{sentenceToShow}}
   </p>
