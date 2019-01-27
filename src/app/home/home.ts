@@ -38,9 +38,8 @@ export class HomePage implements OnInit {
 			});
 	}
 
-	// Load new page with text  
-	openLesson(lessonNumber) {
-		let name = this.lessons[lessonNumber];
-		this.router.navigate(['lesson-editing', name]);
+	// Load new page with text
+	openLesson(id) {
+        this.router.navigate(['/lesson',id]);
 	}
 }

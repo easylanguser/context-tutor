@@ -38,12 +38,12 @@ export class SentenceGuessPage implements OnInit {
 	};
 
 	// Get selected lesson from API
-	private async getData(lessonName) {
+	private async getData(lessonId) {
 		const loading = await this.loadingController.create({
 			message: 'Loading'
 		});
 		await loading.present();
-		this.api.getData(lessonName)
+		this.api.getData(lessonId)
 			.subscribe(res => {
 				this.processLesson((res[0]).response);
 				loading.dismiss();
@@ -53,7 +53,7 @@ export class SentenceGuessPage implements OnInit {
 			});
 	}
 
-	// Get hidden characters of the lesson, their 
+	// Get hidden characters of the lesson, their
 	// indexes and create sentence with underscores
 	private processLesson(lesson: any) {
 		this.lessonLength = lesson.length;
