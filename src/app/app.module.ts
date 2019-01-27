@@ -13,11 +13,12 @@ import { SentenceGuessPage } from '../app/sentence-guess/sentence-guess.page'
 import { LessonsEditingPage } from '../app/lesson-editing/lessons-editing'
 import { HttpClient }  from '@angular/common/http'
 import { HttpClientModule } from '@angular/common/http'
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [AppComponent, LessonsEditingPage, SentenceGuessPage],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, IonicStorageModule.forRoot()],
   providers: [
     StatusBar,
     SplashScreen,

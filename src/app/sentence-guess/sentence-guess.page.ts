@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { UtilsService } from '../utils.service';
 import { LessonByNameService } from '../lesson-by-name.service';
+import { Storage } from '@ionic/storage';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -15,13 +16,15 @@ import { LessonByNameService } from '../lesson-by-name.service';
 
 export class SentenceGuessPage implements OnInit {
 
-	private hiddenCharacters: Array<string> = [];
+	private hiddenCharacters: string[];
 	private sentenceToShow: string;
 	private fullSentence: string;
 	private numberOfGuesses: number = 0;
-	private indexes: Array<number>;
+	private indexes: number[];
 	private sentenceIndex: number;
 	private lessonLength: number;
+	private lessonName: string;
+	private sentencesWithUnderscores: string;
 
 	private firstCharacter: string = 'V';
 	private secondCharacter: string = 'D';
@@ -30,7 +33,8 @@ export class SentenceGuessPage implements OnInit {
 	constructor(private api: LessonByNameService,
 		private route: ActivatedRoute,
 		private loadingController: LoadingController,
-		private util: UtilsService) { }
+		private util: UtilsService,
+		private storage: Storage) { }
 
 	ngOnInit() {
 		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('first')) + 1;
@@ -38,19 +42,48 @@ export class SentenceGuessPage implements OnInit {
 	};
 
 	// Get selected lesson from API
-	private async getData(lessonName) {
+	private async getData(lesson) {
+		this.lessonName = lesson;
 		const loading = await this.loadingController.create({
 			message: 'Loading'
 		});
 		await loading.present();
-		this.api.getData(lessonName)
-			.subscribe(res => {
-				this.processLesson((res[0]).response);
+		this.storage.get(lesson + 'length').then((length) => {
+			if (length !== null) {
+				this.lessonLength = length;
+				this.storage.get(lesson + 's' + (this.sentenceIndex - 1) + 'idxs')
+					.then((val) => { this.indexes = val })
+				this.storage.get(lesson + 's' + (this.sentenceIndex - 1) + 'textunderscored')
+					.then((val) => { this.sentencesWithUnderscores = val })
+				this.storage.get(this.lessonName + 's' + (this.sentenceIndex - 1) + 'hiddenchars')
+					.then((val) => { this.hiddenCharacters = val })
+				this.storage.get(this.lessonName + 's' + (this.sentenceIndex - 1) + 'guesses')
+					.then((val) => {
+						if (val !== null) {
+							this.numberOfGuesses = val
+						} else {
+							this.numberOfGuesses = 0;
+						}
+						const restoreIndexes = this.indexes.slice(0, this.numberOfGuesses);
+						const restoreCharacters = this.hiddenCharacters.slice(0, this.numberOfGuesses);
+						this.sentenceToShow = this.sentencesWithUnderscores;
+						for (var i = 0; i < restoreIndexes.length; i++) {
+							this.sentenceToShow = this.util.showTextWithGuessedCharacter(
+								this.sentenceToShow, restoreCharacters[i], restoreIndexes[i]);
+						}						
+					})
 				loading.dismiss();
-			}, err => {
-				console.log(err);
-				loading.dismiss();
-			});
+			} else {
+				this.api.getData(lesson)
+					.subscribe(res => {
+						this.processLesson((res[0]).response);
+						loading.dismiss();
+					}, err => {
+						console.log(err);
+						loading.dismiss();
+					});
+			}
+		})
 	}
 
 	// Get hidden characters of the lesson, their 
@@ -94,9 +127,9 @@ export class SentenceGuessPage implements OnInit {
 				this.indexes[this.numberOfGuesses]);
 			++this.numberOfGuesses;
 		} else {
-			this.sentenceToShow = this.util.showTextWithGuessedCharacter(
-				this.sentenceToShow, "_", this.indexes[0]);
+			this.sentenceToShow = this.sentencesWithUnderscores;
 			this.numberOfGuesses = 0;
 		}
+		this.storage.set(this.lessonName + 's' + (this.sentenceIndex - 1) + 'guesses', this.numberOfGuesses)
 	}
 }
