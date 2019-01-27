@@ -27,10 +27,8 @@ export class LessonsEditingPage {
 		private storage: Storage) { }
 
 	ngOnInit() {
-		this.route.params.subscribe(params => {
-			this.lessonName = params['name'];
-			this.getData(this.lessonName);
-		});
+		this.lessonName = this.route.snapshot.queryParamMap.get('name');
+		this.getData(this.lessonName);
 	}
 
 	// Open sentence to guess by clicking on it in the list
@@ -50,25 +48,25 @@ export class LessonsEditingPage {
 					this.storage.get(this.lessonName + 's' + i + 'source')
 						.then((val) => { this.sentences.push(val) })
 					this.storage.get(this.lessonName + 's' + i + 'idxs')
-						.then((val) => { this.indexes.push(val)})
+						.then((val) => { this.indexes.push(val) })
 					this.storage.get(this.lessonName + 's' + i + 'textunderscored')
 						.then((val) => { this.sentencesWithUnderscores.push(val) })
 				}
 				loading.dismiss();
 			} else {
 				this.api.getData(lessonName)
-					.subscribe(res => {						
+					.subscribe(res => {
 						let lesson = (res[0]).response;
 						for (var i = 0; i < lesson.length; i++) {
 							this.sentences.push(lesson[i][0].text);
 							this.indexes.push(lesson[i][0].hidenWords);
 							this.sentencesWithUnderscores.push(
 								this.util.replaceLettersWithUnderscore(this.sentences[i], this.indexes[i]))
-							
+
 							this.storage.set(this.lessonName + 's' + i + 'source', this.sentences[i]);
 							this.storage.set(this.lessonName + 's' + i + 'idxs', this.indexes[i]);
 							this.storage.set(this.lessonName + 's' + i + 'textunderscored', this.sentencesWithUnderscores[i]);
-							
+
 							const hiddenCharacters: string[] = [];
 							for (var j = 0; j < this.indexes[i].length; j++) {
 								hiddenCharacters.push(this.sentences[i].charAt(this.indexes[i][j]));

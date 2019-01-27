@@ -40,7 +40,7 @@ export class HomePage implements OnInit {
 
 	// Load new page with text  
 	openLesson(lessonNumber) {
-		let name = this.lessons[lessonNumber];
-		this.router.navigate(['lesson-editing', name]);
+		let name = this.lessons[lessonNumber].name;
+		this.router.navigate(['lesson-editing'], { queryParams: { name: name } });
 	}
 }
