@@ -32,6 +32,7 @@ export class LessonsEditingPage {
 
     // Open sentence to guess by clicking on it in the list
     openSentence(lessonNumber) {
+        console.log(2)
         this.router.navigate(['sentence-guess'],
             {queryParams: {first: lessonNumber, lesson: this.lessonName}});
     }

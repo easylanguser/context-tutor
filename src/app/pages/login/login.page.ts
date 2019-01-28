@@ -1,14 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, ViewEncapsulation } from '@angular/core';
+import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { UserData } from '../../providers/user-provider';
+
+import { UserOptions } from '../../interfaces/user';
 import {AuthService} from "../../services/auth/auth.service";
 
+
+
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.page.html',
+    selector: 'page-login',
+    templateUrl: 'login.page.html',
     styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
-
+export class LoginPage {
     credentialsForm: FormGroup;
 
     constructor(private formBuilder: FormBuilder, private authService: AuthService) { }
@@ -30,5 +36,4 @@ export class LoginPage implements OnInit {
             this.authService.login(this.credentialsForm.value).subscribe();
         });
     }
-
 }

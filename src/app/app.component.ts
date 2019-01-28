@@ -7,20 +7,35 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
 import {AuthService} from "./services/auth/auth.service";
 
+import { Storage } from '@ionic/storage';
+import {BehaviorSubject} from "rxjs";
+
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html'
 })
 export class AppComponent {
+    appPages = [
+        {
+            title: 'My lessons',
+            url: '/home',
+            icon: 'information-circle'
+        },
+    ];
+
+    loggedIn = false;
+
     constructor(
         private platform: Platform,
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         private authService: AuthService,
-        private router: Router
+        private router: Router,
+        private storage: Storage,
     ) {
         this.initializeApp();
     }
+    authenticationState = new BehaviorSubject(false);
 
     initializeApp() {
         this.platform.ready().then(() => {
@@ -29,12 +44,20 @@ export class AppComponent {
 
             this.authService.authenticationState.subscribe(state => {
                 if (state) {
-                    this.router.navigate(['home']);
+                   this.loggedIn = true;
+                    this.router.navigate(['/']);
                 } else {
                     this.router.navigate(['login']);
                 }
             });
 
+        });
+    }
+
+    logout() {
+        this.storage.remove('access_token').then(() => {
+            this.authenticationState.next(false);
+            return this.router.navigateByUrl('/login');
         });
     }
 }

@@ -1,3 +1,12 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>My lessons</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
   <div class="lesson-card" *ngFor="let lesson of lessons; index as i" (click)="openLesson(lesson.id)">
     <span class="lesson-name">{{i+1}}. {{lesson.name}}</span>
