@@ -3,7 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { UtilsService } from '../services/utils/utils.service';
 import { LessonByNameService } from '../services/lesson-by-name/lesson-by-name.service';
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage'; 
+import { ToastController } from '@ionic/angular';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -26,6 +27,8 @@ export class SentenceGuessPage implements OnInit {
 	private lessonId: number;
 	private sentencesWithUnderscores: string;
 
+	private toastIsBeingShown: boolean;
+
 	private alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 	private firstCharacter: string;
@@ -37,7 +40,8 @@ export class SentenceGuessPage implements OnInit {
 		private route: ActivatedRoute,
 		private loadingController: LoadingController,
 		private util: UtilsService,
-		private storage: Storage) { }
+		private storage: Storage,
+		private toastController: ToastController) { }
 
 	ngOnInit() {
 		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('current')) + 1;
@@ -210,11 +214,26 @@ export class SentenceGuessPage implements OnInit {
 		}
 	}
 
+	async presentToastWithOptions() {
+		this.toastIsBeingShown = true;
+		const toast = await this.toastController.create({
+		  message: 'Sentence is over',
+		  position: 'bottom',
+		  duration: 1500
+		});
+		toast.present();
+		await new Promise(resolve => setTimeout(resolve, 2000));
+		this.toastIsBeingShown = false;
+	  }	
+
 	// Filling in characters into underscores by keyboard
 	// If input is wrong - replace with sentence with underscores
 	// If lesson is over - show info
 	handleKeyboardEvent(event: KeyboardEvent) {
 		if (this.numberOfGuesses === this.hiddenCharacters.length) {
+			if (!this.toastIsBeingShown) {
+				this.presentToastWithOptions();
+			}
 			return;
 		}
 
