@@ -4,24 +4,24 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SentenceGuessPage } from './sentence-guess.page';
 
 describe('SentenceGuessPage', () => {
-  let component: SentenceGuessPage;
-  let fixture: ComponentFixture<SentenceGuessPage>;
+	let component: SentenceGuessPage;
+	let fixture: ComponentFixture<SentenceGuessPage>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ SentenceGuessPage ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-    .compileComponents();
-  }));
+	beforeEach(async(() => {
+		TestBed.configureTestingModule({
+			declarations: [SentenceGuessPage],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		})
+			.compileComponents();
+	}));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(SentenceGuessPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	beforeEach(() => {
+		fixture = TestBed.createComponent(SentenceGuessPage);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

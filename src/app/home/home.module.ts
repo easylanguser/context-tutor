@@ -20,4 +20,4 @@ import { HomePage } from '../home/home';
   ],
   declarations: [HomePage]
 })
-export class HomePageModule {}
+export class HomePageModule { }

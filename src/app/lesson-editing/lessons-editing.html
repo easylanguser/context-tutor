@@ -1,12 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-back-button></ion-back-button>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{lessonTitle}}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-  <div class="sentence-with-underscore" 
-    *ngFor="let sentence of sentencesWithUnderscores; index as i" 
-    (click)="openSentence(i)">
+  <div class="sentence-with-underscore" *ngFor="let sentence of sentencesWithUnderscores; index as i" (click)="openSentence(i)">
     {{i+1}}. {{sentence}}
   </div>
 </ion-content>

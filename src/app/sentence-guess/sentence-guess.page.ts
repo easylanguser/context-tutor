@@ -65,29 +65,29 @@ export class SentenceGuessPage implements OnInit {
 	private setColor(letterBoxNumber: number) {
 		switch (letterBoxNumber) {
 			case 1: {
-				document.getElementById('first-letter-guessed').style.borderColor = 'red';
+				document.getElementById('first-letter-guessed').style.borderColor = '#f04141';
 				break;
 			}
 			case 2: {
-				document.getElementById('second-letter-guessed').style.borderColor = 'red';
+				document.getElementById('second-letter-guessed').style.borderColor = '#f04141';
 				break;
 			}
 			case 3: {
-				document.getElementById('third-letter-guessed').style.borderColor = 'red';
+				document.getElementById('third-letter-guessed').style.borderColor = '#f04141';
 				break;
 			}
 			case 4: {
-				document.getElementById('fourth-letter-guessed').style.borderColor = 'red';
+				document.getElementById('fourth-letter-guessed').style.borderColor = '#f04141';
 				break;
 			}
 		}
 	}
 
-	private resetColors() {
-		document.getElementById('first-letter-guessed').style.borderColor = 'black';
-		document.getElementById('second-letter-guessed').style.borderColor = 'black';
-		document.getElementById('third-letter-guessed').style.borderColor = 'black';
-		document.getElementById('fourth-letter-guessed').style.borderColor = 'black';
+	private resetColors(color: string) {
+		document.getElementById('first-letter-guessed').style.borderColor = color;
+		document.getElementById('second-letter-guessed').style.borderColor = color;
+		document.getElementById('third-letter-guessed').style.borderColor = color;
+		document.getElementById('fourth-letter-guessed').style.borderColor = color;
 	}
 
 	// Get selected lesson from API
@@ -138,15 +138,15 @@ export class SentenceGuessPage implements OnInit {
 
 	private refreshLetters() {
 		if (this.numberOfGuesses == this.indexes.length) {
+			this.resetColors('green')
 			this.firstCharacter = 'D';
 			this.secondCharacter = 'O';
 			this.thirdCharacter = 'N';
 			this.fourthCharacter = 'E';
-			this.resetColors();
 			return;
 		}
 
-		this.resetColors();
+		this.resetColors('black');
 
 		const correctLetterIndex = Math.floor(Math.random() * 4) + 1;
 
@@ -230,10 +230,10 @@ export class SentenceGuessPage implements OnInit {
 			}
 			else if (event.key === this.secondCharacter.toLowerCase()) {
 				this.setColor(2);
-			} 
+			}
 			else if (event.key === this.thirdCharacter.toLowerCase()) {
 				this.setColor(3);
-			} 
+			}
 			else if (event.key === this.fourthCharacter.toLowerCase()) {
 				this.setColor(4);
 			}

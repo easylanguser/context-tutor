@@ -18,6 +18,7 @@ export class LessonsEditingPage {
 	private sentences: Array<string> = [];
 	private sentencesWithUnderscores: Array<string> = [];
 	private lessonId: number;
+	private lessonTitle: string;
 
 	constructor(private api: LessonByNameService,
 		private loadingController: LoadingController,
@@ -28,6 +29,7 @@ export class LessonsEditingPage {
 
 	ngOnInit() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
+		this.lessonTitle = this.route.snapshot.queryParamMap.get('lessonTitle');
 		this.getData(this.lessonId);
 	}
 
@@ -77,7 +79,7 @@ export class LessonsEditingPage {
 						loading.dismiss();
 					}, err => {
 						console.log(err);
-						loading.dismiss(); 
+						loading.dismiss();
 					});
 			}
 		});

@@ -8,19 +8,19 @@ import { IonicModule } from '@ionic/angular';
 import { SentenceGuessPage } from './sentence-guess.page';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: SentenceGuessPage
-  }
+	{
+		path: '',
+		component: SentenceGuessPage
+	}
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes)
-  ],
-  declarations: [SentenceGuessPage]
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		RouterModule.forChild(routes)
+	],
+	declarations: [SentenceGuessPage]
 })
-export class SentenceGuessPageModule {}
+export class SentenceGuessPageModule { }
