@@ -2,9 +2,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { UserData } from '../../providers/user-provider';
-
-import { UserOptions } from '../../interfaces/user';
 import {AuthService} from "../../services/auth/auth.service";
 
 
