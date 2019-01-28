@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { LessonsListService } from '../lessons-list.service';
+import { LessonsListService } from '../services/lessons-list/lessons-list.service';
 import { Router } from '@angular/router';
 
 @Component({
