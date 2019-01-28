@@ -9,16 +9,37 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { SentenceGuessPage } from '../app/sentence-guess/sentence-guess.page' 
+import { SentenceGuessPage } from '../app/sentence-guess/sentence-guess.page'
 import { LessonsEditingPage } from '../app/lesson-editing/lessons-editing'
 import { HttpClient }  from '@angular/common/http'
 import { HttpClientModule } from '@angular/common/http'
-import { IonicStorageModule } from '@ionic/storage';
+
+import { Storage, IonicStorageModule } from '@ionic/storage';
+import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
+
+export function jwtOptionsFactory(storage) {
+    return {
+        tokenGetter: () => {
+            return storage.get('access_token');
+        },
+        whitelistedDomains: ['http://165.227.159.35']
+    }
+}
 
 @NgModule({
   declarations: [AppComponent, LessonsEditingPage, SentenceGuessPage],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, IonicStorageModule.forRoot()],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule,IonicStorageModule.forRoot({
+      name: 'easy-db',
+      driverOrder: ['indexeddb', 'sqlite', 'websql']
+  }),
+      JwtModule.forRoot({
+          jwtOptionsProvider: {
+              provide: JWT_OPTIONS,
+              useFactory: jwtOptionsFactory,
+              deps: [Storage],
+          }
+      })],
   providers: [
     StatusBar,
     SplashScreen,

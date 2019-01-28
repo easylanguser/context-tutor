@@ -1,3 +1,12 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>My lessons</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
   <div style="padding-top: 4vh">
     <div class="lesson-card" *ngFor="let lesson of lessons; index as i" (click)="openLesson(i)">
