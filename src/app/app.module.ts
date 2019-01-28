@@ -29,7 +29,10 @@ export function jwtOptionsFactory(storage) {
 @NgModule({
   declarations: [AppComponent, LessonsEditingPage, SentenceGuessPage],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule,IonicStorageModule.forRoot(),
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule,IonicStorageModule.forRoot({
+      name: 'easy-db',
+      driverOrder: ['indexeddb', 'sqlite', 'websql']
+  }),
       JwtModule.forRoot({
           jwtOptionsProvider: {
               provide: JWT_OPTIONS,
