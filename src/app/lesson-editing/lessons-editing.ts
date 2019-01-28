@@ -7,9 +7,9 @@ import { UtilsService } from '../utils.service';
 import { Storage } from '@ionic/storage';
 
 @Component({
-	selector: 'page-lessons-editing',
-	templateUrl: 'lessons-editing.html',
-	styleUrls: ['lessons-editing.scss'],
+    selector: 'page-lessons-editing',
+    templateUrl: 'lessons-editing.html',
+    styleUrls: ['lessons-editing.scss'],
 })
 
 export class LessonsEditingPage {

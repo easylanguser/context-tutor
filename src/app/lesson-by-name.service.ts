@@ -14,10 +14,7 @@ export class LessonByNameService {
   constructor(private http: HttpClient) { }
 
   getData(lessonId: number): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({'Content-Type': 'json'})
-    };
-    let response = this.http.get(apiUrl + lessonId, httpOptions);
+    let response = this.http.get(apiUrl + lessonId);
     return forkJoin([response]);
   }
 }
