@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 
-const apiUrl = 'https://api.jsonbin.io/b/5c4d9e5da3fb18257ac27084'; //'http://165.227.159.35/filmList';
+const apiUrl = 'http://165.227.159.35/lessons/getLessons';
 
 @Injectable({
   providedIn: 'root'

@@ -16,14 +16,14 @@ import { Storage } from '@ionic/storage';
 
 export class SentenceGuessPage implements OnInit {
 
-	private hiddenCharacters: string[];
+	private hiddenCharacters: string[] = [];
 	private sentenceToShow: string;
 	private fullSentence: string;
 	private numberOfGuesses: number = 0;
 	private indexes: number[];
 	private sentenceIndex: number;
 	private lessonLength: number;
-	private lessonName: string;
+	private lessonId: number;
 	private sentencesWithUnderscores: string;
 
 	private firstCharacter: string = 'V';
@@ -37,7 +37,7 @@ export class SentenceGuessPage implements OnInit {
 		private storage: Storage) { }
 
 	ngOnInit() {
-		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('first')) + 1;
+		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('current')) + 1;
 		this.getData(this.route.snapshot.queryParamMap.get('lesson'));
 	};
 
@@ -45,21 +45,23 @@ export class SentenceGuessPage implements OnInit {
 		if (this.sentenceIndex === 1) {
 			return;
 		}
+		this.hiddenCharacters = [];
 		--this.sentenceIndex;
-		this.getData(this.lessonName);
+		this.getData(this.lessonId);
 	}
 
 	nextSentence() {
 		if (this.sentenceIndex === this.lessonLength) {
 			return;
 		}
+		this.hiddenCharacters = [];
 		++this.sentenceIndex;
-		this.getData(this.lessonName);
+		this.getData(this.lessonId);
 	}	
 
 	// Get selected lesson from API
 	private async getData(lesson) {
-		this.lessonName = lesson;
+		this.lessonId = lesson;
 		const loading = await this.loadingController.create({
 			message: 'Loading'
 		});
@@ -71,9 +73,9 @@ export class SentenceGuessPage implements OnInit {
 					.then((val) => { this.indexes = val })
 				this.storage.get(lesson + 's' + (this.sentenceIndex - 1) + 'textunderscored')
 					.then((val) => { this.sentencesWithUnderscores = val })
-				this.storage.get(this.lessonName + 's' + (this.sentenceIndex - 1) + 'hiddenchars')
+				this.storage.get(this.lessonId + 's' + (this.sentenceIndex - 1) + 'hiddenchars')
 					.then((val) => { this.hiddenCharacters = val })
-				this.storage.get(this.lessonName + 's' + (this.sentenceIndex - 1) + 'guesses')
+				this.storage.get(this.lessonId + 's' + (this.sentenceIndex - 1) + 'guesses')
 					.then((val) => {
 						if (val !== null) {
 							this.numberOfGuesses = val
@@ -92,7 +94,7 @@ export class SentenceGuessPage implements OnInit {
 			} else {
 				this.api.getData(lesson)
 					.subscribe(res => {
-						this.processLesson((res[0]).response);
+						this.processLesson((res[0]));
 						loading.dismiss();
 					}, err => {
 						console.log(err);
@@ -106,8 +108,8 @@ export class SentenceGuessPage implements OnInit {
 	// indexes and create sentence with underscores
 	private processLesson(lesson: any) {
 		this.lessonLength = lesson.length;
-		this.indexes = lesson[this.sentenceIndex - 1][0].hidenWords;
-		this.fullSentence = lesson[this.sentenceIndex - 1][0].text;
+		this.indexes = lesson[this.sentenceIndex - 1].hiddenWord;
+		this.fullSentence = lesson[this.sentenceIndex - 1].text;
 		this.sentenceToShow = this.util.replaceLettersWithUnderscore(
 			this.fullSentence, this.indexes);
 
@@ -115,6 +117,7 @@ export class SentenceGuessPage implements OnInit {
 			this.hiddenCharacters.push(
 				(<string>(this.fullSentence)).charAt(this.indexes[i]))
 		}
+		console.log('a');
 	}
 
 	// Show if lesson if over
@@ -146,6 +149,6 @@ export class SentenceGuessPage implements OnInit {
 			this.sentenceToShow = this.sentencesWithUnderscores;
 			this.numberOfGuesses = 0;
 		}
-		this.storage.set(this.lessonName + 's' + (this.sentenceIndex - 1) + 'guesses', this.numberOfGuesses)
+		this.storage.set(this.lessonId + 's' + (this.sentenceIndex - 1) + 'guesses', this.numberOfGuesses)
 	}
 }
