@@ -4,8 +4,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <div>
+<ion-content>
+  <div style="margin-top: 2vh;">
     <ion-button id="previous-sentence-button" (click)="previousSentence()"><</ion-button>
     <span id="lesson-progress">
       {{sentenceIndex}} of {{lessonLength}}
@@ -25,21 +25,8 @@
     <div id="third-letter-guessed">
       {{thirdCharacter}}
     </div>
-  </div>
-  <div id="lines">
-    <div id="first-letter-line"></div>
-    <div id="second-letter-line"></div>
-    <div id="third-letter-line"></div>
-  </div>
-  <div id="characters-row">
-    <span id="first-letter">
-      {{firstCharacter}}
-    </span>
-    <span id="second-letter">
-      {{secondCharacter}}
-    </span>
-    <span id="third-letter">
-      {{thirdCharacter}}
-    </span>
+    <div id="fourth-letter-guessed">
+      {{fourthCharacter}}
+    </div>
   </div>
 </ion-content>

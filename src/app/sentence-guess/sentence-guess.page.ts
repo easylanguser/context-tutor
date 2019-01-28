@@ -26,9 +26,12 @@ export class SentenceGuessPage implements OnInit {
 	private lessonId: number;
 	private sentencesWithUnderscores: string;
 
-	private firstCharacter: string = 'V';
-	private secondCharacter: string = 'D';
-	private thirdCharacter: string = 'L';
+	private alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+	private firstCharacter: string;
+	private secondCharacter: string;
+	private thirdCharacter: string;
+	private fourthCharacter: string;
 
 	constructor(private api: LessonByNameService,
 		private route: ActivatedRoute,
@@ -57,7 +60,35 @@ export class SentenceGuessPage implements OnInit {
 		this.hiddenCharacters = [];
 		++this.sentenceIndex;
 		this.getData(this.lessonId);
-	}	
+	}
+
+	private setColor(letterBoxNumber: number) {
+		switch (letterBoxNumber) {
+			case 1: {
+				document.getElementById('first-letter-guessed').style.borderColor = 'red';
+				break;
+			}
+			case 2: {
+				document.getElementById('second-letter-guessed').style.borderColor = 'red';
+				break;
+			}
+			case 3: {
+				document.getElementById('third-letter-guessed').style.borderColor = 'red';
+				break;
+			}
+			case 4: {
+				document.getElementById('fourth-letter-guessed').style.borderColor = 'red';
+				break;
+			}
+		}
+	}
+
+	private resetColors() {
+		document.getElementById('first-letter-guessed').style.borderColor = 'black';
+		document.getElementById('second-letter-guessed').style.borderColor = 'black';
+		document.getElementById('third-letter-guessed').style.borderColor = 'black';
+		document.getElementById('fourth-letter-guessed').style.borderColor = 'black';
+	}
 
 	// Get selected lesson from API
 	private async getData(lesson) {
@@ -78,7 +109,7 @@ export class SentenceGuessPage implements OnInit {
 				this.storage.get(this.lessonId + 's' + (this.sentenceIndex - 1) + 'guesses')
 					.then((val) => {
 						if (val !== null) {
-							this.numberOfGuesses = val
+							this.numberOfGuesses = val;
 						} else {
 							this.numberOfGuesses = 0;
 						}
@@ -88,7 +119,8 @@ export class SentenceGuessPage implements OnInit {
 						for (var i = 0; i < restoreIndexes.length; i++) {
 							this.sentenceToShow = this.util.showTextWithGuessedCharacter(
 								this.sentenceToShow, restoreCharacters[i], restoreIndexes[i]);
-						}						
+						}
+						this.refreshLetters()
 					})
 				loading.dismiss();
 			} else {
@@ -104,6 +136,65 @@ export class SentenceGuessPage implements OnInit {
 		})
 	}
 
+	private refreshLetters() {
+		if (this.numberOfGuesses == this.indexes.length) {
+			this.firstCharacter = 'D';
+			this.secondCharacter = 'O';
+			this.thirdCharacter = 'N';
+			this.fourthCharacter = 'E';
+			this.resetColors();
+			return;
+		}
+
+		this.resetColors();
+
+		const correctLetterIndex = Math.floor(Math.random() * 4) + 1;
+
+		const firstRandom = Math.floor(Math.random() * this.alphabet.length);
+		let secondRandom, thirdRandom;
+
+		do {
+			secondRandom = Math.floor(Math.random() * this.alphabet.length);
+		} while (secondRandom === firstRandom ||
+			secondRandom === this.alphabet.indexOf(this.hiddenCharacters[this.numberOfGuesses].toUpperCase()));
+
+		do {
+			thirdRandom = Math.floor(Math.random() * this.alphabet.length);
+		} while (thirdRandom === firstRandom || thirdRandom === secondRandom ||
+			thirdRandom === this.alphabet.indexOf(this.hiddenCharacters[this.numberOfGuesses].toUpperCase()));
+
+		switch (correctLetterIndex) {
+			case 1: {
+				this.firstCharacter = this.hiddenCharacters[this.numberOfGuesses].toUpperCase();
+				this.secondCharacter = this.alphabet[firstRandom]
+				this.thirdCharacter = this.alphabet[secondRandom]
+				this.fourthCharacter = this.alphabet[thirdRandom]
+				break;
+			}
+			case 2: {
+				this.secondCharacter = this.hiddenCharacters[this.numberOfGuesses].toUpperCase();
+				this.firstCharacter = this.alphabet[firstRandom]
+				this.thirdCharacter = this.alphabet[secondRandom]
+				this.fourthCharacter = this.alphabet[thirdRandom]
+				break;
+			}
+			case 3: {
+				this.thirdCharacter = this.hiddenCharacters[this.numberOfGuesses].toUpperCase();
+				this.secondCharacter = this.alphabet[firstRandom]
+				this.firstCharacter = this.alphabet[secondRandom]
+				this.fourthCharacter = this.alphabet[thirdRandom]
+				break;
+			}
+			case 4: {
+				this.fourthCharacter = this.hiddenCharacters[this.numberOfGuesses].toUpperCase();
+				this.secondCharacter = this.alphabet[firstRandom]
+				this.thirdCharacter = this.alphabet[secondRandom]
+				this.firstCharacter = this.alphabet[thirdRandom]
+				break;
+			}
+		}
+	}
+
 	// Get hidden characters of the lesson, their 
 	// indexes and create sentence with underscores
 	private processLesson(lesson: any) {
@@ -117,19 +208,6 @@ export class SentenceGuessPage implements OnInit {
 			this.hiddenCharacters.push(
 				(<string>(this.fullSentence)).charAt(this.indexes[i]))
 		}
-		console.log('a');
-	}
-
-	// Show if lesson if over
-	private async presentLoadingDefault() {
-		const loading = await this.loadingController.create({
-			message: 'Lesson is over'
-		});
-		await loading.present();
-
-		setTimeout(() => {
-			loading.dismiss();
-		}, 1000);
 	}
 
 	// Filling in characters into underscores by keyboard
@@ -137,18 +215,32 @@ export class SentenceGuessPage implements OnInit {
 	// If lesson is over - show info
 	handleKeyboardEvent(event: KeyboardEvent) {
 		if (this.numberOfGuesses === this.hiddenCharacters.length) {
-			this.presentLoadingDefault();
 			return;
 		}
+
 		if (event.key === this.hiddenCharacters[this.numberOfGuesses]) {
 			this.sentenceToShow = this.util.showTextWithGuessedCharacter(this.sentenceToShow,
 				this.hiddenCharacters[this.numberOfGuesses],
 				this.indexes[this.numberOfGuesses]);
 			++this.numberOfGuesses;
+			this.refreshLetters();
 		} else {
-			this.sentenceToShow = this.sentencesWithUnderscores;
-			this.numberOfGuesses = 0;
+			if (event.key === this.firstCharacter.toLowerCase()) {
+				this.setColor(1);
+			}
+			else if (event.key === this.secondCharacter.toLowerCase()) {
+				this.setColor(2);
+			} 
+			else if (event.key === this.thirdCharacter.toLowerCase()) {
+				this.setColor(3);
+			} 
+			else if (event.key === this.fourthCharacter.toLowerCase()) {
+				this.setColor(4);
+			}
+			// UNCOMMENT TO RESET SENTENCE IN CASE OF WRONG CHAR
+			//this.sentenceToShow = this.sentencesWithUnderscores;
+			//this.numberOfGuesses = 0;
 		}
-		this.storage.set(this.lessonId + 's' + (this.sentenceIndex - 1) + 'guesses', this.numberOfGuesses)
+		this.storage.set(this.lessonId + 's' + (this.sentenceIndex - 1) + 'guesses', this.numberOfGuesses);
 	}
 }
