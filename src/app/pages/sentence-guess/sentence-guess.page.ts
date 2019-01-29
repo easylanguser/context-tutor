@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-import { UtilsService } from '../services/utils/utils.service';
-import { LessonByNameService } from '../services/lesson-by-name/lesson-by-name.service';
+import { UtilsService } from '../../services/utils/utils.service';
+import { LessonByNameService } from '../../services/lesson-by-name/lesson-by-name.service';
 import { Storage } from '@ionic/storage';
 import { ToastController } from '@ionic/angular';
 

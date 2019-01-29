@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { HomePage } from '../home/home';
+import { HomePage } from './home';
 
 @NgModule({
   imports: [
