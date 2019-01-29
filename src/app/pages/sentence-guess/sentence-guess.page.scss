@@ -4,8 +4,7 @@ ion-content {
 
 #lesson-progress {
     font-size: 8vmin;
-    margin: 0;
-    padding: 0;
+    margin-left: 2.7vw;
     margin-bottom: 1vmin;
 }
 
@@ -47,9 +46,11 @@ ion-content {
 #previous-sentence-button {
     vertical-align: top;
     height: 4vh;
+    width: 5vw;
 }
 
 #next-sentence-button {
     vertical-align: top;
     height: 4vh;
+    width: 5vw;
 }

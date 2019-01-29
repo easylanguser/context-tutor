@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { LessonByNameService } from '../services/lesson-by-name/lesson-by-name.service';
+import { LessonByNameService } from '../../services/lesson-by-name/lesson-by-name.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { UtilsService } from '../services/utils/utils.service';
+import { UtilsService } from '../../services/utils/utils.service';
 import { Storage } from '@ionic/storage';
 
 @Component({

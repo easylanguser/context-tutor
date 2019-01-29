@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-import { UtilsService } from '../services/utils/utils.service';
-import { LessonByNameService } from '../services/lesson-by-name/lesson-by-name.service';
+import { UtilsService } from '../../services/utils/utils.service';
+import { LessonByNameService } from '../../services/lesson-by-name/lesson-by-name.service';
 import { Storage } from '@ionic/storage';
 import { ToastController } from '@ionic/angular';
 
@@ -67,24 +67,13 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	private setColor(letterBoxNumber: number) {
-		switch (letterBoxNumber) {
-			case 1: {
-				document.getElementById('first-letter-guessed').style.borderColor = '#f04141';
-				break;
-			}
-			case 2: {
-				document.getElementById('second-letter-guessed').style.borderColor = '#f04141';
-				break;
-			}
-			case 3: {
-				document.getElementById('third-letter-guessed').style.borderColor = '#f04141';
-				break;
-			}
-			case 4: {
-				document.getElementById('fourth-letter-guessed').style.borderColor = '#f04141';
-				break;
-			}
-		}
+		let letterId: string;
+		if (letterBoxNumber === 1) { letterId = 'first-letter-guessed' }
+		else if (letterBoxNumber === 2) { letterId = 'second-letter-guessed' }
+		else if (letterBoxNumber === 3) { letterId = 'third-letter-guessed' }
+		else if (letterBoxNumber === 4) { letterId = 'fourth-letter-guessed' }
+		else { return }
+		document.getElementById(letterId).style.borderColor = '#f04141';
 	}
 
 	private resetColors(color: string) {
@@ -237,7 +226,7 @@ export class SentenceGuessPage implements OnInit {
 		this.handleKeyboardEvent(event);
 	}
 
-	thirdLetterClick() { 
+	thirdLetterClick() {
 		const event = new KeyboardEvent('CustomEvent3', { key: this.thirdCharacter.toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
