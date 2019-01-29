@@ -1,6 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-back-button></ion-back-button>
+    <ion-buttons slot="end">
+      <div slot="end" style="height: 15vw; width: 15vw; background-image: url('../../assets/icon/favicon.png');
+        background-position: center; background-size: cover;"></div>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -16,16 +20,16 @@
     {{sentenceIndex}}. {{sentenceToShow}}
   </p>
   <div id="characters-row-guessed">
-    <div id="first-letter-guessed" class="letter-guessed">
+    <div id="first-letter-guessed" (click)="firstLetterClick()" class="letter-guessed">
       {{firstCharacter}}
     </div>
-    <div id="second-letter-guessed" class="letter-guessed">
+    <div id="second-letter-guessed" (click)="secondLetterClick()" class="letter-guessed">
       {{secondCharacter}}
     </div>
-    <div id="third-letter-guessed" class="letter-guessed">
+    <div id="third-letter-guessed" (click)="thirdLetterClick()" class="letter-guessed">
       {{thirdCharacter}}
     </div>
-    <div id="fourth-letter-guessed" class="letter-guessed">
+    <div id="fourth-letter-guessed" (click)="fourthLetterClick()" class="letter-guessed">
       {{fourthCharacter}}
     </div>
   </div>

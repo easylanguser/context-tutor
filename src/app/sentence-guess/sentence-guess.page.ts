@@ -4,6 +4,7 @@ import { LoadingController } from '@ionic/angular';
 import { UtilsService } from '../services/utils/utils.service';
 import { LessonByNameService } from '../services/lesson-by-name/lesson-by-name.service';
 import { Storage } from '@ionic/storage';
+import { ToastController } from '@ionic/angular';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -26,6 +27,8 @@ export class SentenceGuessPage implements OnInit {
 	private lessonId: number;
 	private sentencesWithUnderscores: string;
 
+	private toastIsBeingShown: boolean;
+
 	private alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 	private firstCharacter: string;
@@ -37,7 +40,8 @@ export class SentenceGuessPage implements OnInit {
 		private route: ActivatedRoute,
 		private loadingController: LoadingController,
 		private util: UtilsService,
-		private storage: Storage) { }
+		private storage: Storage,
+		private toastController: ToastController) { }
 
 	ngOnInit() {
 		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('current')) + 1;
@@ -210,11 +214,46 @@ export class SentenceGuessPage implements OnInit {
 		}
 	}
 
+	// Show toast if sentence is fully filled
+	async presentToastWithOptions() {
+		this.toastIsBeingShown = true;
+		const toast = await this.toastController.create({
+			message: 'Sentence is over',
+			position: 'bottom',
+			duration: 1500
+		});
+		toast.present();
+		await new Promise(resolve => setTimeout(resolve, 2000));
+		this.toastIsBeingShown = false;
+	}
+
+	firstLetterClick() {
+		const event = new KeyboardEvent('CustomEvent1', { key: this.firstCharacter.toLowerCase() });
+		this.handleKeyboardEvent(event);
+	}
+
+	secondLetterClick() {
+		const event = new KeyboardEvent('CustomEvent2', { key: this.secondCharacter.toLowerCase() });
+		this.handleKeyboardEvent(event);
+	}
+
+	thirdLetterClick() { 
+		const event = new KeyboardEvent('CustomEvent3', { key: this.thirdCharacter.toLowerCase() });
+		this.handleKeyboardEvent(event);
+	}
+
+	fourthLetterClick() {
+		const event = new KeyboardEvent('CustomEvent4', { key: this.fourthCharacter.toLowerCase() });
+		this.handleKeyboardEvent(event);
+	}
 	// Filling in characters into underscores by keyboard
 	// If input is wrong - replace with sentence with underscores
 	// If lesson is over - show info
 	handleKeyboardEvent(event: KeyboardEvent) {
 		if (this.numberOfGuesses === this.hiddenCharacters.length) {
+			if (!this.toastIsBeingShown) {
+				this.presentToastWithOptions();
+			}
 			return;
 		}
 
