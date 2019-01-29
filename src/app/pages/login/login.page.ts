@@ -13,6 +13,7 @@ import {AuthService} from "../../services/auth/auth.service";
 })
 export class LoginPage {
     credentialsForm: FormGroup;
+    submitted: boolean;
 
     constructor(private formBuilder: FormBuilder, private authService: AuthService) { }
 
@@ -24,13 +25,22 @@ export class LoginPage {
     }
 
     onSubmit() {
-        this.authService.login(this.credentialsForm.value).subscribe();
+        this.submitted = true;
+        if(this.credentialsForm.valid){
+            this.authService.login(this.credentialsForm.value).subscribe();
+        }
     }
 
     register() {
-        this.authService.register(this.credentialsForm.value).subscribe(res => {
-            // Call Login to automatically login the new user
-            this.authService.login(this.credentialsForm.value).subscribe();
-        });
+        this.submitted = true;
+        if(this.credentialsForm.valid) {
+            this.authService.register(this.credentialsForm.value).subscribe(res => {
+                // Call Login to automatically login the new user
+                this.authService.login(this.credentialsForm.value).subscribe();
+            });
+        }
     }
+
+    get f() { return this.credentialsForm.controls; }
+
 }

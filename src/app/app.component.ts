@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
-import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import {Platform} from '@ionic/angular';
+import {SplashScreen} from '@ionic-native/splash-screen/ngx';
+import {StatusBar} from '@ionic-native/status-bar/ngx';
 
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
 import {AuthService} from "./services/auth/auth.service";
 
-import { Storage } from '@ionic/storage';
+import {Storage} from '@ionic/storage';
 import {BehaviorSubject} from "rxjs";
 
 @Component({
@@ -35,6 +35,7 @@ export class AppComponent {
     ) {
         this.initializeApp();
     }
+
     authenticationState = new BehaviorSubject(false);
 
     initializeApp() {
@@ -44,9 +45,10 @@ export class AppComponent {
 
             this.authService.authenticationState.subscribe(state => {
                 if (state) {
-                   this.loggedIn = true;
+                    this.loggedIn = true;
                     this.router.navigate(['/']);
                 } else {
+                    this.loggedIn = false;
                     this.router.navigate(['login']);
                 }
             });
@@ -54,10 +56,8 @@ export class AppComponent {
         });
     }
 
-    logout() {
-        this.storage.remove('access_token').then(() => {
-            this.authenticationState.next(false);
-            return this.router.navigateByUrl('/login');
-        });
+     logout() {
+         this.authService.logout();
+         this.loggedIn = false;
     }
 }

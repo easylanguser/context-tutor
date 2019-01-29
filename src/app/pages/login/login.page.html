@@ -16,13 +16,21 @@
       <ion-input type="email" formControlName="email"></ion-input>
     </ion-item>
 
+    <div *ngIf="submitted && f.email.errors" class="invalid">
+      <div *ngIf="f.email.errors.required">this field is required</div>
+    </div>
+
     <ion-item>
       <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" formControlName="password"></ion-input>
+      <ion-input type="password" formControlName="password" required></ion-input>
     </ion-item>
 
-    <ion-button expand="full" type="submit" [disabled]="!credentialsForm.valid">Login</ion-button>
-    <ion-button expand="full" type="button" (click)="register()" [disabled]="!credentialsForm.valid">Register</ion-button>
+    <div *ngIf="submitted && f.password.errors" class="invalid">
+      <div *ngIf="f.password.errors.required">this field is required</div>
+    </div>
+
+    <ion-button expand="full" type="submit">Login</ion-button>
+    <ion-button expand="full" type="button" (click)="register()">Register</ion-button>
 
   </form>
 </ion-content>
