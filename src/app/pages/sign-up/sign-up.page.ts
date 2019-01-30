@@ -1,22 +1,17 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
-import { Router } from '@angular/router';
-
+import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth/auth.service";
 
-
-
 @Component({
-    selector: 'page-login',
-    templateUrl: 'login.page.html',
-    styleUrls: ['./login.page.scss'],
+  selector: 'app-sign-up',
+  templateUrl: './sign-up.page.html',
+  styleUrls: ['./sign-up.page.scss'],
 })
-export class LoginPage {
+export class SignUpPage implements OnInit {
     credentialsForm: FormGroup;
     submitted: boolean;
 
-    constructor(private formBuilder: FormBuilder, private authService: AuthService,
-                private router: Router) { }
+    constructor(private formBuilder: FormBuilder, private authService: AuthService) { }
 
     get f() { return this.credentialsForm.controls; }
 
@@ -26,14 +21,6 @@ export class LoginPage {
             password: ['', [Validators.required, Validators.minLength(6)]]
         });
     }
-
-    onSubmit() {
-        this.submitted = true;
-        if(this.credentialsForm.valid){
-            this.authService.login(this.credentialsForm.value).subscribe();
-        }
-    }
-
     register() {
         this.submitted = true;
         if(this.credentialsForm.valid) {
@@ -44,9 +31,5 @@ export class LoginPage {
         }
     }
 
-
-    toSingUp() {
-        this.router.navigate(['sign-up']);
-    }
 
 }

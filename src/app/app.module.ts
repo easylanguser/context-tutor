@@ -16,8 +16,9 @@ import { HttpClientModule } from '@angular/common/http'
 
 import { Storage, IonicStorageModule } from '@ionic/storage';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
-import {LoginPage} from "./pages/login/login.page";
 import {LoginPageModule} from "./pages/login/login.module";
+import {SignUpPageModule} from "./pages/sign-up/sign-up.module";
+import {AccountPageModule} from "./pages/account/account.module";
 
 
 export function jwtOptionsFactory(storage) {
@@ -32,7 +33,9 @@ export function jwtOptionsFactory(storage) {
 @NgModule({
   declarations: [AppComponent, LessonsEditingPage, SentenceGuessPage],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule,LoginPageModule,IonicStorageModule.forRoot({
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule,LoginPageModule,SignUpPageModule,
+      AccountPageModule,
+      IonicStorageModule.forRoot({
       name: 'easy-db',
       driverOrder: ['indexeddb', 'sqlite', 'websql']
   }),

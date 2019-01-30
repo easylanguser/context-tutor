@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Sign up</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="credentialsForm" (ngSubmit)="register()">
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email" formControlName="email"></ion-input>
+    </ion-item>
+
+    <div *ngIf="submitted && f.email.errors" class="auth-forms">
+      <div *ngIf="f.email.errors.required">this field is required</div>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input type="password" formControlName="password" required></ion-input>
+    </ion-item>
+
+    <div *ngIf="submitted && f.password.errors" class="auth-forms">
+      <div *ngIf="f.password.errors.required">this field is required</div>
+    </div>
+
+    <ion-button expand="full" type="submit">Sign up</ion-button>
+  </form>
+</ion-content>
