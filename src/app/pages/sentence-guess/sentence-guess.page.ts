@@ -46,7 +46,7 @@ export class SentenceGuessPage implements OnInit {
 	};
 
 	private getCurrentSentences(): Sentence[] {
-		return this.lessonsData.lessons[this.lessonId].sentences;
+		return this.lessonsData.getLessonByID(this.lessonId).sentences;
 	}
 
 	previousSentence() {
@@ -196,7 +196,7 @@ export class SentenceGuessPage implements OnInit {
 		if (event.key === this.hiddenCharacters[this.numberOfGuesses]) {
 			this.sentenceToShow = this.util.showTextWithGuessedCharacter(this.sentenceToShow,
 				this.hiddenCharacters[this.numberOfGuesses],
-				this.lessonsData.lessons[this.lessonId].sentences[this.sentenceIndex - 1].hiddenWord[this.numberOfGuesses]);
+				this.getCurrentSentences()[this.sentenceIndex - 1].hiddenWord[this.numberOfGuesses]);
 			++this.numberOfGuesses;
 			this.refreshLetters();
 		} else {
