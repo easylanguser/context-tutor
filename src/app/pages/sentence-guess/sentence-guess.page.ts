@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { UtilsService } from '../../services/utils/utils.service';
-import { LessonByNameService } from '../../services/lesson-by-name/lesson-by-name.service';
 import { ToastController } from '@ionic/angular';
+import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
+import { Sentence } from 'src/app/models/sentence';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -16,52 +17,52 @@ import { ToastController } from '@ionic/angular';
 
 export class SentenceGuessPage implements OnInit {
 
-	private hiddenCharacters: string[] = [];
-	private sentenceToShow: string;
-	private fullSentence: string;
 	private numberOfGuesses: number = 0;
-	private indexes: number[];
-	private sentenceIndex: number;
-	private lessonLength: number;
-	private lessonId: number;
-	private sentencesWithUnderscores: string;
-
+	private lessonId: number = 0;
+	private sentenceIndex: number = 1;
 	private toastIsBeingShown: boolean;
-
 	private alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	private sentenceToShow: string;
+	private hiddenCharacters: string[];
+	private lessonLength: number;
 
 	private firstCharacter: string;
 	private secondCharacter: string;
 	private thirdCharacter: string;
 	private fourthCharacter: string;
 
-	constructor(private api: LessonByNameService,
-		private route: ActivatedRoute,
+	constructor(private route: ActivatedRoute,
 		private loadingController: LoadingController,
 		private util: UtilsService,
-		private toastController: ToastController) { }
+		private toastController: ToastController,
+		private lessonsData: LessonsDataService) { }
 
 	ngOnInit() {
 		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('current')) + 1;
-		this.getData(this.route.snapshot.queryParamMap.get('lesson'));
+		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
+		this.lessonLength = Number(this.getCurrentSentences().length);
+		this.sentenceToShow = this.getCurrentSentences()[this.sentenceIndex - 1].text;
+		this.getData();
 	};
+
+	private getCurrentSentences(): Sentence[] {
+		return this.lessonsData.lessons[this.lessonId].sentences;
+	}
 
 	previousSentence() {
 		if (this.sentenceIndex === 1) {
 			return;
 		}
-		this.hiddenCharacters = [];
 		--this.sentenceIndex;
-		this.getData(this.lessonId);
+		this.getData();
 	}
 
 	nextSentence() {
-		if (this.sentenceIndex === this.lessonLength) {
+		if (this.sentenceIndex === this.getCurrentSentences.length) {
 			return;
 		}
-		this.hiddenCharacters = [];
 		++this.sentenceIndex;
-		this.getData(this.lessonId);
+		this.getData();
 	}
 
 	private setColor(letterBoxNumber: number) {
@@ -82,26 +83,28 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	// Get selected lesson from API
-	private async getData(lesson) {
-		this.lessonId = lesson;
+	private async getData() {
 		const loading = await this.loadingController.create({
 			message: 'Loading'
 		});
 		await loading.present();
 
-		this.api.getData(lesson)
-			.subscribe(res => {
-				this.processLesson((res[0]));
-				this.refreshLetters();
-				loading.dismiss();
-			}, err => {
-				console.log(err);
-				loading.dismiss();
-			});
+		this.hiddenCharacters = [];
+		for (let idx of this.getCurrentSentences()[this.sentenceIndex - 1].hiddenWord) {
+			this.hiddenCharacters.push(this.getCurrentSentences()[this.sentenceIndex - 1].text.charAt(Number(idx)));
+		}
+
+		this.sentenceToShow = this.util.replaceLettersWithUnderscore(
+			this.getCurrentSentences()[this.sentenceIndex - 1].text,
+			this.getCurrentSentences()[this.sentenceIndex - 1].hiddenWord);
+
+		this.refreshLetters();
+
+		loading.dismiss();
 	}
 
 	private refreshLetters() {
-		if (this.numberOfGuesses == this.indexes.length) {
+		if (this.numberOfGuesses == this.getCurrentSentences()[this.sentenceIndex - 1].hiddenWord.length) {
 			this.resetColors('green');
 			this.firstCharacter = 'D';
 			this.secondCharacter = 'O';
@@ -113,65 +116,37 @@ export class SentenceGuessPage implements OnInit {
 		this.resetColors('black');
 
 		const correctLetterIndex = Math.floor(Math.random() * 4) + 1;
-
+		const correctLetter = this.hiddenCharacters[this.numberOfGuesses].toUpperCase();
 		const firstRandom = Math.floor(Math.random() * this.alphabet.length);
-		let secondRandom, thirdRandom;
+		let secondRandom, thirdRandom, fourthRandom;
 
 		do {
 			secondRandom = Math.floor(Math.random() * this.alphabet.length);
 		} while (secondRandom === firstRandom ||
-			secondRandom === this.alphabet.indexOf(this.hiddenCharacters[this.numberOfGuesses].toUpperCase()));
+			secondRandom === this.alphabet.indexOf(correctLetter));
 
 		do {
 			thirdRandom = Math.floor(Math.random() * this.alphabet.length);
 		} while (thirdRandom === firstRandom || thirdRandom === secondRandom ||
-			thirdRandom === this.alphabet.indexOf(this.hiddenCharacters[this.numberOfGuesses].toUpperCase()));
+			thirdRandom === this.alphabet.indexOf(correctLetter));
 
-		switch (correctLetterIndex) {
-			case 1: {
-				this.firstCharacter = this.hiddenCharacters[this.numberOfGuesses].toUpperCase();
-				this.secondCharacter = this.alphabet[firstRandom]
-				this.thirdCharacter = this.alphabet[secondRandom]
-				this.fourthCharacter = this.alphabet[thirdRandom]
-				break;
-			}
-			case 2: {
-				this.secondCharacter = this.hiddenCharacters[this.numberOfGuesses].toUpperCase();
-				this.firstCharacter = this.alphabet[firstRandom]
-				this.thirdCharacter = this.alphabet[secondRandom]
-				this.fourthCharacter = this.alphabet[thirdRandom]
-				break;
-			}
-			case 3: {
-				this.thirdCharacter = this.hiddenCharacters[this.numberOfGuesses].toUpperCase();
-				this.secondCharacter = this.alphabet[firstRandom]
-				this.firstCharacter = this.alphabet[secondRandom]
-				this.fourthCharacter = this.alphabet[thirdRandom]
-				break;
-			}
-			case 4: {
-				this.fourthCharacter = this.hiddenCharacters[this.numberOfGuesses].toUpperCase();
-				this.secondCharacter = this.alphabet[firstRandom]
-				this.thirdCharacter = this.alphabet[secondRandom]
-				this.firstCharacter = this.alphabet[thirdRandom]
-				break;
-			}
-		}
-	}
+		do {
+			fourthRandom = Math.floor(Math.random() * this.alphabet.length);
+		} while (fourthRandom === firstRandom || fourthRandom === secondRandom || fourthRandom === thirdRandom ||
+			fourthRandom === this.alphabet.indexOf(correctLetter));
 
-	// Get hidden characters of the lesson, their
-	// indexes and create sentence with underscores
-	private processLesson(lesson: any) {
-		this.lessonLength = lesson.length;
-		this.indexes = lesson[this.sentenceIndex - 1].hiddenWord;
-		this.fullSentence = lesson[this.sentenceIndex - 1].text;
-		this.sentenceToShow = this.util.replaceLettersWithUnderscore(
-			this.fullSentence, this.indexes);
-
-		for (var i = 0; i < this.indexes.length; i++) {
-			this.hiddenCharacters.push(
-				(<string>(this.fullSentence)).charAt(this.indexes[i]))
-		}
+		this.firstCharacter = correctLetterIndex === 1
+			? correctLetter
+			: this.alphabet[firstRandom];
+		this.secondCharacter = correctLetterIndex === 2
+			? correctLetter
+			: this.alphabet[secondRandom];
+		this.thirdCharacter = correctLetterIndex === 3
+			? correctLetter
+			: this.alphabet[thirdRandom];
+		this.fourthCharacter = correctLetterIndex === 4
+			? correctLetter
+			: this.alphabet[fourthRandom];
 	}
 
 	// Show toast if sentence is fully filled
@@ -221,7 +196,7 @@ export class SentenceGuessPage implements OnInit {
 		if (event.key === this.hiddenCharacters[this.numberOfGuesses]) {
 			this.sentenceToShow = this.util.showTextWithGuessedCharacter(this.sentenceToShow,
 				this.hiddenCharacters[this.numberOfGuesses],
-				this.indexes[this.numberOfGuesses]);
+				this.lessonsData.lessons[this.lessonId].sentences[this.sentenceIndex - 1].hiddenWord[this.numberOfGuesses]);
 			++this.numberOfGuesses;
 			this.refreshLetters();
 		} else {

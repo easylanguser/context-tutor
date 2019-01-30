@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { LessonsListService } from '../../services/lessons-list/lessons-list.service';
 import { Router } from '@angular/router';
+import { LessonsListService } from 'src/app/services/lessons-list/lessons-list.service';
+import { Lesson } from 'src/app/models/lesson';
+import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 
 @Component({
 	selector: 'page-home',
@@ -11,11 +13,12 @@ import { Router } from '@angular/router';
 
 export class HomePage implements OnInit {
 
-	public lessons: any;
+	lessonsNames: Array<[number, string]> = [];
 
 	constructor(private api: LessonsListService,
 		private loadingController: LoadingController,
-		private router: Router) { }
+		private router: Router,
+		private lessonData: LessonsDataService) { }
 
 	ngOnInit() {
 		this.getData();
@@ -29,7 +32,12 @@ export class HomePage implements OnInit {
 		await loading.present();
 		this.api.getData()
 			.subscribe(res => {
-				this.lessons = res[0];
+				for (let i = 0; i < res[0].length; i++) {
+					const lesson = new Lesson(res[0][i].id, res[0][i].name,
+						res[0][i].url, res[0][i].created_at);
+					this.lessonData.addLesson(lesson);
+					this.lessonsNames.push([res[0][i].id, res[0][i].name]);
+				}
 				loading.dismiss();
 			}, err => {
 				console.log(err);
@@ -38,12 +46,7 @@ export class HomePage implements OnInit {
 	}
 
 	// Load new page with text
-	openLesson(lessonNumber) {
-		const lessonID = this.lessons[lessonNumber].id;
-		let lessonTitle: string = this.lessons[lessonNumber].name;
-		if (lessonTitle.length > 24) {
-			lessonTitle = lessonTitle.substr(0, 24) + '...';
-		}
-		this.router.navigate(['lesson-editing'], { queryParams: { lessonID: lessonID, lessonTitle: lessonTitle } });
+	openLesson(lessonID) {
+		this.router.navigate(['lesson-editing'], { queryParams: { lessonID: lessonID } });
 	}
 }

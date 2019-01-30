@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-  <div class="sentence-with-underscore" *ngFor="let sentence of sentencesWithUnderscores; index as i" (click)="openSentence(i)">
-    {{i+1}}. {{sentence}}
+  <div class="sentence-with-underscore" *ngFor="let sentence of sentences;index as i" (click)="openSentence(i)">
+    {{i + 1}}. {{sentence[1]}}
   </div>
 </ion-content>
