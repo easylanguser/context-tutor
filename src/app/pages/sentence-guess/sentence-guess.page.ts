@@ -159,7 +159,7 @@ export class SentenceGuessPage implements OnInit {
 		}
 	}
 
-	// Get hidden characters of the lesson, their 
+	// Get hidden characters of the lesson, their
 	// indexes and create sentence with underscores
 	private processLesson(lesson: any) {
 		this.lessonLength = lesson.length;
