@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { UtilsService } from '../../services/utils/utils.service';
 import { LessonByNameService } from '../../services/lesson-by-name/lesson-by-name.service';
-import { Storage } from '@ionic/storage';
 import { ToastController } from '@ionic/angular';
 
 @Component({
@@ -40,7 +39,6 @@ export class SentenceGuessPage implements OnInit {
 		private route: ActivatedRoute,
 		private loadingController: LoadingController,
 		private util: UtilsService,
-		private storage: Storage,
 		private toastController: ToastController) { }
 
 	ngOnInit() {
@@ -90,48 +88,21 @@ export class SentenceGuessPage implements OnInit {
 			message: 'Loading'
 		});
 		await loading.present();
-		this.storage.get(lesson + 'length').then((length) => {
-			if (length !== null) {
-				this.lessonLength = length;
-				this.storage.get(lesson + 's' + (this.sentenceIndex - 1) + 'idxs')
-					.then((val) => { this.indexes = val })
-				this.storage.get(lesson + 's' + (this.sentenceIndex - 1) + 'textunderscored')
-					.then((val) => { this.sentencesWithUnderscores = val })
-				this.storage.get(this.lessonId + 's' + (this.sentenceIndex - 1) + 'hiddenchars')
-					.then((val) => { this.hiddenCharacters = val })
-				this.storage.get(this.lessonId + 's' + (this.sentenceIndex - 1) + 'guesses')
-					.then((val) => {
-						if (val !== null) {
-							this.numberOfGuesses = val;
-						} else {
-							this.numberOfGuesses = 0;
-						}
-						const restoreIndexes = this.indexes.slice(0, this.numberOfGuesses);
-						const restoreCharacters = this.hiddenCharacters.slice(0, this.numberOfGuesses);
-						this.sentenceToShow = this.sentencesWithUnderscores;
-						for (var i = 0; i < restoreIndexes.length; i++) {
-							this.sentenceToShow = this.util.showTextWithGuessedCharacter(
-								this.sentenceToShow, restoreCharacters[i], restoreIndexes[i]);
-						}
-						this.refreshLetters()
-					})
+
+		this.api.getData(lesson)
+			.subscribe(res => {
+				this.processLesson((res[0]));
+				this.refreshLetters();
 				loading.dismiss();
-			} else {
-				this.api.getData(lesson)
-					.subscribe(res => {
-						this.processLesson((res[0]));
-						loading.dismiss();
-					}, err => {
-						console.log(err);
-						loading.dismiss();
-					});
-			}
-		})
+			}, err => {
+				console.log(err);
+				loading.dismiss();
+			});
 	}
 
 	private refreshLetters() {
 		if (this.numberOfGuesses == this.indexes.length) {
-			this.resetColors('green')
+			this.resetColors('green');
 			this.firstCharacter = 'D';
 			this.secondCharacter = 'O';
 			this.thirdCharacter = 'N';
@@ -235,6 +206,7 @@ export class SentenceGuessPage implements OnInit {
 		const event = new KeyboardEvent('CustomEvent4', { key: this.fourthCharacter.toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
+
 	// Filling in characters into underscores by keyboard
 	// If input is wrong - replace with sentence with underscores
 	// If lesson is over - show info
@@ -269,6 +241,5 @@ export class SentenceGuessPage implements OnInit {
 			//this.sentenceToShow = this.sentencesWithUnderscores;
 			//this.numberOfGuesses = 0;
 		}
-		this.storage.set(this.lessonId + 's' + (this.sentenceIndex - 1) + 'guesses', this.numberOfGuesses);
 	}
 }
