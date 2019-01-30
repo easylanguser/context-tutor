@@ -13,8 +13,7 @@ export class HomePage implements OnInit {
 
 	public lessons: any;
 
-	constructor(
-		private api: LessonsListService,
+	constructor(private api: LessonsListService,
 		private loadingController: LoadingController,
 		private router: Router) { }
 
@@ -38,10 +37,13 @@ export class HomePage implements OnInit {
 			});
 	}
 
-	// Load new page with text  
+	// Load new page with text
 	openLesson(lessonNumber) {
-		let lessonID = this.lessons[lessonNumber].id;
-		let lessonTitle = this.lessons[lessonNumber].name;
+		const lessonID = this.lessons[lessonNumber].id;
+		let lessonTitle: string = this.lessons[lessonNumber].name;
+		if (lessonTitle.length > 24) {
+			lessonTitle = lessonTitle.substr(0, 24) + '...';
+		}
 		this.router.navigate(['lesson-editing'], { queryParams: { lessonID: lessonID, lessonTitle: lessonTitle } });
 	}
 }

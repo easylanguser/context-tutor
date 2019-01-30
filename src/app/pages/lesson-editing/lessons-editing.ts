@@ -4,7 +4,6 @@ import { LessonByNameService } from '../../services/lesson-by-name/lesson-by-nam
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
-import { Storage } from '@ionic/storage';
 
 @Component({
 	selector: 'page-lessons-editing',
@@ -24,13 +23,11 @@ export class LessonsEditingPage {
 		private loadingController: LoadingController,
 		private util: UtilsService,
 		private route: ActivatedRoute,
-		private router: Router,
-		private storage: Storage) { }
+		private router: Router) { }
 
 	ngOnInit() {
-		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
+		this.getData(this.route.snapshot.queryParamMap.get('lessonID'));
 		this.lessonTitle = this.route.snapshot.queryParamMap.get('lessonTitle');
-		this.getData(this.lessonId);
 	}
 
 	// Open sentence to guess by clicking on it in the list
@@ -44,45 +41,30 @@ export class LessonsEditingPage {
 		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
 
-		this.storage.get(this.lessonId + 'length').then((length) => {
-			if (length !== null) {
-				for (var i = 0; i < length; i++) {
-					this.storage.get(this.lessonId + 's' + i + 'source')
-						.then((val) => { this.sentences.push(val) })
-					this.storage.get(this.lessonId + 's' + i + 'idxs')
-						.then((val) => { this.indexes.push(val) })
-					this.storage.get(this.lessonId + 's' + i + 'textunderscored')
-						.then((val) => { this.sentencesWithUnderscores.push(val) })
+		this.lessonId = lessonId;
+		this.sentences = [];
+		this.indexes = [];
+		this.sentencesWithUnderscores = [];
+
+		this.api.getData(lessonId)
+			.subscribe(res => {
+				let lesson = (res[0]);
+				
+				for (var i = 0; i < lesson.length; i++) {
+					this.sentences.push(lesson[i].text);
+					this.indexes.push(lesson[i].hiddenWord);
+					this.sentencesWithUnderscores.push(
+						this.util.replaceLettersWithUnderscore(this.sentences[i], this.indexes[i]))
+
+					const hiddenCharacters: string[] = [];
+					for (var j = 0; j < this.indexes[i].length; j++) {
+						hiddenCharacters.push(this.sentences[i].charAt(this.indexes[i][j]));
+					}
 				}
 				loading.dismiss();
-			} else {
-				this.api.getData(lessonId)
-					.subscribe(res => {
-						let lesson = (res[0]);
-						for (var i = 0; i < lesson.length; i++) {
-							this.sentences.push(lesson[i].text);
-							this.indexes.push(lesson[i].hiddenWord);
-							this.sentencesWithUnderscores.push(
-								this.util.replaceLettersWithUnderscore(this.sentences[i], this.indexes[i]))
-
-							this.storage.set(this.lessonId + 's' + i + 'source', this.sentences[i]);
-							this.storage.set(this.lessonId + 's' + i + 'idxs', this.indexes[i]);
-							this.storage.set(this.lessonId + 's' + i + 'textunderscored', this.sentencesWithUnderscores[i]);
-
-							const hiddenCharacters: string[] = [];
-							for (var j = 0; j < this.indexes[i].length; j++) {
-								hiddenCharacters.push(this.sentences[i].charAt(this.indexes[i][j]));
-							}
-							this.storage.set(this.lessonId + 's' + i + 'hiddenchars', hiddenCharacters);
-						}
-						this.storage.set(this.lessonId + 'length', lesson.length);
-						loading.dismiss();
-					}, err => {
-						console.log(err);
-						loading.dismiss();
-					});
-			}
-		});
-
+			}, err => {
+				console.log(err);
+				loading.dismiss();
+			});
 	}
 }
