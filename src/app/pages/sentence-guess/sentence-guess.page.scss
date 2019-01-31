@@ -33,24 +33,78 @@ ion-content {
 .letter-guessed {
     width: 20vw;
     font-size: 18vw;
-    display: inline-block;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-weight: bold;
-    background-color: rgb(224, 224, 224);
     border-style: solid;
+    background-color: rgb(238, 238, 238);
     border-width: 2px;
-    border-radius: 4px;
+    border-radius: 3px;
     margin: 1vmin;
+    text-align: center;
 }
 
-#previous-sentence-button {
-    vertical-align: top;
-    height: 4vh;
-    width: 5vw;
+#prev-button {
+    height: 11vmin;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    margin-left: 1vw;
+    margin-right: 3vw;
+    font-size: 1.4vh;
+    color: rgba(139, 139, 139, 0.7);
+    cursor: pointer;
+    text-align: center;
+}
+
+#next-button {
+    height: 11vmin;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(189, 189, 189, 0.5);
+    border-radius: 3px;
+    margin-right: 4vw;
+    font-size: 1.4vh;
+    color: rgba(139, 139, 139, 0.7);
+    cursor: pointer;
+    text-align: center;
+}
+
+#hint-button {
+    height: 11vmin;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(189, 189, 189, 0.5);
+    border-radius: 3px;
+    margin-right: 4vw;
+    font-size: 1.4vh;
+    color: rgba(139, 139, 139, 0.7);
+    cursor: pointer;
+    text-align: center;
+}
+
+#give-up-button {
+    height: 11vmin;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(189, 189, 189, 0.5);
+    border-radius: 3px;
+    margin-right: 4vw;
+    font-size: 1.4vh;
+    color: rgba(139, 139, 139, 0.7);
+    cursor: pointer;
+    text-align: center;
 }
 
 #next-sentence-button {
-    vertical-align: top;
-    height: 4vh;
-    width: 5vw;
+    height: 11vmin;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(189, 189, 189, 0.5);
+    border-radius: 3px;
+    font-size: 1.4vh;
+    color: rgba(139, 139, 139, 0.7);
+    cursor: pointer;
+    text-align: center;
+}
+
+.button-bottom-text {
+    font-size: 2vmax;
 }

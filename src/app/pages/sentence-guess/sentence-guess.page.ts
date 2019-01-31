@@ -20,7 +20,7 @@ export class SentenceGuessPage implements OnInit {
 	private numberOfGuesses: number = 0;
 	private lessonId: number = 0;
 	private sentenceIndex: number = 1;
-	private toastIsBeingShown: boolean;
+	private toastIsShown: boolean;
 	private alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	private sentenceToShow: string;
 	private hiddenCharacters: string[];
@@ -40,13 +40,13 @@ export class SentenceGuessPage implements OnInit {
 	ngOnInit() {
 		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('current')) + 1;
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
-		this.lessonLength = Number(this.getCurrentSentences().length);
-		this.sentenceToShow = this.getCurrentSentences()[this.sentenceIndex - 1].text;
+		this.lessonLength = Number(this.lessonsData.getLessonByID(this.lessonId).sentences.length);
+		this.sentenceToShow = this.getCurrentSentence().text;
 		this.getData();
 	};
 
-	private getCurrentSentences(): Sentence[] {
-		return this.lessonsData.getLessonByID(this.lessonId).sentences;
+	private getCurrentSentence(): Sentence {
+		return this.lessonsData.getLessonByID(this.lessonId).sentences[this.sentenceIndex - 1];
 	}
 
 	previousSentence() {
@@ -58,7 +58,7 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	nextSentence() {
-		if (this.sentenceIndex === this.getCurrentSentences.length) {
+		if (this.sentenceIndex === this.lessonsData.getLessonByID(this.lessonId).sentences.length) {
 			return;
 		}
 		++this.sentenceIndex;
@@ -90,13 +90,13 @@ export class SentenceGuessPage implements OnInit {
 		await loading.present();
 
 		this.hiddenCharacters = [];
-		for (let idx of this.getCurrentSentences()[this.sentenceIndex - 1].hiddenWord) {
-			this.hiddenCharacters.push(this.getCurrentSentences()[this.sentenceIndex - 1].text.charAt(Number(idx)));
+		for (let index of this.getCurrentSentence().hiddenWord) {
+			this.hiddenCharacters.push(this.getCurrentSentence().text.charAt(Number(index)));
 		}
 
 		this.sentenceToShow = this.util.replaceLettersWithUnderscore(
-			this.getCurrentSentences()[this.sentenceIndex - 1].text,
-			this.getCurrentSentences()[this.sentenceIndex - 1].hiddenWord);
+			this.getCurrentSentence().text,
+			this.getCurrentSentence().hiddenWord);
 
 		this.refreshLetters();
 
@@ -104,7 +104,7 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	private refreshLetters() {
-		if (this.numberOfGuesses == this.getCurrentSentences()[this.sentenceIndex - 1].hiddenWord.length) {
+		if (this.numberOfGuesses === this.getCurrentSentence().hiddenWord.length) {
 			this.resetColors('green');
 			this.firstCharacter = 'D';
 			this.secondCharacter = 'O';
@@ -150,8 +150,8 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	// Show toast if sentence is fully filled
-	async presentToastWithOptions() {
-		this.toastIsBeingShown = true;
+	async showToast() {
+		this.toastIsShown = true;
 		const toast = await this.toastController.create({
 			message: 'Sentence is over',
 			position: 'bottom',
@@ -159,7 +159,7 @@ export class SentenceGuessPage implements OnInit {
 		});
 		toast.present();
 		await new Promise(resolve => setTimeout(resolve, 2000));
-		this.toastIsBeingShown = false;
+		this.toastIsShown = false;
 	}
 
 	firstLetterClick() {
@@ -187,8 +187,8 @@ export class SentenceGuessPage implements OnInit {
 	// If lesson is over - show info
 	handleKeyboardEvent(event: KeyboardEvent) {
 		if (this.numberOfGuesses === this.hiddenCharacters.length) {
-			if (!this.toastIsBeingShown) {
-				this.presentToastWithOptions();
+			if (!this.toastIsShown) {
+				this.showToast();
 			}
 			return;
 		}
@@ -196,7 +196,7 @@ export class SentenceGuessPage implements OnInit {
 		if (event.key === this.hiddenCharacters[this.numberOfGuesses]) {
 			this.sentenceToShow = this.util.showTextWithGuessedCharacter(this.sentenceToShow,
 				this.hiddenCharacters[this.numberOfGuesses],
-				this.getCurrentSentences()[this.sentenceIndex - 1].hiddenWord[this.numberOfGuesses]);
+				this.getCurrentSentence().hiddenWord[this.numberOfGuesses]);
 			++this.numberOfGuesses;
 			this.refreshLetters();
 		} else {

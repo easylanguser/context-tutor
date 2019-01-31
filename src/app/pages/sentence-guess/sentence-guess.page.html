@@ -19,18 +19,50 @@
   <p id="sentence-to-show">
     {{sentenceIndex}}. {{sentenceToShow}}
   </p>
-  <div id="characters-row-guessed">
-    <div id="first-letter-guessed" (click)="firstLetterClick()" class="letter-guessed">
-      {{firstCharacter}}
-    </div>
-    <div id="second-letter-guessed" (click)="secondLetterClick()" class="letter-guessed">
-      {{secondCharacter}}
-    </div>
-    <div id="third-letter-guessed" (click)="thirdLetterClick()" class="letter-guessed">
-      {{thirdCharacter}}
-    </div>
-    <div id="fourth-letter-guessed" (click)="fourthLetterClick()" class="letter-guessed">
-      {{fourthCharacter}}
-    </div>
-  </div>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col (click)="firstLetterClick()" class="letter-guessed" id="first-letter-guessed">
+          {{firstCharacter}}
+        </ion-col>
+        <ion-col (click)="secondLetterClick()" class="letter-guessed" id="second-letter-guessed">
+          {{secondCharacter}}
+        </ion-col>
+        <ion-col (click)="thirdLetterClick()" class="letter-guessed" id="third-letter-guessed">
+          {{thirdCharacter}}
+        </ion-col>
+        <ion-col (click)="fourthLetterClick()" class="letter-guessed" id="fourth-letter-guessed">
+          {{fourthCharacter}}
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-row flex-wrap: nowrap>
+        <ion-col size="1.5" size-lg="1.2" no-padding id="prev-button" style="flex-flow: column;">
+          <ion-icon name="ios-arrow-back" style="font-size:6vmin;"></ion-icon><br>
+          Prev
+        </ion-col>
+        <ion-col size="1.5" size-lg="1.2" no-padding id="next-button" style="flex-flow: column;">
+          <ion-icon name="ios-arrow-forward" style="font-size:6vmin;"></ion-icon><br>
+          Next
+        </ion-col>
+        <ion-col size="1.5" size-lg="1.2" no-padding id="hint-button" style="flex-flow: column;">
+          <ion-icon name="md-help" style="font-size:6vmin;"></ion-icon><br>
+          Hint
+        </ion-col>
+        <ion-col size="2.3" size-lg="2.2" no-padding id="give-up-button" style="flex-flow: column;">
+          <ion-icon name="ios-exit" style="font-size:6vmin;"></ion-icon><br>
+          Give up
+        </ion-col>
+        <ion-col size="3.3" size-lg="2.7" no-padding id="next-sentence-button" style="flex-flow: column;">
+          <ion-icon name="ios-arrow-up" style="font-size:6vmin;"></ion-icon><br>
+          Next Sentence
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>
