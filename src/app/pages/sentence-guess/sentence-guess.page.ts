@@ -5,6 +5,7 @@ import { UtilsService } from '../../services/utils/utils.service';
 import { ToastController } from '@ionic/angular';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Sentence } from 'src/app/models/sentence';
+import { delay } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -49,7 +50,6 @@ export class SentenceGuessPage implements OnInit {
 		return this.lessonsData.getLessonByID(this.lessonId).sentences[this.sentenceIndex - 1];
 	}
 
-
 	nextSentence() {
 		if (this.sentenceIndex === this.lessonsData.getLessonByID(this.lessonId).sentences.length) {
 			this.sentenceIndex = 1;
@@ -59,21 +59,11 @@ export class SentenceGuessPage implements OnInit {
 		this.getData();
 	}
 
-	private setColor(letterBoxNumber: number) {
-		let letterId: string;
-		if (letterBoxNumber === 1) { letterId = 'first-letter-guessed' }
-		else if (letterBoxNumber === 2) { letterId = 'second-letter-guessed' }
-		else if (letterBoxNumber === 3) { letterId = 'third-letter-guessed' }
-		else if (letterBoxNumber === 4) { letterId = 'fourth-letter-guessed' }
-		else { return }
-		document.getElementById(letterId).style.borderColor = '#f04141';
-	}
-
-	private resetColors(color: string) {
-		document.getElementById('first-letter-guessed').style.borderColor = color;
-		document.getElementById('second-letter-guessed').style.borderColor = color;
-		document.getElementById('third-letter-guessed').style.borderColor = color;
-		document.getElementById('fourth-letter-guessed').style.borderColor = color;
+	private resetColors() {
+		document.getElementById('first-letter-guessed').style.boxShadow = 'none';
+		document.getElementById('second-letter-guessed').style.boxShadow = 'none';
+		document.getElementById('third-letter-guessed').style.boxShadow = 'none';
+		document.getElementById('fourth-letter-guessed').style.boxShadow = 'none';
 	}
 
 	// Get selected lesson from API
@@ -97,9 +87,21 @@ export class SentenceGuessPage implements OnInit {
 		loading.dismiss();
 	}
 
+	giveUp() {
+		this.sentenceToShow = this.getCurrentSentence().text;
+		document.getElementById('next-sentence-button').style.boxShadow = '0px 3px 10px 1px rgba(245, 229, 27, 1)';
+		this.numberOfGuesses = this.hiddenCharacters.length;
+		this.resetColors();
+
+		this.firstCharacter = 'D';
+		this.secondCharacter = 'O';
+		this.thirdCharacter = 'N';
+		this.fourthCharacter = 'E';
+	}
+
 	private refreshLetters() {
 		if (this.numberOfGuesses === this.getCurrentSentence().hiddenWord.length) {
-			this.resetColors('green');
+			document.getElementById('next-sentence-button').style.boxShadow = '0px 3px 10px 1px rgba(58,130,42,0.9)';
 			this.firstCharacter = 'D';
 			this.secondCharacter = 'O';
 			this.thirdCharacter = 'N';
@@ -107,7 +109,7 @@ export class SentenceGuessPage implements OnInit {
 			return;
 		}
 
-		this.resetColors('black');
+		this.resetColors();
 
 		const correctLetterIndex = Math.floor(Math.random() * 4) + 1;
 		const correctLetter = this.hiddenCharacters[this.numberOfGuesses].toUpperCase();
@@ -174,6 +176,16 @@ export class SentenceGuessPage implements OnInit {
 	fourthLetterClick() {
 		const event = new KeyboardEvent('CustomEvent4', { key: this.fourthCharacter.toLowerCase() });
 		this.handleKeyboardEvent(event);
+	}
+
+	private setColor(letterBoxNumber: number) {
+		let letterId: string;
+		if (letterBoxNumber === 1) { letterId = 'first-letter-guessed' }
+		else if (letterBoxNumber === 2) { letterId = 'second-letter-guessed' }
+		else if (letterBoxNumber === 3) { letterId = 'third-letter-guessed' }
+		else if (letterBoxNumber === 4) { letterId = 'fourth-letter-guessed' }
+		else { return }
+		document.getElementById(letterId).style.boxShadow = '0px 3px 10px 1px rgba(58,130,42,0.9)';
 	}
 
 	// Filling in characters into underscores by keyboard

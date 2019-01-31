@@ -16,7 +16,7 @@
 
 <ion-content>
   <p id="sentence-to-show">
-    {{sentenceIndex}}. {{sentenceToShow}}
+    {{sentenceToShow}}
   </p>
 </ion-content>
 
@@ -46,23 +46,25 @@
     <div style="background-color: white; margin-top: 1vh;">
       <ion-grid>
         <ion-row flex-wrap: nowrap>
-          <ion-col size="1.5" size-lg="1.2" no-padding class="bottom-buttons" style="flex-flow: column;">
+          <ion-col size="1.5" size-lg="1.4" no-padding class="bottom-buttons" style="flex-flow: column;">
             <ion-icon name="ios-arrow-back" style="font-size:6vmin;"></ion-icon><br>
             Prev
           </ion-col>
-          <ion-col size="1.5" size-lg="1.2" no-padding class="bottom-buttons" style="flex-flow: column;">
+          <ion-col size="1.5" offset="0.3" size-lg="1.4" no-padding class="bottom-buttons" style="flex-flow: column;">
             <ion-icon name="ios-arrow-forward" style="font-size:6vmin;"></ion-icon><br>
             Next
           </ion-col>
-          <ion-col size="1.5" size-lg="1.2" no-padding class="bottom-buttons" style="flex-flow: column;">
+          <ion-col size="1.5" offset="0.7" size-lg="1.4" no-padding class="bottom-buttons" style="flex-flow: column;">
             <ion-icon name="md-help" style="font-size:6vmin;"></ion-icon><br>
             Hint
           </ion-col>
-          <ion-col size="2.3" size-lg="2.5" no-padding class="bottom-buttons" style="flex-flow: column;">
+          <ion-col size="2.3" offset="0.6" size-lg="2.7" no-padding class="bottom-buttons" 
+            style="flex-flow: column;" (click)="giveUp()">
             <ion-icon name="ios-exit" style="font-size:6vmin;"></ion-icon><br>
             Give up
           </ion-col>
-          <ion-col size="3.1" size-lg="2.7" no-padding class="bottom-buttons" style="flex-flow: column;" (click)="nextSentence()">
+          <ion-col id="next-sentence-button" size="3" offset="0.6" size-lg="2.9" 
+            no-padding class="bottom-buttons" style="flex-flow: column;" (click)="nextSentence()">
             <ion-icon name="ios-arrow-up" style="font-size:6vmin;"></ion-icon><br>
             Next Sentence
           </ion-col>
