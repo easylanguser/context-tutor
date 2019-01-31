@@ -1,68 +1,74 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-back-button></ion-back-button>
+  <ion-toolbar color="toolbar" class="no-selection">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center>
+      Sentence {{sentenceIndex}} of {{lessonLength}}
+    </ion-title>
     <ion-buttons slot="end">
-      <div slot="end" style="height: 15vw; width: 15vw; background-image: url('../../assets/icon/favicon.png');
-        background-position: center; background-size: cover;"></div>
+
+      <div slot="end" style="height: 7vw; width: 7vw; background-image: url('../../assets/icon/favicon.png');
+        background-position: center; background-size: cover; margin-right: 3vw;"></div>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div style="margin-top: 2vh;">
-    <ion-button id="previous-sentence-button" (click)="previousSentence()">
-      <</ion-button> <span id="lesson-progress">
-        {{sentenceIndex}} of {{lessonLength}}
-        </span>
-        <ion-button id="next-sentence-button" (click)="nextSentence()">></ion-button>
-  </div>
   <p id="sentence-to-show">
     {{sentenceIndex}}. {{sentenceToShow}}
   </p>
 </ion-content>
 
-<ion-footer>
-  <ion-toolbar>
-    <ion-grid>
-      <ion-row>
-        <ion-col (click)="firstLetterClick()" class="letter-guessed" id="first-letter-guessed">
-          {{firstCharacter}}
-        </ion-col>
-        <ion-col (click)="secondLetterClick()" class="letter-guessed" id="second-letter-guessed">
-          {{secondCharacter}}
-        </ion-col>
-        <ion-col (click)="thirdLetterClick()" class="letter-guessed" id="third-letter-guessed">
-          {{thirdCharacter}}
-        </ion-col>
-        <ion-col (click)="fourthLetterClick()" class="letter-guessed" id="fourth-letter-guessed">
-          {{fourthCharacter}}
-        </ion-col>
-      </ion-row>
-    </ion-grid>
 
-    <ion-grid>
-      <ion-row flex-wrap: nowrap>
-        <ion-col size="1.5" size-lg="1.2" no-padding id="prev-button" style="flex-flow: column;">
-          <ion-icon name="ios-arrow-back" style="font-size:6vmin;"></ion-icon><br>
-          Prev
-        </ion-col>
-        <ion-col size="1.5" size-lg="1.2" no-padding id="next-button" style="flex-flow: column;">
-          <ion-icon name="ios-arrow-forward" style="font-size:6vmin;"></ion-icon><br>
-          Next
-        </ion-col>
-        <ion-col size="1.5" size-lg="1.2" no-padding id="hint-button" style="flex-flow: column;">
-          <ion-icon name="md-help" style="font-size:6vmin;"></ion-icon><br>
-          Hint
-        </ion-col>
-        <ion-col size="2.3" size-lg="2.2" no-padding id="give-up-button" style="flex-flow: column;">
-          <ion-icon name="ios-exit" style="font-size:6vmin;"></ion-icon><br>
-          Give up
-        </ion-col>
-        <ion-col size="3.3" size-lg="2.7" no-padding id="next-sentence-button" style="flex-flow: column;">
-          <ion-icon name="ios-arrow-up" style="font-size:6vmin;"></ion-icon><br>
-          Next Sentence
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+<ion-footer>
+  <ion-toolbar no-padding class="no-selection">
+
+    <div style="background-color: white;">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="2.4" offset="0.4" (click)="firstLetterClick()" class="letter-guessed" id="first-letter-guessed">
+            {{firstCharacter}}
+          </ion-col>
+          <ion-col size="2.4" offset="0.4" (click)="secondLetterClick()" class="letter-guessed" id="second-letter-guessed">
+            {{secondCharacter}}
+          </ion-col>
+          <ion-col size="2.4" offset="0.4" (click)="thirdLetterClick()" class="letter-guessed" id="third-letter-guessed">
+            {{thirdCharacter}}
+          </ion-col>
+          <ion-col size="2.4" offset="0.4" (click)="fourthLetterClick()" class="letter-guessed" id="fourth-letter-guessed">
+            {{fourthCharacter}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <div style="background-color: white; margin-top: 1vh;">
+      <ion-grid>
+        <ion-row flex-wrap: nowrap>
+          <ion-col size="1.5" size-lg="1.2" no-padding class="bottom-buttons" style="flex-flow: column;">
+            <ion-icon name="ios-arrow-back" style="font-size:6vmin;"></ion-icon><br>
+            Prev
+          </ion-col>
+          <ion-col size="1.5" size-lg="1.2" no-padding class="bottom-buttons" style="flex-flow: column;">
+            <ion-icon name="ios-arrow-forward" style="font-size:6vmin;"></ion-icon><br>
+            Next
+          </ion-col>
+          <ion-col size="1.5" size-lg="1.2" no-padding class="bottom-buttons" style="flex-flow: column;">
+            <ion-icon name="md-help" style="font-size:6vmin;"></ion-icon><br>
+            Hint
+          </ion-col>
+          <ion-col size="2.3" size-lg="2.5" no-padding class="bottom-buttons" style="flex-flow: column;">
+            <ion-icon name="ios-exit" style="font-size:6vmin;"></ion-icon><br>
+            Give up
+          </ion-col>
+          <ion-col size="3.1" size-lg="2.7" no-padding class="bottom-buttons" style="flex-flow: column;" (click)="nextSentence()">
+            <ion-icon name="ios-arrow-up" style="font-size:6vmin;"></ion-icon><br>
+            Next Sentence
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
   </ion-toolbar>
 </ion-footer>

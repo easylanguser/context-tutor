@@ -37,9 +37,10 @@ export class LessonsEditingPage {
 	}
 
 	doRefresh(event) {
+		this.getData(this.lessonId).then(_ => { event.target.complete() });
 		setTimeout(() => {
 			event.target.complete();
-		}, 2000);
+		}, 3000);
 	}
 
 	// Get sentences by certain lesson
@@ -52,8 +53,8 @@ export class LessonsEditingPage {
 				let lsn = res[0];
 				for (let i = 0; i < lsn.length; i++) {
 					const sentence = new Sentence(lsn[i].id, lsn[i].hiddenWord, lsn[i].text);
-					this.sentences.push([lsn[i].id, this.util.replaceLettersWithUnderscore(lsn[i].text, lsn[i].hiddenWord)]);
 					if (!this.lessonData.getLessonByID(lessonId).sentences.some(sntn => sntn.id === sentence.id)) {
+						this.sentences.push([lsn[i].id, this.util.replaceLettersWithUnderscore(lsn[i].text, lsn[i].hiddenWord)]);
 						this.lessonData.getLessonByID(lessonId).addSentence(sentence);
 					}
 				}

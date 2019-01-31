@@ -8,12 +8,12 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
       refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
-  <div class="sentence-with-underscore" *ngFor="let sentence of sentences;index as i" (click)="openSentence(i)">
-    {{i + 1}}. {{sentence[1]}}
+  <div class="sentence-with-underscore" *ngFor="let sentence of this.lessonData.getLessonByID(this.lessonId).sentences;index as i" (click)="openSentence(i)">
+    {{i + 1}}. {{sentence.text}}
   </div>
 </ion-content>

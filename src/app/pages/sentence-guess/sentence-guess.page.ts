@@ -49,19 +49,13 @@ export class SentenceGuessPage implements OnInit {
 		return this.lessonsData.getLessonByID(this.lessonId).sentences[this.sentenceIndex - 1];
 	}
 
-	previousSentence() {
-		if (this.sentenceIndex === 1) {
-			return;
-		}
-		--this.sentenceIndex;
-		this.getData();
-	}
 
 	nextSentence() {
 		if (this.sentenceIndex === this.lessonsData.getLessonByID(this.lessonId).sentences.length) {
-			return;
+			this.sentenceIndex = 1;
+		} else {
+			++this.sentenceIndex;
 		}
-		++this.sentenceIndex;
 		this.getData();
 	}
 
