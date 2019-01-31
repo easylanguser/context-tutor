@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { SentenceGuessPage } from '../app/pages/sentence-guess/sentence-guess.page'
-import { LessonsEditingPage } from '../app/pages/lesson-editing/lessons-editing'
+import { SentencesListPage } from '../app/pages/sentences-list/sentences-list'
 import { HttpClient }  from '@angular/common/http'
 import { HttpClientModule } from '@angular/common/http'
 
@@ -31,7 +31,7 @@ export function jwtOptionsFactory(storage) {
 }
 
 @NgModule({
-  declarations: [AppComponent, LessonsEditingPage, SentenceGuessPage],
+  declarations: [AppComponent, SentencesListPage, SentenceGuessPage],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule,LoginPageModule,SignUpPageModule,
       AccountPageModule,

@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {LessonsEditingPage} from './pages/lesson-editing/lessons-editing';
+import {SentencesListPage} from './pages/sentences-list/sentences-list';
 import {SentenceGuessPage} from './pages/sentence-guess/sentence-guess.page';
 
 import {AuthGuardService} from "./services/guard/auth-guard.service";
@@ -11,7 +11,7 @@ import {AccountPage} from "./pages/account/account.page";
 const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: 'home', loadChildren: './pages/home/home.module#HomePageModule', canActivate: [AuthGuardService]},
-    {path: 'lesson-editing', component: LessonsEditingPage, canActivate: [AuthGuardService]},
+    {path: 'sentences-list', component: SentencesListPage, canActivate: [AuthGuardService]},
     {path: 'sentence-guess', component: SentenceGuessPage, canActivate: [AuthGuardService]},
     {path: 'login', component: LoginPage},
     {path: 'sign-up', component: SignUpPage},

@@ -8,12 +8,12 @@ import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 
 @Component({
-	selector: 'page-lessons-editing',
-	templateUrl: 'lessons-editing.html',
-	styleUrls: ['lessons-editing.scss'],
+	selector: 'page-sentences-list',
+	templateUrl: 'sentences-list.html',
+	styleUrls: ['sentences-list.scss'],
 })
 
-export class LessonsEditingPage {
+export class SentencesListPage {
 
 	private lessonId: number;
 	private sentences: Array<[number, string]> = [];

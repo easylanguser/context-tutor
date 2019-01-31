@@ -47,6 +47,6 @@ export class HomePage implements OnInit {
 
 	// Load new page with text
 	openLesson(lessonID) {
-		this.router.navigate(['lesson-editing'], { queryParams: { lessonID: lessonID } });
+		this.router.navigate(['sentences-list'], { queryParams: { lessonID: lessonID } });
 	}
 }

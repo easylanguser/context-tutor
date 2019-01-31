@@ -149,10 +149,10 @@ export class SentenceGuessPage implements OnInit {
 		const toast = await this.toastController.create({
 			message: 'Sentence is over',
 			position: 'bottom',
-			duration: 1500
+			duration: 1200
 		});
 		toast.present();
-		await new Promise(resolve => setTimeout(resolve, 2000));
+		await new Promise(resolve => setTimeout(resolve, 1600));
 		this.toastIsShown = false;
 	}
 
