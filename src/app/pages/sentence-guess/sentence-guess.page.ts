@@ -5,6 +5,7 @@ import { UtilsService } from '../../services/utils/utils.service';
 import { ToastController } from '@ionic/angular';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Sentence } from 'src/app/models/sentence';
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -17,13 +18,14 @@ import { Sentence } from 'src/app/models/sentence';
 
 export class SentenceGuessPage implements OnInit {
 
-	private numberOfGuesses: number = 0;
+	private numberOfSentencesGuesses: number = 0;
+	private numberOfWordGuesses: number = 0;
 	private lessonId: number = 0;
 	private sentenceIndex: number = 1;
 	private toastIsShown: boolean;
 	private alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	private sentenceToShow: string;
-	private hiddenCharacters: string[];
+	private hiddenCharacters: Array<string[]>;
 	private lessonLength: number;
 
 	private firstCharacter: string;
@@ -35,7 +37,8 @@ export class SentenceGuessPage implements OnInit {
 		private loadingController: LoadingController,
 		private util: UtilsService,
 		private toastController: ToastController,
-		private lessonsData: LessonsDataService) { }
+		private lessonsData: LessonsDataService,
+		private vibration: Vibration) { }
 
 	ngOnInit() {
 		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('current')) + 1;
@@ -55,6 +58,8 @@ export class SentenceGuessPage implements OnInit {
 		} else {
 			++this.sentenceIndex;
 		}
+		this.numberOfSentencesGuesses = 0;
+		this.numberOfWordGuesses = 0;
 		this.getData();
 	}
 
@@ -72,12 +77,22 @@ export class SentenceGuessPage implements OnInit {
 		});
 		await loading.present();
 
+		document.getElementById('next-sentence-button').style.boxShadow = 'none';
+
 		this.hiddenCharacters = [];
-		for (let index of this.getCurrentSentence().hiddenWord) {
-			this.hiddenCharacters.push(this.getCurrentSentence().text.charAt(Number(index)));
+
+		for (let i = 0; i < this.getCurrentSentence().hiddenWord.length; i++) {
+			const chars: string[] = [];
+			for (let j = 0; j < this.getCurrentSentence().hiddenWord[i][1]; j++) {
+				chars.push(this.getCurrentSentence().text.charAt(this.getCurrentSentence().hiddenWord[i][0] + j));
+			}
+			this.hiddenCharacters.push(chars);
 		}
 
-		this.sentenceToShow = this.getCurrentSentence().textUnderscored;
+		this.sentenceToShow = this.util.showTextWithGuessedCharacter(
+			this.getCurrentSentence().textUnderscored,
+			'?',
+			this.getCurrentSentence().hiddenWord[this.numberOfSentencesGuesses][0] + this.numberOfWordGuesses);
 
 		this.refreshLetters();
 
@@ -87,8 +102,9 @@ export class SentenceGuessPage implements OnInit {
 	giveUp() {
 		//this.sentenceToShow = this.getCurrentSentence().text + '<mark class="yellow-box-black-border">Marked</mark>';
 		document.getElementById('next-sentence-button').style.boxShadow = '0px 3px 10px 1px rgba(245, 229, 27, 1)';
-		this.numberOfGuesses = this.hiddenCharacters.length;
+		this.numberOfSentencesGuesses = this.hiddenCharacters.length;
 		this.resetColors();
+		this.sentenceToShow = this.getCurrentSentence().text;
 
 		this.firstCharacter = 'D';
 		this.secondCharacter = 'O';
@@ -96,9 +112,18 @@ export class SentenceGuessPage implements OnInit {
 		this.fourthCharacter = 'E';
 	}
 
+	hint() {
+		if (this.numberOfSentencesGuesses !== this.hiddenCharacters.length) {
+			const event = new KeyboardEvent('CustomEvent0', {
+				key: this.hiddenCharacters[this.numberOfSentencesGuesses][this.numberOfWordGuesses]
+			});
+			this.handleKeyboardEvent(event);
+		}
+	}
+
 	private refreshLetters() {
-		if (this.numberOfGuesses === this.getCurrentSentence().hiddenWord.length) {
-			document.getElementById('next-sentence-button').style.boxShadow = '0px 3px 10px 1px rgba(58,130,42,0.9)';
+		if (this.numberOfSentencesGuesses === this.getCurrentSentence().hiddenWord.length) {
+			document.getElementById('next-sentence-button').style.boxShadow = '0px 1px 4px 1px #139c0d';
 			this.firstCharacter = 'D';
 			this.secondCharacter = 'O';
 			this.thirdCharacter = 'N';
@@ -109,7 +134,7 @@ export class SentenceGuessPage implements OnInit {
 		this.resetColors();
 
 		const correctLetterIndex = Math.floor(Math.random() * 4) + 1;
-		const correctLetter = this.hiddenCharacters[this.numberOfGuesses].toUpperCase();
+		const correctLetter = this.hiddenCharacters[this.numberOfSentencesGuesses][this.numberOfWordGuesses].toUpperCase();
 		const firstRandom = Math.floor(Math.random() * this.alphabet.length);
 		let secondRandom, thirdRandom, fourthRandom;
 
@@ -147,11 +172,12 @@ export class SentenceGuessPage implements OnInit {
 		this.toastIsShown = true;
 		const toast = await this.toastController.create({
 			message: 'Sentence is over',
-			position: 'bottom',
-			duration: 1200
+			position: 'middle',
+			duration: 500,
+			cssClass: 'toast-container'
 		});
 		toast.present();
-		await new Promise(resolve => setTimeout(resolve, 1600));
+		await new Promise(resolve => setTimeout(resolve, 800));
 		this.toastIsShown = false;
 	}
 
@@ -189,20 +215,41 @@ export class SentenceGuessPage implements OnInit {
 	// If input is wrong - replace with sentence with underscores
 	// If lesson is over - show info
 	handleKeyboardEvent(event: KeyboardEvent) {
-		if (this.numberOfGuesses === this.hiddenCharacters.length) {
+		if (this.numberOfSentencesGuesses === this.hiddenCharacters.length) {
 			if (!this.toastIsShown) {
 				this.showToast();
 			}
 			return;
 		}
 
-		if (event.key === this.hiddenCharacters[this.numberOfGuesses]) {
-			this.sentenceToShow = this.util.showTextWithGuessedCharacter(this.sentenceToShow,
-				this.hiddenCharacters[this.numberOfGuesses],
-				this.getCurrentSentence().hiddenWord[this.numberOfGuesses]);
-			++this.numberOfGuesses;
+		if (event.key === this.hiddenCharacters[this.numberOfSentencesGuesses][this.numberOfWordGuesses]) {
+			this.sentenceToShow = this.util.showTextWithGuessedCharacter(
+				this.sentenceToShow,
+				this.hiddenCharacters[this.numberOfSentencesGuesses][this.numberOfWordGuesses],
+				this.getCurrentSentence().hiddenWord[this.numberOfSentencesGuesses][0] + this.numberOfWordGuesses);
+
+			if (this.numberOfWordGuesses !== this.getCurrentSentence().hiddenWord[this.numberOfSentencesGuesses][1] - 1) {
+				this.sentenceToShow = this.util.showTextWithGuessedCharacter(
+					this.sentenceToShow,
+					'?',
+					this.getCurrentSentence().hiddenWord[this.numberOfSentencesGuesses][0] + this.numberOfWordGuesses + 1);
+			} else {
+				if (this.numberOfSentencesGuesses !== this.getCurrentSentence().hiddenWord.length - 1) {
+					this.sentenceToShow = this.util.showTextWithGuessedCharacter(
+						this.sentenceToShow,
+						'?',
+						this.getCurrentSentence().hiddenWord[this.numberOfSentencesGuesses + 1][0]);
+				}
+			}
+
+			++this.numberOfWordGuesses;
+			if (this.numberOfWordGuesses === this.getCurrentSentence().hiddenWord[this.numberOfSentencesGuesses][1]) {
+				++this.numberOfSentencesGuesses;
+				this.numberOfWordGuesses = 0;
+			}
 			this.refreshLetters();
 		} else {
+			this.vibration.vibrate([300, 300]); // Doesn't work on Android for now :<
 			if (event.key === this.firstCharacter.toLowerCase()) {
 				this.setColor(1);
 			}

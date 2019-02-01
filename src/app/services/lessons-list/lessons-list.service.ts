@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';  
 import { forkJoin } from 'rxjs';
 import {HttpService} from "../http/rest/http.service";
 

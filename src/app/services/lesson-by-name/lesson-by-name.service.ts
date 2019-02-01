@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import {HttpService} from "../http/rest/http.service";
 
@@ -15,8 +14,7 @@ export class LessonByNameService {
   constructor(private httpService: HttpService) { }
 
   getData(lessonId: number): Observable<any> {
-    let response = this.httpService.doGet(apiUrl + lessonId)
-
+    let response = this.httpService.doGet(apiUrl+ lessonId);
     return forkJoin([response]);
   }
 }

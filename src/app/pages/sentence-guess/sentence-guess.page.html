@@ -15,10 +15,9 @@
 </ion-header>
 
 <ion-content>
-  <p [innerHTML]="sentenceToShow" id="sentence-to-show"> 
+  <p [innerHTML]="sentenceToShow" id="sentence-to-show">
   </p>
 </ion-content>
-
 
 <ion-footer>
   <ion-toolbar no-padding class="no-selection">
@@ -53,17 +52,18 @@
             <ion-icon name="ios-arrow-forward" style="font-size:6vmin;"></ion-icon><br>
             Next
           </ion-col>
-          <ion-col size="1.5" offset="0.7" size-lg="1.4" no-padding class="bottom-buttons" style="flex-flow: column;">
+          <ion-col size="1.5" offset="0.7" size-lg="1.4" no-padding class="bottom-buttons" style="flex-flow: column;"
+            (click)="hint()">
             <ion-icon name="md-help" style="font-size:6vmin;"></ion-icon><br>
             Hint
           </ion-col>
-          <ion-col size="2.3" offset="0.6" size-lg="2.7" no-padding class="bottom-buttons" 
-            style="flex-flow: column;" (click)="giveUp()">
+          <ion-col size="2.3" offset="0.6" size-lg="2.7" no-padding class="bottom-buttons" style="flex-flow: column;"
+            (click)="giveUp()">
             <ion-icon name="ios-exit" style="font-size:6vmin;"></ion-icon><br>
             Give up
           </ion-col>
-          <ion-col id="next-sentence-button" size="3" offset="0.6" size-lg="2.9" 
-            no-padding class="bottom-buttons" style="flex-flow: column;" (click)="nextSentence()">
+          <ion-col id="next-sentence-button" size="3" offset="0.6" size-lg="2.9" no-padding class="bottom-buttons"
+            style="flex-flow: column;" (click)="nextSentence()">
             <ion-icon name="ios-arrow-up" style="font-size:6vmin;"></ion-icon><br>
             Next Sentence
           </ion-col>

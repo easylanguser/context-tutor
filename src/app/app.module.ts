@@ -19,7 +19,7 @@ import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import {LoginPageModule} from "./pages/login/login.module";
 import {SignUpPageModule} from "./pages/sign-up/sign-up.module";
 import {AccountPageModule} from "./pages/account/account.module";
-
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 export function jwtOptionsFactory(storage) {
     return {
@@ -50,6 +50,7 @@ export function jwtOptionsFactory(storage) {
     StatusBar,
     SplashScreen,
     HttpClient,
+    Vibration,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
