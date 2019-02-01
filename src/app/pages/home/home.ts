@@ -13,8 +13,6 @@ import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.s
 
 export class HomePage implements OnInit {
 
-	lessonsNames: Array<[number, string]> = [];
-
 	constructor(private api: LessonsListService,
 		private loadingController: LoadingController,
 		private router: Router,
@@ -22,6 +20,13 @@ export class HomePage implements OnInit {
 
 	ngOnInit() {
 		this.getData();
+	}
+
+	doRefresh(event) {
+		this.getData().then(_ => { event.target.complete() });
+		setTimeout(() => {
+			event.target.complete();
+		}, 5000);
 	}
 
 	// Get list of lessons for the home page
@@ -35,8 +40,9 @@ export class HomePage implements OnInit {
 				for (let i = 0; i < res[0].length; i++) {
 					const lesson = new Lesson(res[0][i].id, res[0][i].name,
 						res[0][i].url, res[0][i].created_at);
-					this.lessonData.addLesson(lesson);
-					this.lessonsNames.push([res[0][i].id, res[0][i].name]);
+					if (this.lessonData.getLessonByID(lesson.id) === undefined) {
+						this.lessonData.addLesson(lesson);
+					}
 				}
 				loading.dismiss();
 			}, err => {
