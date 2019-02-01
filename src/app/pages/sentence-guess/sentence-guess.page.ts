@@ -77,6 +77,8 @@ export class SentenceGuessPage implements OnInit {
 			this.hiddenCharacters.push(this.getCurrentSentence().text.charAt(Number(index)));
 		}
 
+		this.sentenceToShow = this.getCurrentSentence().textUnderscored;
+
 		this.refreshLetters();
 
 		loading.dismiss();
