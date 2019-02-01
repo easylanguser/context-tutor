@@ -5,7 +5,6 @@ import { UtilsService } from '../../services/utils/utils.service';
 import { ToastController } from '@ionic/angular';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Sentence } from 'src/app/models/sentence';
-import { delay } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -42,7 +41,7 @@ export class SentenceGuessPage implements OnInit {
 		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('current')) + 1;
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
 		this.lessonLength = Number(this.lessonsData.getLessonByID(this.lessonId).sentences.length);
-		this.sentenceToShow = this.getCurrentSentence().text;
+		this.sentenceToShow = this.getCurrentSentence().textUnderscored;
 		this.getData();
 	};
 
@@ -78,17 +77,13 @@ export class SentenceGuessPage implements OnInit {
 			this.hiddenCharacters.push(this.getCurrentSentence().text.charAt(Number(index)));
 		}
 
-		this.sentenceToShow = this.util.replaceLettersWithUnderscore(
-			this.getCurrentSentence().text,
-			this.getCurrentSentence().hiddenWord);
-
 		this.refreshLetters();
 
 		loading.dismiss();
 	}
 
 	giveUp() {
-		this.sentenceToShow = this.getCurrentSentence().text;
+		//this.sentenceToShow = this.getCurrentSentence().text + '<mark class="yellow-box-black-border">Marked</mark>';
 		document.getElementById('next-sentence-button').style.boxShadow = '0px 3px 10px 1px rgba(245, 229, 27, 1)';
 		this.numberOfGuesses = this.hiddenCharacters.length;
 		this.resetColors();

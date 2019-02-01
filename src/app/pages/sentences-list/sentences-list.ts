@@ -16,7 +16,6 @@ import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.s
 export class SentencesListPage {
 
 	private lessonId: number;
-	private sentences: Array<[number, string]> = [];
 
 	constructor(private api: LessonByNameService,
 		private loadingController: LoadingController,
@@ -40,7 +39,7 @@ export class SentencesListPage {
 		this.getData(this.lessonId).then(_ => { event.target.complete() });
 		setTimeout(() => {
 			event.target.complete();
-		}, 3000);
+		}, 5000);
 	}
 
 	// Get sentences by certain lesson
@@ -52,9 +51,12 @@ export class SentencesListPage {
 			.subscribe(res => {
 				let lsn = res[0];
 				for (let i = 0; i < lsn.length; i++) {
-					const sentence = new Sentence(lsn[i].id, lsn[i].hiddenWord, lsn[i].text);
+					const sentence = new Sentence(
+						lsn[i].id, 
+						lsn[i].hiddenWord, 
+						lsn[i].text, 
+						this.util.replaceLettersWithUnderscore(lsn[i].text, lsn[i].hiddenWord));
 					if (!this.lessonData.getLessonByID(lessonId).sentences.some(sntn => sntn.id === sentence.id)) {
-						this.sentences.push([lsn[i].id, this.util.replaceLettersWithUnderscore(lsn[i].text, lsn[i].hiddenWord)]);
 						this.lessonData.getLessonByID(lessonId).addSentence(sentence);
 					}
 				}

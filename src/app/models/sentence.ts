@@ -4,5 +4,5 @@ import { Injectable } from '@angular/core';
     providedIn: 'root'
 })
 export class Sentence {
-    constructor(public id: number, public hiddenWord: number[], public text: string) { }
+    constructor(public id: number, public hiddenWord: number[], public text: string, public textUnderscored) { }
 }
