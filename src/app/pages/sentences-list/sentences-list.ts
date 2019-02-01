@@ -53,9 +53,9 @@ export class SentencesListPage {
 				for (let i = 0; i < lsn.length; i++) {
 					const sentence = new Sentence(
 						lsn[i].id, 
-						lsn[i].hiddenWord, 
+						lsn[i].words, 
 						lsn[i].text, 
-						this.util.replaceLettersWithUnderscore(lsn[i].text, lsn[i].hiddenWord),
+						this.util.replaceLettersWithUnderscore(lsn[i].text, lsn[i].words),
 						false);
 					if (!this.lessonData.getLessonByID(lessonId).sentences.some(sntn => sntn.id === sentence.id)) {
 						this.lessonData.getLessonByID(lessonId).addSentence(sentence);
