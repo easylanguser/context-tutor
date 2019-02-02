@@ -122,6 +122,8 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	private refreshLetters() {
+		this.resetColors();
+
 		if (this.numberOfSentencesGuesses === this.getCurrentSentence().hiddenWord.length) {
 			document.getElementById('next-sentence-button').style.boxShadow = '0px 1px 4px 1px #139c0d';
 			this.firstCharacter = 'D';
@@ -130,8 +132,6 @@ export class SentenceGuessPage implements OnInit {
 			this.fourthCharacter = 'E';
 			return;
 		}
-
-		this.resetColors();
 
 		const correctLetterIndex = Math.floor(Math.random() * 4) + 1;
 		const correctLetter = this.hiddenCharacters[this.numberOfSentencesGuesses][this.numberOfWordGuesses].toUpperCase();
@@ -222,7 +222,7 @@ export class SentenceGuessPage implements OnInit {
 			return;
 		}
 
-		if (event.key === this.hiddenCharacters[this.numberOfSentencesGuesses][this.numberOfWordGuesses]) {
+		if (event.key.toUpperCase() === this.hiddenCharacters[this.numberOfSentencesGuesses][this.numberOfWordGuesses].toUpperCase()) {
 			this.sentenceToShow = this.util.showTextWithGuessedCharacter(
 				this.sentenceToShow,
 				this.hiddenCharacters[this.numberOfSentencesGuesses][this.numberOfWordGuesses],
@@ -249,7 +249,7 @@ export class SentenceGuessPage implements OnInit {
 			}
 			this.refreshLetters();
 		} else {
-			this.vibration.vibrate([300, 300]); // Doesn't work on Android for now :<
+			this.vibration.vibrate([300, 300]);
 			if (event.key === this.firstCharacter.toLowerCase()) {
 				this.setColor(1);
 			}

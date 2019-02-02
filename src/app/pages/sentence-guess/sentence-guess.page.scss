@@ -68,17 +68,17 @@ ion-content {
     }
 }
 
-@media (min-width: 1600px) and (max-width: 1750px) {
+@media (min-width: 1600px) and (max-width: 1700px) {
     .letter-guessed {
-        height: 11vmin;
-        font-size: 6vw;
+        height: 12vmin;
+        font-size: 5vw;
     }
 }
 
-@media (min-width: 1750px) {
+@media (min-width: 1700px) {
     .letter-guessed {
         height: 11vmin;
-        font-size: 4vw;
+        font-size: 5vw;
     }
 }
 
