@@ -12,11 +12,4 @@ export class Lesson {
     addSentence(sentence: Sentence): void {
         this.sentences.push(sentence);
     }
-
-    removeSentence(sentenceToRemove: Sentence): void {
-        const index = this.sentences.indexOf(sentenceToRemove);
-        if (index > -1) {
-            this.sentences.splice(index, 1);
-        }
-    }
 }

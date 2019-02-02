@@ -15,7 +15,7 @@
 </ion-header>
 
 <ion-content>
-  <p [innerHTML]="sentenceToShow" id="sentence-to-show">
+  <p [innerHTML]="sentenceShown" id="sentence-to-show">
   </p>
 </ion-content>
 
@@ -26,16 +26,16 @@
       <ion-grid>
         <ion-row>
           <ion-col size="2.4" offset="0.4" (click)="firstLetterClick()" class="letter-guessed" id="first-letter-guessed">
-            {{firstCharacter}}
+            {{firstChar}}
           </ion-col>
           <ion-col size="2.4" offset="0.4" (click)="secondLetterClick()" class="letter-guessed" id="second-letter-guessed">
-            {{secondCharacter}}
+            {{secondChar}}
           </ion-col>
           <ion-col size="2.4" offset="0.4" (click)="thirdLetterClick()" class="letter-guessed" id="third-letter-guessed">
-            {{thirdCharacter}}
+            {{thirdChar}}
           </ion-col>
           <ion-col size="2.4" offset="0.4" (click)="fourthLetterClick()" class="letter-guessed" id="fourth-letter-guessed">
-            {{fourthCharacter}}
+            {{fourthChar}}
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -44,11 +44,13 @@
     <div style="background-color: white; margin-top: 1vh;">
       <ion-grid>
         <ion-row flex-wrap: nowrap>
-          <ion-col size="1.5" size-lg="1.4" no-padding class="bottom-buttons" style="flex-flow: column;">
+          <ion-col size="1.5" size-lg="1.4" no-padding class="bottom-buttons" style="flex-flow: column;"
+            (click)="previousWord()">
             <ion-icon name="ios-arrow-back" style="font-size:6vmin;"></ion-icon><br>
             Prev
           </ion-col>
-          <ion-col size="1.5" offset="0.3" size-lg="1.4" no-padding class="bottom-buttons" style="flex-flow: column;">
+          <ion-col size="1.5" offset="0.3" size-lg="1.4" no-padding class="bottom-buttons" style="flex-flow: column;"
+            (click)="nextWord()">
             <ion-icon name="ios-arrow-forward" style="font-size:6vmin;"></ion-icon><br>
             Next
           </ion-col>
