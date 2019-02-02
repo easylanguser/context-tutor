@@ -9,13 +9,14 @@
 
 <ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
-      refreshingText="Refreshing...">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" 
+      refreshingSpinner="circles" refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
   <div style="padding-top: 4vh">
     <div class="lesson-card" *ngFor="let lesson of this.lessonData.lessons" (click)="openLesson(lesson.id)">
-      <span class="lesson-name">{{lesson.id}}. {{lesson.name}}</span>
+      <p class="lesson-name">{{lesson.id}}. {{lesson.name}}</p>
+      <span class="lesson-creation-date"><u>{{lesson.created_at | date:"dd/MM/yyyy 'at' HH:mm"}}</u></span>
     </div>
   </div>
 </ion-content>

@@ -1,15 +1,19 @@
 .lesson-card {
 	background-color: #FFF;
-	border-radius: 6px;
+	border-radius: 1vw;
 	padding: 4px;
-	margin: 8px;
-	box-shadow: 0 0 7px rgba(0,0,0,0.6);
+	margin: 2vmin;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 	cursor: pointer;
-	text-align: center;
+	position: relative;
+	padding: 8px;
 }
 
 .lesson-name {
-	width: 100%;
-	font-size: 24px;
-	font-weight: bold;
+	margin-top: 0;
+	font-size: 6vmin;
+}
+
+.lesson-creation-date {
+	font-size: 4vmin;
 }

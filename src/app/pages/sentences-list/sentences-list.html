@@ -13,7 +13,9 @@
       refreshingSpinner="circles" refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
-  <div class="sentence-with-underscore" *ngFor="let sentence of this.lessonData.getLessonByID(this.lessonId).sentences;index as i" (click)="openSentence(i)">
+  <div class="sentence-with-underscore" 
+    *ngFor="let sentence of this.lessonData.getLessonByID(this.lessonId).sentences;index as i" 
+    (click)="openSentence(i)">
     {{i + 1}}. {{sentence.textUnderscored}}
   </div>
 </ion-content>

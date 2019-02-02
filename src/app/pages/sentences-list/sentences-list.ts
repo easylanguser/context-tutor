@@ -16,6 +16,7 @@ import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.s
 export class SentencesListPage {
 
 	private lessonId: number;
+	private lessonTitle: string;
 
 	constructor(private api: LessonByNameService,
 		private loadingController: LoadingController,
@@ -46,7 +47,6 @@ export class SentencesListPage {
 	private async getData(lessonId) {
 		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
-
 		this.api.getData(lessonId)
 			.subscribe(res => {
 				let lsn = res[0];
@@ -61,6 +61,8 @@ export class SentencesListPage {
 						this.lessonData.getLessonByID(lessonId).addSentence(sentence);
 					}
 				}
+				this.lessonTitle = 'Number of sentences: ' + 
+					this.lessonData.getLessonByID(lessonId).sentences.length.toString();
 				loading.dismiss();
 			}, err => {
 				console.log(err);
