@@ -17,7 +17,7 @@ export class HttpService {
         this.storage.get(TOKEN_KEY).then(token => this.token = token);
     }
 
-    doPost(url: string, body): Observable<any> {
+    doPost(url: string, body?: Object): Observable<any> {
         const headers = this.addHeaders();
         return this.http.post(url, body, headers)
     }

@@ -45,7 +45,7 @@ export class LoginPage {
     }
 
 
-    toSingUp() {
+    toSignUp() {
         this.router.navigate(['sign-up']);
     }
 
