@@ -41,55 +41,52 @@ ion-content {
 
 
 @media (min-width: 1px) and (max-width: 750px) {
-    .letter-guessed {
+    .char-box {
         height: 20vmin;
-        font-size: 18vw;
+        font-size: 17vw;
     }
 }
 
 @media (min-width: 750px) and (max-width: 1100px){
-    .letter-guessed {
+    .char-box {
         height: 16vmin;
         font-size: 14vw;
     }
 }
 
 @media (min-width: 1100px) and (max-width: 1400px) {
-    .letter-guessed {
+    .char-box {
         height: 14vmin;
         font-size: 7vw;
     }
 }
 
 @media (min-width: 1400px) and (max-width: 1600px) {
-    .letter-guessed {
+    .char-box {
         height: 12vmin;
         font-size: 8vw;
     }
 }
 
 @media (min-width: 1600px) and (max-width: 1700px) {
-    .letter-guessed {
+    .char-box {
         height: 12vmin;
         font-size: 5vw;
     }
 }
 
 @media (min-width: 1700px) {
-    .letter-guessed {
+    .char-box {
         height: 11vmin;
         font-size: 5vw;
     }
 }
 
-.letter-guessed {
+.char-box {
     border-radius: 3px;
     margin: 1vmin;
     text-align: center;
     background-color: rgb(223,223,223);
-    -webkit-box-shadow: 0px 2px 4px 2px rgba(156, 156, 156, 0.6);
-    -moz-box-shadow: 0px 2px 4px 2px rgba(156, 156, 156, 0.6);
-    box-shadow: 0px 2px 4px 2px rgba(156, 156, 156, 0.6);
 }
 
 @media (min-width: 1px) and (max-width: 800px) {
