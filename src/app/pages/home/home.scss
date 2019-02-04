@@ -1,19 +1,28 @@
 .lesson-card {
+	width: 100%;
+	height: 13vh;
 	background-color: #FFF;
-	border-radius: 1vw;
-	padding: 4px;
-	margin: 2vmin;
-	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	margin-bottom: 0.2vh;
 	cursor: pointer;
+	display: table;
+    table-layout: fixed;
+}
+
+.lesson-text-div {
+	width: 70vw;
+	overflow: hidden;
+	display: table-cell;
+	vertical-align: top;
+	padding-top: 2vh;
+	padding-left: 4vw;
+	padding-right: 2vw;
+}
+
+.lesson-info {
+	height: 100%;
 	position: relative;
-	padding: 8px;
 }
 
-.lesson-name {
-	margin-top: 0;
-	font-size: 6vmin;
-}
-
-.lesson-creation-date {
-	font-size: 4vmin;
+.pieChart {
+	height: 8vh;
 }
