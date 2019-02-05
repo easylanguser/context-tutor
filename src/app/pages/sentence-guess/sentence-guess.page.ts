@@ -102,14 +102,12 @@ export class SentenceGuessPage implements OnInit {
 				this.currentWord = savedNum;
 				return;
 			}
-			this.sentenceShown = this.util.addCharByIndex(
-				this.sentenceShown,
+			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 				'_',
 				this.currentSentence().hiddenWord[this.currentWord - 1][0] +
 				this.currentChars[this.currentWord - 1]);
 			if (this.currentWord !== this.hiddenChars.length) {
-				this.sentenceShown = this.util.addCharByIndex(
-					this.sentenceShown,
+				this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 					'?',
 					this.currentSentence().hiddenWord[this.currentWord][0] +
 					this.currentChars[this.currentWord]);
@@ -131,13 +129,11 @@ export class SentenceGuessPage implements OnInit {
 				this.currentWord = savedNum;
 				return;
 			}
-			this.sentenceShown = this.util.addCharByIndex(
-				this.sentenceShown,
+			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 				'_',
 				this.currentSentence().hiddenWord[savedNum][0] +
 				this.currentChars[savedNum]);
-			this.sentenceShown = this.util.addCharByIndex(
-				this.sentenceShown,
+			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 				'?',
 				this.currentSentence().hiddenWord[this.currentWord][0] +
 				this.currentChars[this.currentWord]);
@@ -276,15 +272,13 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		if (event.key.toUpperCase() === this.hiddenChars[this.currentWord][this.currentChars[this.currentWord]].toUpperCase()) {
-			this.sentenceShown = this.util.addCharByIndex(
-				this.sentenceShown,
+			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 				this.hiddenChars[this.currentWord][this.currentChars[this.currentWord]],
 				this.currentSentence().hiddenWord[this.currentWord][0] + this.currentChars[this.currentWord]);
 
 			if (this.currentChars[this.currentWord] !==
 				this.currentSentence().hiddenWord[this.currentWord][1] - 1) {
-				this.sentenceShown = this.util.addCharByIndex(
-					this.sentenceShown,
+				this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 					'?',
 					this.currentSentence().hiddenWord[this.currentWord][0] +
 					this.currentChars[this.currentWord] + 1);
@@ -296,8 +290,7 @@ export class SentenceGuessPage implements OnInit {
 					} while (this.currentChars[this.currentWord] ===
 					this.hiddenChars[this.currentWord].length
 						&& this.currentWord < this.hiddenChars.length)
-					this.sentenceShown = this.util.addCharByIndex(
-						this.sentenceShown,
+					this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 						'?',
 						this.currentSentence().hiddenWord[this.currentWord][0] +
 						this.currentChars[this.currentWord]);
