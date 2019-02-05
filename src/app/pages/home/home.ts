@@ -13,6 +13,7 @@ import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.s
 export class HomePage {
 
 	private displayedLessons: Lesson[];
+	private clearSegmentBoolean: boolean;
 
 	constructor(private api: LessonsListService,
 		private loadingController: LoadingController,
@@ -52,6 +53,7 @@ export class HomePage {
 	}
 
 	doRefresh(event) {
+		this.clearSegmentBoolean = false;
 		this.getData().then(_ => { event.target.complete() });
 		setTimeout(() => {
 			event.target.complete();
