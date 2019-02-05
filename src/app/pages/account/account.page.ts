@@ -16,7 +16,7 @@ export class AccountPage implements OnInit {
 
     user = {};
 
-    constructor(private storage: Storage, private helper: JwtHelperService,  private authService: AuthService, private httpService: HttpService,
+    constructor(private storage: Storage, private helper: JwtHelperService, private authService: AuthService, private httpService: HttpService,
                 private alertController: AlertController) {
     }
 
@@ -34,11 +34,29 @@ export class AccountPage implements OnInit {
         });
     }
 
-    deleteAccount() {
-       return this.httpService.doPost('http://165.227.159.35/user/deleteAccount').toPromise().then(res=>{
-           this.showAlert(res)
-           this.authService.logout();
-       })
+    async deleteAccount() {
+        let alert = await this.alertController.create({
+            message: 'Are you sure you want to delete your account?',
+            buttons: [
+                {
+                    text: 'Delete',
+                    handler: () => {
+                        alert.dismiss(true);
+                        this.httpService.doPost('http://165.227.159.35/user/deleteAccount')
+                            .subscribe(res => {
+                                return this.authService.logout();
+                            })
+                    }
+                }, {
+                    text: 'Cancel',
+                    handler: () => {
+                        alert.dismiss(false);
+                        return false;
+                    }
+                }
+            ]
+        });
+        return await alert.present();
     }
 
     changePassword() {
@@ -52,17 +70,6 @@ export class AccountPage implements OnInit {
     }
 
     logout() {
-            this.authService.logout();
+        this.authService.logout();
     }
-
-
-    showAlert(res) {
-        let alert = this.alertController.create({
-            message: res.msg,
-            header: 'Email confirmation',
-            buttons: ['OK']
-        });
-        alert.then(alert => alert.present());
-    }
-
 }
