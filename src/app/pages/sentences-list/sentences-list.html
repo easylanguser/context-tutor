@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>{{lessonTitle}}</ion-title>
+    <ion-title>{{this.lessonData.getLessonByID(lessonId).sentences.length.toString() + ' sentences'}}</ion-title>
     <ion-buttons slot="end">
       <ion-button>
         Edit
@@ -34,16 +34,16 @@
   <div class="sentence-card" *ngFor="let sentence of this.lessonData.getLessonByID(this.lessonId).sentences;index as i"
     (click)="openSentence(i)">
     <div class="sentence-text-div">
-      <p style="overflow: hidden;display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-top: 0;">
+      <p style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-top: 0;">
         {{i + 1}}. {{sentence.textUnderscored}}
       </p>
     </div>
     <div class="sentence-info">
       <div class="pie-chart"></div>
-      <span style='bottom: 0.8vh; position: absolute;'>
+      <span class="date-text">
         Date here
       </span>
-      <ion-icon name="ios-arrow-forward" style='bottom: 1vh; right: 1vh; position: absolute;'></ion-icon>
+      <ion-icon name="ios-arrow-forward" class="forward-icon"></ion-icon>
     </div>
   </div>
 </ion-content>

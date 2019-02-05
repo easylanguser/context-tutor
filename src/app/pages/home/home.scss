@@ -18,11 +18,32 @@
 	padding-right: 2vw;
 }
 
+.lesson-text {
+	overflow: hidden;
+	display: -webkit-box; 
+	-webkit-line-clamp: 2; 
+	-webkit-box-orient: vertical; 
+	margin-top: 0;
+}
+
 .lesson-info {
 	height: 100%;
 	position: relative;
 }
 
-.pieChart {
-	height: 8vh;
+.pie-chart {
+    height: 8vh;
+    margin: 3px;
+	border: 1px solid cadetblue;
+}
+
+.date-text {
+	bottom: 0.8vh;
+	position: absolute;
+}
+
+.forward-icon {
+	bottom: 1vh;
+	right: 1vh;
+	position: absolute;
 }
