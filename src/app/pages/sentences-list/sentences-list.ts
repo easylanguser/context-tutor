@@ -61,8 +61,7 @@ export class SentencesListPage {
 						this.lessonData.getLessonByID(lessonId).addSentence(sentence);
 					}
 				}
-				this.lessonTitle = 'Number of sentences: ' + 
-					this.lessonData.getLessonByID(lessonId).sentences.length.toString();
+				this.lessonTitle = this.lessonData.getLessonByID(lessonId).sentences.length.toString() + ' sentences';
 				loading.dismiss();
 			}, err => {
 				console.log(err);

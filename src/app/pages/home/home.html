@@ -1,22 +1,47 @@
-<ion-header>
+<ion-header style="margin-bottom: 1vh">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>My lessons</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        Edit
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
+  <ion-segment (ionChange)="segmentChanged($event)" style="width: 95vw !important; margin-left: 2.5vw; margin-top: 1vh">
+    <ion-segment-button value="camera">
+      <ion-label>Week ago</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="bookmark">
+      <ion-label>Month ago</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="camera2">
+      <ion-label>Year ago</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 </ion-header>
 
 <ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" 
-      refreshingSpinner="circles" refreshingText="Refreshing...">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
-  <div style="padding-top: 4vh">
-    <div class="lesson-card" *ngFor="let lesson of this.lessonData.lessons" (click)="openLesson(lesson.id)">
-      <p class="lesson-name">{{lesson.id}}. {{lesson.name}}</p>
-      <span class="lesson-creation-date"><u>{{lesson.created_at | date:"dd/MM/yyyy 'at' HH:mm"}}</u></span>
+  <div class="lesson-card" *ngFor="let lesson of this.lessonData.lessons" (click)="openLesson(lesson.id)">
+    <div class="lesson-text-div">
+      <p style="overflow: hidden;display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-top: 0;">
+        {{lesson.id}}. {{lesson.name}}
+      </p>
+    </div>
+    <div class="lesson-info">
+      <div class="pieChart">
+        <canvas #chartCanvas></canvas>
+      </div>
+      <span style='bottom: 0.8vh; position: absolute;'>
+        {{lesson.created_at | date:"MMM dd"}}</span>
+      <ion-icon name="ios-arrow-forward" style='bottom: 1vh; right: 1vh; position: absolute;'></ion-icon>
     </div>
   </div>
 </ion-content>

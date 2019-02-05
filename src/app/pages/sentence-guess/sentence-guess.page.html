@@ -4,10 +4,9 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title text-center>
-      Sentence {{sentenceIndex}} of {{lessonLength}}
+      Sentence {{sentenceIndex}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}
     </ion-title>
     <ion-buttons slot="end">
-
       <div slot="end" style="height: 7vw; width: 7vw; background-image: url('../../assets/icon/favicon.png');
         background-position: center; background-size: cover; margin-right: 3vw;"></div>
     </ion-buttons>
@@ -15,8 +14,7 @@
 </ion-header>
 
 <ion-content>
-  <p [innerHTML]="sentenceShown" id="sentence-to-show">
-  </p>
+  <p [innerHTML]="sentenceShown" id="sentence-to-show"></p>
 </ion-content>
 
 <ion-footer>
@@ -25,16 +23,16 @@
     <div style="background-color: white;">
       <ion-grid>
         <ion-row>
-          <ion-col size="2.4" offset="0.4" (click)="firstLetterClick()" class="letter-guessed" id="first-letter-guessed">
+          <ion-col size="2.4" offset="0.4" (click)="firstCharBoxClick()" class="char-box" id="first-char-box">
             {{firstChar}}
           </ion-col>
-          <ion-col size="2.4" offset="0.4" (click)="secondLetterClick()" class="letter-guessed" id="second-letter-guessed">
+          <ion-col size="2.4" offset="0.4" (click)="secondCharBoxClick()" class="char-box" id="second-char-box">
             {{secondChar}}
           </ion-col>
-          <ion-col size="2.4" offset="0.4" (click)="thirdLetterClick()" class="letter-guessed" id="third-letter-guessed">
+          <ion-col size="2.4" offset="0.4" (click)="thirdCharBoxClick()" class="char-box" id="third-char-box">
             {{thirdChar}}
           </ion-col>
-          <ion-col size="2.4" offset="0.4" (click)="fourthLetterClick()" class="letter-guessed" id="fourth-letter-guessed">
+          <ion-col size="2.4" offset="0.4" (click)="fourthCharBoxClick()" class="char-box" id="fourth-char-box">
             {{fourthChar}}
           </ion-col>
         </ion-row>
@@ -45,27 +43,27 @@
       <ion-grid>
         <ion-row flex-wrap: nowrap>
           <ion-col size="1.5" size-lg="1.4" no-padding class="bottom-buttons" style="flex-flow: column;"
-            (click)="previousWord()">
+            (click)="previousWordClick()">
             <ion-icon name="ios-arrow-back" style="font-size:6vmin;"></ion-icon><br>
             Prev
           </ion-col>
           <ion-col size="1.5" offset="0.3" size-lg="1.4" no-padding class="bottom-buttons" style="flex-flow: column;"
-            (click)="nextWord()">
+            (click)="nextWordClick()">
             <ion-icon name="ios-arrow-forward" style="font-size:6vmin;"></ion-icon><br>
             Next
           </ion-col>
           <ion-col size="1.5" offset="0.7" size-lg="1.4" no-padding class="bottom-buttons" style="flex-flow: column;"
-            (click)="hint()">
+            (click)="hintClick()">
             <ion-icon name="md-help" style="font-size:6vmin;"></ion-icon><br>
             Hint
           </ion-col>
           <ion-col size="2.3" offset="0.6" size-lg="2.7" no-padding class="bottom-buttons" style="flex-flow: column;"
-            (click)="giveUp()">
+            (click)="giveUpClick()">
             <ion-icon name="ios-exit" style="font-size:6vmin;"></ion-icon><br>
             Give up
           </ion-col>
           <ion-col id="next-sentence-button" size="3" offset="0.6" size-lg="2.9" no-padding class="bottom-buttons"
-            style="flex-flow: column;" (click)="nextSentence()">
+            style="flex-flow: column;" (click)="nextSentenceClick()">
             <ion-icon name="ios-arrow-up" style="font-size:6vmin;"></ion-icon><br>
             Next Sentence
           </ion-col>
