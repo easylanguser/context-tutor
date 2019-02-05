@@ -313,7 +313,7 @@ export class SentenceGuessPage implements OnInit {
 			}
 			this.refreshCharBoxes();
 		} else {
-			this.vibration.vibrate([300, 300]);
+			this.vibration.vibrate(300);
 			if (event.key === this.firstChar.toLowerCase()) {
 				this.setColor(1);
 			}
