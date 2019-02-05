@@ -15,7 +15,7 @@ const routes: Routes = [
     {path: 'sentence-guess', component: SentenceGuessPage, canActivate: [AuthGuardService]},
     {path: 'login', component: LoginPage},
     {path: 'sign-up', component: SignUpPage},
-    {path: 'account', component: AccountPage, canActivate: [AuthGuardService]}
+    {path: 'account', component: AccountPage, canActivate: [AuthGuardService]},
 ];
 
 @NgModule({

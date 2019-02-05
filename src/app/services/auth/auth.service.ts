@@ -18,6 +18,7 @@ export class AuthService {
     url = environment.url;
     user = null;
     authenticationState = new BehaviorSubject(false);
+    public token;
 
     constructor(private http: HttpClient, private helper: JwtHelperService, private storageService: StorageService,
                 private plt: Platform, private alertController: AlertController) {
@@ -33,7 +34,7 @@ export class AuthService {
                 let isExpired = this.helper.isTokenExpired(token);
 
                 if (!isExpired) {
-                    this.user = decoded;
+                    this.token = token;
                     this.authenticationState.next(true);
                 } else {
                     this.storageService.remove(TOKEN_KEY);
@@ -56,7 +57,7 @@ export class AuthService {
             .pipe(
                 tap(res => {
                     this.storageService.set(TOKEN_KEY, res['token']);
-                    this.user = this.helper.decodeToken(res['token']);
+                    this.token = res['token']
                     this.authenticationState.next(true);
                 }),
                 catchError(e =>
@@ -68,6 +69,7 @@ export class AuthService {
     logout() {
         this.storageService.remove(TOKEN_KEY).then(() => {
             this.authenticationState.next(false);
+            this.token = null;
         });
     }
 

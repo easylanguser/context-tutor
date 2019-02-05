@@ -6,7 +6,7 @@ import {Storage} from "@ionic/storage";
 })
 export class StorageService implements OnInit{
 
-    constructor(private storage: Storage){;
+    constructor(private storage: Storage){
     }
 
     ngOnInit(){
