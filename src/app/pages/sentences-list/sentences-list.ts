@@ -54,7 +54,7 @@ export class SentencesListPage {
 						lsn[i].id,
 						lsn[i].words,
 						lsn[i].text,
-						this.util.replaceLettersWithUnderscore(lsn[i].text, lsn[i].words),
+						this.util.hideChars(lsn[i].text, lsn[i].words),
 						false);
 					if (!this.lessonData.getLessonByID(lessonId).sentences.some(sntn => sntn.id === sentence.id)) {
 						this.lessonData.getLessonByID(lessonId).addSentence(sentence);
