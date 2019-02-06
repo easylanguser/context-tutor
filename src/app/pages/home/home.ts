@@ -14,6 +14,7 @@ export class HomePage {
 
 	private displayedLessons: Lesson[];
 	private clearSegmentBoolean: boolean;
+	visibility: string = 'shown';
 
 	constructor(private api: LessonsListService,
 		private loadingController: LoadingController,
@@ -22,16 +23,31 @@ export class HomePage {
 		this.getData();
 	}
 
-	weekAgoClick() {
+	async weekAgoClick() {
+		const loading = await this.loadingController.create({
+			message: 'Loading'
+		});
+		await loading.present();
 		this.displayedLessons = this.lessonData.lessons.filter(this.weekAgo);
+		loading.dismiss();
 	}
 
-	monthAgoClick() {
+	async monthAgoClick() {
+		const loading = await this.loadingController.create({
+			message: 'Loading'
+		});
+		await loading.present();
 		this.displayedLessons = this.lessonData.lessons.filter(this.monthAgo);
+		loading.dismiss();
 	}
 
-	yearAgoClick() {
+	async yearAgoClick() {
+		const loading = await this.loadingController.create({
+			message: 'Loading'
+		});
+		await loading.present();
 		this.displayedLessons = this.lessonData.lessons.filter(this.yearAgo);
+		loading.dismiss();
 	}
 
 	weekAgo(element: Lesson, index, array) {

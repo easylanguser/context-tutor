@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
+import { Statistics } from 'src/app/models/statistics';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -55,7 +56,8 @@ export class SentencesListPage {
 						lsn[i].words,
 						lsn[i].text,
 						this.util.hideChars(lsn[i].text, lsn[i].words),
-						false);
+						false,
+						new Statistics(0, 0, 0, 0, 0, 0, 0));
 					if (!this.lessonData.getLessonByID(lessonId).sentences.some(sntn => sntn.id === sentence.id)) {
 						this.lessonData.getLessonByID(lessonId).addSentence(sentence);
 					}

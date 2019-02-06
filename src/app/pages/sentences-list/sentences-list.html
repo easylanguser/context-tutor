@@ -11,7 +11,7 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <ion-segment style="width: 95vw !important; margin-left: 2.5vw; margin-top: 1vh">
+  <ion-segment id="progress-segment">
     <ion-segment-button value="camera">
       All
     </ion-segment-button>
@@ -26,14 +26,15 @@
 
 <ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
-      refreshingText="Refreshing...">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" 
+      refreshingSpinner="circles" refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
-  <div class="sentence-card" *ngFor="let sentence of this.lessonData.getLessonByID(this.lessonId).sentences;index as i"
+  <div class="sentence-card" 
+    *ngFor="let sentence of this.lessonData.getLessonByID(this.lessonId).sentences;index as i"
     (click)="openSentence(i)">
     <div class="sentence-text-div">
-      <p style="overflow-y: scroll; text-overflow: ellipsis; line-height: 3vh; max-height: 6vh; margin-top: 0;">
+      <p class="sentence-text">
         {{sentence.textUnderscored}}
       </p>
     </div>

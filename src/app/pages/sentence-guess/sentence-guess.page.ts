@@ -46,6 +46,10 @@ export class SentenceGuessPage implements OnInit {
 		this.getData();
 	};
 
+	logStat() {
+		console.log(this.currentSentence().statistics);
+	}
+
 	private currentSentence(): Sentence {
 		return this.lessonsData.getLessonByID(this.lessonId).sentences[this.sentenceIndex - 1];
 	}
@@ -83,7 +87,7 @@ export class SentenceGuessPage implements OnInit {
 			this.currentSentence().textUnderscored,
 			'?',
 			this.currentSentence().hiddenWord[this.currentWord][0] +
-				this.currentChars[this.currentWord]);
+			this.currentChars[this.currentWord]);
 
 		this.refreshCharBoxes();
 
@@ -114,6 +118,8 @@ export class SentenceGuessPage implements OnInit {
 			}
 
 			this.refreshCharBoxes();
+
+			++this.currentSentence().statistics.wordSkips; // Statistics
 		}
 	}
 
@@ -138,6 +144,9 @@ export class SentenceGuessPage implements OnInit {
 				this.currentSentence().hiddenWord[this.currentWord][0] +
 				this.currentChars[this.currentWord]);
 			this.refreshCharBoxes();
+
+			++this.currentSentence().statistics.wordSkips; // Statistics
+
 		}
 	}
 
@@ -153,12 +162,16 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	giveUpClick() {
-		document.getElementById('next-sentence-button').style.boxShadow = '0px 3px 10px 1px rgba(245, 229, 27, 1)';
-		this.currentWord = this.hiddenChars.length;
-		this.resetColors();
-		this.sentenceShown = this.currentSentence().text;
+		if (this.currentWord !== this.hiddenChars.length) {
+			++this.currentSentence().statistics.giveUps; // Statistics
 
-		this.printDoneWord();
+			document.getElementById('next-sentence-button').style.boxShadow = '0px 3px 10px 1px rgba(245, 229, 27, 1)';
+			this.currentWord = this.hiddenChars.length;
+			this.resetColors();
+			this.sentenceShown = this.currentSentence().text;
+
+			this.printDoneWord();
+		}
 	}
 
 	hintClick() {
@@ -167,6 +180,8 @@ export class SentenceGuessPage implements OnInit {
 				key: this.hiddenChars[this.currentWord][this.currentChars[this.currentWord]]
 			});
 			this.handleKeyboardEvent(event);
+
+			++this.currentSentence().statistics.hintUsages; // Statistics
 		}
 	}
 
@@ -188,6 +203,12 @@ export class SentenceGuessPage implements OnInit {
 	fourthCharBoxClick() {
 		const event = new KeyboardEvent('ev4', { key: this.fourthChar.toLowerCase() });
 		this.handleKeyboardEvent(event);
+	}
+
+	leaveLesson() {
+		if (this.currentSentence().text !== this.sentenceShown) {
+			++this.currentSentence().statistics.lessonLeaves; // Statistics
+		}
 	}
 
 	private printDoneWord() {
@@ -272,6 +293,11 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		if (event.key.toUpperCase() === this.hiddenChars[this.currentWord][this.currentChars[this.currentWord]].toUpperCase()) {
+
+			if (event.type !== 'ev0') {
+				++this.currentSentence().statistics.correctAnswers; // Statistics
+			}
+
 			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 				this.hiddenChars[this.currentWord][this.currentChars[this.currentWord]],
 				this.currentSentence().hiddenWord[this.currentWord][0] + this.currentChars[this.currentWord]);
@@ -306,6 +332,9 @@ export class SentenceGuessPage implements OnInit {
 			}
 			this.refreshCharBoxes();
 		} else {
+
+			++this.currentSentence().statistics.wrongAnswers; // Statistics
+
 			this.vibration.vibrate(300);
 			if (event.key === this.firstChar.toLowerCase()) {
 				this.setColor(1);
