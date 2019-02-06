@@ -18,8 +18,8 @@ import { Vibration } from '@ionic-native/vibration/ngx';
 
 export class SentenceGuessPage implements OnInit {
 
-	private currentWord: number = 0;
-	private currentChars: number[] = [];
+	private curWordIndex: number = 0;
+	private curCharsIndexes: number[] = [];
 	private lessonId: number = 0;
 	private sentenceIndex: number = 1;
 	private toastIsShown: boolean;
@@ -40,17 +40,17 @@ export class SentenceGuessPage implements OnInit {
 		private vibration: Vibration) { }
 
 	ngOnInit() {
-		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('current')) + 1;
+		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('cur')) + 1;
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
-		this.sentenceShown = this.currentSentence().textUnderscored;
+		this.sentenceShown = this.curSentence().textUnderscored;
 		this.getData();
 	};
 
 	logStat() {
-		console.log(this.currentSentence().statistics);
+		console.log(this.curSentence().statistics);
 	}
 
-	private currentSentence(): Sentence {
+	private curSentence(): Sentence {
 		return this.lessonsData.getLessonByID(this.lessonId).sentences[this.sentenceIndex - 1];
 	}
 
@@ -62,32 +62,30 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	private async getData() {
-		const loading = await this.loadingController.create({
-			message: 'Loading'
-		});
+		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
 
 		document.getElementById('next-sentence-button').style.boxShadow = 'none';
 
 		this.hiddenChars = [];
 
-		for (let i in this.currentSentence().hiddenWord) {
+		for (let i in this.curSentence().hiddenWord) {
 			const chars: string[] = [];
-			for (let j = 0; j < this.currentSentence().hiddenWord[i][1]; j++) {
-				chars.push(this.currentSentence().text.charAt(this.currentSentence().hiddenWord[i][0] + j));
+			for (let j = 0; j < this.curSentence().hiddenWord[i][1]; j++) {
+				chars.push(this.curSentence().text.charAt(this.curSentence().hiddenWord[i][0] + j));
 			}
 			this.hiddenChars.push(chars);
 		}
 
 		for (let i in this.hiddenChars) {
-			this.currentChars.push(Number(i));
+			this.curCharsIndexes.push(Number(i));
 		}
 
 		this.sentenceShown = this.util.addCharByIndex(
-			this.currentSentence().textUnderscored,
+			this.curSentence().textUnderscored,
 			'?',
-			this.currentSentence().hiddenWord[this.currentWord][0] +
-			this.currentChars[this.currentWord]);
+			this.curSentence().hiddenWord[this.curWordIndex][0] +
+			this.curCharsIndexes[this.curWordIndex]);
 
 		this.refreshCharBoxes();
 
@@ -95,57 +93,57 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	nextWordClick() {
-		if (this.currentWord < this.hiddenChars.length - 1) {
-			const savedNum = this.currentWord;
+		if (this.curWordIndex < this.hiddenChars.length - 1) {
+			const savedNum = this.curWordIndex;
 			do {
-				++this.currentWord;
-			} while (this.currentChars[this.currentWord] ===
-			this.hiddenChars[this.currentWord].length
-				&& this.currentWord < this.hiddenChars.length)
-			if (this.currentWord === this.hiddenChars.length) {
-				this.currentWord = savedNum;
+				++this.curWordIndex;
+			} while (this.curCharsIndexes[this.curWordIndex] ===
+			this.hiddenChars[this.curWordIndex].length
+				&& this.curWordIndex < this.hiddenChars.length)
+			if (this.curWordIndex === this.hiddenChars.length) {
+				this.curWordIndex = savedNum;
 				return;
 			}
 			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 				'_',
-				this.currentSentence().hiddenWord[this.currentWord - 1][0] +
-				this.currentChars[this.currentWord - 1]);
-			if (this.currentWord !== this.hiddenChars.length) {
+				this.curSentence().hiddenWord[this.curWordIndex - 1][0] +
+				this.curCharsIndexes[this.curWordIndex - 1]);
+			if (this.curWordIndex !== this.hiddenChars.length) {
 				this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 					'?',
-					this.currentSentence().hiddenWord[this.currentWord][0] +
-					this.currentChars[this.currentWord]);
+					this.curSentence().hiddenWord[this.curWordIndex][0] +
+					this.curCharsIndexes[this.curWordIndex]);
 			}
 
 			this.refreshCharBoxes();
 
-			++this.currentSentence().statistics.wordSkips; // Statistics
+			++this.curSentence().statistics.wordSkips; // Statistics
 		}
 	}
 
 	previousWordClick() {
-		if (this.currentWord > 0) {
-			const savedNum = this.currentWord;
+		if (this.curWordIndex > 0) {
+			const savedNum = this.curWordIndex;
 			do {
-				--this.currentWord;
-			} while (this.currentChars[this.currentWord] ===
-			this.hiddenChars[this.currentWord].length
-				&& this.currentWord > 0)
-			if (this.currentWord === -1) {
-				this.currentWord = savedNum;
+				--this.curWordIndex;
+			} while (this.curCharsIndexes[this.curWordIndex] ===
+			this.hiddenChars[this.curWordIndex].length
+				&& this.curWordIndex > 0)
+			if (this.curWordIndex === -1) {
+				this.curWordIndex = savedNum;
 				return;
 			}
 			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 				'_',
-				this.currentSentence().hiddenWord[savedNum][0] +
-				this.currentChars[savedNum]);
+				this.curSentence().hiddenWord[savedNum][0] +
+				this.curCharsIndexes[savedNum]);
 			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 				'?',
-				this.currentSentence().hiddenWord[this.currentWord][0] +
-				this.currentChars[this.currentWord]);
+				this.curSentence().hiddenWord[this.curWordIndex][0] +
+				this.curCharsIndexes[this.curWordIndex]);
 			this.refreshCharBoxes();
 
-			++this.currentSentence().statistics.wordSkips; // Statistics
+			++this.curSentence().statistics.wordSkips; // Statistics
 
 		}
 	}
@@ -156,32 +154,30 @@ export class SentenceGuessPage implements OnInit {
 		} else {
 			++this.sentenceIndex;
 		}
-		this.currentWord = 0;
-		this.currentChars = [];
+		this.curWordIndex = 0;
+		this.curCharsIndexes = [];
 		this.getData();
 	}
 
 	giveUpClick() {
-		if (this.currentWord !== this.hiddenChars.length) {
-			++this.currentSentence().statistics.giveUps; // Statistics
+		if (this.curWordIndex !== this.hiddenChars.length) {
+			++this.curSentence().statistics.giveUps; // Statistics
 
 			document.getElementById('next-sentence-button').style.boxShadow = '0px 3px 10px 1px rgba(245, 229, 27, 1)';
-			this.currentWord = this.hiddenChars.length;
+			this.curWordIndex = this.hiddenChars.length;
 			this.resetColors();
-			this.sentenceShown = this.currentSentence().text;
+			this.sentenceShown = this.curSentence().text;
 
 			this.printDoneWord();
 		}
 	}
 
 	hintClick() {
-		if (this.currentWord !== this.hiddenChars.length) {
-			const event = new KeyboardEvent('ev0', {
-				key: this.hiddenChars[this.currentWord][this.currentChars[this.currentWord]]
-			});
+		if (this.curWordIndex !== this.hiddenChars.length) {
+			const event = new KeyboardEvent('ev0', { key: this.curCorrectChar() });
 			this.handleKeyboardEvent(event);
 
-			++this.currentSentence().statistics.hintUsages; // Statistics
+			++this.curSentence().statistics.hintUsages; // Statistics
 		}
 	}
 
@@ -206,8 +202,8 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	leaveLesson() {
-		if (this.currentSentence().text !== this.sentenceShown) {
-			++this.currentSentence().statistics.lessonLeaves; // Statistics
+		if (this.curSentence().text !== this.sentenceShown) {
+			++this.curSentence().statistics.lessonLeaves; // Statistics
 		}
 	}
 
@@ -221,14 +217,14 @@ export class SentenceGuessPage implements OnInit {
 	private refreshCharBoxes() {
 		this.resetColors();
 
-		if (this.currentWord === this.currentSentence().hiddenWord.length) {
+		if (this.curWordIndex === this.curSentence().hiddenWord.length) {
 			document.getElementById('next-sentence-button').style.boxShadow = '0px 1px 4px 1px #139c0d';
 			this.printDoneWord();
 			return;
 		}
 
 		const correctCharIndex = Math.floor(Math.random() * 4) + 1;
-		const correctChar = this.hiddenChars[this.currentWord][this.currentChars[this.currentWord]].toUpperCase();
+		const correctChar = this.curCorrectChar().toUpperCase();
 		const firstRand = Math.floor(Math.random() * this.alphabet.length);
 		let secondRand, thirdRand, fourthRand;
 
@@ -264,7 +260,7 @@ export class SentenceGuessPage implements OnInit {
 	private async showToast() {
 		this.toastIsShown = true;
 		const toast = await this.toastController.create({
-			message: 'Sentence is filled completely',
+			message: 'Sentence is filled',
 			position: 'middle',
 			duration: 600,
 			cssClass: 'toast-container'
@@ -284,58 +280,61 @@ export class SentenceGuessPage implements OnInit {
 		document.getElementById(charBoxId).style.boxShadow = '0px 3px 10px 1px rgba(167, 1, 6, 1)';
 	}
 
+	private curCorrectChar(): string {
+		return this.hiddenChars[this.curWordIndex][this.curCharsIndexes[this.curWordIndex]];
+	}
+
 	handleKeyboardEvent(event: KeyboardEvent) {
-		if (this.currentWord === this.hiddenChars.length) {
+		if (this.curWordIndex === this.hiddenChars.length) {
 			if (!this.toastIsShown) {
 				this.showToast();
 			}
 			return;
 		}
 
-		if (event.key.toUpperCase() === this.hiddenChars[this.currentWord][this.currentChars[this.currentWord]].toUpperCase()) {
+		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
 
 			if (event.type !== 'ev0') {
-				++this.currentSentence().statistics.correctAnswers; // Statistics
+				++this.curSentence().statistics.correctAnswers; // Statistics
 			}
 
 			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
-				this.hiddenChars[this.currentWord][this.currentChars[this.currentWord]],
-				this.currentSentence().hiddenWord[this.currentWord][0] + this.currentChars[this.currentWord]);
+				this.curCorrectChar(),
+				this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
 
-			if (this.currentChars[this.currentWord] !==
-				this.currentSentence().hiddenWord[this.currentWord][1] - 1) {
+			if (this.curCharsIndexes[this.curWordIndex] !== this.curSentence().hiddenWord[this.curWordIndex][1] - 1) {
+				// If current word is not filled -> replace following char with '?'
 				this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 					'?',
-					this.currentSentence().hiddenWord[this.currentWord][0] +
-					this.currentChars[this.currentWord] + 1);
-			} else {
-				if (this.currentWord !== this.currentSentence().hiddenWord.length - 1) {
-					++this.currentChars[this.currentWord];
-					do {
-						++this.currentWord;
-					} while (this.currentChars[this.currentWord] ===
-					this.hiddenChars[this.currentWord].length
-						&& this.currentWord < this.hiddenChars.length)
-					this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
-						'?',
-						this.currentSentence().hiddenWord[this.currentWord][0] +
-						this.currentChars[this.currentWord]);
-					this.refreshCharBoxes();
-					return;
-				}
+					this.curSentence().hiddenWord[this.curWordIndex][0] +
+					this.curCharsIndexes[this.curWordIndex] + 1);
+			} else if (this.curWordIndex !== this.curSentence().hiddenWord.length - 1) {
+				// If current word is filled and it is not the last filled word -> find first word, that is not filled
+				++this.curCharsIndexes[this.curWordIndex];
+				do {
+					++this.curWordIndex;
+				} while (this.curCharsIndexes[this.curWordIndex] ===
+				this.hiddenChars[this.curWordIndex].length
+					&& this.curWordIndex < this.hiddenChars.length)
+				this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
+					'?',
+					this.curSentence().hiddenWord[this.curWordIndex][0] +
+					this.curCharsIndexes[this.curWordIndex]);
+				this.refreshCharBoxes();
+				return;
 			}
 
-			++this.currentChars[this.currentWord];
-			if (this.currentChars[this.currentWord] ===
-				this.currentSentence().hiddenWord[this.currentWord][1]) {
-				++this.currentWord;
+			++this.curCharsIndexes[this.curWordIndex];
+			if (this.curCharsIndexes[this.curWordIndex] ===
+				this.curSentence().hiddenWord[this.curWordIndex][1]) {
+				++this.curWordIndex;
 			}
 			this.refreshCharBoxes();
 		} else {
 
-			++this.currentSentence().statistics.wrongAnswers; // Statistics
+			++this.curSentence().statistics.wrongAnswers; // Statistics
 
-			this.vibration.vibrate(300);
+			this.vibration.vibrate(200);
 			if (event.key === this.firstChar.toLowerCase()) {
 				this.setColor(1);
 			}
