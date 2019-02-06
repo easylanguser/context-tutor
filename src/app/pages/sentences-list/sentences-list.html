@@ -3,7 +3,9 @@
     <ion-buttons slot="start">
       <ion-back-button text="Lessons"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{this.lessonData.getLessonByID(lessonId).sentences.length.toString() + ' sentences'}}</ion-title>
+    <ion-title>
+      {{this.lessonData.getLessonByID(lessonId).sentences.length.toString() + ' sentences'}}
+    </ion-title>
     <ion-buttons slot="end">
       <ion-button>
         Edit
@@ -12,13 +14,13 @@
   </ion-toolbar>
 
   <ion-segment id="progress-segment">
-    <ion-segment-button value="camera">
+    <ion-segment-button>
       All
     </ion-segment-button>
-    <ion-segment-button value="bookmark">
+    <ion-segment-button>
       Red
     </ion-segment-button>
-    <ion-segment-button value="camera2">
+    <ion-segment-button>
       Red + Yellow
     </ion-segment-button>
   </ion-segment>
