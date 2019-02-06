@@ -33,7 +33,7 @@
   <div class="sentence-card" *ngFor="let sentence of this.lessonData.getLessonByID(this.lessonId).sentences;index as i"
     (click)="openSentence(i)">
     <div class="sentence-text-div">
-      <p style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-top: 0;">
+      <p style="overflow-y: scroll; text-overflow: ellipsis; line-height: 3vh; max-height: 6vh; margin-top: 0;">
         {{sentence.textUnderscored}}
       </p>
     </div>
