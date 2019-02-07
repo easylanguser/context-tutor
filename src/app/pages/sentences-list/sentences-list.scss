@@ -1,7 +1,11 @@
 #progress-segment {
 	width: 95vw !important; 
 	margin-left: 2.5vw; 
-	margin-top: 1vh
+	margin-top: 1vh;
+}
+
+.ios :host #progress-segment {
+	margin-bottom: 1vh;
 }
 
 .sentence-card {

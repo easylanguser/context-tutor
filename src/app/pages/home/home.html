@@ -1,4 +1,4 @@
-<ion-header style="margin-bottom: 1vh">
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
@@ -10,6 +10,9 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+</ion-header>
+
+<ion-content>
   <ion-segment [(ngModel)]="clearSegmentBoolean" id="date-segment">
     <ion-segment-button (click)="weekAgoClick()">
       Week ago
@@ -21,17 +24,11 @@
       Year ago
     </ion-segment-button>
   </ion-segment>
-</ion-header>
-
-<ion-content>
-  <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" 
-      refreshingSpinner="circles" refreshingText="Refreshing...">
+  <ion-refresher [pullMax]="0" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content>
     </ion-refresher-content>
   </ion-refresher>
-  <div class="lesson-card" 
-    *ngFor="let lesson of this.displayedLessons" 
-    (click)="openLesson(lesson.id)">
+  <div class="lesson-card" *ngFor="let lesson of this.displayedLessons" (click)="openLesson(lesson.id)">
     <div class="lesson-text-div">
       <p class="lesson-text">
         {{lesson.name}}

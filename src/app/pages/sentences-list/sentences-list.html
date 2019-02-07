@@ -1,4 +1,4 @@
-<ion-header style="margin-bottom: 1vh">
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button text="Lessons"></ion-back-button>
@@ -12,7 +12,9 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+</ion-header>
 
+<ion-content>
   <ion-segment id="progress-segment">
     <ion-segment-button>
       All
@@ -24,16 +26,13 @@
       Red + Yellow
     </ion-segment-button>
   </ion-segment>
-</ion-header>
 
-<ion-content>
-  <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" 
-      refreshingSpinner="circles" refreshingText="Refreshing...">
+  <ion-refresher [pullMax]="0" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content>
     </ion-refresher-content>
   </ion-refresher>
-  <div class="sentence-card" 
-    *ngFor="let sentence of this.lessonData.getLessonByID(this.lessonId).sentences;index as i"
+  
+  <div class="sentence-card" *ngFor="let sentence of this.lessonData.getLessonByID(this.lessonId).sentences;index as i"
     (click)="openSentence(i)">
     <div class="sentence-text-div">
       <p class="sentence-text">
