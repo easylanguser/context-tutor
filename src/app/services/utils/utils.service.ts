@@ -26,7 +26,7 @@ export class UtilsService {
 		return textWithHiddenCharacters;
 	}
 
-	addCharByIndex(input, replacement, index): string {
+	addCharByIndex(input: string, replacement: string, index: number): string {
 		return input.substr(0, index) + replacement + input.substr(index + replacement.length);
 	}
 }

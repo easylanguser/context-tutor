@@ -56,6 +56,8 @@ export class SentencesListPage {
 						lsn[i].words,
 						lsn[i].text,
 						this.util.hideChars(lsn[i].text, lsn[i].words),
+						[],
+						0,
 						false,
 						new Statistics(0, 0, 0, 0, 0, 0, 0));
 					if (!this.lessonData.getLessonByID(lessonId).sentences.some(sntn => sntn.id === sentence.id)) {
