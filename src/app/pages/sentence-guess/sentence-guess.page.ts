@@ -43,7 +43,7 @@ export class SentenceGuessPage implements OnInit {
 		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('current')) + 1;
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
 		this.sentenceShown = this.curSentence().textUnderscored;
-		this.getData();
+		this.getData(true);
 	};
 
 	logStat() {
@@ -61,14 +61,19 @@ export class SentenceGuessPage implements OnInit {
 		document.getElementById('fourth-char-box').style.boxShadow = 'none';
 	}
 
-	private async getData() {
-		const loading = await this.loadingController.create({ message: 'Loading' });
-		await loading.present();
+	private async getData(showLoader: boolean) {
+		let loading: any;
+		if (showLoader) {	
+			loading = await this.loadingController.create({ message: 'Loading' });
+			await loading.present();
+		}
 
 		if (this.curSentence().isSolved) {
 			this.sentenceShown = this.curSentence().text;
 			document.getElementById('next-sentence-button').style.boxShadow = '0px 1px 4px 1px #139c0d';
-			loading.dismiss();
+			if (showLoader) {
+				loading.dismiss();
+			}
 			return;
 		}
 		document.getElementById('next-sentence-button').style.boxShadow = 'none';
@@ -110,7 +115,9 @@ export class SentenceGuessPage implements OnInit {
 
 		this.refreshCharBoxes();
 
-		loading.dismiss();
+		if (showLoader) {
+			loading.dismiss();
+		}
 	}
 
 	nextWordClick() {
@@ -174,7 +181,7 @@ export class SentenceGuessPage implements OnInit {
 		}
 		this.curWordIndex = 0;
 		this.curCharsIndexes = [];
-		this.getData();
+		this.getData(false);
 	}
 
 	giveUpClick() {

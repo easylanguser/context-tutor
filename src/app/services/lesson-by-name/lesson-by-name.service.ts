@@ -17,6 +17,4 @@ export class LessonByNameService {
     let response = this.httpService.doGet(apiUrl + lessonId);
     return forkJoin([response]);
   }
-
-
 }
