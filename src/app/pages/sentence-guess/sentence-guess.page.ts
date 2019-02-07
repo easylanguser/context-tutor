@@ -68,7 +68,6 @@ export class SentenceGuessPage implements OnInit {
 		if (this.curSentence().isSolved) {
 			this.sentenceShown = this.curSentence().text;
 			document.getElementById('next-sentence-button').style.boxShadow = '0px 1px 4px 1px #139c0d';
-			this.printDoneWord();
 			loading.dismiss();
 			return;
 		}
@@ -119,9 +118,8 @@ export class SentenceGuessPage implements OnInit {
 			const savedNum = this.curWordIndex;
 			do {
 				++this.curWordIndex;
-			} while (this.curCharsIndexes[this.curWordIndex] ===
-			this.hiddenChars[this.curWordIndex].length
-				&& this.curWordIndex < this.hiddenChars.length)
+			} while (this.curWordIndex < this.hiddenChars.length && this.curCharsIndexes[this.curWordIndex] ===
+			this.hiddenChars[this.curWordIndex].length - 1)
 			if (this.curWordIndex === this.hiddenChars.length) {
 				this.curWordIndex = savedNum;
 				return;
@@ -148,21 +146,20 @@ export class SentenceGuessPage implements OnInit {
 			const savedNum = this.curWordIndex;
 			do {
 				--this.curWordIndex;
-			} while (this.curCharsIndexes[this.curWordIndex] ===
-			this.hiddenChars[this.curWordIndex].length
-				&& this.curWordIndex > 0)
+			} while (this.curWordIndex > 0 && this.curCharsIndexes[this.curWordIndex] ===
+			this.hiddenChars[this.curWordIndex].length - 1)
 			if (this.curWordIndex === -1) {
 				this.curWordIndex = savedNum;
 				return;
 			}
-			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
+			this.sentenceShown = this.util.addCharByIndex(
+				this.sentenceShown,
 				'_',
-				this.curSentence().hiddenWord[savedNum][0] +
-				this.curCharsIndexes[savedNum]);
-			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
+				this.curSentence().hiddenWord[savedNum][0] + this.curCharsIndexes[savedNum]);
+			this.sentenceShown = this.util.addCharByIndex(
+				this.sentenceShown,
 				'?',
-				this.curSentence().hiddenWord[this.curWordIndex][0] +
-				this.curCharsIndexes[this.curWordIndex]);
+				this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
 			this.refreshCharBoxes();
 
 			++this.curSentence().statistics.wordSkips; // Statistics
@@ -188,7 +185,6 @@ export class SentenceGuessPage implements OnInit {
 			this.curWordIndex = this.hiddenChars.length;
 			this.resetColors();
 			this.sentenceShown = this.curSentence().text;
-			this.printDoneWord();
 			this.curSentence().isSolved = true;
 		}
 	}
@@ -230,19 +226,11 @@ export class SentenceGuessPage implements OnInit {
 		this.curSentence().curCharsIndexes = this.curCharsIndexes;
 	}
 
-	private printDoneWord() {
-		this.firstChar = 'D';
-		this.secondChar = 'O';
-		this.thirdChar = 'N';
-		this.fourthChar = 'E';
-	}
-
 	private refreshCharBoxes() {
 		this.resetColors();
 
 		if (this.curWordIndex === this.curSentence().hiddenWord.length) {
 			document.getElementById('next-sentence-button').style.boxShadow = '0px 1px 4px 1px #139c0d';
-			this.printDoneWord();
 			this.curSentence().isSolved = true;
 			return;
 		}
@@ -332,19 +320,28 @@ export class SentenceGuessPage implements OnInit {
 					'?',
 					this.curSentence().hiddenWord[this.curWordIndex][0] +
 					this.curCharsIndexes[this.curWordIndex] + 1);
-			} else if (this.curWordIndex !== this.curSentence().hiddenWord.length - 1) {
-				// If current word is filled and it is not the last filled word -> find first word, that is not filled
-				++this.curCharsIndexes[this.curWordIndex];
+			} else {
+				// If current word is filled -> find first word, that is not filled
 				do {
 					++this.curWordIndex;
-				} while (this.curCharsIndexes[this.curWordIndex] ===
-				this.hiddenChars[this.curWordIndex].length
-					&& this.curWordIndex < this.hiddenChars.length)
-				this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
+					if (this.curWordIndex === this.hiddenChars.length) {
+						if (this.sentenceShown !== this.curSentence().text) {
+							this.curWordIndex = 0;
+						} else {
+							document.getElementById('next-sentence-button').style.boxShadow = '0px 1px 4px 1px #139c0d';
+							this.curSentence().isSolved = true;
+							return;
+						}
+					}
+				} while (this.curCharsIndexes[this.curWordIndex] === this.hiddenChars[this.curWordIndex].length - 1);
+
+				this.sentenceShown = this.util.addCharByIndex(
+					this.sentenceShown,
 					'?',
-					this.curSentence().hiddenWord[this.curWordIndex][0] +
-					this.curCharsIndexes[this.curWordIndex]);
+					this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
+
 				this.refreshCharBoxes();
+
 				return;
 			}
 
