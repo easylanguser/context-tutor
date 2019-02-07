@@ -182,6 +182,10 @@ export class SentenceGuessPage implements OnInit {
 		this.curWordIndex = 0;
 		this.curCharsIndexes = [];
 		this.getData(false);
+
+		if (!this.curSentence().isSolved) {
+			++this.curSentence().statistics.sentenceSkips; // Statistics
+		}
 	}
 
 	giveUpClick() {

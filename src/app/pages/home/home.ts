@@ -14,7 +14,6 @@ export class HomePage {
 
 	private displayedLessons: Lesson[];
 	private clearSegmentBoolean: boolean;
-	visibility: string = 'shown';
 
 	constructor(private api: LessonsListService,
 		private loadingController: LoadingController,
