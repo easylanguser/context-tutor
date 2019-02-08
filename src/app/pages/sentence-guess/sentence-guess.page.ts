@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { UtilsService } from '../../services/utils/utils.service';
@@ -13,7 +14,18 @@ import { Vibration } from '@ionic-native/vibration/ngx';
 	styleUrls: ['./sentence-guess.page.scss'],
 	host: {
 		'(document:keypress)': 'handleKeyboardEvent($event)'
-	}
+	},
+	animations: [
+		trigger('fade', [
+			transition(':enter', [
+				style({ opacity: '0' }),
+				animate('250ms 500ms ease-out', style({ opacity: '1' }))
+			]),
+			transition(':leave', [
+				animate('250ms ease-in', style({ opacity: '0' }))
+			])
+		])
+	]
 })
 
 export class SentenceGuessPage implements OnInit {
@@ -26,7 +38,8 @@ export class SentenceGuessPage implements OnInit {
 	private sentenceShown: string; // Current displayed sentence
 
 	private toastIsShown: boolean; // Single toast flag
-
+	displayButtons: boolean = true;
+	
 	// 3 random characters with one correct one 
 	private firstChar: string;
 	private secondChar: string;
@@ -131,9 +144,9 @@ export class SentenceGuessPage implements OnInit {
 			const savedNum = this.curWordIndex; // Save current word number in case switching cannot be done
 			do {
 				++this.curWordIndex;
-			} while (this.curWordIndex < this.curSentence().hiddenChars.length && 
+			} while (this.curWordIndex < this.curSentence().hiddenChars.length &&
 				this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length - 1);
-			
+
 			// If end of sentence was reached
 			if (this.curWordIndex === this.curSentence().hiddenChars.length) {
 				this.curWordIndex = savedNum;
@@ -144,7 +157,7 @@ export class SentenceGuessPage implements OnInit {
 				this.sentenceShown,
 				'_',
 				this.curSentence().hiddenWord[this.curWordIndex - 1][0] + this.curCharsIndexes[this.curWordIndex - 1]);
-			
+
 			this.sentenceShown = this.util.addCharByIndex(
 				this.sentenceShown,
 				'?',
@@ -163,7 +176,7 @@ export class SentenceGuessPage implements OnInit {
 			do {
 				--this.curWordIndex;
 			} while (this.curWordIndex > 0 && this.curCharsIndexes[this.curWordIndex] ===
-				this.curSentence().hiddenChars[this.curWordIndex].length - 1);
+			this.curSentence().hiddenChars[this.curWordIndex].length - 1);
 
 			// If end of sentence was reached
 			if (this.curWordIndex === -1) {
@@ -189,11 +202,11 @@ export class SentenceGuessPage implements OnInit {
 
 	// Go to following sentence of the lesson
 	nextSentenceClick() {
-		this.sentenceIndex = 
-			this.sentenceIndex === this.lessonsData.getLessonByID(this.lessonId).sentences.length 
-			? 1 
-			: this.sentenceIndex + 1;
-		
+		this.sentenceIndex =
+			this.sentenceIndex === this.lessonsData.getLessonByID(this.lessonId).sentences.length
+				? 1
+				: this.sentenceIndex + 1;
+
 		this.curWordIndex = 0;
 		this.curCharsIndexes = [];
 
@@ -325,10 +338,12 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
-
 			if (event.type !== 'ev0') {
 				++this.curSentence().statistics.correctAnswers; // Statistics
 			}
+
+			this.displayButtons = false;
+			setTimeout(() => this.displayButtons = true, 400);
 
 			// Fill guessed character
 			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
@@ -337,10 +352,10 @@ export class SentenceGuessPage implements OnInit {
 
 			if (this.curCharsIndexes[this.curWordIndex] !== this.curSentence().hiddenWord[this.curWordIndex][1] - 1) {
 				// If current word is not filled -> replace following char with '?'
-				this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
+				this.sentenceShown = this.util.addCharByIndex(
+					this.sentenceShown,
 					'?',
-					this.curSentence().hiddenWord[this.curWordIndex][0] +
-					this.curCharsIndexes[this.curWordIndex] + 1);
+					this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex] + 1);
 			} else {
 				// If current word is filled -> find first word, that is not filled
 				do {
@@ -354,7 +369,7 @@ export class SentenceGuessPage implements OnInit {
 							return;
 						}
 					}
-				} while (this.curCharsIndexes[this.curWordIndex] === 
+				} while (this.curCharsIndexes[this.curWordIndex] ===
 					this.curSentence().hiddenChars[this.curWordIndex].length - 1);
 
 				this.sentenceShown = this.util.addCharByIndex(
@@ -378,8 +393,8 @@ export class SentenceGuessPage implements OnInit {
 			++this.curSentence().statistics.wrongAnswers; // Statistics
 
 			this.vibration.vibrate(200);
-			
-			switch(event.key) {
+
+			switch (event.key) {
 				case this.firstChar.toLowerCase(): {
 					this.highlightClickedCharBox(1);
 					break;

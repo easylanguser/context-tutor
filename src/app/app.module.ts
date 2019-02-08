@@ -20,6 +20,7 @@ import {LoginPageModule} from "./pages/login/login.module";
 import {SignUpPageModule} from "./pages/sign-up/sign-up.module";
 import {AccountPageModule} from "./pages/account/account.module";
 import { Vibration } from '@ionic-native/vibration/ngx';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export function jwtOptionsFactory(storage) {
     return {
@@ -33,7 +34,7 @@ export function jwtOptionsFactory(storage) {
 @NgModule({
   declarations: [AppComponent, SentencesListPage, SentenceGuessPage],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule,LoginPageModule,SignUpPageModule,
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule,LoginPageModule,SignUpPageModule, BrowserAnimationsModule,
       AccountPageModule,
       IonicStorageModule.forRoot({
       name: 'easy-db',

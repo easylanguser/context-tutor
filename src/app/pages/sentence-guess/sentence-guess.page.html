@@ -22,17 +22,17 @@
 
     <div style="background-color: white;">
       <ion-grid>
-        <ion-row>
-          <ion-col size="2.4" offset="0.4" (click)="firstCharBoxClick()" class="char-box" id="first-char-box">
+        <ion-row style="height: 20vmin;">
+          <ion-col *ngIf="displayButtons" @fade size="2.4" offset="0.4" (click)="firstCharBoxClick()" class="char-box" id="first-char-box">
             {{firstChar}}
           </ion-col>
-          <ion-col size="2.4" offset="0.4" (click)="secondCharBoxClick()" class="char-box" id="second-char-box">
+          <ion-col *ngIf="displayButtons" @fade size="2.4" offset="0.4" (click)="secondCharBoxClick()" class="char-box" id="second-char-box">
             {{secondChar}}
           </ion-col>
-          <ion-col size="2.4" offset="0.4" (click)="thirdCharBoxClick()" class="char-box" id="third-char-box">
+          <ion-col *ngIf="displayButtons" @fade size="2.4" offset="0.4" (click)="thirdCharBoxClick()" class="char-box" id="third-char-box">
             {{thirdChar}}
           </ion-col>
-          <ion-col size="2.4" offset="0.4" (click)="fourthCharBoxClick()" class="char-box" id="fourth-char-box">
+          <ion-col *ngIf="displayButtons" @fade size="2.4" offset="0.4" (click)="fourthCharBoxClick()" class="char-box" id="fourth-char-box">
             {{fourthChar}}
           </ion-col>
         </ion-row>
