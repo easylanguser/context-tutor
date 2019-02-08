@@ -10,6 +10,7 @@ export class Sentence {
         public hiddenWord: Array<[number, number]>, 
         public text: string, 
         public textUnderscored: string,
+        public hiddenChars: Array<string[]>,
         public curCharsIndexes: number[],
         public curWordIndex: number,
         public isSolved: boolean,

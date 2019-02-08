@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="toolbar" class="no-selection">
     <ion-buttons slot="start">
-      <ion-back-button text="Lesson" (click)="leaveLesson()"></ion-back-button>
+      <ion-back-button text="Lesson" (click)="leaveLessonClick()"></ion-back-button>
     </ion-buttons>
     <ion-title text-center>
       Sentence {{sentenceIndex}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}

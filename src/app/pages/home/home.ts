@@ -75,6 +75,7 @@ export class HomePage {
 		}, 5000);
 	}
 
+	// Get list of lessons, add them to displayed and to lessons data service
 	private async getData() {
 		const loading = await this.loadingController.create({
 			message: 'Loading'
@@ -97,6 +98,7 @@ export class HomePage {
 			});
 	}
 
+	// Go to selected lesson page
 	openLesson(lessonID) {
 		this.router.navigate(['sentences-list'], { queryParams: { lessonID: lessonID } });
 	}

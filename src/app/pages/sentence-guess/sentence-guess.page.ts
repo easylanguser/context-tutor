@@ -18,15 +18,16 @@ import { Vibration } from '@ionic-native/vibration/ngx';
 
 export class SentenceGuessPage implements OnInit {
 
-	private curWordIndex: number = 0;
-	private curCharsIndexes: number[] = [];
-	private lessonId: number = 0;
-	private sentenceIndex: number = 1;
-	private toastIsShown: boolean;
+	private curWordIndex: number = 0; // Number of word, that user is currently at
+	private curCharsIndexes: number[] = []; // Number of character for each word, that user is currently at
+	private lessonId: number = 0; // Id of current lesson
+	private sentenceIndex: number = 1; // Number of current sentence in lesson
 	private alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	private sentenceShown: string;
-	private hiddenChars: Array<string[]>;
+	private sentenceShown: string; // Current displayed sentence
 
+	private toastIsShown: boolean; // Single toast flag
+
+	// 3 random characters with one correct one 
 	private firstChar: string;
 	private secondChar: string;
 	private thirdChar: string;
@@ -39,21 +40,29 @@ export class SentenceGuessPage implements OnInit {
 		private lessonsData: LessonsDataService,
 		private vibration: Vibration) { }
 
+	// Get number of sentence and id of the lesson from previous page
 	ngOnInit() {
 		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('current')) + 1;
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
-		this.sentenceShown = this.curSentence().textUnderscored;
 		this.getData(true);
 	};
 
+	// TODO: change statistics manipulation
 	logStat() {
 		console.log(this.curSentence().statistics);
 	}
 
+	// Get current Sentence object from service
 	private curSentence(): Sentence {
 		return this.lessonsData.getLessonByID(this.lessonId).sentences[this.sentenceIndex - 1];
 	}
 
+	// Get current character, to be filled
+	private curCorrectChar(): string {
+		return this.curSentence().hiddenChars[this.curWordIndex][this.curCharsIndexes[this.curWordIndex]];
+	}
+
+	// Remove characters boxes highlighting
 	private resetColors() {
 		document.getElementById('first-char-box').style.boxShadow = 'none';
 		document.getElementById('second-char-box').style.boxShadow = 'none';
@@ -61,48 +70,44 @@ export class SentenceGuessPage implements OnInit {
 		document.getElementById('fourth-char-box').style.boxShadow = 'none';
 	}
 
+	private highlightNextSentenceButton(color: string) {
+		document.getElementById('next-sentence-button').style.boxShadow = color;
+	}
+
 	private async getData(showLoader: boolean) {
 		let loading: any;
-		if (showLoader) {	
+		if (showLoader) { // Show loader if sentence is loaded first time	
 			loading = await this.loadingController.create({ message: 'Loading' });
 			await loading.present();
 		}
 
-		if (this.curSentence().isSolved) {
+		if (this.curSentence().isSolved) { // Display filled sentence, if it has already been solved
 			this.sentenceShown = this.curSentence().text;
-			document.getElementById('next-sentence-button').style.boxShadow = '0px 1px 4px 1px #139c0d';
+			this.highlightNextSentenceButton('0px 1px 4px 1px #139c0d');
 			if (showLoader) {
 				loading.dismiss();
 			}
 			return;
 		}
-		document.getElementById('next-sentence-button').style.boxShadow = 'none';
 
+		this.highlightNextSentenceButton('none');
+
+		// Restore user progress
 		this.curWordIndex = this.curSentence().curWordIndex;
 		this.curCharsIndexes = this.curSentence().curCharsIndexes;
 
-		this.hiddenChars = [];
-
-		for (let i in this.curSentence().hiddenWord) {
-			const chars: string[] = [];
-			for (let j = 0; j < this.curSentence().hiddenWord[i][1]; j++) {
-				chars.push(this.curSentence().text.charAt(this.curSentence().hiddenWord[i][0] + j));
-			}
-			this.hiddenChars.push(chars);
-		}
-
 		this.sentenceShown = this.curSentence().textUnderscored;
 
-		if (this.curCharsIndexes.length === 0) {
-			for (let i in this.hiddenChars) {
+		if (this.curCharsIndexes.length === 0) { // If user has no progress -> set current characters indexes to zeroes
+			for (let i in this.curSentence().hiddenChars) {
 				this.curCharsIndexes.push(0);
 			}
-		} else {
+		} else { // Else restore sentence guessed words
 			for (let i in this.curCharsIndexes) {
 				for (let j = 0; j < this.curCharsIndexes[i]; j++) {
 					this.sentenceShown = this.util.addCharByIndex(
 						this.sentenceShown,
-						this.hiddenChars[i][j],
+						this.curSentence().hiddenChars[i][j],
 						this.curSentence().hiddenWord[i][0] + j);
 				}
 			}
@@ -120,67 +125,78 @@ export class SentenceGuessPage implements OnInit {
 		}
 	}
 
+	// Go to following unfilled word  
 	nextWordClick() {
-		if (!this.curSentence().isSolved && this.curWordIndex < this.hiddenChars.length - 1) {
-			const savedNum = this.curWordIndex;
+		if (!this.curSentence().isSolved && this.curWordIndex < this.curSentence().hiddenChars.length - 1) {
+			const savedNum = this.curWordIndex; // Save current word number in case switching cannot be done
 			do {
 				++this.curWordIndex;
-			} while (this.curWordIndex < this.hiddenChars.length && this.curCharsIndexes[this.curWordIndex] ===
-			this.hiddenChars[this.curWordIndex].length - 1)
-			if (this.curWordIndex === this.hiddenChars.length) {
+			} while (this.curWordIndex < this.curSentence().hiddenChars.length && 
+				this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length - 1);
+			
+			// If end of sentence was reached
+			if (this.curWordIndex === this.curSentence().hiddenChars.length) {
 				this.curWordIndex = savedNum;
 				return;
 			}
-			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
-				'_',
-				this.curSentence().hiddenWord[this.curWordIndex - 1][0] +
-				this.curCharsIndexes[this.curWordIndex - 1]);
-			if (this.curWordIndex !== this.hiddenChars.length) {
-				this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
-					'?',
-					this.curSentence().hiddenWord[this.curWordIndex][0] +
-					this.curCharsIndexes[this.curWordIndex]);
-			}
 
-			this.refreshCharBoxes();
-
-			++this.curSentence().statistics.wordSkips; // Statistics
-		}
-	}
-
-	previousWordClick() {
-		if (!this.curSentence().isSolved && this.curWordIndex > 0) {
-			const savedNum = this.curWordIndex;
-			do {
-				--this.curWordIndex;
-			} while (this.curWordIndex > 0 && this.curCharsIndexes[this.curWordIndex] ===
-			this.hiddenChars[this.curWordIndex].length - 1)
-			if (this.curWordIndex === -1) {
-				this.curWordIndex = savedNum;
-				return;
-			}
 			this.sentenceShown = this.util.addCharByIndex(
 				this.sentenceShown,
 				'_',
-				this.curSentence().hiddenWord[savedNum][0] + this.curCharsIndexes[savedNum]);
+				this.curSentence().hiddenWord[this.curWordIndex - 1][0] + this.curCharsIndexes[this.curWordIndex - 1]);
+			
 			this.sentenceShown = this.util.addCharByIndex(
 				this.sentenceShown,
 				'?',
 				this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
+
 			this.refreshCharBoxes();
 
 			++this.curSentence().statistics.wordSkips; // Statistics
 		}
 	}
 
-	nextSentenceClick() {
-		if (this.sentenceIndex === this.lessonsData.getLessonByID(this.lessonId).sentences.length) {
-			this.sentenceIndex = 1;
-		} else {
-			++this.sentenceIndex;
+	// Go to first previous unfilled word
+	previousWordClick() {
+		if (!this.curSentence().isSolved && this.curWordIndex > 0) {
+			const savedNum = this.curWordIndex; // Save current word number in case switching cannot be done
+			do {
+				--this.curWordIndex;
+			} while (this.curWordIndex > 0 && this.curCharsIndexes[this.curWordIndex] ===
+				this.curSentence().hiddenChars[this.curWordIndex].length - 1);
+
+			// If end of sentence was reached
+			if (this.curWordIndex === -1) {
+				this.curWordIndex = savedNum;
+				return;
+			}
+
+			this.sentenceShown = this.util.addCharByIndex(
+				this.sentenceShown,
+				'_',
+				this.curSentence().hiddenWord[savedNum][0] + this.curCharsIndexes[savedNum]);
+
+			this.sentenceShown = this.util.addCharByIndex(
+				this.sentenceShown,
+				'?',
+				this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
+
+			this.refreshCharBoxes();
+
+			++this.curSentence().statistics.wordSkips; // Statistics
 		}
+	}
+
+	// Go to following sentence of the lesson
+	nextSentenceClick() {
+		this.sentenceIndex = 
+			this.sentenceIndex === this.lessonsData.getLessonByID(this.lessonId).sentences.length 
+			? 1 
+			: this.sentenceIndex + 1;
+		
 		this.curWordIndex = 0;
 		this.curCharsIndexes = [];
+
 		this.getData(false);
 
 		if (!this.curSentence().isSolved) {
@@ -188,18 +204,20 @@ export class SentenceGuessPage implements OnInit {
 		}
 	}
 
+	// Give up and show full sentence
 	giveUpClick() {
 		if (!this.curSentence().isSolved) {
 			++this.curSentence().statistics.giveUps; // Statistics
 
-			document.getElementById('next-sentence-button').style.boxShadow = '0px 3px 10px 1px rgba(245, 229, 27, 1)';
-			this.curWordIndex = this.hiddenChars.length;
+			this.highlightNextSentenceButton('0px 3px 10px 1px rgba(245, 229, 27, 1)');
+			this.curWordIndex = this.curSentence().hiddenChars.length;
 			this.resetColors();
 			this.sentenceShown = this.curSentence().text;
 			this.curSentence().isSolved = true;
 		}
 	}
 
+	// Show user one current character
 	hintClick() {
 		if (!this.curSentence().isSolved) {
 			const event = new KeyboardEvent('ev0', { key: this.curCorrectChar() });
@@ -229,7 +247,8 @@ export class SentenceGuessPage implements OnInit {
 		this.handleKeyboardEvent(event);
 	}
 
-	leaveLesson() {
+	// Save user progress and leave lesson 
+	leaveLessonClick() {
 		if (this.curSentence().text !== this.sentenceShown) {
 			++this.curSentence().statistics.lessonLeaves; // Statistics
 		}
@@ -237,15 +256,8 @@ export class SentenceGuessPage implements OnInit {
 		this.curSentence().curCharsIndexes = this.curCharsIndexes;
 	}
 
-	private refreshCharBoxes() {
-		this.resetColors();
-
-		if (this.curWordIndex === this.curSentence().hiddenWord.length) {
-			document.getElementById('next-sentence-button').style.boxShadow = '0px 1px 4px 1px #139c0d';
-			this.curSentence().isSolved = true;
-			return;
-		}
-
+	// Generate 3 random characters from alphabet and random position for correct character  
+	private generateRandomCharacters() {
 		const correctCharIndex = Math.floor(Math.random() * 4) + 1;
 		const correctChar = this.curCorrectChar().toUpperCase();
 		const firstRand = Math.floor(Math.random() * this.alphabet.length);
@@ -280,20 +292,20 @@ export class SentenceGuessPage implements OnInit {
 			: this.alphabet[fourthRand];
 	}
 
-	private async showToast() {
-		this.toastIsShown = true;
-		const toast = await this.toastController.create({
-			message: 'Sentence is filled',
-			position: 'middle',
-			duration: 600,
-			cssClass: 'toast-container'
-		});
-		toast.present();
-		await new Promise(resolve => setTimeout(resolve, 900));
-		this.toastIsShown = false;
+	// Reset characters boxes highlighting and generate random characters
+	private refreshCharBoxes() {
+		this.resetColors();
+
+		if (this.curWordIndex === this.curSentence().hiddenWord.length) {
+			this.highlightNextSentenceButton('0px 1px 4px 1px #139c0d');
+			this.curSentence().isSolved = true;
+			return;
+		}
+
+		this.generateRandomCharacters();
 	}
 
-	private setColor(charBoxNumber: number) {
+	private highlightClickedCharBox(charBoxNumber: number) {
 		let charBoxId: string;
 		if (charBoxNumber === 1) { charBoxId = 'first-char-box' }
 		else if (charBoxNumber === 2) { charBoxId = 'second-char-box' }
@@ -303,10 +315,7 @@ export class SentenceGuessPage implements OnInit {
 		document.getElementById(charBoxId).style.boxShadow = '0px 3px 10px 1px rgba(167, 1, 6, 1)';
 	}
 
-	private curCorrectChar(): string {
-		return this.hiddenChars[this.curWordIndex][this.curCharsIndexes[this.curWordIndex]];
-	}
-
+	// Handle keyboard event from desktop and clicks on char boxes from mobiles and desktop
 	handleKeyboardEvent(event: KeyboardEvent) {
 		if (this.curSentence().isSolved) {
 			if (!this.toastIsShown) {
@@ -321,6 +330,7 @@ export class SentenceGuessPage implements OnInit {
 				++this.curSentence().statistics.correctAnswers; // Statistics
 			}
 
+			// Fill guessed character
 			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 				this.curCorrectChar(),
 				this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
@@ -335,16 +345,17 @@ export class SentenceGuessPage implements OnInit {
 				// If current word is filled -> find first word, that is not filled
 				do {
 					++this.curWordIndex;
-					if (this.curWordIndex === this.hiddenChars.length) {
+					if (this.curWordIndex === this.curSentence().hiddenChars.length) {
 						if (this.sentenceShown !== this.curSentence().text) {
 							this.curWordIndex = 0;
 						} else {
-							document.getElementById('next-sentence-button').style.boxShadow = '0px 1px 4px 1px #139c0d';
+							this.highlightNextSentenceButton('0px 1px 4px 1px #139c0d');
 							this.curSentence().isSolved = true;
 							return;
 						}
 					}
-				} while (this.curCharsIndexes[this.curWordIndex] === this.hiddenChars[this.curWordIndex].length - 1);
+				} while (this.curCharsIndexes[this.curWordIndex] === 
+					this.curSentence().hiddenChars[this.curWordIndex].length - 1);
 
 				this.sentenceShown = this.util.addCharByIndex(
 					this.sentenceShown,
@@ -357,28 +368,48 @@ export class SentenceGuessPage implements OnInit {
 			}
 
 			++this.curCharsIndexes[this.curWordIndex];
-			if (this.curCharsIndexes[this.curWordIndex] ===
-				this.curSentence().hiddenWord[this.curWordIndex][1]) {
+
+			if (this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenWord[this.curWordIndex][1]) {
 				++this.curWordIndex;
 			}
+
 			this.refreshCharBoxes();
 		} else {
-
 			++this.curSentence().statistics.wrongAnswers; // Statistics
 
 			this.vibration.vibrate(200);
-			if (event.key === this.firstChar.toLowerCase()) {
-				this.setColor(1);
-			}
-			else if (event.key === this.secondChar.toLowerCase()) {
-				this.setColor(2);
-			}
-			else if (event.key === this.thirdChar.toLowerCase()) {
-				this.setColor(3);
-			}
-			else if (event.key === this.fourthChar.toLowerCase()) {
-				this.setColor(4);
+			
+			switch(event.key) {
+				case this.firstChar.toLowerCase(): {
+					this.highlightClickedCharBox(1);
+					break;
+				}
+				case this.secondChar.toLowerCase(): {
+					this.highlightClickedCharBox(2);
+					break;
+				}
+				case this.thirdChar.toLowerCase(): {
+					this.highlightClickedCharBox(3);
+					break;
+				}
+				case this.fourthChar.toLowerCase(): {
+					this.highlightClickedCharBox(4);
+					break;
+				}
 			}
 		}
+	}
+
+	private async showToast() {
+		this.toastIsShown = true;
+		const toast = await this.toastController.create({
+			message: 'Sentence is filled',
+			position: 'middle',
+			duration: 600,
+			cssClass: 'toast-container'
+		});
+		toast.present();
+		await new Promise(resolve => setTimeout(resolve, 900));
+		this.toastIsShown = false;
 	}
 }
