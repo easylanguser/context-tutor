@@ -4,11 +4,11 @@
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
 
-        <ion-title>Login</ion-title>
+        <ion-title>Sign in</ion-title>
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding class="forms">
     <form [formGroup]="credentialsForm" (ngSubmit)="onSubmit()">
 
         <ion-item>
@@ -29,11 +29,11 @@
             <div *ngIf="f.password.errors.required">this field is required</div>
         </div>
 
-        <ion-button expand="full" type="submit">Login</ion-button>
+        <ion-button expand="full" type="submit">Sing in</ion-button>
     </form>
 </ion-content>
 <ion-footer>
     <ion-toolbar>
-        <ion-title text-center> Don't have an account yet? <a (click)="toSignUp()">Sign up</a></ion-title>
+        <ion-title text-center> <a (click)="toSignUp()" >Forget </a>your password?</ion-title>
     </ion-toolbar>
 </ion-footer>

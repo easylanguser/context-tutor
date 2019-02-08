@@ -7,6 +7,7 @@ import {AuthGuardService} from "./services/guard/auth-guard.service";
 import {LoginPage} from "./pages/login/login.page";
 import {SignUpPage} from "./pages/sign-up/sign-up.page";
 import {AccountPage} from "./pages/account/account.page";
+import {ForgetPage} from "./pages/forget/forget.page";
 
 const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -16,6 +17,8 @@ const routes: Routes = [
     {path: 'login', component: LoginPage},
     {path: 'sign-up', component: SignUpPage},
     {path: 'account', component: AccountPage, canActivate: [AuthGuardService]},
+    {path: 'forget', component: ForgetPage},
+
 ];
 
 @NgModule({

@@ -46,7 +46,7 @@ export class LoginPage {
 
 
     toSignUp() {
-        this.router.navigate(['sign-up']);
+        this.router.navigate(['forget']);
     }
 
 }
