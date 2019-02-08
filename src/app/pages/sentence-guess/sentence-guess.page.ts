@@ -19,10 +19,10 @@ import { Vibration } from '@ionic-native/vibration/ngx';
 		trigger('fade', [
 			transition(':enter', [
 				style({ opacity: '0' }),
-				animate('250ms 500ms ease-out', style({ opacity: '1' }))
+				animate('200ms 400ms ease-out', style({ opacity: '1' }))
 			]),
 			transition(':leave', [
-				animate('250ms ease-in', style({ opacity: '0' }))
+				animate('200ms ease-in', style({ opacity: '0' }))
 			])
 		])
 	]
@@ -343,7 +343,7 @@ export class SentenceGuessPage implements OnInit {
 			}
 
 			this.displayButtons = false;
-			setTimeout(() => this.displayButtons = true, 400);
+			setTimeout(() => this.displayButtons = true, 300);
 
 			// Fill guessed character
 			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,

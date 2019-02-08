@@ -20,23 +20,19 @@
 <ion-footer>
   <ion-toolbar no-padding class="no-selection">
 
-    <div style="background-color: white;">
-      <ion-grid>
-        <ion-row style="height: 22vmin;">
-          <ion-col *ngIf="displayButtons" @fade size="2.4" offset="0.4" (click)="firstCharBoxClick()" class="char-box" id="first-char-box">
-            {{firstChar}}
-          </ion-col>
-          <ion-col *ngIf="displayButtons" @fade size="2.4" offset="0.4" (click)="secondCharBoxClick()" class="char-box" id="second-char-box">
-            {{secondChar}}
-          </ion-col>
-          <ion-col *ngIf="displayButtons" @fade size="2.4" offset="0.4" (click)="thirdCharBoxClick()" class="char-box" id="third-char-box">
-            {{thirdChar}}
-          </ion-col>
-          <ion-col *ngIf="displayButtons" @fade size="2.4" offset="0.4" (click)="fourthCharBoxClick()" class="char-box" id="fourth-char-box">
-            {{fourthChar}}
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+    <div style="height: 22vmin;">
+      <button *ngIf="this.displayButtons" @fade (click)="firstCharBoxClick()" class="char-box" id="first-char-box">
+        {{firstChar}}
+      </button>
+      <button *ngIf="this.displayButtons" @fade (click)="secondCharBoxClick()" class="char-box" id="second-char-box">
+        {{secondChar}}
+      </button>
+      <button *ngIf="this.displayButtons" @fade (click)="thirdCharBoxClick()" class="char-box" id="third-char-box">
+        {{thirdChar}}
+      </button>
+      <button *ngIf="this.displayButtons" @fade (click)="fourthCharBoxClick()" class="char-box" id="fourth-char-box">
+        {{fourthChar}}
+      </button>
     </div>
 
     <div style="background-color: white;">
