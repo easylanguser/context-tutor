@@ -2,9 +2,9 @@
   <ion-split-pane>
 
     <ion-menu type="overlay">
-        <ion-toolbar>
-          <ion-title>Menu</ion-title>
-        </ion-toolbar>
+      <ion-toolbar>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
       <ion-content>
 
         <ion-list *ngIf="loggedIn">
@@ -88,10 +88,20 @@
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
+
+        <ion-list>
+          <ion-list-header>
+            Theming
+          </ion-list-header>
+          <ion-select placeholder="Select App Theme" interface="action-sheet" (ionChange)="onChangeTheme($event)">
+            <ion-select-option value="dark">Dark</ion-select-option>
+            <ion-select-option value="light">Light</ion-select-option>
+          </ion-select>
+        </ion-list>
       </ion-content>
     </ion-menu>
 
-    <ion-router-outlet main ></ion-router-outlet>
+    <ion-router-outlet main></ion-router-outlet>
 
   </ion-split-pane>
 

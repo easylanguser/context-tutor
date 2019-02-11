@@ -9,6 +9,7 @@ import {AuthService} from "./services/auth/auth.service";
 
 import {Storage} from '@ionic/storage';
 import {BehaviorSubject} from "rxjs";
+import { SettingsService } from './services/settings/settings.service';
 
 @Component({
     selector: 'app-root',
@@ -32,8 +33,17 @@ export class AppComponent {
         private authService: AuthService,
         private router: Router,
         private storage: Storage,
+        private settings: SettingsService
     ) {
         this.initializeApp();
+    }
+
+    onChangeTheme(ev: CustomEvent) {
+        if (ev.detail.value === 'dark') {
+            this.settings.enableDarkMode(true);
+        } else {
+            this.settings.enableDarkMode(false);
+        }
     }
 
     authenticationState = new BehaviorSubject(false);
