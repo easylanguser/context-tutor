@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth/auth.service";
 import {Router} from "@angular/router";
 import {UserService} from "../../services/user/user-service";
+import {AlertController} from "@ionic/angular";
 
 @Component({
   selector: 'app-forget',
@@ -15,7 +16,7 @@ export class ForgetPage implements OnInit {
     submitted: boolean;
 
     constructor(private formBuilder: FormBuilder, private UserService: UserService,
-                private router: Router) { }
+                private router: Router, private alertController: AlertController) { }
 
     get f() { return this.credentialsForm.controls; }
 
@@ -28,12 +29,23 @@ export class ForgetPage implements OnInit {
     onSubmit() {
         this.submitted = true;
         if(this.credentialsForm.valid){
-            this.UserService.sendPasswordToEmail(this.credentialsForm.value).subscribe()
+            this.UserService.sendPassResetRequest(this.credentialsForm.value).subscribe(res=>{
+                this.showAlert(res);
+            })
         }
     }
 
     toSignUp() {
-        this.router.navigate(['forget']);
+        this.router.navigate(['sign-up']);
+    }
+
+    showAlert(res) {
+        let alert = this.alertController.create({
+            message: res.msg,
+            header: 'Email confirmation',
+            buttons: ['OK']
+        });
+        alert.then(alert => alert.present());
     }
 
 }
