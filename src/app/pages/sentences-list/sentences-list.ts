@@ -30,7 +30,7 @@ export class SentencesListPage {
 		this.getData(this.lessonId);
 	}
 
-	// Open sentence to guess by clicking on it in the list
+	// Go to selected lesson sentences page
 	openSentence(sentenceNumber) {
 		this.router.navigate(['sentence-guess'],
 			{ queryParams: { current: sentenceNumber, lesson: this.lessonId } });
@@ -43,7 +43,7 @@ export class SentencesListPage {
 		}, 5000);
 	}
 
-	// Get sentences by certain lesson
+	// Get sentences by certain lesson and add them to global data
 	private async getData(lessonId) {
 		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
@@ -51,11 +51,20 @@ export class SentencesListPage {
 			.subscribe(res => {
 				let lsn = res[0];
 				for (let i = 0; i < lsn.length; i++) {
+					const hiddenChars: Array<string[]> = [];
+					for (let j = 0; j < lsn[i].words.length; j++) {
+						const chars: string[] = [];
+						for (let k = 0; k < lsn[i].words[j][1]; k++) {
+							chars.push(lsn[i].text.charAt(lsn[i].words[j][0] + k));
+						}
+						hiddenChars.push(chars);
+					}
 					const sentence = new Sentence(
 						lsn[i].id,
 						lsn[i].words,
 						lsn[i].text,
 						this.util.hideChars(lsn[i].text, lsn[i].words),
+						hiddenChars,
 						[],
 						0,
 						false,

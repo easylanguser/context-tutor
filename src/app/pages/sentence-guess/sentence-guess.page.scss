@@ -39,53 +39,22 @@ ion-content {
             user-select: none;
 }
 
-@media (min-width: 1px) and (max-width: 750px) {
-    .char-box {
-        height: 20vmin;
-        font-size: 17vw;
-    }
-}
-
-@media (min-width: 750px) and (max-width: 1100px){
-    .char-box {
-        height: 16vmin;
-        font-size: 14vw;
-    }
-}
-
-@media (min-width: 1100px) and (max-width: 1400px) {
-    .char-box {
-        height: 14vmin;
-        font-size: 7vw;
-    }
-}
-
-@media (min-width: 1400px) and (max-width: 1600px) {
-    .char-box {
-        height: 12vmin;
-        font-size: 8vw;
-    }
-}
-
-@media (min-width: 1600px) and (max-width: 1700px) {
-    .char-box {
-        height: 12vmin;
-        font-size: 5vw;
-    }
-}
-
-@media (min-width: 1700px) {
-    .char-box {
-        height: 11vmin;
-        font-size: 5vw;
-    }
-}
-
 .char-box {
+    height: 20vmin;
     border-radius: 3px;
-    margin: 1vmin;
+    width: 23vw;
+    margin: 1vw;
+    border-radius: 2px;
     text-align: center;
+    font-size: 18vw;
+    outline: none;
     background-color: rgb(223,223,223);
+}
+
+@media (min-width: 992px) {
+    .char-box {
+        width: 16vw;
+    }
 }
 
 @media (min-width: 1px) and (max-width: 800px) {
