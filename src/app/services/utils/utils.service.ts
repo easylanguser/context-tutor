@@ -7,9 +7,7 @@ export class UtilsService {
 
 	constructor() { }
 
-	// Get new text from inputText with underscores at indexes and 
-	// fill array with indexes of hidden characters for each sentence
-	replaceLettersWithUnderscore(inputText: string, indexes: Array<[number, number]>): string {
+	hideChars(inputText: string, indexes: Array<[number, number]>): string {
 		let textWithHiddenCharacters = inputText.substr(0, indexes[0][0]);
 		for (let i = 0; i < indexes.length - 1; i++) {
 			for (let j = 0; j < indexes[i][1]; j++) {
@@ -28,8 +26,7 @@ export class UtilsService {
 		return textWithHiddenCharacters;
 	}
 
-	// Show one guessed letter
-	showTextWithGuessedCharacter(input, replacement, index): string {
+	addCharByIndex(input: string, replacement: string, index: number): string {
 		return input.substr(0, index) + replacement + input.substr(index + replacement.length);
 	}
 }

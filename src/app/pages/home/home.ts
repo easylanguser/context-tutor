@@ -1,88 +1,80 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { LessonsListService } from 'src/app/services/lessons-list/lessons-list.service';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
-import { Chart } from 'chart.js';
-import { ElementRef } from '@angular/core';
 
 @Component({
 	selector: 'page-home',
 	templateUrl: 'home.html',
 	styleUrls: ['home.scss']
 })
-
 export class HomePage {
 
-	@ViewChild('chartCanvas') chartCanvas: ElementRef;
-
-	correct: number;
-	wrong: number;
-	chartVar: any;
-	voted: boolean = false;
+	private displayedLessons: Lesson[];
+	private clearSegmentBoolean: boolean;
 
 	constructor(private api: LessonsListService,
 		private loadingController: LoadingController,
 		private router: Router,
 		private lessonData: LessonsDataService) {
 		this.getData();
-		this.wrong = 3;
-		this.correct = 6;
 	}
 
-	ngAfterViewInit() {
-		setTimeout(() => {
-			if (!this.chartCanvas.nativeElement) {
-				setTimeout(() => {
-					if (!this.chartCanvas.nativeElement) {
-						return;
-					} else {
-						this.showChart();
-					}
-				}, 2000)
-			} else {
-				this.showChart();
-			}
-		}, 2000)
+	async weekAgoClick() {
+		const loading = await this.loadingController.create({
+			message: 'Loading'
+		});
+		await loading.present();
+		this.displayedLessons = this.lessonData.lessons.filter(this.weekAgo);
+		loading.dismiss();
 	}
 
-	showChart() {
-		this.chartVar = new Chart(this.chartCanvas.nativeElement, {
-			type: 'doughnut',
-			data: {
-				datasets: [{
-					data: [this.correct, this.wrong],
-					backgroundColor: [
-						'rgba(41, 255, 122, 1)',
-						'rgba(255, 1, 12, 1)'
-					]
-				}],
-				labels: [
-					'correct',
-					'wrong'
-				]
-			},
+	async monthAgoClick() {
+		const loading = await this.loadingController.create({
+			message: 'Loading'
+		});
+		await loading.present();
+		this.displayedLessons = this.lessonData.lessons.filter(this.monthAgo);
+		loading.dismiss();
+	}
 
-			options: {
-				legend: {
-					display: false
-				},
-				tooltips: {
-					enabled: true
-				}
-			}
-		})
+	async yearAgoClick() {
+		const loading = await this.loadingController.create({
+			message: 'Loading'
+		});
+		await loading.present();
+		this.displayedLessons = this.lessonData.lessons.filter(this.yearAgo);
+		loading.dismiss();
+	}
+
+	weekAgo(element: Lesson, index, array) {
+		let now = new Date().getTime();
+		let elemDate = new Date(element.created_at).getTime();
+		return (now - elemDate <= 604800000);
+	}
+
+	monthAgo(element: Lesson, index, array) {
+		let now = new Date().getTime();
+		let elemDate = new Date(element.created_at).getTime();
+		return (now - elemDate <= 2592000000);
+	}
+
+	yearAgo(element: Lesson, index, array) {
+		let now = new Date().getTime();
+		let elemDate = new Date(element.created_at).getTime();
+		return (now - elemDate <= 31536000000);
 	}
 
 	doRefresh(event) {
+		this.clearSegmentBoolean = false;
 		this.getData().then(_ => { event.target.complete() });
 		setTimeout(() => {
 			event.target.complete();
 		}, 5000);
 	}
 
-	// Get list of lessons for the home page
 	private async getData() {
 		const loading = await this.loadingController.create({
 			message: 'Loading'
@@ -97,6 +89,7 @@ export class HomePage {
 						this.lessonData.addLesson(lesson);
 					}
 				}
+				this.displayedLessons = this.lessonData.lessons;
 				loading.dismiss();
 			}, err => {
 				console.log(err);
@@ -104,7 +97,6 @@ export class HomePage {
 			});
 	}
 
-	// Load new page with text
 	openLesson(lessonID) {
 		this.router.navigate(['sentences-list'], { queryParams: { lessonID: lessonID } });
 	}

@@ -1,49 +1,50 @@
-<ion-header style="margin-bottom: 1vh">
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button text="Lessons"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{lessonTitle}}</ion-title>
+    <ion-title>
+      {{this.lessonData.getLessonByID(lessonId).sentences.length.toString() + ' sentences'}}
+    </ion-title>
     <ion-buttons slot="end">
       <ion-button>
         Edit
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
-  <ion-segment (ionChange)="segmentChanged($event)" 
-    style="width: 95vw !important; margin-left: 2.5vw; margin-top: 1vh">
-    <ion-segment-button value="camera">
-      <ion-label>All</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="bookmark">
-      <ion-label>Red</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="camera2">
-      <ion-label>Red + Yellow</ion-label>
-    </ion-segment-button>
-  </ion-segment>
 </ion-header>
 
 <ion-content>
-  <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
-      refreshingText="Refreshing...">
+  <ion-segment id="progress-segment">
+    <ion-segment-button>
+      All
+    </ion-segment-button>
+    <ion-segment-button>
+      Red
+    </ion-segment-button>
+    <ion-segment-button>
+      Red + Yellow
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-refresher [pullMax]="0" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content>
     </ion-refresher-content>
   </ion-refresher>
+  
   <div class="sentence-card" *ngFor="let sentence of this.lessonData.getLessonByID(this.lessonId).sentences;index as i"
     (click)="openSentence(i)">
     <div class="sentence-text-div">
-      <p style="overflow: hidden;display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-top: 0;">
-        {{i + 1}}. {{sentence.textUnderscored}}
+      <p class="sentence-text">
+        {{sentence.textUnderscored}}
       </p>
     </div>
     <div class="sentence-info">
       <div class="pie-chart"></div>
-      <span style='bottom: 0.8vh; position: absolute;'>
+      <span class="date-text">
         Date here
       </span>
-      <ion-icon name="ios-arrow-forward" style='bottom: 1vh; right: 1vh; position: absolute;'></ion-icon>
+      <ion-icon name="ios-arrow-forward" class="forward-icon"></ion-icon>
     </div>
   </div>
 </ion-content>

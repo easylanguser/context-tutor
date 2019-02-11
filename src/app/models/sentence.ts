@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Statistics } from './statistics';
 
 @Injectable({
     providedIn: 'root'
@@ -9,5 +10,8 @@ export class Sentence {
         public hiddenWord: Array<[number, number]>, 
         public text: string, 
         public textUnderscored: string,
-        public isSolved: boolean) { }
+        public curCharsIndexes: number[],
+        public curWordIndex: number,
+        public isSolved: boolean,
+        public statistics: Statistics) { }
 }

@@ -1,21 +1,11 @@
-.sentence-with-underscore {
-    font-weight: bold;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    letter-spacing: 0.07em;
-    cursor: pointer;
+#progress-segment {
+	width: 95vw !important; 
+	margin-left: 2.5vw; 
+	margin-top: 1vh;
 }
 
-.selected-color{
-    border: 1px solid orange;
-    border-radius: 4px;
-    padding: 4px;
-}
-
-.toolbar-title-md {
-    text-align: left;
-    margin-right: 50px;
-    margin-bottom: -30px;
+.ios :host #progress-segment {
+	margin-bottom: 1vh;
 }
 
 .sentence-card {
@@ -38,6 +28,14 @@
 	padding-right: 2vw;
 }
 
+.sentence-text {
+	overflow-y: auto; 
+	text-overflow: ellipsis; 
+	line-height: 3vh; 
+	max-height: 6vh; 
+	margin-top: 0;
+}
+
 .sentence-info {
 	height: 100%;
 	position: relative;
@@ -47,4 +45,25 @@
     height: 8vh;
     margin: 3px;
 	border: 1px solid cadetblue;
+}
+
+.date-text {
+	bottom: 0.8vh;
+	position: absolute;
+}
+
+.forward-icon {
+	bottom: 1vh;
+	right: 1vh;
+	position: absolute;
+}
+
+@media (min-width: 992px) {
+	#progress-segment {
+		width: 67vw !important;
+	}
+
+	.sentence-text-div {
+		width: 50.4vw;
+	}
 }

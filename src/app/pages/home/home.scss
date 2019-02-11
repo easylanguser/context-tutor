@@ -1,3 +1,13 @@
+#date-segment {
+	width: 95vw !important; 
+	margin-left: 2.5vw; 
+	margin-top: 1vh;
+}
+
+.ios :host #date-segment {
+	margin-bottom: 1vh;
+}
+
 .lesson-card {
 	width: 100%;
 	height: 13vh;
@@ -18,11 +28,42 @@
 	padding-right: 2vw;
 }
 
+.lesson-text {
+	overflow-y: auto;
+	text-overflow: ellipsis;
+	line-height: 3vh;
+	max-height: 6vh;
+	margin-top: 0;
+}
+
 .lesson-info {
 	height: 100%;
 	position: relative;
 }
 
-.pieChart {
-	height: 8vh;
+.pie-chart {
+    height: 8vh;
+    margin: 3px;
+	border: 1px solid cadetblue;
+}
+
+.date-text {
+	bottom: 0.8vh;
+	position: absolute;
+}
+
+.forward-icon {
+	bottom: 1vh;
+	right: 1vh;
+	position: absolute;
+}
+
+@media (min-width: 992px) {
+	#date-segment {
+		width: 67vw !important;
+	}
+
+	.lesson-text-div {
+		width: 50.4vw;
+	}
 }

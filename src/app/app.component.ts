@@ -40,7 +40,11 @@ export class AppComponent {
 
     initializeApp() {
         this.platform.ready().then(() => {
-            this.statusBar.styleDefault();
+            if (this.platform.is('android')) {
+                this.statusBar.styleBlackOpaque;
+            } else {
+                this.statusBar.styleDefault();
+            }
             this.splashScreen.hide();
 
             this.authService.authenticationState.subscribe(state => {

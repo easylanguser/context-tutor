@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
+import { Statistics } from 'src/app/models/statistics';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -16,7 +17,6 @@ import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.s
 export class SentencesListPage {
 
 	private lessonId: number;
-	private lessonTitle: string;
 
 	constructor(private api: LessonByNameService,
 		private loadingController: LoadingController,
@@ -52,16 +52,18 @@ export class SentencesListPage {
 				let lsn = res[0];
 				for (let i = 0; i < lsn.length; i++) {
 					const sentence = new Sentence(
-						lsn[i].id, 
-						lsn[i].words, 
-						lsn[i].text, 
-						this.util.replaceLettersWithUnderscore(lsn[i].text, lsn[i].words),
-						false);
+						lsn[i].id,
+						lsn[i].words,
+						lsn[i].text,
+						this.util.hideChars(lsn[i].text, lsn[i].words),
+						[],
+						0,
+						false,
+						new Statistics(0, 0, 0, 0, 0, 0, 0));
 					if (!this.lessonData.getLessonByID(lessonId).sentences.some(sntn => sntn.id === sentence.id)) {
 						this.lessonData.getLessonByID(lessonId).addSentence(sentence);
 					}
 				}
-				this.lessonTitle = this.lessonData.getLessonByID(lessonId).sentences.length.toString() + ' sentences';
 				loading.dismiss();
 			}, err => {
 				console.log(err);
