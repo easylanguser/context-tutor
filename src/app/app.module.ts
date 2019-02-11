@@ -37,7 +37,7 @@ export function jwtOptionsFactory(storage) {
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule,LoginPageModule,SignUpPageModule, BrowserAnimationsModule,
       AccountPageModule,
-      ForgetPageModule
+      ForgetPageModule,
       IonicStorageModule.forRoot({
       name: 'easy-db',
       driverOrder: ['indexeddb', 'sqlite', 'websql']
