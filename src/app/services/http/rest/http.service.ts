@@ -5,7 +5,6 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {AuthService} from "../../auth/auth.service";
 
-const TOKEN_KEY = 'access_token';
 
 @Injectable({
     providedIn: 'root'
@@ -28,7 +27,7 @@ export class HttpService {
 
     addHeaders() {
         const token = this.authService.token;
-        const headers = new HttpHeaders({'Content-Type': 'json','Authorization':token});
+        const headers = new HttpHeaders({'Content-Type': 'application/json','Authorization':token});
         return {headers: headers}
     }
 

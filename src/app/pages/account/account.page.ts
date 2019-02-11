@@ -4,6 +4,7 @@ import {JwtHelperService} from "@auth0/angular-jwt";
 import {AuthService} from "../../services/auth/auth.service";
 import {HttpService} from "../../services/http/rest/http.service";
 import {AlertController} from "@ionic/angular";
+import {Router} from "@angular/router";
 
 const TOKEN_KEY = 'access_token';
 
@@ -17,7 +18,7 @@ export class AccountPage implements OnInit {
     user = {};
 
     constructor(private storage: Storage, private helper: JwtHelperService, private authService: AuthService, private httpService: HttpService,
-                private alertController: AlertController) {
+                private alertController: AlertController,private router: Router) {
     }
 
     ngOnInit() {
@@ -60,14 +61,9 @@ export class AccountPage implements OnInit {
     }
 
     changePassword() {
-        // this.storage.get(TOKEN_KEY).then(token => {
-        //     if (token) {
-        //         let decoded = this.helper.decodeToken(token);
-        //         this.user['email'] = decoded.email;
-        //
-        //     }
-        // });
+        this.router.navigate(['change']);
     }
+
 
     logout() {
         this.authService.logout();
