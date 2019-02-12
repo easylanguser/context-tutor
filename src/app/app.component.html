@@ -93,10 +93,15 @@
           <ion-list-header>
             Theming
           </ion-list-header>
-          <ion-select placeholder="Select App Theme" interface="popover" (ionChange)="onChangeTheme($event)">
-            <ion-select-option value="dark">Dark</ion-select-option>
-            <ion-select-option value="light">Light</ion-select-option>
-          </ion-select>
+          <ion-item>
+            <ion-icon slot="start" name="brush"></ion-icon>
+            <ion-label>
+            <ion-select style="max-width: 100%;" placeholder="Select App Theme" interface="popover" (ionChange)="onChangeTheme($event)">
+              <ion-select-option value="dark">Dark</ion-select-option>
+              <ion-select-option value="light">Light</ion-select-option>
+            </ion-select>
+          </ion-label>
+          </ion-item>
         </ion-list>
       </ion-content>
     </ion-menu>
