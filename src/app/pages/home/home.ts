@@ -12,8 +12,8 @@ import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.s
 })
 export class HomePage {
 
-	private displayedLessons: Lesson[];
-	private clearSegmentBoolean: boolean;
+	displayedLessons: Lesson[];
+	clearSegmentBoolean: boolean;
 
 	constructor(private api: LessonsListService,
 		private loadingController: LoadingController,

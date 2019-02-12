@@ -16,14 +16,14 @@ import { Statistics } from 'src/app/models/statistics';
 
 export class SentencesListPage {
 
-	private lessonId: number;
+	lessonId: number;
 
 	constructor(private api: LessonByNameService,
 		private loadingController: LoadingController,
 		private util: UtilsService,
 		private route: ActivatedRoute,
 		private router: Router,
-		private lessonData: LessonsDataService) { }
+		public lessonData: LessonsDataService) { }
 
 	ngOnInit() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));

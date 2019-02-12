@@ -1,9 +1,5 @@
-import { Injectable } from '@angular/core';
 import { Statistics } from './statistics';
 
-@Injectable({
-    providedIn: 'root'
-})
 export class Sentence {
     constructor(
         public id: number, 

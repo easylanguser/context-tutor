@@ -1,9 +1,5 @@
-import { Injectable } from '@angular/core';
 import { Sentence } from './sentence';
 
-@Injectable({
-    providedIn: 'root'
-})
 export class Lesson {
     sentences: Sentence[] = [];
 

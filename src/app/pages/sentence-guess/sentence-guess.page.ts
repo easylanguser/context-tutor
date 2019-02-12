@@ -30,27 +30,27 @@ import { Vibration } from '@ionic-native/vibration/ngx';
 
 export class SentenceGuessPage implements OnInit {
 
-	private curWordIndex: number = 0; // Number of word, that user is currently at
-	private curCharsIndexes: number[] = []; // Number of character for each word, that user is currently at
-	private lessonId: number = 0; // Id of current lesson
-	private sentenceIndex: number = 1; // Number of current sentence in lesson
-	private alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	private sentenceShown: string; // Current displayed sentence
+	curWordIndex: number = 0; // Number of word, that user is currently at
+	curCharsIndexes: number[] = []; // Number of character for each word, that user is currently at
+	lessonId: number = 0; // Id of current lesson
+	sentenceIndex: number = 1; // Number of current sentence in lesson
+	alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	sentenceShown: string; // Current displayed sentence
 
 	private toastIsShown: boolean; // Single toast flag
 	displayButtons: boolean = true;
 	
 	// 3 random characters with one correct one 
-	private firstChar: string;
-	private secondChar: string;
-	private thirdChar: string;
-	private fourthChar: string;
+	firstChar: string;
+	secondChar: string;
+	thirdChar: string;
+	fourthChar: string;
 
 	constructor(private route: ActivatedRoute,
 		private loadingController: LoadingController,
 		private util: UtilsService,
 		private toastController: ToastController,
-		private lessonsData: LessonsDataService,
+		public lessonsData: LessonsDataService,
 		private vibration: Vibration) { }
 
 	// Get number of sentence and id of the lesson from previous page

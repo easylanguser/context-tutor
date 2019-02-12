@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -8,19 +8,18 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-
-import { SentenceGuessPage } from '../app/pages/sentence-guess/sentence-guess.page'
-import { SentencesListPage } from '../app/pages/sentences-list/sentences-list'
 import { HttpClient }  from '@angular/common/http'
 import { HttpClientModule } from '@angular/common/http'
 
 import { Storage, IonicStorageModule } from '@ionic/storage';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
-import {LoginPageModule} from "./pages/login/login.module";
-import {SignUpPageModule} from "./pages/sign-up/sign-up.module";
-import {AccountPageModule} from "./pages/account/account.module";
+import { LoginPageModule } from "./pages/login/login.module";
+import { SignUpPageModule } from "./pages/sign-up/sign-up.module";
+import { AccountPageModule } from "./pages/account/account.module";
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SentencesListPageModule } from './pages/sentences-list/sentences-list.module';
+import { SentenceGuessPageModule } from './pages/sentence-guess/sentence-guess.module';
 
 export function jwtOptionsFactory(storage) {
     return {
@@ -32,9 +31,16 @@ export function jwtOptionsFactory(storage) {
 }
 
 @NgModule({
-  declarations: [AppComponent, SentencesListPage, SentenceGuessPage],
+  declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule,LoginPageModule,SignUpPageModule, BrowserAnimationsModule,
+  imports: [BrowserModule, IonicModule.forRoot(), 
+      AppRoutingModule, 
+      HttpClientModule,
+      SentencesListPageModule,
+      SentenceGuessPageModule,
+      LoginPageModule,
+      SignUpPageModule, 
+      BrowserAnimationsModule,
       AccountPageModule,
       IonicStorageModule.forRoot({
       name: 'easy-db',
@@ -54,6 +60,7 @@ export function jwtOptionsFactory(storage) {
     Vibration,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

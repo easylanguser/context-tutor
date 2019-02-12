@@ -13,7 +13,8 @@ import { SettingsService } from './services/settings/settings.service';
 
 @Component({
     selector: 'app-root',
-    templateUrl: 'app.component.html'
+    templateUrl: 'app.component.html',
+    
 })
 export class AppComponent {
     appPages = [
