@@ -51,9 +51,17 @@ ion-content {
     background-color: rgb(223,223,223);
 }
 
-@media (min-width: 992px) {
+@media (min-width: 992px) and (max-width: 1800px) {
     .char-box {
         width: 16vw;
+        font-size: 15vw;
+    }
+}
+
+@media (min-width: 1800px) {
+    .char-box {
+        width: 16vw;
+        font-size: 10vw;
     }
 }
 
