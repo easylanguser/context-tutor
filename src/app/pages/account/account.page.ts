@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Storage} from "@ionic/storage";
 import {JwtHelperService} from "@auth0/angular-jwt";
+import {AuthService} from "../../services/auth/auth.service";
+import {HttpService} from "../../services/http/rest/http.service";
+import {AlertController} from "@ionic/angular";
+import {Router} from "@angular/router";
 
 const TOKEN_KEY = 'access_token';
 
@@ -13,7 +17,8 @@ export class AccountPage implements OnInit {
 
     user = {};
 
-    constructor(private storage: Storage, private helper: JwtHelperService) {
+    constructor(private storage: Storage, private helper: JwtHelperService, private authService: AuthService, private httpService: HttpService,
+                private alertController: AlertController,private router: Router) {
     }
 
     ngOnInit() {
@@ -30,4 +35,37 @@ export class AccountPage implements OnInit {
         });
     }
 
+    async deleteAccount() {
+        let alert = await this.alertController.create({
+            message: 'Are you sure you want to delete your account?',
+            buttons: [
+                {
+                    text: 'Delete',
+                    handler: () => {
+                        alert.dismiss(true);
+                        this.httpService.doPost('http://165.227.159.35/user/deleteAccount')
+                            .subscribe(res => {
+                                return this.authService.logout();
+                            })
+                    }
+                }, {
+                    text: 'Cancel',
+                    handler: () => {
+                        alert.dismiss(false);
+                        return false;
+                    }
+                }
+            ]
+        });
+        return await alert.present();
+    }
+
+    changePassword() {
+        this.router.navigate(['change']);
+    }
+
+
+    logout() {
+        this.authService.logout();
+    }
 }

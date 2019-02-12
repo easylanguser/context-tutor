@@ -3,21 +3,19 @@ import {Storage} from "@ionic/storage";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {AuthService} from "../../auth/auth.service";
 
-const TOKEN_KEY = 'access_token';
 
 @Injectable({
     providedIn: 'root'
 })
 export class HttpService {
 
-    token: string;
+    constructor(private authService: AuthService, private helper: JwtHelperService, private http: HttpClient) {
 
-    constructor(private storage: Storage, private helper: JwtHelperService, private http: HttpClient) {
-        this.storage.get(TOKEN_KEY).then(token => this.token = token);
     }
 
-    doPost(url: string, body): Observable<any> {
+    doPost(url: string, body?: Object): Observable<any> {
         const headers = this.addHeaders();
         return this.http.post(url, body, headers)
     }
@@ -28,9 +26,11 @@ export class HttpService {
     }
 
     addHeaders() {
-        const headers = new HttpHeaders({'Content-Type': 'json','Authorization':this.token});
+        const token = this.authService.token;
+        const headers = new HttpHeaders({'Content-Type': 'application/json','Authorization':token});
         return {headers: headers}
     }
+
 }
 
 

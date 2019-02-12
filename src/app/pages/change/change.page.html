@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Change password</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="forms">
+  <form [formGroup]="credentialsForm" (ngSubmit)="changePassword()">
+
+    <ion-item>
+      <ion-label position="floating">Old password</ion-label>
+      <ion-input type="password" formControlName="oldPassword"></ion-input>
+    </ion-item>
+
+    <div *ngIf="submitted && f.email.errors" class="auth-forms">
+      <div *ngIf="f.email.errors.required">this field is required</div>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">New password</ion-label>
+      <ion-input type="password" formControlName="newPassword" required></ion-input>
+    </ion-item>
+
+    <div *ngIf="submitted && f.password.errors" class="auth-forms">
+      <div *ngIf="f.password.errors.required">this field is required</div>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Confirmation</ion-label>
+      <ion-input type="password" formControlName="passwordConfirm" required></ion-input>
+    </ion-item>
+
+    <div *ngIf="submitted && f.password.errors" class="auth-forms">
+      <div *ngIf="f.password.errors.required">this field is required</div>
+    </div>
+
+    <ion-button expand="full" type="submit">Change password</ion-button>
+  </form>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-title text-center> <a (click)="toSignUp()" >Forget </a>your password?</ion-title>
+  </ion-toolbar>
+</ion-footer>

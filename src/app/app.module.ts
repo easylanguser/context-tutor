@@ -20,6 +20,8 @@ import { Vibration } from '@ionic-native/vibration/ngx';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SentencesListPageModule } from './pages/sentences-list/sentences-list.module';
 import { SentenceGuessPageModule } from './pages/sentence-guess/sentence-guess.module';
+import { ForgetPageModule } from "./pages/forget/forget.module";
+import { ChangePageModule } from "./pages/change/change.module";
 
 export function jwtOptionsFactory(storage) {
     return {
@@ -42,6 +44,8 @@ export function jwtOptionsFactory(storage) {
       SignUpPageModule, 
       BrowserAnimationsModule,
       AccountPageModule,
+      ForgetPageModule,
+      ChangePageModule,
       IonicStorageModule.forRoot({
       name: 'easy-db',
       driverOrder: ['indexeddb', 'sqlite', 'websql']
