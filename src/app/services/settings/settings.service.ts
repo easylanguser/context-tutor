@@ -6,18 +6,7 @@ import { DOCUMENT } from '@angular/common';
 })
 export class SettingsService {
 
-	private currentTheme = '';
-
 	constructor(@Inject(DOCUMENT) private document: Document) { }
-
-	setPrimaryColor(color: string) {
-		this.setVariable('--ion-color-primary', color)
-	}
-
-	setVariable(name: string, value: string) {
-		this.currentTheme = `${name}: ${value};`;
-		this.document.documentElement.style.setProperty(name, value);
-	}
 
 	enableDarkMode(enableDarkMode: boolean) {
 		let theme = this.getLightTheme();
@@ -28,18 +17,15 @@ export class SettingsService {
 	}
 
 	getDarkTheme() {
-		return `
-      ${this.currentTheme}
-      --ion-background-color: #303030;
-	  --ion-text-color: #FFF;
-    `
+		return '--ion-background-color: #303030; \
+		--ion-text-color: #FFF; \
+		--ion-color-step-850: #FFF; \
+		--ion-color-step-50: #444; \
+		currentColor: #FFF;'
 	}
 
 	getLightTheme() {
-		return `
-      ${this.currentTheme}
-      --ion-background-color: #fff;
-      --ion-text-color: #222;
-    `
+		return '--ion-background-color: #FFF; \
+		--ion-text-color: #222;'	
 	}
 }
