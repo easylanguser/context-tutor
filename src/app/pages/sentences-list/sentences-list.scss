@@ -11,7 +11,8 @@
 .sentence-card {
 	width: 100%;
 	height: 12vh;
-	background-color: #FFF;
+	background-color: var(--ion-color-step-50);
+	color: var(--ion-color-step-850);
 	margin-bottom: 0.2vh;
 	cursor: pointer;
 	display: table;

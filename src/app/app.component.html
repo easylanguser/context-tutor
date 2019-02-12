@@ -93,7 +93,7 @@
           <ion-list-header>
             Theming
           </ion-list-header>
-          <ion-select placeholder="Select App Theme" interface="action-sheet" (ionChange)="onChangeTheme($event)">
+          <ion-select placeholder="Select App Theme" [interfaceOptions]="customPopoverOptions" interface="popover" (ionChange)="onChangeTheme($event)">
             <ion-select-option value="dark">Dark</ion-select-option>
             <ion-select-option value="light">Light</ion-select-option>
           </ion-select>
