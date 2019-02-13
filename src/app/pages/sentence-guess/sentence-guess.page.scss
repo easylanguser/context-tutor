@@ -2,25 +2,25 @@ ion-content {
     text-align: center;
 }
 
-@media (min-width: 1000px) {
-    #sentence-to-show {
-        font-size: 3vw;
-    }
-}
-
-@media (min-width: 600px) and (max-width: 1000px) {
-    #sentence-to-show {
-        font-size: 4vw;
-    }
-}
-
 @media (min-width: 1px) and (max-width: 600px) {
     #sentence-to-show {
         font-size: 6vw;
     }
 }
 
-#sentence-to-show {   
+@media (min-width: 600px) and (max-width: 992px) {
+    #sentence-to-show {
+        font-size: 4vw;
+    }
+}
+
+@media (min-width: 992px) {
+    #sentence-to-show {
+        font-size: 3vw;
+    }
+}
+
+#sentence-to-show {
     text-align: start;
     padding: 0;
     margin-left: 3vw;
@@ -28,74 +28,127 @@ ion-content {
 }
 
 #characters-row-guessed {
-    width: 100%; 
+    width: 100%;
     display: table;
     margin-top: 1%;
-    -webkit-touch-callout: none; 
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
-     -khtml-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .char-box {
-    height: 20vmin;
-    border-radius: 3px;
+    height: 23vw;
     width: 23vw;
     margin: 1vw;
-    border-radius: 2px;
     text-align: center;
-    font-size: 18vw;
+    font-size: 17vw;
     outline: none;
-    background-color: rgb(223,223,223);
+    background-color: rgb(228, 228, 228);
+    border-radius: 50%;
+    border: 2px solid rgb(206, 206, 206);
 }
 
-@media (min-width: 992px) and (max-width: 1800px) {
+@media (min-width: 992px) {
     .char-box {
-        width: 16vw;
-        font-size: 15vw;
+        height: 13vh;
+        width: 13vh;
+        font-size: 9vh;
     }
 }
 
-@media (min-width: 1800px) {
-    .char-box {
-        width: 16vw;
-        font-size: 10vw;
-    }
+#navigation-and-hint-buttons {
+    height: 10vh;
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
+    vertical-align: middle;
 }
 
-@media (min-width: 1px) and (max-width: 800px) {
-    .bottom-buttons {
-        height: 11vmin;
+@media (min-width: 992px) {
+    #navigation-and-hint-buttons {
+        width: 72vw;
     }
+} 
+
+#previous-word-button {
+    height: 8vh;
+    font-size: 8vh;
+    float: left; 
+    margin-left: 5vw;
 }
 
-@media (min-width: 800px) {
-    .bottom-buttons {
-        height: 8vh;
-    }
+#next-word-button {
+    height: 8vh;
+    font-size: 8vh;
+    float: right;
+    margin-right: 5vw;
 }
 
-.bottom-buttons {
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    font-size: 1.4vh;
-    color: rgba(139, 139, 139, 0.7);
-    cursor: pointer;
+#hint-button {
+    height: 8vh;
+    width: 8vh;
+    margin: 0 auto;
+    background-color: #FFF;
     text-align: center;
+    font-size: 8vh;
+    outline: none;
+    border-radius: 50%;
 }
 
-.button-bottom-text {
-    font-size: 2vmax;
+#give-up-button {
+    height: 14vmin;
+    width: 14vmin;
+    margin: 1vw; 
+    text-align: center;
+    font-size: 4vw;
+    outline: none;
+    border-radius: 50%;
+    background-color: rgb(228, 228, 228);
+}
+
+@media (min-width: 1200px) and (max-width: 1600px) {
+    #give-up-button {
+        font-size: 3vw;
+    }
+}
+
+@media (min-width: 1600px) {
+    #give-up-button {
+        font-size: 2vw;
+    }
+}
+
+#chars-and-give-up {
+    height: 24vmin;
+    float: none;
+}
+
+@media (min-width: 992px) {
+    #chars-and-give-up {
+        height: 18vmin;
+        float: left;
+    }
+
+    #give-up-button-container {
+        float: right;
+    }
+}
+
+#give-up-button-container {
+    height: 16vmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .no-selection {
-    -webkit-touch-callout: none; 
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
-     -khtml-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

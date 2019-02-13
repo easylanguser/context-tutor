@@ -4,11 +4,6 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>My lessons</ion-title>
-    <ion-buttons slot="end">
-      <ion-button>
-        Edit
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -28,7 +23,7 @@
     <ion-refresher-content>
     </ion-refresher-content>
   </ion-refresher>
-  <ion-list>
+  <ion-list no-padding>
     <ion-item-sliding *ngFor="let lesson of this.displayedLessons" #slidingItem>
       <ion-item no-padding style="--inner-padding-end: 0px !important;">
         <div class="lesson-card" (click)="openLesson(lesson.id)">
@@ -46,8 +41,11 @@
         </div>
       </ion-item>
       <ion-item-options side="end">
-        <ion-item-option class="edit-sliding-option" (click)="edit(lesson.id)">Edit</ion-item-option>
-        <ion-item-option class="delete-sliding-option" color="danger" (click)="deleteItem(slidingItem, lesson.id)">Delete
+        <ion-item-option class="try-again-sliding-option" color="primary" (click)="tryAgain(lesson.id)">
+          Try again
+        </ion-item-option>
+        <ion-item-option class="delete-sliding-option" color="danger" (click)="deleteItem(slidingItem, lesson.id)">
+          Delete
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>

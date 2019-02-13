@@ -7,20 +7,31 @@
       Sentence {{sentenceIndex}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}
     </ion-title>
     <ion-buttons slot="end" (click)="logStat()">
-      <div slot="end" style="height: 7vw; width: 7vw; background-image: url('../../assets/icon/favicon.png');
-        background-position: center; background-size: cover; margin-right: 3vw;"></div>
+      <div id="next-sentence-button" style="height: 3vh; width: 3vh;" (click)="nextSentenceClick()">
+        <ion-icon style="font-size: 3vh;" name="arrow-forward"></ion-icon>
+      </div>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <p [innerHTML]="sentenceShown" id="sentence-to-show"></p>
+  <div id="navigation-and-hint-buttons" style="visibility: hidden;">
+    <span id="previous-word-button" (click)="previousWordClick()">
+      < 
+    </span>
+    <span id="next-word-button" (click)="nextWordClick()">
+      >
+    </span>
+    <button id="hint-button" (click)="hintClick()">
+      ?
+    </button>
+  </div>
 </ion-content>
 
-<ion-footer>
+<ion-footer id="footer" style="visibility:hidden;">
   <ion-toolbar no-padding class="no-selection">
-
-    <div style="height: 22vmin;">
+    <div id="chars-and-give-up">
       <button *ngIf="this.displayButtons" @fade (click)="firstCharBoxClick()" class="char-box" id="first-char-box">
         {{firstChar}}
       </button>
@@ -34,38 +45,10 @@
         {{fourthChar}}
       </button>
     </div>
-
-    <div style="background-color: white;">
-      <ion-grid>
-        <ion-row flex-wrap: nowrap>
-          <ion-col size="1.5" size-lg="1.4" no-padding class="bottom-buttons"
-            (click)="previousWordClick()">
-            <ion-icon name="ios-arrow-back" style="font-size:6vmin;"></ion-icon><br>
-            Prev
-          </ion-col>
-          <ion-col size="1.5" offset="0.3" size-lg="1.4" no-padding class="bottom-buttons"
-            (click)="nextWordClick()">
-            <ion-icon name="ios-arrow-forward" style="font-size:6vmin;"></ion-icon><br>
-            Next
-          </ion-col>
-          <ion-col size="1.5" offset="0.7" size-lg="1.4" no-padding class="bottom-buttons"
-            (click)="hintClick()">
-            <ion-icon name="md-help" style="font-size:6vmin;"></ion-icon><br>
-            Hint
-          </ion-col>
-          <ion-col size="2.3" offset="0.6" size-lg="2.7" no-padding class="bottom-buttons"
-            (click)="giveUpClick()">
-            <ion-icon name="ios-exit" style="font-size:6vmin;"></ion-icon><br>
-            Give up
-          </ion-col>
-          <ion-col id="next-sentence-button" size="3" offset="0.6" size-lg="2.9" no-padding class="bottom-buttons"
-            (click)="nextSentenceClick()">
-            <ion-icon name="ios-arrow-up" style="font-size:6vmin;"></ion-icon><br>
-            Next Sentence
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+    <div id="give-up-button-container">
+      <button (click)="giveUpClick()" id="give-up-button">
+        Give up
+      </button>
     </div>
-
   </ion-toolbar>
 </ion-footer>

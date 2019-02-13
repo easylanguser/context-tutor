@@ -45,11 +45,11 @@ export class SettingsService {
 
 	getLightTheme() {
 		return ' \
-			--ion-background-color: #ffffff; \
-			--ion-background-color-rgb: 255,255,255; \
+			--ion-background-color: #efeff4; \
+			--ion-background-color-rgb: 239, 239, 244; \
 			--ion-text-color: #000000; \
 			--ion-text-color-rgb: 0,0,0; \
-			--ion-color-step-50: #f2f2f2; \
+			--ion-color-step-50: #ffffff; \
 			--ion-color-step-100: #e6e6e6; \
 			--ion-color-step-150: #d9d9d9; \
 			--ion-color-step-200: #cccccc; \
