@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
+import { trigger, style, transition, animate } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { UtilsService } from '../../services/utils/utils.service';
@@ -39,8 +39,7 @@ export class SentenceGuessPage implements OnInit {
 
 	private toastIsShown: boolean; // Single toast flag
 	private hintIsClicked: boolean = false;
-	displayButtons: boolean = true;
-	
+	displayButtons: boolean = true;	
 	
 	// 3 random characters with one correct one 
 	firstChar: string;
@@ -85,10 +84,6 @@ export class SentenceGuessPage implements OnInit {
 		document.getElementById('fourth-char-box').style.boxShadow = 'none';
 	}
 
-	private highlightNextSentenceButton(color: string) {
-		document.getElementById('next-sentence-button').style.boxShadow = color;
-	}
-
 	private async getData(showLoader: boolean) {
 		let loading: any;
 		if (showLoader) { // Show loader if sentence is loaded first time	
@@ -97,8 +92,8 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		if (this.curSentence().isSolved) { // Display filled sentence, if it has already been solved
+			this.showHideControls(false);
 			this.sentenceShown = this.curSentence().text;
-			this.highlightNextSentenceButton('0px 1px 4px 1px #139c0d');
 			if (showLoader) {
 				loading.dismiss();
 			}
@@ -106,8 +101,7 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		this.makeHintButtonActive();
-
-		this.highlightNextSentenceButton('none');
+		this.showHideControls(true);
 
 		// Restore user progress
 		this.curWordIndex = this.curSentence().curWordIndex;
@@ -228,11 +222,11 @@ export class SentenceGuessPage implements OnInit {
 		if (!this.curSentence().isSolved) {
 			++this.curSentence().statistics.giveUps; // Statistics
 
-			this.highlightNextSentenceButton('0px 3px 10px 1px rgba(245, 229, 27, 1)');
 			this.curWordIndex = this.curSentence().hiddenChars.length;
 			this.resetColors();
 			this.sentenceShown = this.curSentence().text;
 			this.curSentence().isSolved = true;
+			this.showHideControls(false);
 		}
 	}
 
@@ -241,13 +235,13 @@ export class SentenceGuessPage implements OnInit {
 		if (!this.curSentence().isSolved && !this.hintIsClicked) {
 			++this.curSentence().statistics.hintUsages; // Statistics
 			if (this.curCorrectChar().toUpperCase() === this.firstChar) {
-				this.highlightClickedCharBox(1, '0px 3px 10px 1px rgba(254, 241, 96, 1)');
+				this.highlightClickedCharBox(1, '0px 0px 8px 0px rgba(254, 241, 96, 1)');
 			} else if (this.curCorrectChar().toUpperCase() === this.secondChar) {
-				this.highlightClickedCharBox(2, '0px 3px 10px 1px rgba(254, 241, 96, 1)');
+				this.highlightClickedCharBox(2, '0px 0px 8px 0px rgba(254, 241, 96, 1)');
 			} else if (this.curCorrectChar().toUpperCase() === this.thirdChar) {
-				this.highlightClickedCharBox(3, '0px 3px 10px 1px rgba(254, 241, 96, 1)');
+				this.highlightClickedCharBox(3, '0px 0px 8px 0px rgba(254, 241, 96, 1)');
 			} else {
-				this.highlightClickedCharBox(4, '0px 3px 10px 1px rgba(254, 241, 96, 1)');
+				this.highlightClickedCharBox(4, '0px 0px 8px 0px rgba(254, 241, 96, 1)');
 			}
 			document.getElementById('hint-button').style.opacity = '0.5';
 			this.hintIsClicked = true;
@@ -324,7 +318,6 @@ export class SentenceGuessPage implements OnInit {
 		this.resetColors();
 
 		if (this.curWordIndex === this.curSentence().hiddenWord.length) {
-			this.highlightNextSentenceButton('0px 1px 4px 1px #139c0d');
 			this.curSentence().isSolved = true;
 			return;
 		}
@@ -345,6 +338,11 @@ export class SentenceGuessPage implements OnInit {
 	private makeHintButtonActive() {
 		document.getElementById('hint-button').style.opacity = '1';
 		this.hintIsClicked = false;
+	}
+
+	private showHideControls(isVisible) {
+		document.getElementById('navigation-and-hint-buttons').style.visibility = isVisible ? 'visible' : 'hidden';
+		document.getElementById('footer').style.visibility = isVisible ? 'visible' : 'hidden';
 	}
 
 	// Handle keyboard event from desktop and clicks on char boxes from mobiles and desktop
@@ -381,7 +379,6 @@ export class SentenceGuessPage implements OnInit {
 						if (this.sentenceShown !== this.curSentence().text) {
 							this.curWordIndex = 0;
 						} else {
-							this.highlightNextSentenceButton('0px 1px 4px 1px #139c0d');
 							this.curSentence().isSolved = true;
 							return;
 						}
@@ -413,19 +410,19 @@ export class SentenceGuessPage implements OnInit {
 
 			switch (event.key) {
 				case this.firstChar.toLowerCase(): {
-					this.highlightClickedCharBox(1, '0px 3px 10px 1px rgba(167, 1, 6, 1)');
+					this.highlightClickedCharBox(1, '0px 0px 8px 0px rgba(167, 1, 6, 1)');
 					break;
 				}
 				case this.secondChar.toLowerCase(): {
-					this.highlightClickedCharBox(2, '0px 3px 10px 1px rgba(167, 1, 6, 1)');
+					this.highlightClickedCharBox(2, '0px 0px 8px 0px rgba(167, 1, 6, 1)');
 					break;
 				}
 				case this.thirdChar.toLowerCase(): {
-					this.highlightClickedCharBox(3, '0px 3px 10px 1px rgba(167, 1, 6, 1)');
+					this.highlightClickedCharBox(3, '0px 0px 8px 0px rgba(167, 1, 6, 1)');
 					break;
 				}
 				case this.fourthChar.toLowerCase(): {
-					this.highlightClickedCharBox(4, '0px 3px 10px 1px rgba(167, 1, 6, 1)');
+					this.highlightClickedCharBox(4, '0px 0px 8px 0px rgba(167, 1, 6, 1)');
 					break;
 				}
 			}
