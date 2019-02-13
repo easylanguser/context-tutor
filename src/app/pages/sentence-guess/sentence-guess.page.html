@@ -7,8 +7,8 @@
       Sentence {{sentenceIndex}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}
     </ion-title>
     <ion-buttons slot="end" (click)="logStat()">
-      <div id="next-sentence-button" style="height: 7vw; width: 7vw;" (click)="nextSentenceClick()">
-        <ion-icon style="font-size: 7vw;" name="arrow-forward"></ion-icon>
+      <div id="next-sentence-button" style="height: 3vh; width: 3vh;" (click)="nextSentenceClick()">
+        <ion-icon style="font-size: 3vh;" name="arrow-forward"></ion-icon>
       </div>
     </ion-buttons>
   </ion-toolbar>
@@ -16,7 +16,6 @@
 
 <ion-content>
   <p [innerHTML]="sentenceShown" id="sentence-to-show"></p>
-
   <div id="navigation-and-hint-buttons" style="visibility: hidden;">
     <span id="previous-word-button" (click)="previousWordClick()">
       < 
@@ -32,7 +31,7 @@
 
 <ion-footer id="footer" style="visibility:hidden;">
   <ion-toolbar no-padding class="no-selection">
-    <div style="height: 24vmin;">
+    <div id="chars-and-give-up">
       <button *ngIf="this.displayButtons" @fade (click)="firstCharBoxClick()" class="char-box" id="first-char-box">
         {{firstChar}}
       </button>
@@ -46,7 +45,7 @@
         {{fourthChar}}
       </button>
     </div>
-    <div style="height: 16vmin; display: flex; align-items: center; justify-content: center;">
+    <div id="give-up-button-container">
       <button (click)="giveUpClick()" id="give-up-button">
         Give up
       </button>

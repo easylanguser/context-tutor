@@ -55,6 +55,12 @@
     font-size: 3vmin;
 }
 
+@media (min-width: 650px) {
+    .date-text {
+        font-size: 1.5vmin;
+    }
+}
+
 .forward-icon {
     bottom: 1vh;
     right: 1vh;

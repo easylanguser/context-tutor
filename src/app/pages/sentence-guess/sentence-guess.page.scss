@@ -8,13 +8,13 @@ ion-content {
     }
 }
 
-@media (min-width: 600px) and (max-width: 1000px) {
+@media (min-width: 600px) and (max-width: 992px) {
     #sentence-to-show {
         font-size: 4vw;
     }
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 992px) {
     #sentence-to-show {
         font-size: 3vw;
     }
@@ -51,18 +51,11 @@ ion-content {
     border: 2px solid rgb(206, 206, 206);
 }
 
-@media (min-width: 992px) and (max-width: 1800px) {
+@media (min-width: 992px) {
     .char-box {
-        height: 22vmin;
-        width: 16vw;
-        font-size: 15vw;
-    }
-}
-
-@media (min-width: 1800px) {
-    .char-box {
-        width: 16vw;
-        font-size: 10vw;
+        height: 13vh;
+        width: 13vh;
+        font-size: 9vh;
     }
 }
 
@@ -73,6 +66,12 @@ ion-content {
     width: 100vw;
     vertical-align: middle;
 }
+
+@media (min-width: 992px) {
+    #navigation-and-hint-buttons {
+        width: 72vw;
+    }
+} 
 
 #previous-word-button {
     height: 8vh;
@@ -100,14 +99,49 @@ ion-content {
 }
 
 #give-up-button {
-    height: 14vw;
-    width: 14vw;
+    height: 14vmin;
+    width: 14vmin;
     margin: 1vw; 
     text-align: center;
     font-size: 4vw;
     outline: none;
     border-radius: 50%;
     background-color: rgb(228, 228, 228);
+}
+
+@media (min-width: 1200px) and (max-width: 1600px) {
+    #give-up-button {
+        font-size: 3vw;
+    }
+}
+
+@media (min-width: 1600px) {
+    #give-up-button {
+        font-size: 2vw;
+    }
+}
+
+#chars-and-give-up {
+    height: 24vmin;
+    float: none;
+}
+
+@media (min-width: 992px) {
+    #chars-and-give-up {
+        height: 18vmin;
+        float: left;
+    }
+
+    #give-up-button-container {
+        float: right;
+    }
+}
+
+#give-up-button-container {
+    height: 16vmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .no-selection {
