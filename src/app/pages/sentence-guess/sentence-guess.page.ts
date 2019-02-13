@@ -38,7 +38,9 @@ export class SentenceGuessPage implements OnInit {
 	sentenceShown: string; // Current displayed sentence
 
 	private toastIsShown: boolean; // Single toast flag
+	private hintIsClicked: boolean = false;
 	displayButtons: boolean = true;
+	
 	
 	// 3 random characters with one correct one 
 	firstChar: string;
@@ -103,6 +105,8 @@ export class SentenceGuessPage implements OnInit {
 			return;
 		}
 
+		this.makeHintButtonActive();
+
 		this.highlightNextSentenceButton('none');
 
 		// Restore user progress
@@ -164,6 +168,7 @@ export class SentenceGuessPage implements OnInit {
 				this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
 
 			this.refreshCharBoxes();
+			this.makeHintButtonActive();
 
 			++this.curSentence().statistics.wordSkips; // Statistics
 		}
@@ -195,6 +200,7 @@ export class SentenceGuessPage implements OnInit {
 				this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
 
 			this.refreshCharBoxes();
+			this.makeHintButtonActive();
 
 			++this.curSentence().statistics.wordSkips; // Statistics
 		}
@@ -232,11 +238,19 @@ export class SentenceGuessPage implements OnInit {
 
 	// Show user one current character
 	hintClick() {
-		if (!this.curSentence().isSolved) {
-			const event = new KeyboardEvent('ev0', { key: this.curCorrectChar() });
-			this.handleKeyboardEvent(event);
-
+		if (!this.curSentence().isSolved && !this.hintIsClicked) {
 			++this.curSentence().statistics.hintUsages; // Statistics
+			if (this.curCorrectChar().toUpperCase() === this.firstChar) {
+				this.highlightClickedCharBox(1, '0px 3px 10px 1px rgba(254, 241, 96, 1)');
+			} else if (this.curCorrectChar().toUpperCase() === this.secondChar) {
+				this.highlightClickedCharBox(2, '0px 3px 10px 1px rgba(254, 241, 96, 1)');
+			} else if (this.curCorrectChar().toUpperCase() === this.thirdChar) {
+				this.highlightClickedCharBox(3, '0px 3px 10px 1px rgba(254, 241, 96, 1)');
+			} else {
+				this.highlightClickedCharBox(4, '0px 3px 10px 1px rgba(254, 241, 96, 1)');
+			}
+			document.getElementById('hint-button').style.opacity = '0.5';
+			this.hintIsClicked = true;
 		}
 	}
 
@@ -318,14 +332,19 @@ export class SentenceGuessPage implements OnInit {
 		this.generateRandomCharacters();
 	}
 
-	private highlightClickedCharBox(charBoxNumber: number) {
+	private highlightClickedCharBox(charBoxNumber: number, color: string) {
 		let charBoxId: string;
 		if (charBoxNumber === 1) { charBoxId = 'first-char-box' }
 		else if (charBoxNumber === 2) { charBoxId = 'second-char-box' }
 		else if (charBoxNumber === 3) { charBoxId = 'third-char-box' }
 		else if (charBoxNumber === 4) { charBoxId = 'fourth-char-box' }
 		else { return }
-		document.getElementById(charBoxId).style.boxShadow = '0px 3px 10px 1px rgba(167, 1, 6, 1)';
+		document.getElementById(charBoxId).style.boxShadow = color;
+	}
+
+	private makeHintButtonActive() {
+		document.getElementById('hint-button').style.opacity = '1';
+		this.hintIsClicked = false;
 	}
 
 	// Handle keyboard event from desktop and clicks on char boxes from mobiles and desktop
@@ -338,10 +357,8 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
-			if (event.type !== 'ev0') {
-				++this.curSentence().statistics.correctAnswers; // Statistics
-			}
 
+			this.makeHintButtonActive();
 			this.displayButtons = false;
 			setTimeout(() => this.displayButtons = true, 300);
 
@@ -396,19 +413,19 @@ export class SentenceGuessPage implements OnInit {
 
 			switch (event.key) {
 				case this.firstChar.toLowerCase(): {
-					this.highlightClickedCharBox(1);
+					this.highlightClickedCharBox(1, '0px 3px 10px 1px rgba(167, 1, 6, 1)');
 					break;
 				}
 				case this.secondChar.toLowerCase(): {
-					this.highlightClickedCharBox(2);
+					this.highlightClickedCharBox(2, '0px 3px 10px 1px rgba(167, 1, 6, 1)');
 					break;
 				}
 				case this.thirdChar.toLowerCase(): {
-					this.highlightClickedCharBox(3);
+					this.highlightClickedCharBox(3, '0px 3px 10px 1px rgba(167, 1, 6, 1)');
 					break;
 				}
 				case this.fourthChar.toLowerCase(): {
-					this.highlightClickedCharBox(4);
+					this.highlightClickedCharBox(4, '0px 3px 10px 1px rgba(167, 1, 6, 1)');
 					break;
 				}
 			}
