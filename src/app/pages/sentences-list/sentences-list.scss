@@ -23,6 +23,7 @@
 	width: 70vw;
 	overflow: hidden;
 	display: table-cell;
+	position: relative;
 	vertical-align: top;
 	padding-top: 2vh;
 	padding-left: 4vw;
@@ -49,8 +50,9 @@
 }
 
 .date-text {
-	bottom: 0.8vh;
+	bottom: 0;
 	position: absolute;
+	font-size: 3vmin;
 }
 
 .forward-icon {

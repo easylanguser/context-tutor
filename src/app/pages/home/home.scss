@@ -49,8 +49,15 @@
 }
 
 .date-text {
-	bottom: 0.8vh;
+	bottom: 4px;
 	position: absolute;
+	font-size: 3vmin;
+}
+
+@media (min-width: 650px) {
+	.date-text {
+		font-size: 2vmin;
+	}
 }
 
 .forward-icon {
@@ -67,4 +74,12 @@
 	.lesson-text-div {
 		width: 50.4vw;
 	}
+}
+
+.edit-sliding-option {
+	width: 20vw;
+}
+
+.delete-sliding-option {
+	width: 20vw;
 }

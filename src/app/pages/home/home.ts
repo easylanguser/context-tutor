@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, IonItemSliding } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { LessonsListService } from 'src/app/services/lessons-list/lessons-list.service';
 import { Lesson } from 'src/app/models/lesson';
@@ -20,6 +20,25 @@ export class HomePage {
 		private router: Router,
 		private lessonData: LessonsDataService) {
 		this.getData();
+	}
+
+	edit(lessonID: number) {
+		this.router.navigate(['edit-lesson'], { queryParams: { lessonID: lessonID } });
+	}
+
+	deleteItem(slidingItem: IonItemSliding, lessonID: number) {
+		slidingItem.close();
+		
+		let i = 0;
+		for (i; i < this.displayedLessons.length; i++) {
+			if (this.displayedLessons[i].id === lessonID) {
+				break;
+			}
+		}
+
+    	if (i !== this.displayedLessons.length) {
+    		this.displayedLessons.splice(i, 1);
+    	}
 	}
 
 	async weekAgoClick() {
