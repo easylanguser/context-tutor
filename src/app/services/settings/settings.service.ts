@@ -45,8 +45,8 @@ export class SettingsService {
 
 	getLightTheme() {
 		return ' \
-			--ion-background-color: #ffffff; \
-			--ion-background-color-rgb: 255,255,255; \
+			--ion-background-color: #efeff4; \
+			--ion-background-color-rgb: 239, 239, 244; \
 			--ion-text-color: #000000; \
 			--ion-text-color-rgb: 0,0,0; \
 			--ion-color-step-50: #ffffff; \

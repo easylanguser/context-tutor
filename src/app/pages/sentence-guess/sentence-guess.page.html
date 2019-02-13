@@ -17,23 +17,20 @@
 <ion-content>
   <p [innerHTML]="sentenceShown" id="sentence-to-show"></p>
 
-  <div id="navigation-and-hint-buttons" style="height: 10vh; position: absolute; bottom: 0; width: 100vw; vertical-align: middle;">
-    <span style="height: 8vh; font-size: 8vh; float: left; margin-left: 5vw;" (click)="previousWordClick()">
-      <
+  <div id="navigation-and-hint-buttons" style="visibility: hidden;">
+    <span id="previous-word-button" (click)="previousWordClick()">
+      < 
     </span>
-    <span style="height: 8vh; font-size: 8vh; float: right; margin-right: 5vw;" (click)="nextWordClick()">
+    <span id="next-word-button" (click)="nextWordClick()">
       >
     </span>
-    <div style="height: 8vh; margin: 0 auto;">
-      <button id="hint-button" style="height: 8vh; width: 8vh; margin: 1vw; background-color: #FFF;
-          text-align: center; font-size: 8vh; outline: none; border-radius: 50%;" (click)="hintClick()">
-        ?
-      </button>
-    </div>
+    <button id="hint-button" (click)="hintClick()">
+      ?
+    </button>
   </div>
 </ion-content>
 
-<ion-footer id="footer">
+<ion-footer id="footer" style="visibility:hidden;">
   <ion-toolbar no-padding class="no-selection">
     <div style="height: 24vmin;">
       <button *ngIf="this.displayButtons" @fade (click)="firstCharBoxClick()" class="char-box" id="first-char-box">
@@ -50,8 +47,7 @@
       </button>
     </div>
     <div style="height: 16vmin; display: flex; align-items: center; justify-content: center;">
-      <button (click)="giveUpClick()" style="height: 14vw; width: 14vw; margin: 1vw; 
-        text-align: center; font-size: 4vw; outline: none; border-radius: 50%; background-color: rgb(228, 228, 228);">
+      <button (click)="giveUpClick()" id="give-up-button">
         Give up
       </button>
     </div>

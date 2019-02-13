@@ -26,7 +26,7 @@
     <ion-refresher-content>
     </ion-refresher-content>
   </ion-refresher>
-  
+
   <div class="sentence-card" *ngFor="let sentence of this.lessonData.getLessonByID(this.lessonId).sentences;index as i"
     (click)="openSentence(i)">
     <div class="sentence-text-div">
