@@ -28,17 +28,28 @@
     <ion-refresher-content>
     </ion-refresher-content>
   </ion-refresher>
-  <div class="lesson-card" *ngFor="let lesson of this.displayedLessons" (click)="openLesson(lesson.id)">
-    <div class="lesson-text-div">
-      <p class="lesson-text">
-        {{lesson.name}}
-      </p>
-    </div>
-    <div class="lesson-info">
-      <div class="pie-chart"></div>
-      <span class="date-text">
-        {{lesson.created_at | date:"MMM dd"}}</span>
-      <ion-icon name="ios-arrow-forward" class="forward-icon"></ion-icon>
-    </div>
-  </div>
+  <ion-list>
+    <ion-item-sliding *ngFor="let lesson of this.displayedLessons" #slidingItem>
+      <ion-item no-padding style="--inner-padding-end: 0px !important;">
+        <div class="lesson-card" (click)="openLesson(lesson.id)">
+          <div class="lesson-text-div">
+            <p class="lesson-text">
+              {{lesson.name}}
+            </p>
+          </div>
+          <div class="lesson-info">
+            <div class="pie-chart"></div>
+            <span class="date-text">
+              {{lesson.created_at | date:"MMM dd"}}</span>
+            <ion-icon name="ios-arrow-forward" class="forward-icon"></ion-icon>
+          </div>
+        </div>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option class="edit-sliding-option" (click)="edit(lesson.id)">Edit</ion-item-option>
+        <ion-item-option class="delete-sliding-option" color="danger" (click)="deleteItem(slidingItem, lesson.id)">Delete
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
 </ion-content>

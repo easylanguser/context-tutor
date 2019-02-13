@@ -22,6 +22,7 @@ import { SentencesListPageModule } from './pages/sentences-list/sentences-list.m
 import { SentenceGuessPageModule } from './pages/sentence-guess/sentence-guess.module';
 import { ForgetPageModule } from "./pages/forget/forget.module";
 import { ChangePageModule } from "./pages/change/change.module";
+import { EditLessonPageModule } from "./pages/edit-lesson/edit-lesson.module";
 
 export function jwtOptionsFactory(storage) {
     return {
@@ -46,6 +47,7 @@ export function jwtOptionsFactory(storage) {
       AccountPageModule,
       ForgetPageModule,
       ChangePageModule,
+      EditLessonPageModule,
       IonicStorageModule.forRoot({
       name: 'easy-db',
       driverOrder: ['indexeddb', 'sqlite', 'websql']
