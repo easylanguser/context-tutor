@@ -36,12 +36,12 @@
             <p class="lesson-text">
               {{lesson.name}}
             </p>
+            <span class="date-text">
+              {{lesson.created_at | date:"MMM dd"}}
+            </span>
           </div>
           <div class="lesson-info">
             <div class="pie-chart"></div>
-            <span class="date-text">
-              {{lesson.created_at | date:"MMM dd"}}</span>
-            <ion-icon name="ios-arrow-forward" class="forward-icon"></ion-icon>
           </div>
         </div>
       </ion-item>
