@@ -22,7 +22,7 @@ export class HomePage {
 		this.getData();
 	}
 
-	edit(lessonID: number) {
+	tryAgain(lessonID: number) {
 		this.router.navigate(['edit-lesson'], { queryParams: { lessonID: lessonID } });
 	}
 

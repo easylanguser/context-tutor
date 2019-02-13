@@ -1,85 +1,86 @@
 #date-segment {
-	width: 95vw !important; 
-	margin-left: 2.5vw; 
-	margin-top: 1vh;
+    width: 95vw !important;
+    margin-left: 2.5vw;
+    margin-top: 1vh;
 }
 
 .ios :host #date-segment {
-	margin-bottom: 1vh;
+    margin-bottom: 1vh;
 }
 
 .lesson-card {
-	width: 100%;
-	height: 13vh;
-	background-color: var(--ion-color-step-50);
-	color: var(--ion-color-step-850);
-	margin-bottom: 0.2vh;
-	cursor: pointer;
-	display: table;
+    width: 100%;
+    height: 13vh;
+    background-color: var(--ion-color-step-50);
+    color: var(--ion-color-step-850);
+    margin-bottom: 0.2vh;
+    cursor: pointer;
+    display: table;
     table-layout: fixed;
 }
 
 .lesson-text-div {
-	width: 70vw;
-	overflow: hidden;
-	display: table-cell;
-	vertical-align: top;
-	padding-top: 2vh;
-	padding-left: 4vw;
-	padding-right: 2vw;
+    width: 70vw;
+    overflow: hidden;
+    display: table-cell;
+    vertical-align: top;
+    padding-top: 2vh;
+    padding-left: 4vw;
+    padding-right: 2vw;
 }
 
 .lesson-text {
-	overflow-y: auto;
-	text-overflow: ellipsis;
-	line-height: 3vh;
-	max-height: 6vh;
-	margin-top: 0;
+    overflow-y: auto;
+    text-overflow: ellipsis;
+    line-height: 3vh;
+    max-height: 6vh;
+    margin-top: 0;
 }
 
 .lesson-info {
-	height: 100%;
-	position: relative;
+    height: 100%;
+    position: relative;
 }
 
 .pie-chart {
     height: 8vh;
     margin: 3px;
-	border: 1px solid cadetblue;
+    border: 1px solid cadetblue;
 }
 
 .date-text {
-	bottom: 4px;
-	position: absolute;
-	font-size: 3vmin;
+    bottom: 4px;
+    position: absolute;
+    font-size: 3vmin;
 }
 
 @media (min-width: 650px) {
-	.date-text {
-		font-size: 2vmin;
-	}
+    .date-text {
+        font-size: 2vmin;
+    }
 }
 
 .forward-icon {
-	bottom: 1vh;
-	right: 1vh;
-	position: absolute;
+    bottom: 1vh;
+    right: 1vh;
+    position: absolute;
 }
 
 @media (min-width: 992px) {
-	#date-segment {
-		width: 67vw !important;
-	}
-
-	.lesson-text-div {
-		width: 50.4vw;
-	}
+    #date-segment {
+        width: 67vw !important;
+    }
+    .lesson-text-div {
+        width: 50.4vw;
+    }
 }
 
-.edit-sliding-option {
-	width: 20vw;
+.try-again-sliding-option {
+    width: 18vw;
+    text-align: center;
 }
 
 .delete-sliding-option {
-	width: 20vw;
+    width: 18vw;
+    text-align: center;
 }

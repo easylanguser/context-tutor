@@ -46,8 +46,11 @@
         </div>
       </ion-item>
       <ion-item-options side="end">
-        <ion-item-option class="edit-sliding-option" (click)="edit(lesson.id)">Edit</ion-item-option>
-        <ion-item-option class="delete-sliding-option" color="danger" (click)="deleteItem(slidingItem, lesson.id)">Delete
+        <ion-item-option class="try-again-sliding-option" color="primary" (click)="tryAgain(lesson.id)">
+          Try again
+        </ion-item-option>
+        <ion-item-option class="delete-sliding-option" color="danger" (click)="deleteItem(slidingItem, lesson.id)">
+          Delete
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>

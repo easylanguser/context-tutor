@@ -142,7 +142,7 @@ export class SentenceGuessPage implements OnInit {
 		}
 	}
 
-	// Go to following unfilled word  
+	// Go to following unfilled word
 	nextWordClick() {
 		if (!this.curSentence().isSolved && this.curWordIndex < this.curSentence().hiddenChars.length - 1) {
 			const savedNum = this.curWordIndex; // Save current word number in case switching cannot be done
