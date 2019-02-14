@@ -7,8 +7,9 @@
       Sentence {{sentenceIndex}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}
     </ion-title>
     <ion-buttons slot="end" (click)="logStat()">
-      <div id="next-sentence-button" style="height: 3vh; width: 3vh;" (click)="nextSentenceClick()">
-        <ion-icon style="font-size: 3vh;" name="arrow-forward"></ion-icon>
+      <ion-label id="next-sentence-text">Next</ion-label>
+      <div id="next-sentence-div" (click)="nextSentenceClick()">
+        <ion-icon id="next-sentence-icon" name="arrow-forward"></ion-icon>
       </div>
     </ion-buttons>
   </ion-toolbar>
@@ -31,7 +32,7 @@
 
 <ion-footer id="footer" style="visibility:hidden;">
   <ion-toolbar no-padding class="no-selection">
-    <div id="chars-and-give-up">
+    <div id="chars">
       <button *ngIf="this.displayButtons" @fade (click)="firstCharBoxClick()" class="char-box" id="first-char-box">
         {{firstChar}}
       </button>

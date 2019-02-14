@@ -27,7 +27,7 @@ export class HomePage implements OnInit  {
     }
 
 	tryAgain(lessonID: number) {
-		this.router.navigate(['edit-lesson'], { queryParams: { lessonID: lessonID } });
+		console.log("TODO: try again implementation");
 	}
 
 	deleteItem(slidingItem: IonItemSliding, lessonID: number) {
