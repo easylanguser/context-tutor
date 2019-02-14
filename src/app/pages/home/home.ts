@@ -15,6 +15,8 @@ export class HomePage {
 	displayedLessons: Lesson[];
 	clearSegmentBoolean: boolean;
 
+	periods: number[] = [604800000, 2592000000, 31536000000];
+
 	constructor(private api: LessonsListService,
 		private loadingController: LoadingController,
 		private router: Router,
@@ -28,7 +30,7 @@ export class HomePage {
 
 	deleteItem(slidingItem: IonItemSliding, lessonID: number) {
 		slidingItem.close();
-		
+
 		let i = 0;
 		for (i; i < this.displayedLessons.length; i++) {
 			if (this.displayedLessons[i].id === lessonID) {
@@ -36,55 +38,35 @@ export class HomePage {
 			}
 		}
 
-    	if (i !== this.displayedLessons.length) {
-    		this.displayedLessons.splice(i, 1);
-    	}
+		if (i !== this.displayedLessons.length) {
+			this.displayedLessons.splice(i, 1);
+		}
 	}
 
-	async weekAgoClick() {
+	async filterDate(periodNumber: number) {
 		const loading = await this.loadingController.create({
 			message: 'Loading'
 		});
 		await loading.present();
-		this.displayedLessons = this.lessonData.lessons.filter(this.weekAgo);
+		this.displayedLessons = this.lessonData.lessons.filter(
+			lesson => new Date().getTime() - new Date(lesson.created_at).getTime() <= this.periods[periodNumber]
+		);
 		loading.dismiss();
 	}
 
-	async monthAgoClick() {
-		const loading = await this.loadingController.create({
-			message: 'Loading'
-		});
-		await loading.present();
-		this.displayedLessons = this.lessonData.lessons.filter(this.monthAgo);
-		loading.dismiss();
+	weekAgoClick() {
+		this.filterDate(0);
 	}
 
-	async yearAgoClick() {
-		const loading = await this.loadingController.create({
-			message: 'Loading'
-		});
-		await loading.present();
-		this.displayedLessons = this.lessonData.lessons.filter(this.yearAgo);
-		loading.dismiss();
+	monthAgoClick() {
+		this.filterDate(1);
 	}
 
-	weekAgo(element: Lesson, index, array) {
-		let now = new Date().getTime();
-		let elemDate = new Date(element.created_at).getTime();
-		return (now - elemDate <= 604800000);
+	yearAgoClick() {
+		this.filterDate(2);
 	}
 
-	monthAgo(element: Lesson, index, array) {
-		let now = new Date().getTime();
-		let elemDate = new Date(element.created_at).getTime();
-		return (now - elemDate <= 2592000000);
-	}
 
-	yearAgo(element: Lesson, index, array) {
-		let now = new Date().getTime();
-		let elemDate = new Date(element.created_at).getTime();
-		return (now - elemDate <= 31536000000);
-	}
 
 	doRefresh(event) {
 		this.clearSegmentBoolean = false;
