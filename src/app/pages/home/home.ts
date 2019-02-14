@@ -50,7 +50,7 @@ export class HomePage implements OnInit  {
 			message: 'Loading'
 		});
 		await loading.present();
-		this.displayedLessons = this.lessonService.getLessons().filter(
+		this.displayedLessons = this.lessonService.lessons.filter(
 			lesson => new Date().getTime() - new Date(lesson.created_at).getTime() <= this.periods[periodNumber]
 		);
 		loading.dismiss();
