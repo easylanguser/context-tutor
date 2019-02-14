@@ -50,9 +50,16 @@ ion-content {
 
 #sentence-to-show {
     text-align: start;
+    font-size: 4vh;
+    letter-spacing: 2px;
     padding: 0;
     margin-left: 3vw;
     margin-right: 3vw;
+    line-height: 5vh;
+    max-height: 50vh;
+    overflow-y: scroll;
+    padding-top: 2vh;
+    padding-bottom: 0;
 }
 
 #characters-row-guessed {
@@ -102,6 +109,7 @@ ion-content {
 } 
 
 #previous-word-button {
+    color: grey;
     height: 8vh;
     font-size: 8vh;
     float: left; 
@@ -109,6 +117,7 @@ ion-content {
 }
 
 #next-word-button {
+    color: grey;
     height: 8vh;
     font-size: 8vh;
     float: right;
@@ -121,7 +130,7 @@ ion-content {
     margin: 0 auto;
     background-color: #FFF;
     text-align: center;
-    font-size: 8vh;
+    font-size: 7vh;
     outline: none;
     border-radius: 50%;
 }
