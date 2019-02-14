@@ -5,8 +5,7 @@ import { LoadingController } from '@ionic/angular';
 import { UtilsService } from '../../services/utils/utils.service';
 import { ToastController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
-import { Vibration } from '@ionic-native/vibration/ngx';
-import {LessonsService} from "src/app/services/lessons-data/lessons-data.service";
+import { LessonsService } from "src/app/services/lessons-data/lessons-data.service";
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -51,8 +50,7 @@ export class SentenceGuessPage implements OnInit {
 		private loadingController: LoadingController,
 		private util: UtilsService,
 		private toastController: ToastController,
-		public lessonsData: LessonsService,
-		private vibration: Vibration) { }
+		public lessonsData: LessonsService) { }
 
 	// Get number of sentence and id of the lesson from previous page
 	ngOnInit() {
@@ -405,8 +403,6 @@ export class SentenceGuessPage implements OnInit {
 			this.refreshCharBoxes();
 		} else {
 			++this.curSentence().statistics.wrongAnswers; // Statistics
-
-			this.vibration.vibrate(200);
 
 			switch (event.key) {
 				case this.firstChar.toLowerCase(): {
