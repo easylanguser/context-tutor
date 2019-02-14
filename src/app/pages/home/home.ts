@@ -1,26 +1,30 @@
-import { Component } from '@angular/core';
-import { LoadingController, IonItemSliding } from '@ionic/angular';
-import { Router } from '@angular/router';
-import { LessonsListService } from 'src/app/services/lessons-list/lessons-list.service';
-import { Lesson } from 'src/app/models/lesson';
-import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {LoadingController, IonItemSliding} from '@ionic/angular';
+import {Router} from '@angular/router';
+import {Lesson} from 'src/app/models/lesson';
+import {LessonsService} from 'src/app/services/lessons-data/lessons-data.service';
 
 @Component({
-	selector: 'page-home',
-	templateUrl: 'home.html',
-	styleUrls: ['home.scss']
+    selector: 'page-home',
+    templateUrl: 'home.html',
+    styleUrls: ['home.scss']
 })
-export class HomePage {
+export class HomePage implements OnInit  {
 
 	displayedLessons: Lesson[];
 	clearSegmentBoolean: boolean;
 
-	constructor(private api: LessonsListService,
-		private loadingController: LoadingController,
-		private router: Router,
-		private lessonData: LessonsDataService) {
-		this.getData();
-	}
+	// Week, month and year in milliseconds
+	periods: number[] = [604800000, 2592000000, 31536000000];
+
+    constructor(private loadingController: LoadingController,
+                private router: Router,
+                private lessonService: LessonsService) {
+    }
+
+    ngOnInit() {
+        this.getData().then(res => res)
+    }
 
 	tryAgain(lessonID: number) {
 		this.router.navigate(['edit-lesson'], { queryParams: { lessonID: lessonID } });
@@ -28,7 +32,7 @@ export class HomePage {
 
 	deleteItem(slidingItem: IonItemSliding, lessonID: number) {
 		slidingItem.close();
-		
+
 		let i = 0;
 		for (i; i < this.displayedLessons.length; i++) {
 			if (this.displayedLessons[i].id === lessonID) {
@@ -36,54 +40,32 @@ export class HomePage {
 			}
 		}
 
-    	if (i !== this.displayedLessons.length) {
-    		this.displayedLessons.splice(i, 1);
-    	}
+		if (i !== this.displayedLessons.length) {
+			this.displayedLessons.splice(i, 1);
+		}
 	}
 
-	async weekAgoClick() {
+	async filterDate(periodNumber: number) {
 		const loading = await this.loadingController.create({
 			message: 'Loading'
 		});
 		await loading.present();
-		this.displayedLessons = this.lessonData.lessons.filter(this.weekAgo);
+		this.displayedLessons = this.lessonService.getLessons().filter(
+			lesson => new Date().getTime() - new Date(lesson.created_at).getTime() <= this.periods[periodNumber]
+		);
 		loading.dismiss();
 	}
 
-	async monthAgoClick() {
-		const loading = await this.loadingController.create({
-			message: 'Loading'
-		});
-		await loading.present();
-		this.displayedLessons = this.lessonData.lessons.filter(this.monthAgo);
-		loading.dismiss();
+	weekAgoClick() {
+		this.filterDate(0);
 	}
 
-	async yearAgoClick() {
-		const loading = await this.loadingController.create({
-			message: 'Loading'
-		});
-		await loading.present();
-		this.displayedLessons = this.lessonData.lessons.filter(this.yearAgo);
-		loading.dismiss();
+	monthAgoClick() {
+		this.filterDate(1);
 	}
 
-	weekAgo(element: Lesson, index, array) {
-		let now = new Date().getTime();
-		let elemDate = new Date(element.created_at).getTime();
-		return (now - elemDate <= 604800000);
-	}
-
-	monthAgo(element: Lesson, index, array) {
-		let now = new Date().getTime();
-		let elemDate = new Date(element.created_at).getTime();
-		return (now - elemDate <= 2592000000);
-	}
-
-	yearAgo(element: Lesson, index, array) {
-		let now = new Date().getTime();
-		let elemDate = new Date(element.created_at).getTime();
-		return (now - elemDate <= 31536000000);
+	yearAgoClick() {
+		this.filterDate(2);
 	}
 
 	doRefresh(event) {
@@ -95,27 +77,14 @@ export class HomePage {
 	}
 
 	// Get list of lessons, add them to displayed and to lessons data service
-	private async getData() {
-		const loading = await this.loadingController.create({
-			message: 'Loading'
-		});
-		await loading.present();
-		this.api.getData()
-			.subscribe(res => {
-				for (let i = 0; i < res[0].length; i++) {
-					const lesson = new Lesson(res[0][i].id, res[0][i].name,
-						res[0][i].url, res[0][i].created_at);
-					if (this.lessonData.getLessonByID(lesson.id) === undefined) {
-						this.lessonData.addLesson(lesson);
-					}
-				}
-				this.displayedLessons = this.lessonData.lessons;
-				loading.dismiss();
-			}, err => {
-				console.log(err);
-				loading.dismiss();
-			});
-	}
+    private async getData() {
+        const loading = await this.loadingController.create({
+            message: 'Loading'
+        });
+        await loading.present();
+        this.displayedLessons = this.lessonService.getLessons()
+        loading.dismiss();
+    }
 
 	// Go to selected lesson page
 	openLesson(lessonID) {

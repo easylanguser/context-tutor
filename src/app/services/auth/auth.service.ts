@@ -70,6 +70,7 @@ export class AuthService {
         this.storageService.remove(TOKEN_KEY).then(() => {
             this.authenticationState.next(false);
             this.token = null;
+            window.location.reload();
         });
     }
 

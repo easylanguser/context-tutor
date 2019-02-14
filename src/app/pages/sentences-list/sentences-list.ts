@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
-import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
+import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Statistics } from 'src/app/models/statistics';
 
 @Component({
@@ -23,7 +23,7 @@ export class SentencesListPage {
 		private util: UtilsService,
 		private route: ActivatedRoute,
 		private router: Router,
-		public lessonData: LessonsDataService) { }
+		public lessonData: LessonsService) { }
 
 	ngOnInit() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));

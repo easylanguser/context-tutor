@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { UtilsService } from '../../services/utils/utils.service';
 import { ToastController } from '@ionic/angular';
-import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Sentence } from 'src/app/models/sentence';
 import { Vibration } from '@ionic-native/vibration/ngx';
+import {LessonsService} from "src/app/services/lessons-data/lessons-data.service";
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -39,9 +39,9 @@ export class SentenceGuessPage implements OnInit {
 
 	private toastIsShown: boolean; // Single toast flag
 	private hintIsClicked: boolean = false;
-	displayButtons: boolean = true;	
-	
-	// 3 random characters with one correct one 
+	displayButtons: boolean = true;
+
+	// 3 random characters with one correct one
 	firstChar: string;
 	secondChar: string;
 	thirdChar: string;
@@ -51,7 +51,7 @@ export class SentenceGuessPage implements OnInit {
 		private loadingController: LoadingController,
 		private util: UtilsService,
 		private toastController: ToastController,
-		public lessonsData: LessonsDataService,
+		public lessonsData: LessonsService,
 		private vibration: Vibration) { }
 
 	// Get number of sentence and id of the lesson from previous page
@@ -86,7 +86,7 @@ export class SentenceGuessPage implements OnInit {
 
 	private async getData(showLoader: boolean) {
 		let loading: any;
-		if (showLoader) { // Show loader if sentence is loaded first time	
+		if (showLoader) { // Show loader if sentence is loaded first time
 			loading = await this.loadingController.create({ message: 'Loading' });
 			await loading.present();
 		}
@@ -268,7 +268,7 @@ export class SentenceGuessPage implements OnInit {
 		this.handleKeyboardEvent(event);
 	}
 
-	// Save user progress and leave lesson 
+	// Save user progress and leave lesson
 	leaveLessonClick() {
 		if (this.curSentence().text !== this.sentenceShown) {
 			++this.curSentence().statistics.lessonLeaves; // Statistics
@@ -277,7 +277,7 @@ export class SentenceGuessPage implements OnInit {
 		this.curSentence().curCharsIndexes = this.curCharsIndexes;
 	}
 
-	// Generate 3 random characters from alphabet and random position for correct character  
+	// Generate 3 random characters from alphabet and random position for correct character
 	private generateRandomCharacters() {
 		const correctCharIndex = Math.floor(Math.random() * 4) + 1;
 		const correctChar = this.curCorrectChar().toUpperCase();
