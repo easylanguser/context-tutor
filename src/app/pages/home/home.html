@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar mode="ios">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -24,7 +24,7 @@
     </ion-refresher-content>
   </ion-refresher>
   <ion-list no-padding>
-    <ion-item-sliding *ngFor="let lesson of this.displayedLessons" #slidingItem>
+    <ion-item-sliding *ngFor="let lesson of this.displayedLessons;" #slidingItem>
       <ion-item no-padding style="--inner-padding-end: 0px !important;">
         <div class="lesson-card" (click)="openLesson(lesson.id)">
           <div class="lesson-text-div">
@@ -36,7 +36,7 @@
             </span>
           </div>
           <div class="lesson-info">
-            <div class="pie-chart"></div>
+            <div class="pie-chart" id="pie-chart-{{lesson.id}}"></div>
           </div>
         </div>
       </ion-item>

@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar class="no-selection">
+  <ion-toolbar mode="ios" class="no-selection">
     <ion-buttons slot="start">
       <ion-back-button text="Lesson" (click)="leaveLessonClick()"></ion-back-button>
     </ion-buttons>
@@ -31,7 +31,7 @@
 </ion-content>
 
 <ion-footer id="footer" style="visibility:hidden;">
-  <ion-toolbar no-padding class="no-selection">
+  <ion-toolbar mode="ios" no-padding class="no-selection">
     <div id="chars">
       <button *ngIf="this.displayButtons" @fade (click)="firstCharBoxClick()" class="char-box" id="first-char-box">
         {{firstChar}}
