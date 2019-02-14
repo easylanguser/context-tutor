@@ -15,6 +15,7 @@ export class HomePage {
 	displayedLessons: Lesson[];
 	clearSegmentBoolean: boolean;
 
+	// Week, month and year in milliseconds
 	periods: number[] = [604800000, 2592000000, 31536000000];
 
 	constructor(private api: LessonsListService,
@@ -65,8 +66,6 @@ export class HomePage {
 	yearAgoClick() {
 		this.filterDate(2);
 	}
-
-
 
 	doRefresh(event) {
 		this.clearSegmentBoolean = false;
