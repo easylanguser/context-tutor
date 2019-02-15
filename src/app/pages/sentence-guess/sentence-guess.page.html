@@ -6,11 +6,9 @@
     <ion-title text-center>
       Sentence {{sentenceIndex}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}
     </ion-title>
-    <ion-buttons slot="end" (click)="nextSentenceClick()">
+    <ion-buttons id="next-sentence" slot="end" (click)="nextSentenceClick()">
       <ion-label id="next-sentence-text">Next</ion-label>
-      <div id="next-sentence-div">
-        <ion-icon id="next-sentence-icon" name="arrow-forward"></ion-icon>
-      </div>
+      <ion-icon id="next-sentence-icon" name="arrow-forward"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

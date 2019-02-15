@@ -10,19 +10,23 @@ ion-content {
     color: #3880ff;
 }
 
-#next-sentence-div {
-    height: 9vw;
-    width: 9vw;
+.md :host #next-sentence {
+    margin-right: 2vmin;
+}
+
+.md :host #next-sentence-text {
+    margin-right: 2vmin;
+    text-transform: uppercase;
+    font-size: 3.5vmin;
 }
 
 #next-sentence-icon {
-    font-size: 9vw;
+    font-size: 6vmin;
 }
 
-@media (min-width: 410px) {
-    #next-sentence-div {
-        height: 3vh;
-        width: 3vh;
+@media (min-width: 810px) {
+    .md :host #next-sentence-text {
+        font-size: 2vmin;
     }
     
     #next-sentence-icon {
