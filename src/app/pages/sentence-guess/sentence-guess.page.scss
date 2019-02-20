@@ -84,6 +84,10 @@ ion-content {
     margin: 1vw;
     text-align: center;
     font-size: 17vw;
+    --background: rgb(228, 228, 228);
+    --color: black;
+    --border-radius: 50%;
+    border-radius: 50%;
     outline: none;
     background-color: rgb(228, 228, 228);
     border-radius: 50%;
@@ -132,11 +136,11 @@ ion-content {
     height: 8vh;
     width: 8vh;
     margin: 0 auto;
-    background-color: #FFF;
     text-align: center;
     font-size: 7vh;
     outline: none;
-    border-radius: 50%;
+    --background: white;
+    --color: black;
 }
 
 #give-up-button {
@@ -146,8 +150,8 @@ ion-content {
     text-align: center;
     font-size: 4vw;
     outline: none;
-    border-radius: 50%;
-    background-color: rgb(228, 228, 228);
+    --background: rgb(228, 228, 228);
+    --color: black;
 }
 
 @media (min-width: 1200px) and (max-width: 1600px) {

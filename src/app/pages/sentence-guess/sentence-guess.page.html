@@ -22,13 +22,12 @@
     <span id="next-word-button" (click)="nextWordClick()">
       >
     </span>
-    <button id="hint-button" (click)="hintClick()">
-      ?
+    <ion-button shape="round" id="hint-button" (click)="hintClick()">
     </button>
   </div>
 </ion-content>
 
-<ion-footer id="footer" style="visibility:hidden;">
+<ion-footer id="footer" style="visibility:hidden; height: 40vmin;">
   <ion-toolbar mode="ios" no-padding class="no-selection">
     <div id="chars">
       <button *ngIf="this.displayButtons" @fade (click)="firstCharBoxClick()" class="char-box" id="first-char-box">
@@ -45,9 +44,9 @@
       </button>
     </div>
     <div id="give-up-button-container">
-      <button (click)="giveUpClick()" id="give-up-button">
+      <ion-button shape="round" (click)="giveUpClick()" id="give-up-button">
         Give up
-      </button>
+      </ion-button>
     </div>
   </ion-toolbar>
 </ion-footer>
