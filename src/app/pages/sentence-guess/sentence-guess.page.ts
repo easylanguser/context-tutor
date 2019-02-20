@@ -422,6 +422,12 @@ export class SentenceGuessPage implements OnInit {
 				++this.curWordIndex;
 			}
 
+			if (this.curCorrectChar().toUpperCase().charCodeAt(0) < 65 || 
+				this.curCorrectChar().toUpperCase().charCodeAt(0) > 90) {
+				const event = new KeyboardEvent('evCorrect', { key: this.curCorrectChar().toUpperCase() });
+				this.handleKeyboardEvent(event);
+			}
+
 			setTimeout(() => {
 				this.refreshCharBoxes();
 				this.displayButtons = true;
