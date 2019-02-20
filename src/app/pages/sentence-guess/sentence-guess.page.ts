@@ -279,23 +279,53 @@ export class SentenceGuessPage implements OnInit {
 	private generateRandomCharacters() {
 		const correctCharIndex = Math.floor(Math.random() * 4) + 1;
 		const correctChar = this.curCorrectChar().toUpperCase();
-		const firstRand = Math.floor(Math.random() * this.alphabet.length);
-		let secondRand, thirdRand, fourthRand;
+		let vowelsPositions = [0, 4, 8, 14, 20, 24];
+		let firstRand, secondRand, thirdRand, fourthRand;
+		let vowelIsGuessed: boolean = false;
 
-		do {
-			secondRand = Math.floor(Math.random() * this.alphabet.length);
-		} while (secondRand === firstRand ||
-			secondRand === this.alphabet.indexOf(correctChar));
+		if (vowelsPositions.indexOf(this.alphabet.indexOf(correctChar)) !== -1) {
+			vowelIsGuessed = true;
+		}
 
-		do {
-			thirdRand = Math.floor(Math.random() * this.alphabet.length);
-		} while (thirdRand === firstRand || thirdRand === secondRand ||
-			thirdRand === this.alphabet.indexOf(correctChar));
+		if (vowelIsGuessed) {
+			do {
+				firstRand = Math.floor(Math.random() * this.alphabet.length);
+			} while (firstRand === this.alphabet.indexOf(correctChar));
 
-		do {
-			fourthRand = Math.floor(Math.random() * this.alphabet.length);
-		} while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand ||
-			fourthRand === this.alphabet.indexOf(correctChar));
+			do {
+				secondRand = Math.floor(Math.random() * this.alphabet.length);
+			} while (secondRand === firstRand ||
+				secondRand === this.alphabet.indexOf(correctChar));
+
+			do {
+				thirdRand = Math.floor(Math.random() * this.alphabet.length);
+			} while (thirdRand === firstRand || thirdRand === secondRand ||
+				thirdRand === this.alphabet.indexOf(correctChar));
+
+			do {
+				fourthRand = Math.floor(Math.random() * this.alphabet.length);
+			} while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand ||
+				fourthRand === this.alphabet.indexOf(correctChar));
+		} else {
+			do {
+				firstRand = Math.floor(Math.random() * this.alphabet.length);
+			} while (firstRand === this.alphabet.indexOf(correctChar) || vowelsPositions.indexOf(firstRand) !== -1);
+
+			do {
+				secondRand = Math.floor(Math.random() * this.alphabet.length);
+			} while (secondRand === firstRand ||
+				secondRand === this.alphabet.indexOf(correctChar) || vowelsPositions.indexOf(secondRand) !== -1);
+
+			do {
+				thirdRand = Math.floor(Math.random() * this.alphabet.length);
+			} while (thirdRand === firstRand || thirdRand === secondRand ||
+				thirdRand === this.alphabet.indexOf(correctChar) || vowelsPositions.indexOf(thirdRand) !== -1);
+
+			do {
+				fourthRand = Math.floor(Math.random() * this.alphabet.length);
+			} while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand ||
+				fourthRand === this.alphabet.indexOf(correctChar) || vowelsPositions.indexOf(fourthRand) !== -1);
+		}
 
 		this.firstChar = correctCharIndex === 1
 			? correctChar
@@ -357,7 +387,6 @@ export class SentenceGuessPage implements OnInit {
 			this.makeHintButtonActive();
 			this.displayButtons = false;
 			setTimeout(() => this.displayButtons = true, 300);
-
 			// Fill guessed character
 			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 				this.curCorrectChar(),
