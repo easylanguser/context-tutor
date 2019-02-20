@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, style, transition, animate } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { UtilsService } from '../../services/utils/utils.service';
@@ -13,18 +12,7 @@ import { LessonsService } from "src/app/services/lessons-data/lessons-data.servi
 	styleUrls: ['./sentence-guess.page.scss'],
 	host: {
 		'(document:keypress)': 'handleKeyboardEvent($event)'
-	},
-	animations: [
-		trigger('fade', [
-			transition(':enter', [
-				style({ opacity: '0' }),
-				animate('200ms 400ms ease-out', style({ opacity: '1' }))
-			]),
-			transition(':leave', [
-				animate('200ms ease-in', style({ opacity: '0' }))
-			])
-		])
-	]
+	}
 })
 
 export class SentenceGuessPage implements OnInit {
@@ -212,6 +200,7 @@ export class SentenceGuessPage implements OnInit {
 
 		if (!this.curSentence().isSolved) {
 			++this.curSentence().statistics.sentenceSkips; // Statistics
+			this.displayButtons = true;
 		}
 	}
 
@@ -277,69 +266,69 @@ export class SentenceGuessPage implements OnInit {
 
 	// Generate 3 random characters from alphabet and random position for correct character
 	private generateRandomCharacters() {
-		const correctCharIndex = Math.floor(Math.random() * 4) + 1;
-		const correctChar = this.curCorrectChar().toUpperCase();
-		let vowelsPositions = [0, 4, 8, 14, 20, 24];
-		let firstRand, secondRand, thirdRand, fourthRand;
-		let vowelIsGuessed: boolean = false;
-
-		if (vowelsPositions.indexOf(this.alphabet.indexOf(correctChar)) !== -1) {
-			vowelIsGuessed = true;
-		}
-
-		if (vowelIsGuessed) {
-			do {
-				firstRand = Math.floor(Math.random() * this.alphabet.length);
-			} while (firstRand === this.alphabet.indexOf(correctChar));
-
-			do {
-				secondRand = Math.floor(Math.random() * this.alphabet.length);
-			} while (secondRand === firstRand ||
-				secondRand === this.alphabet.indexOf(correctChar));
-
-			do {
-				thirdRand = Math.floor(Math.random() * this.alphabet.length);
-			} while (thirdRand === firstRand || thirdRand === secondRand ||
-				thirdRand === this.alphabet.indexOf(correctChar));
-
-			do {
-				fourthRand = Math.floor(Math.random() * this.alphabet.length);
-			} while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand ||
-				fourthRand === this.alphabet.indexOf(correctChar));
-		} else {
-			do {
-				firstRand = Math.floor(Math.random() * this.alphabet.length);
-			} while (firstRand === this.alphabet.indexOf(correctChar) || vowelsPositions.indexOf(firstRand) !== -1);
-
-			do {
-				secondRand = Math.floor(Math.random() * this.alphabet.length);
-			} while (secondRand === firstRand ||
-				secondRand === this.alphabet.indexOf(correctChar) || vowelsPositions.indexOf(secondRand) !== -1);
-
-			do {
-				thirdRand = Math.floor(Math.random() * this.alphabet.length);
-			} while (thirdRand === firstRand || thirdRand === secondRand ||
-				thirdRand === this.alphabet.indexOf(correctChar) || vowelsPositions.indexOf(thirdRand) !== -1);
-
-			do {
-				fourthRand = Math.floor(Math.random() * this.alphabet.length);
-			} while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand ||
-				fourthRand === this.alphabet.indexOf(correctChar) || vowelsPositions.indexOf(fourthRand) !== -1);
-		}
-
-		this.firstChar = correctCharIndex === 1
-			? correctChar
-			: this.alphabet[firstRand];
-		this.secondChar = correctCharIndex === 2
-			? correctChar
-			: this.alphabet[secondRand];
-		this.thirdChar = correctCharIndex === 3
-			? correctChar
-			: this.alphabet[thirdRand];
-		this.fourthChar = correctCharIndex === 4
-			? correctChar
-			: this.alphabet[fourthRand];
-	}
+        const correctCharIndex = Math.floor(Math.random() * 4) + 1;
+        const correctChar = this.curCorrectChar().toUpperCase();
+        let vowelsPositions = [0, 4, 8, 14, 20, 24];
+        let firstRand, secondRand, thirdRand, fourthRand;
+        let vowelIsGuessed: boolean = false;
+ 
+        if (vowelsPositions.indexOf(this.alphabet.indexOf(correctChar)) !== -1) {
+            vowelIsGuessed = true;
+        }
+ 
+        if (vowelIsGuessed) {
+            do {
+                firstRand = Math.floor(Math.random() * this.alphabet.length);
+            } while (firstRand === this.alphabet.indexOf(correctChar));
+ 
+            do {
+                secondRand = Math.floor(Math.random() * this.alphabet.length);
+            } while (secondRand === firstRand ||
+                secondRand === this.alphabet.indexOf(correctChar));
+ 
+            do {
+                thirdRand = Math.floor(Math.random() * this.alphabet.length);
+            } while (thirdRand === firstRand || thirdRand === secondRand ||
+                thirdRand === this.alphabet.indexOf(correctChar));
+ 
+            do {
+                fourthRand = Math.floor(Math.random() * this.alphabet.length);
+            } while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand ||
+                fourthRand === this.alphabet.indexOf(correctChar));
+        } else {
+            do {
+                firstRand = Math.floor(Math.random() * this.alphabet.length);
+            } while (firstRand === this.alphabet.indexOf(correctChar) || vowelsPositions.indexOf(firstRand) !== -1);
+ 
+            do {
+                secondRand = Math.floor(Math.random() * this.alphabet.length);
+            } while (secondRand === firstRand ||
+                secondRand === this.alphabet.indexOf(correctChar) || vowelsPositions.indexOf(secondRand) !== -1);
+ 
+            do {
+                thirdRand = Math.floor(Math.random() * this.alphabet.length);
+            } while (thirdRand === firstRand || thirdRand === secondRand ||
+                thirdRand === this.alphabet.indexOf(correctChar) || vowelsPositions.indexOf(thirdRand) !== -1);
+ 
+            do {
+                fourthRand = Math.floor(Math.random() * this.alphabet.length);
+            } while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand ||
+                fourthRand === this.alphabet.indexOf(correctChar) || vowelsPositions.indexOf(fourthRand) !== -1);
+        }
+ 
+        this.firstChar = correctCharIndex === 1
+            ? correctChar
+            : this.alphabet[firstRand];
+        this.secondChar = correctCharIndex === 2
+            ? correctChar
+            : this.alphabet[secondRand];
+        this.thirdChar = correctCharIndex === 3
+            ? correctChar
+            : this.alphabet[thirdRand];
+        this.fourthChar = correctCharIndex === 4
+            ? correctChar
+            : this.alphabet[fourthRand];
+    }
 
 	// Reset characters boxes highlighting and generate random characters
 	private refreshCharBoxes() {
@@ -371,6 +360,7 @@ export class SentenceGuessPage implements OnInit {
 	private showHideControls(isVisible) {
 		document.getElementById('navigation-and-hint-buttons').style.visibility = isVisible ? 'visible' : 'hidden';
 		document.getElementById('footer').style.visibility = isVisible ? 'visible' : 'hidden';
+		this.displayButtons = isVisible;
 	}
 
 	// Handle keyboard event from desktop and clicks on char boxes from mobiles and desktop
@@ -386,7 +376,7 @@ export class SentenceGuessPage implements OnInit {
 
 			this.makeHintButtonActive();
 			this.displayButtons = false;
-			setTimeout(() => this.displayButtons = true, 300);
+
 			// Fill guessed character
 			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
 				this.curCorrectChar(),
@@ -418,7 +408,10 @@ export class SentenceGuessPage implements OnInit {
 					'?',
 					this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
 
-				this.refreshCharBoxes();
+				setTimeout(() => {
+					this.refreshCharBoxes();
+					this.displayButtons = true;
+				}, 1000)
 
 				return;
 			}
@@ -429,7 +422,10 @@ export class SentenceGuessPage implements OnInit {
 				++this.curWordIndex;
 			}
 
-			this.refreshCharBoxes();
+			setTimeout(() => {
+				this.refreshCharBoxes();
+				this.displayButtons = true;
+			}, 1000)
 		} else {
 			++this.curSentence().statistics.wrongAnswers; // Statistics
 

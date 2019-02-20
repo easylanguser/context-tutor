@@ -16,36 +16,39 @@
 <ion-content>
   <p [innerHTML]="sentenceShown" id="sentence-to-show"></p>
   <div class="no-selection" id="navigation-and-hint-buttons" style="visibility: hidden;">
-    <span id="previous-word-button" (click)="previousWordClick()">
+    <p id="previous-word-button" (click)="previousWordClick()">
       < 
-    </span>
-    <span id="next-word-button" (click)="nextWordClick()">
+    </p>
+    <p id="next-word-button" (click)="nextWordClick()">
       >
-    </span>
+    </p>
     <ion-button shape="round" id="hint-button" (click)="hintClick()">
-    </button>
+      ?
+    </ion-button>
   </div>
 </ion-content>
 
-<ion-footer id="footer" style="visibility:hidden; height: 40vmin;">
+<ion-footer id="footer">
   <ion-toolbar mode="ios" no-padding class="no-selection">
-    <div id="chars">
-      <button *ngIf="this.displayButtons" @fade (click)="firstCharBoxClick()" class="char-box" id="first-char-box">
+    <div [style.opacity]="this.displayButtons ? '1' : '0'" 
+      [style.visibility]="this.displayButtons ? 'visible' : 'hidden'" 
+      id="chars">
+      <ion-button shape="round" (click)="firstCharBoxClick()" class="char-box" id="first-char-box">
         {{firstChar}}
-      </button>
-      <button *ngIf="this.displayButtons" @fade (click)="secondCharBoxClick()" class="char-box" id="second-char-box">
+      </ion-button>
+      <ion-button shape="round" (click)="secondCharBoxClick()" class="char-box" id="second-char-box">
         {{secondChar}}
-      </button>
-      <button *ngIf="this.displayButtons" @fade (click)="thirdCharBoxClick()" class="char-box" id="third-char-box">
+      </ion-button>
+      <ion-button shape="round" (click)="thirdCharBoxClick()" class="char-box" id="third-char-box">
         {{thirdChar}}
-      </button>
-      <button *ngIf="this.displayButtons" @fade (click)="fourthCharBoxClick()" class="char-box" id="fourth-char-box">
+      </ion-button>
+      <ion-button shape="round" (click)="fourthCharBoxClick()" class="char-box" id="fourth-char-box">
         {{fourthChar}}
-      </button>
+      </ion-button>
     </div>
     <div id="give-up-button-container">
       <ion-button shape="round" (click)="giveUpClick()" id="give-up-button">
-        Give up
+        Give<br>up
       </ion-button>
     </div>
   </ion-toolbar>

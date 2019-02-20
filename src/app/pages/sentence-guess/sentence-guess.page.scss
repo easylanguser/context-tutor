@@ -3,11 +3,17 @@ ion-content {
 }
 
 .ios :host #next-sentence-text {
+    font-size: 17px;
     color: #3880ff;
 }
 
 .ios :host #next-sentence-icon {
+    font-size: 1.85em !important;
     color: #3880ff;
+}
+
+.md :host #next-sentence-icon {
+    font-size: 24px !important;
 }
 
 .md :host #next-sentence {
@@ -17,11 +23,7 @@ ion-content {
 .md :host #next-sentence-text {
     margin-right: 2vmin;
     text-transform: uppercase;
-    font-size: 3.5vmin;
-}
-
-#next-sentence-icon {
-    font-size: 6vmin;
+    font-size: 14px;
 }
 
 @media (min-width: 810px) {
@@ -60,22 +62,10 @@ ion-content {
     margin-left: 3vw;
     margin-right: 3vw;
     line-height: 5vh;
-    max-height: 50vh;
+    max-height: 45vh;
     overflow-y: scroll;
     padding-top: 2vh;
     padding-bottom: 0;
-}
-
-#characters-row-guessed {
-    width: 100%;
-    display: table;
-    margin-top: 1%;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 .char-box {
@@ -87,11 +77,12 @@ ion-content {
     --background: rgb(228, 228, 228);
     --color: black;
     --border-radius: 50%;
+    --border-width: 2px;
+    --border-color: rgb(206, 206, 206);
+    --border-style: solid;
+    --box-shadow: none;
     border-radius: 50%;
     outline: none;
-    background-color: rgb(228, 228, 228);
-    border-radius: 50%;
-    border: 2px solid rgb(206, 206, 206);
 }
 
 @media (min-width: 992px) {
@@ -103,44 +94,48 @@ ion-content {
 }
 
 #navigation-and-hint-buttons {
-    height: 9vh;
+    height: 10vh;
     position: absolute;
     bottom: 0;
     width: 100vw;
-    vertical-align: middle;
 }
 
 @media (min-width: 992px) {
     #navigation-and-hint-buttons {
         width: 72vw;
     }
-} 
+}
 
 #previous-word-button {
     color: grey;
-    height: 8vh;
-    font-size: 8vh;
+    height: 9vh;
+    font-size: 7vh;
+    line-height: 9vh;
     float: left; 
-    margin-left: 5vw;
+    margin: 0 0 0 5vw;
 }
 
 #next-word-button {
     color: grey;
-    height: 8vh;
-    font-size: 8vh;
+    height: 9vh;
+    font-size: 7vh;
+    line-height: 9vh;
     float: right;
-    margin-right: 5vw;
+    margin: 0 5vw 0 0;
 }
 
 #hint-button {
     height: 8vh;
     width: 8vh;
-    margin: 0 auto;
+    margin: 1vh auto 0 auto;
     text-align: center;
     font-size: 7vh;
     outline: none;
     --background: white;
     --color: black;
+    --box-shadow: none;
+    --border-radius: 50%;
+    border-radius: 50%;
 }
 
 #give-up-button {
@@ -148,10 +143,13 @@ ion-content {
     width: 14vmin;
     margin: 1vw; 
     text-align: center;
-    font-size: 4vw;
+    font-size: 2vh;
     outline: none;
     --background: rgb(228, 228, 228);
     --color: black;
+    --box-shadow: none;
+    --border-radius: 50%;
+    border-radius: 50%;
 }
 
 @media (min-width: 1200px) and (max-width: 1600px) {
@@ -166,10 +164,23 @@ ion-content {
     }
 }
 
+#footer {
+    visibility:hidden;
+    height: 40vmin;
+}
+
+@media (min-width: 992px) {
+    #footer {
+        height: 18vmin;
+        width: 72vw;
+    }
+}
+
 #chars {
     height: 24vmin;
     width: 100vw;
     float: none;
+    transition: all .5s;
 }
 
 @media (min-width: 992px) {
