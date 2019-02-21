@@ -18,7 +18,7 @@ export class AccountPage implements OnInit {
     user = {};
 
     constructor(private storage: Storage, private helper: JwtHelperService, private authService: AuthService, private httpService: HttpService,
-                private alertController: AlertController,private router: Router) {
+                private alertController: AlertController, private router: Router) {
     }
 
     ngOnInit() {
@@ -38,14 +38,23 @@ export class AccountPage implements OnInit {
     async deleteAccount() {
         let alert = await this.alertController.create({
             message: 'Are you sure you want to delete your account?',
+            inputs: [
+                {
+
+                    placeholder: 'You password',
+                    name: 'password',
+
+                }],
             buttons: [
                 {
                     text: 'Delete',
-                    handler: () => {
+                    handler: (data) => {
                         alert.dismiss(true);
                         this.httpService.doPost('http://165.227.159.35/user/deleteAccount')
                             .subscribe(res => {
                                 return this.authService.logout();
+                            },err=>{
+                                this.showAlert(err.error)
                             })
                     }
                 }, {
@@ -55,8 +64,8 @@ export class AccountPage implements OnInit {
                         return false;
                     }
                 }
-            ]
-        });
+            ]}
+        )
         return await alert.present();
     }
 
@@ -67,5 +76,13 @@ export class AccountPage implements OnInit {
 
     logout() {
         this.authService.logout();
+    }
+
+    showAlert(res) {
+        let alert = this.alertController.create({
+            message: res.msg,
+            // header: 'User deleting',
+        });
+        alert.then(alert => alert.present());
     }
 }
