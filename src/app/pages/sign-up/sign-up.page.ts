@@ -20,8 +20,8 @@ export class SignUpPage implements OnInit {
 
     ngOnInit() {
         this.credentialsForm = this.formBuilder.group({
-            email: ['', [Validators.required, Validators.email]],
-            password: ['', [Validators.required, Validators.minLength(6)]]
+            email: ['', [Validators.required]],
+            password: ['', [Validators.required]]
         });
     }
     register() {
