@@ -3,7 +3,7 @@ import { LoadingController, IonItemSliding, AlertController } from '@ionic/angul
 import { Router } from '@angular/router';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
-import { LessonDeleteService } from 'src/app/services/lesson-delete.service';
+import { LessonDeleteService } from 'src/app/services/lesson-delete/lesson-delete.service';
 
 @Component({
 	selector: 'page-home',
@@ -35,14 +35,13 @@ export class HomePage implements OnInit {
 				{
 					text: 'Cancel',
 					role: 'cancel',
-					handler: () => { 
-						console.log(lessonID);
+					handler: () => {
 						slidingItem.close();
 					}
 				},
 				{
 					text: 'Delete',
-					handler: () => {
+					handler: () => { 
 						slidingItem.close();
 
 						this.lessonDeleteService.delete(lessonID);
