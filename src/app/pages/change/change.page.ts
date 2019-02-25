@@ -33,7 +33,7 @@ export class ChangePage implements OnInit {
     changePassword() {
         this.submitted = true;
         if (this.credentialsForm.valid) {
-            this.httpService.doPost('http://165.227.159.35/user/changePassword', this.credentialsForm.value).subscribe(res => {
+            this.httpService.doPost('http://165.227.159.35/api/user/changePassword', this.credentialsForm.value).subscribe(res => {
                 this.showAlert(res);
             });
         }

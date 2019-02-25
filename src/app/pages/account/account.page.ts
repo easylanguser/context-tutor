@@ -13,9 +13,10 @@ const TOKEN_KEY = 'access_token';
     templateUrl: './account.page.html',
     styleUrls: ['./account.page.scss'],
 })
+
+
 export class AccountPage implements OnInit {
 
-    user = {};
 
     constructor(private storage: Storage, private helper: JwtHelperService, private authService: AuthService, private httpService: HttpService,
                 private alertController: AlertController, private router: Router) {
@@ -29,8 +30,6 @@ export class AccountPage implements OnInit {
         this.storage.get(TOKEN_KEY).then(token => {
             if (token) {
                 let decoded = this.helper.decodeToken(token);
-                this.user['email'] = decoded.email;
-
             }
         });
     }
@@ -50,7 +49,7 @@ export class AccountPage implements OnInit {
                     text: 'Delete',
                     handler: (data) => {
                         alert.dismiss(true);
-                        this.httpService.doPost('http://165.227.159.35/user/deleteAccount')
+                        this.httpService.doPost('http://165.227.159.35/api/user/deleteAccount',data)
                             .subscribe(res => {
                                 return this.authService.logout();
                             },err=>{

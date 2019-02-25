@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';  
+import { Observable } from 'rxjs';
 import { forkJoin } from 'rxjs';
 import {HttpService} from "../http/rest/http.service";
 
-const apiUrl = 'http://165.227.159.35/lessons/getLessons';
+const apiUrl = 'http://165.227.159.35/api/lessons/getLessons';
 
 @Injectable({
   providedIn: 'root'

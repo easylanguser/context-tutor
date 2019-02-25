@@ -17,7 +17,7 @@ export class UserService implements OnInit{
     }
 
     sendPassResetRequest(email: string): Observable<any> {
-        return this.http.post(`${this.url}/user/sendPassword`, email)
+        return this.http.post(`${this.url}/api/user/sendPassword`, email)
     }
 
 }

@@ -44,7 +44,7 @@ export class AuthService {
     }
 
     register(credentials) {
-        return this.http.post(`${this.url}/auth/register`, credentials).pipe(
+        return this.http.post(`${this.url}/api/auth/register`, credentials).pipe(
             catchError(e => {
                 this.showAlert(e.error.msg);
                 throw new Error(e);
@@ -53,7 +53,7 @@ export class AuthService {
     }
 
     login(credentials) {
-        return this.http.post(`${this.url}/auth/login`, credentials)
+        return this.http.post(`${this.url}/api/auth/login`, credentials)
             .pipe(
                 tap(res => {
                     this.storageService.set(TOKEN_KEY, res['token']);
