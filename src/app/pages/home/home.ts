@@ -26,10 +26,6 @@ export class HomePage implements OnInit  {
         this.getData().then(res => res)
     }
 
-	tryAgain(lessonID: number) {
-		console.log("TODO: try again implementation");
-	}
-
 	deleteItem(slidingItem: IonItemSliding, lessonID: number) {
 		slidingItem.close();
 
