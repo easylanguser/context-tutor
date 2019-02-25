@@ -25,6 +25,11 @@ export class HttpService {
         return this.http.get(url, headers)
     }
 
+    doDelete(url: string): Observable<any> {
+        const headers = this.addHeaders();
+        return this.http.delete(url, headers)
+    }
+
     addHeaders() {
         const token = this.authService.token;
         const headers = new HttpHeaders({'Content-Type': 'application/json','Authorization':token});
