@@ -22,8 +22,8 @@ export class LoginPage {
 
     ngOnInit() {
         this.credentialsForm = this.formBuilder.group({
-            email: ['', [Validators.required]],
-            password: ['', [Validators.required]]
+            email: ['', [Validators.required,Validators.pattern("[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}")]],
+            password: ['', [Validators.required, Validators.minLength(6)]]
         });
     }
 

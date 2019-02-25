@@ -1,40 +1,46 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
 
-    <ion-title>Sign up</ion-title>
-  </ion-toolbar>
+        <ion-title>Sign up</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <form [formGroup]="credentialsForm" (ngSubmit)="register()">
+    <form [formGroup]="credentialsForm" (ngSubmit)="register()">
 
-    <ion-item>
-      <ion-label position="floating">Email</ion-label>
-      <ion-input type="email" formControlName="email"></ion-input>
-    </ion-item>
+        <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" formControlName="email"></ion-input>
+        </ion-item>
 
-    <div *ngIf="submitted && f.email.errors" class="auth-forms">
-      <div *ngIf="f.email.errors.required">this field is required</div>
-    </div>
+        <div *ngIf="submitted && f.email.errors" class="auth-forms">
+            <div *ngIf="f.email.errors.required">this field is required</div>
+        </div>
+        <div *ngIf="f.email.errors && f.email.touched && !f.email.errors.required && submitted" class="auth-forms">
+            <div>You provide invalid email</div>
+        </div>
 
-    <ion-item>
-      <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" formControlName="password" required></ion-input>
-    </ion-item>
+        <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" formControlName="password" required></ion-input>
+        </ion-item>
 
-    <div *ngIf="submitted && f.password.errors" class="auth-forms">
-      <div *ngIf="f.password.errors.required">this field is required</div>
-    </div>
+        <div *ngIf="submitted && f.password.errors" class="auth-forms">
+            <div *ngIf="f.password.errors.required">this field is required</div>
+        </div>
+        <div *ngIf="f.password.errors && f.password.touched && !f.password.errors.required && submitted" class="auth-forms">
+            <div>Password must be more than 6 chars</div>
+        </div>
 
-    <ion-button expand="full" type="submit">Sign up</ion-button>
-  </form>
+        <ion-button expand="full" type="submit">Sign up</ion-button>
+    </form>
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
-    <ion-title text-center>Have already registered? <a (click)="toSignIn()">Sign in</a></ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title text-center>Have already registered? <a (click)="toSignIn()">Sign in</a></ion-title>
+    </ion-toolbar>
 </ion-footer>
