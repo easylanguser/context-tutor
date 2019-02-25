@@ -6,15 +6,15 @@ import { HttpService } from "../http/rest/http.service";
 const apiUrl = 'http://165.227.159.35/api/sentences/getLessonSentences?lessonId=';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 
 export class LessonByNameService {
 
-  constructor(private httpService: HttpService) { }
+	constructor(private httpService: HttpService) { }
 
-  getData(lessonId: number): Observable<any> {
-    let response = this.httpService.doGet(apiUrl + lessonId);
-    return forkJoin([response]);
-  }
+	getData(lessonId: number): Observable<any> {
+		let response = this.httpService.doGet(apiUrl + lessonId);
+		return forkJoin([response]);
+	}
 }

@@ -1,15 +1,16 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {LoadingController, IonItemSliding} from '@ionic/angular';
-import {Router} from '@angular/router';
-import {Lesson} from 'src/app/models/lesson';
-import {LessonsService} from 'src/app/services/lessons-data/lessons-data.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { LoadingController, IonItemSliding, AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { Lesson } from 'src/app/models/lesson';
+import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
+import { LessonDeleteService } from 'src/app/services/lesson-delete/lesson-delete.service';
 
 @Component({
-    selector: 'page-home',
-    templateUrl: 'home.html',
-    styleUrls: ['home.scss']
+	selector: 'page-home',
+	templateUrl: 'home.html',
+	styleUrls: ['home.scss']
 })
-export class HomePage implements OnInit  {
+export class HomePage implements OnInit {
 
 	displayedLessons: Lesson[];
 	clearSegmentBoolean: boolean;
@@ -17,32 +18,49 @@ export class HomePage implements OnInit  {
 	// Week, month and year in milliseconds
 	periods: number[] = [604800000, 2592000000, 31536000000];
 
-    constructor(private loadingController: LoadingController,
-                private router: Router,
-                private lessonService: LessonsService) {
-    }
+	constructor(private loadingController: LoadingController,
+		private router: Router,
+		private lessonService: LessonsService,
+		private alertCtrl: AlertController,
+		private lessonDeleteService: LessonDeleteService) { }
 
-    ngOnInit() {
-        this.getData().then(res => res)
-    }
-
-	tryAgain(lessonID: number) {
-		console.log("TODO: try again implementation");
+	ngOnInit() {
+		this.getData().then(res => res)
 	}
 
-	deleteItem(slidingItem: IonItemSliding, lessonID: number) {
-		slidingItem.close();
+	async deleteItem(slidingItem: IonItemSliding, lessonID: number) {
+		let alert = await this.alertCtrl.create({
+			message: 'Are you sure you want to delete this lesson?',
+			buttons: [
+				{
+					text: 'Cancel',
+					role: 'cancel',
+					handler: () => {
+						slidingItem.close();
+					}
+				},
+				{
+					text: 'Delete',
+					handler: () => { 
+						slidingItem.close();
 
-		let i = 0;
-		for (i; i < this.displayedLessons.length; i++) {
-			if (this.displayedLessons[i].id === lessonID) {
-				break;
-			}
-		}
+						this.lessonDeleteService.delete(lessonID);
 
-		if (i !== this.displayedLessons.length) {
-			this.displayedLessons.splice(i, 1);
-		}
+						let i = 0;
+						for (i; i < this.displayedLessons.length; i++) {
+							if (this.displayedLessons[i].id === lessonID) {
+								break;
+							}
+						}
+
+						if (i !== this.displayedLessons.length) {
+							this.displayedLessons.splice(i, 1);
+						}
+					}
+				}
+			]
+		});
+		await alert.present();
 	}
 
 	async filterDate(periodNumber: number) {
@@ -77,14 +95,14 @@ export class HomePage implements OnInit  {
 	}
 
 	// Get list of lessons, add them to displayed and to lessons data service
-    private async getData() {
-        const loading = await this.loadingController.create({
-            message: 'Loading'
-        });
-        await loading.present();
-        this.displayedLessons = this.lessonService.getLessons()
-        loading.dismiss();
-    }
+	private async getData() {
+		const loading = await this.loadingController.create({
+			message: 'Loading'
+		});
+		await loading.present();
+		this.displayedLessons = this.lessonService.getLessons()
+		loading.dismiss();
+	}
 
 	// Go to selected lesson page
 	openLesson(lessonID) {
