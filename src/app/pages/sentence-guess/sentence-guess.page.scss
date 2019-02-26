@@ -30,10 +30,9 @@ ion-content {
     .md :host #next-sentence-text {
         font-size: 2vmin;
     }
-    
     #next-sentence-icon {
         font-size: 3vh;
-    }   
+    }
 }
 
 @media (min-width: 1px) and (max-width: 600px) {
@@ -84,7 +83,7 @@ ion-content {
     height: 9vh;
     font-size: 7vh;
     line-height: 9vh;
-    float: left; 
+    float: left;
     margin: 0 0 0 5vw;
 }
 
@@ -114,7 +113,7 @@ ion-content {
 #give-up-button {
     height: 14vmin;
     width: 14vmin;
-    margin: 1vw; 
+    margin: 1vw;
     text-align: center;
     font-size: 2vh;
     outline: none;
@@ -138,7 +137,7 @@ ion-content {
 }
 
 #footer {
-    visibility:hidden;
+    visibility: hidden;
     height: 40vmin;
 }
 
@@ -156,8 +155,7 @@ ion-content {
     transition: all .5s;
 }
 
-.card
-{
+.card {
     display: inline-block;
     height: 23vw;
     width: 23vw;
@@ -171,8 +169,7 @@ ion-content {
 }
 
 .front,
-.back
-{
+.back {
     display: flex;
     width: 100%;
     height: 100%;
@@ -181,21 +178,26 @@ ion-content {
     align-items: center;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    border: 2px solid rgb(206, 206, 206);
 }
 
-.front
-{
-    color: #fff;
-    background: #09416e;
+@media (min-width: 992px) {
+    .card {
+        height: 13vh;
+        width: 13vh;
+        font-size: 9vh;
+    }
 }
 
-.back
-{
+.front {
+    background: rgb(228, 228, 228);
+}
+
+.back {
     position: absolute;
     top: 0;
     left: 0;
-    color: #2196f3;
-    background: rgb(107, 25, 25);
+    background: rgb(228, 228, 228);
     transform: rotateY(180deg);
     -webkit-transform: rotateY(180deg);
 }
@@ -206,7 +208,6 @@ ion-content {
         width: 58vw;
         float: left;
     }
-
     #give-up-button-container {
         width: 14vw;
         float: right;
