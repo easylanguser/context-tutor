@@ -5,6 +5,7 @@ import { UtilsService } from '../../services/utils/utils.service';
 import { ToastController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsService } from "src/app/services/lessons-data/lessons-data.service";
+import * as anime from 'animejs';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -27,12 +28,17 @@ export class SentenceGuessPage implements OnInit {
 	private toastIsShown: boolean; // Single toast flag
 	private hintIsClicked: boolean = false;
 	displayButtons: boolean = true;
+	updateFrontOrBack: boolean = true;
 
 	// 3 random characters with one correct one
 	firstChar: string;
 	secondChar: string;
 	thirdChar: string;
 	fourthChar: string;
+	firstCharBack: string;
+	secondCharBack: string;
+	thirdCharBack: string;
+	fourthCharBack: string;
 
 	constructor(private route: ActivatedRoute,
 		private loadingController: LoadingController,
@@ -50,6 +56,18 @@ export class SentenceGuessPage implements OnInit {
 	// TODO: change statistics manipulation
 	logStat() {
 		console.log(this.curSentence().statistics);
+	}
+
+	animateFlip() {
+		anime({
+			targets: [document.querySelector("#first-char-box"),
+			document.querySelector("#second-char-box"),
+			document.querySelector("#third-char-box"),
+			document.querySelector("#fourth-char-box")],
+			rotateY: { value: '+=180', delay: 0 },
+			easing: 'easeInOutSine',
+			duration: 500
+		});
 	}
 
 	// Get current Sentence object from service
@@ -221,11 +239,11 @@ export class SentenceGuessPage implements OnInit {
 	hintClick() {
 		if (!this.curSentence().isSolved && !this.hintIsClicked) {
 			++this.curSentence().statistics.hintUsages; // Statistics
-			if (this.curCorrectChar().toUpperCase() === this.firstChar) {
+			if (this.curCorrectChar().toUpperCase() === (this.updateFrontOrBack ? this.firstChar: this.firstCharBack)) {
 				this.highlightClickedCharBox(1, '0px 0px 8px 0px rgba(254, 241, 96, 1)');
-			} else if (this.curCorrectChar().toUpperCase() === this.secondChar) {
+			} else if (this.curCorrectChar().toUpperCase() === (this.updateFrontOrBack ? this.secondChar: this.secondCharBack)) {
 				this.highlightClickedCharBox(2, '0px 0px 8px 0px rgba(254, 241, 96, 1)');
-			} else if (this.curCorrectChar().toUpperCase() === this.thirdChar) {
+			} else if (this.curCorrectChar().toUpperCase() === (this.updateFrontOrBack ? this.thirdChar : this.thirdCharBack)) {
 				this.highlightClickedCharBox(3, '0px 0px 8px 0px rgba(254, 241, 96, 1)');
 			} else {
 				this.highlightClickedCharBox(4, '0px 0px 8px 0px rgba(254, 241, 96, 1)');
@@ -236,22 +254,25 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	firstCharBoxClick() {
-		const event = new KeyboardEvent('ev1', { key: this.firstChar.toLowerCase() });
+		const event = new KeyboardEvent('ev1', 
+			{ key: (this.updateFrontOrBack ? this.firstChar : this.firstCharBack).toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
 
 	secondCharBoxClick() {
-		const event = new KeyboardEvent('ev2', { key: this.secondChar.toLowerCase() });
+		const event = new KeyboardEvent('ev2', 
+			{ key: (this.updateFrontOrBack ? this.secondChar : this.secondCharBack).toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
 
 	thirdCharBoxClick() {
-		const event = new KeyboardEvent('ev3', { key: this.thirdChar.toLowerCase() });
+		const event = new KeyboardEvent('ev3', 
+			{ key: (this.updateFrontOrBack ? this.thirdChar : this.thirdCharBack).toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
 
 	fourthCharBoxClick() {
-		const event = new KeyboardEvent('ev4', { key: this.fourthChar.toLowerCase() });
+		const event = new KeyboardEvent('ev4', { key: (this.updateFrontOrBack ? this.fourthChar : this.fourthCharBack).toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
 
@@ -270,64 +291,81 @@ export class SentenceGuessPage implements OnInit {
 
 	// Generate 3 random characters from alphabet and random position for correct character
 	private generateRandomCharacters() {
-        const correctCharBoxIndex = Math.floor(Math.random() * 4) + 1;
+		const correctCharBoxIndex = Math.floor(Math.random() * 4) + 1;
 		const correctChar = this.curCorrectChar().toUpperCase();
 		const correctCharIndexInAlphabet = this.alphabet.indexOf(correctChar);
-        let vowelsPositions = [0, 4, 8, 14, 20, 24];
-        let firstRand: number, secondRand: number, thirdRand: number, fourthRand: number;
-        let vowelIsGuessed: boolean = vowelsPositions.indexOf(correctCharIndexInAlphabet) !== -1;
- 
-        if (vowelIsGuessed) {
-            do {
-                firstRand = this.randomAlphabetIndex();
-            } while (firstRand === correctCharIndexInAlphabet);
- 
-            do {
-                secondRand = this.randomAlphabetIndex();
-            } while (secondRand === firstRand || secondRand === correctCharIndexInAlphabet);
- 
-            do {
-                thirdRand = this.randomAlphabetIndex();
-			} while (thirdRand === firstRand || thirdRand === secondRand || 
+		let vowelsPositions = [0, 4, 8, 14, 20, 24];
+		let firstRand: number, secondRand: number, thirdRand: number, fourthRand: number;
+		let vowelIsGuessed: boolean = vowelsPositions.indexOf(correctCharIndexInAlphabet) !== -1;
+
+		this.updateFrontOrBack = !this.updateFrontOrBack;
+
+		if (vowelIsGuessed) {
+			do {
+				firstRand = this.randomAlphabetIndex();
+			} while (firstRand === correctCharIndexInAlphabet);
+
+			do {
+				secondRand = this.randomAlphabetIndex();
+			} while (secondRand === firstRand || secondRand === correctCharIndexInAlphabet);
+
+			do {
+				thirdRand = this.randomAlphabetIndex();
+			} while (thirdRand === firstRand || thirdRand === secondRand ||
 				thirdRand === correctCharIndexInAlphabet);
- 
-            do {
-                fourthRand = this.randomAlphabetIndex();
-			} while (fourthRand === firstRand || fourthRand === secondRand || 
-				fourthRand === thirdRand || fourthRand === correctCharIndexInAlphabet);
-        } else {
-            do {
-                firstRand = this.randomAlphabetIndex();
-            } while (firstRand === correctCharIndexInAlphabet || vowelsPositions.indexOf(firstRand) !== -1);
- 
-            do {
-                secondRand = this.randomAlphabetIndex();
-			} while (secondRand === firstRand || secondRand === correctCharIndexInAlphabet || 
+
+			do {
+				fourthRand = this.randomAlphabetIndex();
+			} while (fourthRand === firstRand || fourthRand === secondRand ||
+			fourthRand === thirdRand || fourthRand === correctCharIndexInAlphabet);
+		} else {
+			do {
+				firstRand = this.randomAlphabetIndex();
+			} while (firstRand === correctCharIndexInAlphabet || vowelsPositions.indexOf(firstRand) !== -1);
+
+			do {
+				secondRand = this.randomAlphabetIndex();
+			} while (secondRand === firstRand || secondRand === correctCharIndexInAlphabet ||
 				vowelsPositions.indexOf(secondRand) !== -1);
- 
-            do {
-                thirdRand = this.randomAlphabetIndex();
-			} while (thirdRand === firstRand || thirdRand === secondRand || 
-				thirdRand === correctCharIndexInAlphabet || vowelsPositions.indexOf(thirdRand) !== -1);
- 
-            do {
-                fourthRand = this.randomAlphabetIndex();
-            } while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand ||
-                fourthRand === correctCharIndexInAlphabet || vowelsPositions.indexOf(fourthRand) !== -1);
-        }
- 
-        this.firstChar = correctCharBoxIndex === 1
-            ? correctChar
-            : this.alphabet[firstRand];
-        this.secondChar = correctCharBoxIndex === 2
-            ? correctChar
-            : this.alphabet[secondRand];
-        this.thirdChar = correctCharBoxIndex === 3
-            ? correctChar
-            : this.alphabet[thirdRand];
-        this.fourthChar = correctCharBoxIndex === 4
-            ? correctChar
-            : this.alphabet[fourthRand];
+
+			do {
+				thirdRand = this.randomAlphabetIndex();
+			} while (thirdRand === firstRand || thirdRand === secondRand ||
+			thirdRand === correctCharIndexInAlphabet || vowelsPositions.indexOf(thirdRand) !== -1);
+
+			do {
+				fourthRand = this.randomAlphabetIndex();
+			} while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand ||
+			fourthRand === correctCharIndexInAlphabet || vowelsPositions.indexOf(fourthRand) !== -1);
+		}
+
+		if (this.updateFrontOrBack) {
+			this.firstChar = correctCharBoxIndex === 1
+				? correctChar
+				: this.alphabet[firstRand];
+			this.secondChar = correctCharBoxIndex === 2
+				? correctChar
+				: this.alphabet[secondRand];
+			this.thirdChar = correctCharBoxIndex === 3
+				? correctChar
+				: this.alphabet[thirdRand];
+			this.fourthChar = correctCharBoxIndex === 4
+				? correctChar
+				: this.alphabet[fourthRand];
+		} else {
+			this.firstCharBack = correctCharBoxIndex === 1
+				? correctChar
+				: this.alphabet[firstRand];
+			this.secondCharBack = correctCharBoxIndex === 2
+				? correctChar
+				: this.alphabet[secondRand];
+			this.thirdCharBack = correctCharBoxIndex === 3
+				? correctChar
+				: this.alphabet[thirdRand];
+			this.fourthCharBack = correctCharBoxIndex === 4
+				? correctChar
+				: this.alphabet[fourthRand];
+		}
 	}
 
 	// Reset characters boxes highlighting and generate random characters
@@ -373,9 +411,8 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
-
+			this.animateFlip();
 			this.makeHintButtonActive();
-			this.displayButtons = false;
 
 			// Fill guessed character
 			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
@@ -408,10 +445,7 @@ export class SentenceGuessPage implements OnInit {
 					'?',
 					this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
 
-				setTimeout(() => {
-					this.refreshCharBoxes();
-					this.displayButtons = true;
-				}, 1000)
+				this.refreshCharBoxes();
 
 				return;
 			}
@@ -422,33 +456,30 @@ export class SentenceGuessPage implements OnInit {
 				++this.curWordIndex;
 			}
 
-			if (this.curCorrectChar().toUpperCase().charCodeAt(0) < 65 || 
+			if (this.curCorrectChar().toUpperCase().charCodeAt(0) < 65 ||
 				this.curCorrectChar().toUpperCase().charCodeAt(0) > 90) {
 				const event = new KeyboardEvent('evCorrect', { key: this.curCorrectChar().toUpperCase() });
 				this.handleKeyboardEvent(event);
 			}
 
-			setTimeout(() => {
-				this.refreshCharBoxes();
-				this.displayButtons = true;
-			}, 1000)
+			this.refreshCharBoxes();
 		} else {
 			++this.curSentence().statistics.wrongAnswers; // Statistics
 
 			switch (event.key) {
-				case this.firstChar.toLowerCase(): {
+				case (this.updateFrontOrBack ? this.firstChar : this.firstCharBack).toLowerCase(): {
 					this.highlightClickedCharBox(1, '0px 0px 8px 0px rgba(167, 1, 6, 1)');
 					break;
 				}
-				case this.secondChar.toLowerCase(): {
+				case (this.updateFrontOrBack ? this.secondChar : this.secondCharBack).toLowerCase(): {
 					this.highlightClickedCharBox(2, '0px 0px 8px 0px rgba(167, 1, 6, 1)');
 					break;
 				}
-				case this.thirdChar.toLowerCase(): {
+				case (this.updateFrontOrBack ? this.thirdChar : this.thirdCharBack).toLowerCase(): {
 					this.highlightClickedCharBox(3, '0px 0px 8px 0px rgba(167, 1, 6, 1)');
 					break;
 				}
-				case this.fourthChar.toLowerCase(): {
+				case (this.updateFrontOrBack ? this.fourthChar : this.fourthCharBack).toLowerCase(): {
 					this.highlightClickedCharBox(4, '0px 0px 8px 0px rgba(167, 1, 6, 1)');
 					break;
 				}

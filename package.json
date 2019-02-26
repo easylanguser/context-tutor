@@ -30,6 +30,8 @@
     "@ionic-native/vibration": "^5.0.0",
     "@ionic/angular": "^4.0.0",
     "@ionic/storage": "^2.2.0",
+    "@types/animejs": "^2.0.1",
+    "animejs": "^2.2.0",
     "chart.js": "^2.7.3",
     "com.telerik.plugins.nativepagetransitions": "^0.6.5",
     "cordova-android": "7.1.4",
