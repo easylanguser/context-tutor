@@ -167,6 +167,7 @@ export class SentenceGuessPage implements OnInit {
 
 			this.refreshCharBoxes();
 			this.makeHintButtonActive();
+			this.animateFlip();
 
 			++this.curSentence().statistics.wordSkips; // Statistics
 		}
@@ -199,6 +200,7 @@ export class SentenceGuessPage implements OnInit {
 
 			this.refreshCharBoxes();
 			this.makeHintButtonActive();
+			this.animateFlip();
 
 			++this.curSentence().statistics.wordSkips; // Statistics
 		}
@@ -220,6 +222,7 @@ export class SentenceGuessPage implements OnInit {
 			++this.curSentence().statistics.sentenceSkips; // Statistics
 			this.displayButtons = true;
 		}
+		this.animateFlip();
 	}
 
 	// Give up and show full sentence
