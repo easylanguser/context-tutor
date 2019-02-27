@@ -43,9 +43,9 @@ export class HomePage implements OnInit {
 					text: 'Delete',
 					handler: () => { 
 						slidingItem.close();
-
+						
 						this.lessonDeleteService.delete(lessonID);
-
+						
 						let i = 0;
 						for (i; i < this.displayedLessons.length; i++) {
 							if (this.displayedLessons[i].id === lessonID) {
@@ -100,7 +100,7 @@ export class HomePage implements OnInit {
 			message: 'Loading'
 		});
 		await loading.present();
-		this.displayedLessons = this.lessonService.getLessons()
+		this.displayedLessons = this.lessonService.getLessons();
 		loading.dismiss();
 	}
 

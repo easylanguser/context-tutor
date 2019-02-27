@@ -11,9 +11,10 @@ import {AuthService} from "../../auth/auth.service";
 })
 export class HttpService {
 
-    constructor(private authService: AuthService, private helper: JwtHelperService, private http: HttpClient) {
-
-    }
+    constructor(
+        private authService: AuthService, 
+        private helper: JwtHelperService, 
+        private http: HttpClient) {}
 
     doPost(url: string, body?: Object): Observable<any> {
         const headers = this.addHeaders();
@@ -25,9 +26,9 @@ export class HttpService {
         return this.http.get(url, headers)
     }
 
-    doDelete(url: string): Observable<any> {
+    doDelete(url: string) {
         const headers = this.addHeaders();
-        return this.http.delete(url, headers)
+        return this.http.delete(url, headers).toPromise();
     }
 
     addHeaders() {

@@ -11,8 +11,7 @@ export class LessonDeleteService {
 
 	constructor(private httpService: HttpService) { }
 
-	delete(lessonId: number): Observable<any> {
-		let response = this.httpService.doDelete(apiUrl + lessonId);
-		return forkJoin([response]);
+	delete(lessonId: number) {
+		this.httpService.doDelete(apiUrl + lessonId);
 	}
 }
