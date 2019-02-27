@@ -40,7 +40,7 @@
     margin-right: 3vw;
     line-height: 5vh;
     max-height: 45vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #navigation-and-hint-buttons {
@@ -196,14 +196,8 @@
     }
 }
 
-@media (min-width: 1200px) and (max-width: 1600px) {
+@media (min-width: 700px) {
     #give-up-button {
-        font-size: 3vw;
-    }
-}
-
-@media (min-width: 1600px) {
-    #give-up-button {
-        font-size: 2vw;
+        font-size: 3.5vmin;
     }
 }
