@@ -159,7 +159,7 @@ export class SentenceGuessPage implements OnInit {
 			do {
 				isNext ? ++this.curWordIndex : --this.curWordIndex;
 			} while ((isNext ? this.curWordIndex < this.curSentence().hiddenChars.length : this.curWordIndex > 0) &&
-				this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length - 1);
+				this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length);
 
 			if (this.curWordIndex === (isNext ? this.curSentence().hiddenChars.length : -1)) {
 				this.curWordIndex = savedNum;
@@ -382,12 +382,14 @@ export class SentenceGuessPage implements OnInit {
 				this.curCorrectChar(),
 				this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
 
-			if (this.curCharsIndexes[this.curWordIndex] !== this.curSentence().hiddenWord[this.curWordIndex][1] - 1) {
+			++this.curCharsIndexes[this.curWordIndex];
+
+			if (this.curCharsIndexes[this.curWordIndex] !== this.curSentence().hiddenWord[this.curWordIndex][1]) {
 				// If current word is not filled -> replace following char with '?'
 				this.sentenceShown = this.util.addCharByIndex(
 					this.sentenceShown,
 					'?',
-					this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex] + 1);
+					this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
 			} else {
 				do { // If current word is filled -> find first word, that is not filled
 					++this.curWordIndex;
@@ -399,8 +401,7 @@ export class SentenceGuessPage implements OnInit {
 							return;
 						}
 					}
-				} while (this.curCharsIndexes[this.curWordIndex] ===
-					this.curSentence().hiddenChars[this.curWordIndex].length - 1);
+				} while (this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length);
 
 				this.sentenceShown = this.util.addCharByIndex(
 					this.sentenceShown,
@@ -411,8 +412,6 @@ export class SentenceGuessPage implements OnInit {
 
 				return;
 			}
-
-			++this.curCharsIndexes[this.curWordIndex];
 
 			if (this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenWord[this.curWordIndex][1]) {
 				++this.curWordIndex;
