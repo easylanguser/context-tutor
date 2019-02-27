@@ -1,5 +1,10 @@
-ion-content {
-    text-align: center;
+.no-selection {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .ios :host #next-sentence-text {
@@ -26,33 +31,6 @@ ion-content {
     font-size: 14px;
 }
 
-@media (min-width: 810px) {
-    .md :host #next-sentence-text {
-        font-size: 2vmin;
-    }
-    #next-sentence-icon {
-        font-size: 3vh;
-    }
-}
-
-@media (min-width: 1px) and (max-width: 600px) {
-    #sentence-to-show {
-        font-size: 6vw;
-    }
-}
-
-@media (min-width: 600px) and (max-width: 992px) {
-    #sentence-to-show {
-        font-size: 4vw;
-    }
-}
-
-@media (min-width: 992px) {
-    #sentence-to-show {
-        font-size: 3vw;
-    }
-}
-
 #sentence-to-show {
     text-align: start;
     font-size: 4vh;
@@ -70,12 +48,6 @@ ion-content {
     position: absolute;
     bottom: 0;
     width: 100vw;
-}
-
-@media (min-width: 992px) {
-    #navigation-and-hint-buttons {
-        width: 72vw;
-    }
 }
 
 #previous-word-button {
@@ -99,8 +71,8 @@ ion-content {
 #hint-button {
     height: 8vh;
     width: 8vh;
-    margin: 1vh auto 0 auto;
-    text-align: center;
+    display: block;
+    margin: 0 auto;
     font-size: 7vh;
     outline: none;
     --background: white;
@@ -110,42 +82,9 @@ ion-content {
     border-radius: 50%;
 }
 
-#give-up-button {
-    height: 14vmin;
-    width: 14vmin;
-    margin: 1vw;
-    text-align: center;
-    font-size: 2vh;
-    outline: none;
-    --background: rgb(228, 228, 228);
-    --color: black;
-    --box-shadow: none;
-    --border-radius: 50%;
-    border-radius: 50%;
-}
-
-@media (min-width: 1200px) and (max-width: 1600px) {
-    #give-up-button {
-        font-size: 3vw;
-    }
-}
-
-@media (min-width: 1600px) {
-    #give-up-button {
-        font-size: 2vw;
-    }
-}
-
 #footer {
     visibility: hidden;
     height: 40vmin;
-}
-
-@media (min-width: 992px) {
-    #footer {
-        height: 18vmin;
-        width: 72vw;
-    }
 }
 
 #chars {
@@ -155,7 +94,7 @@ ion-content {
     transition: all .5s;
 }
 
-.card {
+.char-box {
     display: inline-block;
     height: 23vw;
     width: 23vw;
@@ -168,8 +107,7 @@ ion-content {
     -webkit-transform-style: preserve-3d;
 }
 
-.front,
-.back {
+.front, .back {
     display: flex;
     width: 100%;
     height: 100%;
@@ -179,14 +117,6 @@ ion-content {
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     border: 2px solid rgb(206, 206, 206);
-}
-
-@media (min-width: 992px) {
-    .card {
-        height: 13vh;
-        width: 13vh;
-        font-size: 9vh;
-    }
 }
 
 .front {
@@ -202,18 +132,6 @@ ion-content {
     -webkit-transform: rotateY(180deg);
 }
 
-@media (min-width: 992px) {
-    #chars {
-        height: 18vmin;
-        width: 58vw;
-        float: left;
-    }
-    #give-up-button-container {
-        width: 14vw;
-        float: right;
-    }
-}
-
 #give-up-button-container {
     height: 16vmin;
     display: flex;
@@ -221,11 +139,71 @@ ion-content {
     justify-content: center;
 }
 
-.no-selection {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+#give-up-button {
+    height: 14vmin;
+    width: 14vmin;
+    margin: 1vw;
+    font-size: 2vh;
+    outline: none;
+    --background: rgb(228, 228, 228);
+    --color: black;
+    --box-shadow: none;
+    --border-radius: 50%;
+    border-radius: 50%;
+}
+
+@media (min-width: 1px) and (max-width: 600px) {
+    #sentence-to-show {
+        font-size: 6vw;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 992px) {
+    #sentence-to-show {
+        font-size: 4vw;
+    }
+}
+
+@media (min-width: 992px) {
+    #chars {
+        height: 18vmin;
+        width: 58vw;
+        float: left;
+    }
+
+    #give-up-button-container {
+        width: 14vw;
+        float: right;
+    }
+
+    .char-box {
+        height: 13vh;
+        width: 13vh;
+        font-size: 9vh;
+    }
+
+    #footer {
+        height: 18vmin;
+        width: 72vw;
+    }
+
+    #navigation-and-hint-buttons {
+        width: 72vw;
+    }
+
+    #sentence-to-show {
+        font-size: 3vw;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1600px) {
+    #give-up-button {
+        font-size: 3vw;
+    }
+}
+
+@media (min-width: 1600px) {
+    #give-up-button {
+        font-size: 2vw;
+    }
 }

@@ -20,7 +20,7 @@
       < </p> <p id="next-word-button" (click)="nextWordClick()">
         >
     </p>
-    <ion-button shape="round" id="hint-button" (click)="hintClick()">
+    <ion-button text-center shape="round" id="hint-button" (click)="hintClick()">
       ?
     </ion-button>
   </div>
@@ -30,25 +30,25 @@
   <ion-toolbar mode="ios" no-padding class="no-selection">
     <div [style.opacity]="this.displayButtons ? '1' : '0'"
       [style.visibility]="this.displayButtons ? 'visible' : 'hidden'" id="chars">
-      <div class="card" id="first-char-box" (click)="firstCharBoxClick()">
+      <div class="char-box" id="first-char-box" (click)="firstCharBoxClick()">
         <div class="front">{{firstCharBack}}</div>
         <div class="back">{{firstChar}}</div>
       </div>
-      <div class="card" id="second-char-box" (click)="secondCharBoxClick()">
+      <div class="char-box" id="second-char-box" (click)="secondCharBoxClick()">
         <div class="front">{{secondCharBack}}</div>
         <div class="back">{{secondChar}}</div>
       </div>
-      <div class="card" id="third-char-box" (click)="thirdCharBoxClick()">
+      <div class="char-box" id="third-char-box" (click)="thirdCharBoxClick()">
         <div class="front">{{thirdCharBack}}</div>
         <div class="back">{{thirdChar}}</div>
       </div>
-      <div class="card" id="fourth-char-box" (click)="fourthCharBoxClick()">
+      <div class="char-box" id="fourth-char-box" (click)="fourthCharBoxClick()">
         <div class="front">{{fourthCharBack}}</div>
         <div class="back">{{fourthChar}}</div>
       </div>
     </div>
     <div id="give-up-button-container">
-      <ion-button shape="round" (click)="giveUpClick()" id="give-up-button">
+      <ion-button text-center shape="round" (click)="giveUpClick()" id="give-up-button">
         Give<br>up
       </ion-button>
     </div>
