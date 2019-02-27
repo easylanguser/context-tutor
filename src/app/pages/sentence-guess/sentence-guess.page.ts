@@ -28,7 +28,7 @@ export class SentenceGuessPage implements OnInit {
 	private toastIsShown: boolean; // Single toast flag
 	private hintIsClicked: boolean = false;
 	displayButtons: boolean = true;
-	updateFrontOrBack: boolean = true;
+	updateFrontOrBack: boolean = false;
 
 	// 3 random characters with one correct one
 	firstChar: string;
@@ -167,7 +167,6 @@ export class SentenceGuessPage implements OnInit {
 
 			this.refreshCharBoxes();
 			this.makeHintButtonActive();
-			this.animateFlip();
 
 			++this.curSentence().statistics.wordSkips; // Statistics
 		}
@@ -200,7 +199,6 @@ export class SentenceGuessPage implements OnInit {
 
 			this.refreshCharBoxes();
 			this.makeHintButtonActive();
-			this.animateFlip();
 
 			++this.curSentence().statistics.wordSkips; // Statistics
 		}
@@ -222,7 +220,6 @@ export class SentenceGuessPage implements OnInit {
 			++this.curSentence().statistics.sentenceSkips; // Statistics
 			this.displayButtons = true;
 		}
-		this.animateFlip();
 	}
 
 	// Give up and show full sentence
@@ -369,6 +366,7 @@ export class SentenceGuessPage implements OnInit {
 				? correctChar
 				: this.alphabet[fourthRand];
 		}
+		this.animateFlip();
 	}
 
 	// Reset characters boxes highlighting and generate random characters
@@ -414,7 +412,6 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
-			this.animateFlip();
 			this.makeHintButtonActive();
 
 			// Fill guessed character
