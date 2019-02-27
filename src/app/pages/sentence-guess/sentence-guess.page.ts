@@ -338,6 +338,7 @@ export class SentenceGuessPage implements OnInit {
 
 		if (this.curWordIndex === this.curSentence().hiddenWord.length) {
 			this.curSentence().isSolved = true;
+			this.resetColors();
 			return;
 		}
 
@@ -375,6 +376,7 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
+			++this.curSentence().statistics.correctAnswers; // Statistics
 			this.makeHintButtonActive();
 
 			// Fill guessed character
@@ -447,8 +449,9 @@ export class SentenceGuessPage implements OnInit {
 		this.toastIsShown = true;
 		const toast = await this.toastController.create({
 			message: 'Sentence is filled',
-			position: 'middle',
+			position: 'bottom',
 			duration: 600,
+			animated: true,
 			cssClass: 'toast-container'
 		});
 		toast.present();
