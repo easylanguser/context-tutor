@@ -28,13 +28,14 @@ export class SentenceGuessPage implements OnInit {
 	private toastIsShown: boolean; // Single toast flag
 	private hintIsClicked: boolean = false;
 	displayButtons: boolean = true;
-	updateFrontOrBack: boolean = false;
+	updateFront: boolean = false;
 
 	// 3 random characters with one correct one
 	firstChar: string;
 	secondChar: string;
 	thirdChar: string;
 	fourthChar: string;
+
 	firstCharBack: string;
 	secondCharBack: string;
 	thirdCharBack: string;
@@ -82,10 +83,10 @@ export class SentenceGuessPage implements OnInit {
 
 	// Remove characters boxes highlighting
 	private resetColors() {
-		document.getElementById('first-char-box').style.boxShadow = 'none';
-		document.getElementById('second-char-box').style.boxShadow = 'none';
-		document.getElementById('third-char-box').style.boxShadow = 'none';
-		document.getElementById('fourth-char-box').style.boxShadow = 'none';
+		const boxesIDs = ['first-char-box', 'second-char-box', 'third-char-box', 'fourth-char-box'];
+		for (const id of boxesIDs) {
+			document.getElementById(id).style.boxShadow = 'none';
+		}
 	}
 
 	private async getData(showLoader: boolean) {
@@ -142,47 +143,25 @@ export class SentenceGuessPage implements OnInit {
 
 	// Go to following unfilled word
 	nextWordClick() {
-		if (!this.curSentence().isSolved && this.curWordIndex < this.curSentence().hiddenChars.length - 1) {
-			const savedNum = this.curWordIndex; // Save current word number in case switching cannot be done
-			do {
-				++this.curWordIndex;
-			} while (this.curWordIndex < this.curSentence().hiddenChars.length &&
-				this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length - 1);
-
-			// If end of sentence was reached
-			if (this.curWordIndex === this.curSentence().hiddenChars.length) {
-				this.curWordIndex = savedNum;
-				return;
-			}
-
-			this.sentenceShown = this.util.addCharByIndex(
-				this.sentenceShown,
-				'_',
-				this.curSentence().hiddenWord[this.curWordIndex - 1][0] + this.curCharsIndexes[this.curWordIndex - 1]);
-
-			this.sentenceShown = this.util.addCharByIndex(
-				this.sentenceShown,
-				'?',
-				this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
-
-			this.refreshCharBoxes();
-			this.makeHintButtonActive();
-
-			++this.curSentence().statistics.wordSkips; // Statistics
-		}
+		this.nextOrPreviousWordsHandle(true);
 	}
 
 	// Go to first previous unfilled word
 	previousWordClick() {
-		if (!this.curSentence().isSolved && this.curWordIndex > 0) {
+		this.nextOrPreviousWordsHandle(false);
+	}
+
+	nextOrPreviousWordsHandle(isNext: boolean) {
+		if (!this.curSentence().isSolved && (isNext ?
+			this.curWordIndex < this.curSentence().hiddenChars.length - 1 :
+			this.curWordIndex > 0)) {
 			const savedNum = this.curWordIndex; // Save current word number in case switching cannot be done
 			do {
-				--this.curWordIndex;
-			} while (this.curWordIndex > 0 && this.curCharsIndexes[this.curWordIndex] ===
-			this.curSentence().hiddenChars[this.curWordIndex].length - 1);
+				isNext ? ++this.curWordIndex : --this.curWordIndex;
+			} while ((isNext ? this.curWordIndex < this.curSentence().hiddenChars.length : this.curWordIndex > 0) &&
+				this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length - 1);
 
-			// If end of sentence was reached
-			if (this.curWordIndex === -1) {
+			if (this.curWordIndex === (isNext ? this.curSentence().hiddenChars.length : -1)) {
 				this.curWordIndex = savedNum;
 				return;
 			}
@@ -190,7 +169,8 @@ export class SentenceGuessPage implements OnInit {
 			this.sentenceShown = this.util.addCharByIndex(
 				this.sentenceShown,
 				'_',
-				this.curSentence().hiddenWord[savedNum][0] + this.curCharsIndexes[savedNum]);
+				this.curSentence().hiddenWord[isNext ? this.curWordIndex - 1 : savedNum][0] +
+					this.curCharsIndexes[isNext ? this.curWordIndex - 1 : savedNum]);
 
 			this.sentenceShown = this.util.addCharByIndex(
 				this.sentenceShown,
@@ -239,14 +219,15 @@ export class SentenceGuessPage implements OnInit {
 	hintClick() {
 		if (!this.curSentence().isSolved && !this.hintIsClicked) {
 			++this.curSentence().statistics.hintUsages; // Statistics
-			if (this.curCorrectChar().toUpperCase() === (this.updateFrontOrBack ? this.firstChar: this.firstCharBack)) {
-				this.highlightClickedCharBox(1, '0px 0px 8px 0px rgba(254, 241, 96, 1)');
-			} else if (this.curCorrectChar().toUpperCase() === (this.updateFrontOrBack ? this.secondChar: this.secondCharBack)) {
-				this.highlightClickedCharBox(2, '0px 0px 8px 0px rgba(254, 241, 96, 1)');
-			} else if (this.curCorrectChar().toUpperCase() === (this.updateFrontOrBack ? this.thirdChar : this.thirdCharBack)) {
-				this.highlightClickedCharBox(3, '0px 0px 8px 0px rgba(254, 241, 96, 1)');
+			const yellowHighlight = '0px 0px 8px 0px rgba(254, 241, 96, 1)';
+			if (this.curCorrectChar().toUpperCase() === (this.updateFront ? this.firstChar : this.firstCharBack)) {
+				this.highlightClickedCharBox(1, yellowHighlight);
+			} else if (this.curCorrectChar().toUpperCase() === (this.updateFront ? this.secondChar : this.secondCharBack)) {
+				this.highlightClickedCharBox(2, yellowHighlight);
+			} else if (this.curCorrectChar().toUpperCase() === (this.updateFront ? this.thirdChar : this.thirdCharBack)) {
+				this.highlightClickedCharBox(3, yellowHighlight);
 			} else {
-				this.highlightClickedCharBox(4, '0px 0px 8px 0px rgba(254, 241, 96, 1)');
+				this.highlightClickedCharBox(4, yellowHighlight);
 			}
 			document.getElementById('hint-button').style.opacity = '0.5';
 			this.hintIsClicked = true;
@@ -254,25 +235,26 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	firstCharBoxClick() {
-		const event = new KeyboardEvent('ev1', 
-			{ key: (this.updateFrontOrBack ? this.firstChar : this.firstCharBack).toLowerCase() });
+		const event = new KeyboardEvent('ev1',
+			{ key: (this.updateFront ? this.firstChar : this.firstCharBack).toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
 
 	secondCharBoxClick() {
-		const event = new KeyboardEvent('ev2', 
-			{ key: (this.updateFrontOrBack ? this.secondChar : this.secondCharBack).toLowerCase() });
+		const event = new KeyboardEvent('ev2',
+			{ key: (this.updateFront ? this.secondChar : this.secondCharBack).toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
 
 	thirdCharBoxClick() {
-		const event = new KeyboardEvent('ev3', 
-			{ key: (this.updateFrontOrBack ? this.thirdChar : this.thirdCharBack).toLowerCase() });
+		const event = new KeyboardEvent('ev3',
+			{ key: (this.updateFront ? this.thirdChar : this.thirdCharBack).toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
 
 	fourthCharBoxClick() {
-		const event = new KeyboardEvent('ev4', { key: (this.updateFrontOrBack ? this.fourthChar : this.fourthCharBack).toLowerCase() });
+		const event = new KeyboardEvent('ev4',
+			{ key: (this.updateFront ? this.fourthChar : this.fourthCharBack).toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
 
@@ -298,48 +280,28 @@ export class SentenceGuessPage implements OnInit {
 		let firstRand: number, secondRand: number, thirdRand: number, fourthRand: number;
 		let vowelIsGuessed: boolean = vowelsPositions.indexOf(correctCharIndexInAlphabet) !== -1;
 
-		this.updateFrontOrBack = !this.updateFrontOrBack;
+		this.updateFront = !this.updateFront;
 
-		if (vowelIsGuessed) {
-			do {
-				firstRand = this.randomAlphabetIndex();
-			} while (firstRand === correctCharIndexInAlphabet);
+		do {
+			firstRand = this.randomAlphabetIndex();
+		} while (firstRand === correctCharIndexInAlphabet || (vowelIsGuessed ? false : vowelsPositions.indexOf(firstRand) !== -1));
 
-			do {
-				secondRand = this.randomAlphabetIndex();
-			} while (secondRand === firstRand || secondRand === correctCharIndexInAlphabet);
+		do {
+			secondRand = this.randomAlphabetIndex();
+		} while (secondRand === firstRand || secondRand === correctCharIndexInAlphabet ||
+			(vowelIsGuessed ? false : vowelsPositions.indexOf(secondRand) !== -1));
 
-			do {
-				thirdRand = this.randomAlphabetIndex();
-			} while (thirdRand === firstRand || thirdRand === secondRand ||
-				thirdRand === correctCharIndexInAlphabet);
+		do {
+			thirdRand = this.randomAlphabetIndex();
+		} while (thirdRand === firstRand || thirdRand === secondRand || thirdRand === correctCharIndexInAlphabet || 
+			(vowelIsGuessed ? false : vowelsPositions.indexOf(thirdRand) !== -1));
 
-			do {
-				fourthRand = this.randomAlphabetIndex();
-			} while (fourthRand === firstRand || fourthRand === secondRand ||
-			fourthRand === thirdRand || fourthRand === correctCharIndexInAlphabet);
-		} else {
-			do {
-				firstRand = this.randomAlphabetIndex();
-			} while (firstRand === correctCharIndexInAlphabet || vowelsPositions.indexOf(firstRand) !== -1);
+		do {
+			fourthRand = this.randomAlphabetIndex();
+		} while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand ||
+			fourthRand === correctCharIndexInAlphabet || (vowelIsGuessed ? false : vowelsPositions.indexOf(fourthRand) !== -1));
 
-			do {
-				secondRand = this.randomAlphabetIndex();
-			} while (secondRand === firstRand || secondRand === correctCharIndexInAlphabet ||
-				vowelsPositions.indexOf(secondRand) !== -1);
-
-			do {
-				thirdRand = this.randomAlphabetIndex();
-			} while (thirdRand === firstRand || thirdRand === secondRand ||
-			thirdRand === correctCharIndexInAlphabet || vowelsPositions.indexOf(thirdRand) !== -1);
-
-			do {
-				fourthRand = this.randomAlphabetIndex();
-			} while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand ||
-			fourthRand === correctCharIndexInAlphabet || vowelsPositions.indexOf(fourthRand) !== -1);
-		}
-
-		if (this.updateFrontOrBack) {
+		if (this.updateFront) {
 			this.firstChar = correctCharBoxIndex === 1
 				? correctChar
 				: this.alphabet[firstRand];
@@ -366,6 +328,7 @@ export class SentenceGuessPage implements OnInit {
 				? correctChar
 				: this.alphabet[fourthRand];
 		}
+
 		this.animateFlip();
 	}
 
@@ -426,8 +389,7 @@ export class SentenceGuessPage implements OnInit {
 					'?',
 					this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex] + 1);
 			} else {
-				// If current word is filled -> find first word, that is not filled
-				do {
+				do { // If current word is filled -> find first word, that is not filled
 					++this.curWordIndex;
 					if (this.curWordIndex === this.curSentence().hiddenChars.length) {
 						if (this.sentenceShown !== this.curSentence().text) {
@@ -456,31 +418,26 @@ export class SentenceGuessPage implements OnInit {
 				++this.curWordIndex;
 			}
 
-			if (this.curCorrectChar().toUpperCase().charCodeAt(0) < 65 ||
-				this.curCorrectChar().toUpperCase().charCodeAt(0) > 90) {
-				const event = new KeyboardEvent('evCorrect', { key: this.curCorrectChar().toUpperCase() });
-				this.handleKeyboardEvent(event);
-			}
-
 			this.refreshCharBoxes();
 		} else {
 			++this.curSentence().statistics.wrongAnswers; // Statistics
 
+			const redHighlight = '0px 0px 8px 0px rgba(167, 1, 6, 1)';
 			switch (event.key) {
-				case (this.updateFrontOrBack ? this.firstChar : this.firstCharBack).toLowerCase(): {
-					this.highlightClickedCharBox(1, '0px 0px 8px 0px rgba(167, 1, 6, 1)');
+				case (this.updateFront ? this.firstChar : this.firstCharBack).toLowerCase(): {
+					this.highlightClickedCharBox(1, redHighlight);
 					break;
 				}
-				case (this.updateFrontOrBack ? this.secondChar : this.secondCharBack).toLowerCase(): {
-					this.highlightClickedCharBox(2, '0px 0px 8px 0px rgba(167, 1, 6, 1)');
+				case (this.updateFront ? this.secondChar : this.secondCharBack).toLowerCase(): {
+					this.highlightClickedCharBox(2, redHighlight);
 					break;
 				}
-				case (this.updateFrontOrBack ? this.thirdChar : this.thirdCharBack).toLowerCase(): {
-					this.highlightClickedCharBox(3, '0px 0px 8px 0px rgba(167, 1, 6, 1)');
+				case (this.updateFront ? this.thirdChar : this.thirdCharBack).toLowerCase(): {
+					this.highlightClickedCharBox(3, redHighlight);
 					break;
 				}
-				case (this.updateFrontOrBack ? this.fourthChar : this.fourthCharBack).toLowerCase(): {
-					this.highlightClickedCharBox(4, '0px 0px 8px 0px rgba(167, 1, 6, 1)');
+				case (this.updateFront ? this.fourthChar : this.fourthCharBack).toLowerCase(): {
+					this.highlightClickedCharBox(4, redHighlight);
 					break;
 				}
 			}
