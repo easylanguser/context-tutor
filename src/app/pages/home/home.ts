@@ -16,7 +16,7 @@ export class HomePage implements OnInit {
 	clearSegmentBoolean: boolean;
 
 	// Week, month and year in milliseconds
-	periods: number[] = [604800000, 2592000000, 31536000000];
+	periods: number[] = [1209600000, 5184000000, 63072000000];
 
 	constructor(private loadingController: LoadingController,
 		private router: Router,
@@ -100,7 +100,9 @@ export class HomePage implements OnInit {
 			message: 'Loading'
 		});
 		await loading.present();
+		
 		this.displayedLessons = this.lessonService.getLessons();
+
 		loading.dismiss();
 	}
 

@@ -10,7 +10,7 @@
 
 .sentence-card {
     width: 100%;
-    height: 12vh;
+    height: 10vh;
     background-color: var(--ion-color-step-50);
     color: var(--ion-color-step-850);
     margin-bottom: 0.2vh;
@@ -20,45 +20,22 @@
 }
 
 .sentence-text-div {
-    width: 70vw;
-    overflow: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     display: table-cell;
     position: relative;
     vertical-align: top;
-    padding-top: 2vh;
-    padding-left: 4vw;
-    padding-right: 2vw;
+    padding: 1vh 4vw 1vh 4vw;
 }
 
 .sentence-text {
-    overflow-y: auto;
+    overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 3vh;
+    line-height: 6vh;
     max-height: 6vh;
     margin-top: 0;
-}
-
-.sentence-info {
-    height: 100%;
-    position: relative;
-}
-
-.pie-chart {
-    height: 8vh;
-    margin: 3px;
-    border: 1px solid cadetblue;
-}
-
-.date-text {
-    bottom: 4px;
-    position: absolute;
-    font-size: 3vmin;
-}
-
-@media (min-width: 650px) {
-    .date-text {
-        font-size: 1.5vmin;
-    }
+    color: #95949c;
 }
 
 .forward-icon {

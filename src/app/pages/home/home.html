@@ -23,20 +23,17 @@
     <ion-refresher-content>
     </ion-refresher-content>
   </ion-refresher>
-  <ion-list no-padding>
-    <ion-item-sliding *ngFor="let lesson of this.displayedLessons;" #slidingItem>
-      <ion-item no-padding style="--inner-padding-end: 0px !important;">
+  <ion-list no-padding no-margin>
+    <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem>
+      <ion-item no-padding style="--inner-padding-end: 0px !important;--inner-border-width:0px !important;">
         <div class="lesson-card" (click)="openLesson(lesson.id)">
           <div class="lesson-text-div">
             <p class="lesson-text">
-              {{lesson.name}}
+              {{i + 1}}. {{lesson.name}}
             </p>
             <span class="date-text">
-              {{lesson.created_at | date:"MMM dd"}}
+              {{lesson.displayedDate}}
             </span>
-          </div>
-          <div class="lesson-info">
-            <div class="pie-chart" id="pie-chart-{{lesson.id}}"></div>
           </div>
         </div>
       </ion-item>

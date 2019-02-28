@@ -7,30 +7,6 @@
     user-select: none;
 }
 
-.ios :host #next-sentence-text {
-    font-size: 17px;
-    color: #3880ff;
-}
-
-.ios :host #next-sentence-icon {
-    font-size: 1.85em !important;
-    color: #3880ff;
-}
-
-.md :host #next-sentence-icon {
-    font-size: 24px !important;
-}
-
-.md :host #next-sentence {
-    margin-right: 2vmin;
-}
-
-.md :host #next-sentence-text {
-    margin-right: 2vmin;
-    text-transform: uppercase;
-    font-size: 14px;
-}
-
 #sentence-to-show {
     text-align: start;
     font-size: 4vh;
@@ -38,69 +14,54 @@
     padding: 0;
     margin-left: 3vw;
     margin-right: 3vw;
-    line-height: 5vh;
-    max-height: 45vh;
+    line-height: 4vh;
+    max-height: 60vh;
     overflow-y: auto;
 }
 
-#navigation-and-hint-buttons {
-    height: 10vh;
-    position: absolute;
-    bottom: 0;
-    width: 100vw;
-}
+$chars-and-hint-height: 20vw;
 
-#previous-word-button {
-    color: grey;
-    height: 9vh;
-    font-size: 7vh;
-    line-height: 9vh;
-    float: left;
-    margin: 0 0 0 5vw;
-}
-
-#next-word-button {
-    color: grey;
-    height: 9vh;
-    font-size: 7vh;
-    line-height: 9vh;
+#hint-button-div {
+    height: $chars-and-hint-height;
+    width: 21vw;
     float: right;
-    margin: 0 5vw 0 0;
+    display: flex;
+    justify-content: center;
+    padding-top: 1vw;
 }
 
 #hint-button {
-    height: 8vh;
-    width: 8vh;
+    height: 18vw;
+    width: 18vw;
     display: block;
     margin: 0 auto;
     font-size: 7vh;
     outline: none;
-    --background: white;
-    --color: black;
-    --box-shadow: none;
-    --border-radius: 50%;
+    background: #FFF;
     border-radius: 50%;
+    border: 1px solid #CECECE;
 }
 
 #footer {
     visibility: hidden;
-    height: 40vmin;
+    height: 36vw;
 }
 
 #chars {
-    height: 24vmin;
-    width: 100vw;
-    float: none;
+    display: inline-block;
+    height: $chars-and-hint-height;
+    width: 78vw;
     transition: all .5s;
+    padding-left: 1vw;
 }
 
 .char-box {
     display: inline-block;
-    height: 23vw;
-    width: 23vw;
-    margin: 1vw;
+    height: 18vw;
+    width: 18vw;
+    margin: 1vw 0.5vw 0 0.5vw;
     text-align: center;
-    font-size: 17vw;
+    font-size: 13vw;
     outline: none;
     border-radius: 50%;
     transform-style: preserve-3d;
@@ -108,7 +69,8 @@
     color: black;
 }
 
-.front, .back {
+.front,
+.back {
     display: flex;
     width: 100%;
     height: 100%;
@@ -117,40 +79,47 @@
     align-items: center;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    border: 2px solid rgb(206, 206, 206);
+    border: 1px solid #CECECE;
 }
 
 .front {
-    background: rgb(228, 228, 228);
+    background: #f4f4f7;
 }
 
 .back {
     position: absolute;
     top: 0;
     left: 0;
-    background: rgb(228, 228, 228);
+    background: #f4f4f7;
     transform: rotateY(180deg);
     -webkit-transform: rotateY(180deg);
 }
 
 #give-up-button-container {
-    height: 16vmin;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 16vw;
 }
 
 #give-up-button {
     height: 14vmin;
     width: 14vmin;
-    margin: 1vw;
-    font-size: 2vh;
+    margin-left: 6vh;
+    font-size: 4vmin;
     outline: none;
-    --background: rgb(228, 228, 228);
-    --color: black;
-    --box-shadow: none;
-    --border-radius: 50%;
+    background: #FFF;
     border-radius: 50%;
+    border: 1px solid #CECECE;
+}
+
+#next-sentence-button {
+    height: 14vmin;
+    width: 14vmin;
+    float: right;
+    margin-right: 6vh;
+    font-size: 4vmin;
+    outline: none;
+    background: #FFF;
+    border-radius: 50%;
+    border: 1px solid #CECECE;
 }
 
 @media (min-width: 1px) and (max-width: 600px) {
@@ -166,39 +135,49 @@
 }
 
 @media (min-width: 992px) {
+    #sentence-to-show {
+        font-size: 3vw;
+    }
+    #footer {
+        height: 28vh;
+        width: 72vw;
+    }
     #chars {
-        height: 18vmin;
-        width: 58vw;
-        float: left;
+        height: 18vh;
+        width: 56vw;
     }
-
-    #give-up-button-container {
-        width: 14vw;
-        float: right;
+    #hint-button-div {
+        width: 16vw; 
+        height: 18vh;
     }
-
+    #hint-button {
+        height: 13vh;
+        width: 13vh;
+    }
+    #give-up-button {
+        height: 9vmin;
+        width: 9vmin;
+    }
+    #next-sentence-button {
+        height: 9vmin;
+        width: 9vmin;
+    }
     .char-box {
         height: 13vh;
         width: 13vh;
         font-size: 9vh;
     }
-
-    #footer {
-        height: 18vmin;
-        width: 72vw;
-    }
-
-    #navigation-and-hint-buttons {
-        width: 72vw;
-    }
-
-    #sentence-to-show {
-        font-size: 3vw;
+    #give-up-button-container {
+        height: 10vh;
     }
 }
 
 @media (min-width: 700px) {
     #give-up-button {
-        font-size: 3.5vmin;
+        font-size: 3vmin;
+    }
+
+    #next-sentence-button {
+        font-size: 3vmin;
     }
 }

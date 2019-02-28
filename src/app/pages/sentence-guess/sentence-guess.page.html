@@ -6,24 +6,11 @@
     <ion-title text-center>
       Sentence {{sentenceIndex}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}
     </ion-title>
-    <ion-buttons id="next-sentence" slot="end" (click)="nextSentenceClick()">
-      <ion-label id="next-sentence-text">Next</ion-label>
-      <ion-icon id="next-sentence-icon" name="arrow-forward"></ion-icon>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <p [innerHTML]="sentenceShown" id="sentence-to-show"></p>
-  <div class="no-selection" id="navigation-and-hint-buttons" style="visibility: hidden;">
-    <p id="previous-word-button" (click)="previousWordClick()">
-      < </p> <p id="next-word-button" (click)="nextWordClick()">
-        >
-    </p>
-    <ion-button text-center shape="round" id="hint-button" (click)="hintClick()">
-      ?
-    </ion-button>
-  </div>
 </ion-content>
 
 <ion-footer id="footer">
@@ -47,10 +34,18 @@
         <div class="back">{{fourthChar}}</div>
       </div>
     </div>
+    <div id="hint-button-div" (click)="hintClick()">
+      <button text-center shape="round" id="hint-button" (click)="hintClick()">
+        ?
+      </button>
+    </div>
     <div id="give-up-button-container">
-      <ion-button text-center shape="round" (click)="giveUpClick()" id="give-up-button">
+      <button text-center shape="round" id="give-up-button" (click)="giveUpClick()">
         Give<br>up
-      </ion-button>
+      </button>
+      <button text-center shape="round" id="next-sentence-button" (click)="nextSentenceClick()">
+        Next 
+      </button>
     </div>
   </ion-toolbar>
 </ion-footer>

@@ -361,7 +361,6 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	private showHideControls(isVisible: boolean) {
-		document.getElementById('navigation-and-hint-buttons').style.visibility = isVisible ? 'visible' : 'hidden';
 		document.getElementById('footer').style.visibility = isVisible ? 'visible' : 'hidden';
 		this.displayButtons = isVisible;
 	}
