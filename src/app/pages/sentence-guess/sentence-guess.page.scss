@@ -38,6 +38,9 @@ $chars-and-hint-height: 20vw;
     font-size: 7vh;
     outline: none;
     background: #FFF;
+    --background: #FFF;
+    --color: #000;
+    --border-radius: 50%;
     border-radius: 50%;
     border: 1px solid #CECECE;
 }
@@ -106,6 +109,9 @@ $chars-and-hint-height: 20vw;
     font-size: 4vmin;
     outline: none;
     background: #FFF;
+    --background: #FFF;
+    --color: #000;
+    --border-radius: 50%;
     border-radius: 50%;
     border: 1px solid #CECECE;
 }
@@ -118,6 +124,9 @@ $chars-and-hint-height: 20vw;
     font-size: 4vmin;
     outline: none;
     background: #FFF;
+    --background: #FFF;
+    --color: #000;
+    --border-radius: 50%;
     border-radius: 50%;
     border: 1px solid #CECECE;
 }
