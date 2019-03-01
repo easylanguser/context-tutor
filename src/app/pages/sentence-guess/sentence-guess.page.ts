@@ -29,6 +29,10 @@ export class SentenceGuessPage implements OnInit {
 	private hintIsClicked: boolean = false;
 	updateFront: boolean = false;
 
+	// Single animation at a time flags
+	private sentenceTranslateIsPlayed: boolean = false;
+	private charactersRotationIsPlayed: boolean = false;
+	
 	// 3 random characters with one correct one
 	firstChar: string;
 	secondChar: string;
@@ -39,6 +43,11 @@ export class SentenceGuessPage implements OnInit {
 	secondCharBack: string;
 	thirdCharBack: string;
 	fourthCharBack: string;
+
+	// Highlights colors
+	yellowHighlight = '0 0 5px 1px #E0E306';
+	greenHighlight = '0 0 5px 1px #50C878';
+	none = 'none';
 
 	constructor(private route: ActivatedRoute,
 		private loadingController: LoadingController,
@@ -58,8 +67,14 @@ export class SentenceGuessPage implements OnInit {
 		console.log(this.curSentence().statistics);
 	}
 
-	animateFlip() {
-		anime({
+	async animateFlip() {
+		if (this.charactersRotationIsPlayed) {
+			return;
+		}
+
+		this.charactersRotationIsPlayed = true;
+
+		await anime({
 			targets: [document.querySelector("#first-char-box"),
 			document.querySelector("#second-char-box"),
 			document.querySelector("#third-char-box"),
@@ -67,10 +82,18 @@ export class SentenceGuessPage implements OnInit {
 			rotateY: '+=180',
 			easing: 'easeInOutSine',
 			duration: 500
-		});
+		}).finished;
+
+		this.charactersRotationIsPlayed = false;
 	}
 
 	async animateSwipe() {
+		if (this.sentenceTranslateIsPlayed) {
+			return;
+		}
+
+		this.sentenceTranslateIsPlayed = true;
+
 		const textShownId = '#sentence-to-show';
 		await anime({
 			targets: [document.querySelector(textShownId)],
@@ -81,12 +104,14 @@ export class SentenceGuessPage implements OnInit {
 
 		await this.getData(false);
 
-		anime({
+		await anime({
 			targets: [document.querySelector(textShownId)],
 			translateX: '-=105vw',
 			easing: 'easeInOutCirc',
 			duration: 400
-		});
+		}).finished;
+
+		this.sentenceTranslateIsPlayed = false;
 	}
 
 
@@ -120,10 +145,11 @@ export class SentenceGuessPage implements OnInit {
 			if (showLoader) {
 				loading.dismiss();
 			}
+			this.highlightNext(this.greenHighlight);
 			return;
 		}
 
-		this.makeHintButtonActive();
+		this.highlightNext(this.none);
 
 		// Restore user progress
 		this.curWordIndex = this.curSentence().curWordIndex;
@@ -195,7 +221,6 @@ export class SentenceGuessPage implements OnInit {
 				this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
 
 			this.refreshCharBoxes();
-			this.makeHintButtonActive();
 
 			++this.curSentence().statistics.wordSkips; // Statistics
 		}
@@ -203,6 +228,10 @@ export class SentenceGuessPage implements OnInit {
 
 	// Go to following sentence of the lesson
 	nextSentenceClick() {
+		if (this.sentenceTranslateIsPlayed) {
+			return;
+		}
+
 		this.sentenceIndex =
 			this.sentenceIndex === this.lessonsData.getLessonByID(this.lessonId).sentences.length
 				? 1
@@ -227,6 +256,7 @@ export class SentenceGuessPage implements OnInit {
 			this.resetColors();
 			this.sentenceShown = this.curSentence().text;
 			this.curSentence().isSolved = true;
+			this.highlightNext(this.greenHighlight);
 		}
 	}
 
@@ -234,17 +264,17 @@ export class SentenceGuessPage implements OnInit {
 	hintClick() {
 		if (!this.curSentence().isSolved && !this.hintIsClicked) {
 			++this.curSentence().statistics.hintUsages; // Statistics
-			const yellowHighlight = '0px 0px 8px 0px rgba(254, 241, 96, 1)';
+			
 			if (this.curCorrectChar().toUpperCase() === (this.updateFront ? this.firstChar : this.firstCharBack)) {
-				this.highlightClickedCharBox(1, yellowHighlight);
+				this.highlightClickedCharBox(1, this.yellowHighlight);
 			} else if (this.curCorrectChar().toUpperCase() === (this.updateFront ? this.secondChar : this.secondCharBack)) {
-				this.highlightClickedCharBox(2, yellowHighlight);
+				this.highlightClickedCharBox(2, this.yellowHighlight);
 			} else if (this.curCorrectChar().toUpperCase() === (this.updateFront ? this.thirdChar : this.thirdCharBack)) {
-				this.highlightClickedCharBox(3, yellowHighlight);
+				this.highlightClickedCharBox(3, this.yellowHighlight);
 			} else {
-				this.highlightClickedCharBox(4, yellowHighlight);
+				this.highlightClickedCharBox(4, this.yellowHighlight);
 			}
-			document.getElementById('hint-button').style.opacity = '0.5';
+			this.highlightHint(this.yellowHighlight);
 			this.hintIsClicked = true;
 		}
 	}
@@ -288,6 +318,10 @@ export class SentenceGuessPage implements OnInit {
 
 	// Generate 3 random characters from alphabet and random position for correct character
 	private generateRandomCharacters() {
+		if (this.charactersRotationIsPlayed) {
+			return;
+		}
+
 		const correctCharBoxIndex = Math.floor(Math.random() * 4) + 1;
 		const correctChar = this.curCorrectChar().toUpperCase();
 		const correctCharIndexInAlphabet = this.alphabet.indexOf(correctChar);
@@ -370,9 +404,12 @@ export class SentenceGuessPage implements OnInit {
 		document.getElementById(charBoxId).style.boxShadow = color;
 	}
 
-	private makeHintButtonActive() {
-		document.getElementById('hint-button').style.opacity = '1';
-		this.hintIsClicked = false;
+	private highlightNext(highlight: string) {
+		document.getElementById('next-sentence-button').style.boxShadow = highlight;
+	}
+
+	private highlightHint(highlight: string) {
+		document.getElementById('hint-button').style.boxShadow = highlight;
 	}
 
 	// Handle keyboard event from desktop and clicks on char boxes from mobiles and desktop
@@ -386,7 +423,11 @@ export class SentenceGuessPage implements OnInit {
 
 		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
 			++this.curSentence().statistics.correctAnswers; // Statistics
-			this.makeHintButtonActive();
+
+			if (this.hintIsClicked) {
+				this.hintIsClicked = false;
+				this.highlightHint(this.none);
+			}
 
 			// Fill guessed character
 			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
@@ -409,6 +450,7 @@ export class SentenceGuessPage implements OnInit {
 							this.curWordIndex = 0;
 						} else {
 							this.curSentence().isSolved = true;
+							this.highlightNext(this.greenHighlight);
 							return;
 						}
 					}
