@@ -27,7 +27,6 @@ export class SentenceGuessPage implements OnInit {
 
 	private toastIsShown: boolean; // Single toast flag
 	private hintIsClicked: boolean = false;
-	displayButtons: boolean = true;
 	updateFront: boolean = false;
 
 	// 3 random characters with one correct one
@@ -65,11 +64,31 @@ export class SentenceGuessPage implements OnInit {
 			document.querySelector("#second-char-box"),
 			document.querySelector("#third-char-box"),
 			document.querySelector("#fourth-char-box")],
-			rotateY: { value: '+=180', delay: 0 },
+			rotateY: '+=180',
 			easing: 'easeInOutSine',
 			duration: 500
 		});
 	}
+
+	async animateSwipe() {
+		const textShownId = '#sentence-to-show';
+		await anime({
+			targets: [document.querySelector(textShownId)],
+			translateX: '+=105vw',
+			easing: 'easeInOutCirc',
+			duration: 400
+		}).finished;
+
+		await this.getData(false);
+
+		anime({
+			targets: [document.querySelector(textShownId)],
+			translateX: '-=105vw',
+			easing: 'easeInOutCirc',
+			duration: 400
+		});
+	}
+
 
 	// Get current Sentence object from service
 	private curSentence(): Sentence {
@@ -97,7 +116,6 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		if (this.curSentence().isSolved) { // Display filled sentence, if it has already been solved
-			this.showHideControls(false);
 			this.sentenceShown = this.curSentence().text;
 			if (showLoader) {
 				loading.dismiss();
@@ -106,7 +124,6 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		this.makeHintButtonActive();
-		this.showHideControls(true);
 
 		// Restore user progress
 		this.curWordIndex = this.curSentence().curWordIndex;
@@ -170,7 +187,7 @@ export class SentenceGuessPage implements OnInit {
 				this.sentenceShown,
 				'_',
 				this.curSentence().hiddenWord[isNext ? this.curWordIndex - 1 : savedNum][0] +
-					this.curCharsIndexes[isNext ? this.curWordIndex - 1 : savedNum]);
+				this.curCharsIndexes[isNext ? this.curWordIndex - 1 : savedNum]);
 
 			this.sentenceShown = this.util.addCharByIndex(
 				this.sentenceShown,
@@ -194,11 +211,10 @@ export class SentenceGuessPage implements OnInit {
 		this.curWordIndex = 0;
 		this.curCharsIndexes = [];
 
-		this.getData(false);
+		this.animateSwipe();
 
 		if (!this.curSentence().isSolved) {
 			++this.curSentence().statistics.sentenceSkips; // Statistics
-			this.displayButtons = true;
 		}
 	}
 
@@ -211,7 +227,6 @@ export class SentenceGuessPage implements OnInit {
 			this.resetColors();
 			this.sentenceShown = this.curSentence().text;
 			this.curSentence().isSolved = true;
-			this.showHideControls(false);
 		}
 	}
 
@@ -293,13 +308,13 @@ export class SentenceGuessPage implements OnInit {
 
 		do {
 			thirdRand = this.randomAlphabetIndex();
-		} while (thirdRand === firstRand || thirdRand === secondRand || thirdRand === correctCharIndexInAlphabet || 
+		} while (thirdRand === firstRand || thirdRand === secondRand || thirdRand === correctCharIndexInAlphabet ||
 			(vowelIsGuessed ? false : vowelsPositions.indexOf(thirdRand) !== -1));
 
 		do {
 			fourthRand = this.randomAlphabetIndex();
 		} while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand ||
-			fourthRand === correctCharIndexInAlphabet || (vowelIsGuessed ? false : vowelsPositions.indexOf(fourthRand) !== -1));
+		fourthRand === correctCharIndexInAlphabet || (vowelIsGuessed ? false : vowelsPositions.indexOf(fourthRand) !== -1));
 
 		if (this.updateFront) {
 			this.firstChar = correctCharBoxIndex === 1
@@ -358,11 +373,6 @@ export class SentenceGuessPage implements OnInit {
 	private makeHintButtonActive() {
 		document.getElementById('hint-button').style.opacity = '1';
 		this.hintIsClicked = false;
-	}
-
-	private showHideControls(isVisible: boolean) {
-		document.getElementById('footer').style.visibility = isVisible ? 'visible' : 'hidden';
-		this.displayButtons = isVisible;
 	}
 
 	// Handle keyboard event from desktop and clicks on char boxes from mobiles and desktop
@@ -448,13 +458,11 @@ export class SentenceGuessPage implements OnInit {
 		this.toastIsShown = true;
 		const toast = await this.toastController.create({
 			message: 'Sentence is filled',
-			position: 'bottom',
-			duration: 600,
-			animated: true,
-			cssClass: 'toast-container'
+			position: 'top',
+			duration: 1000,
+			animated: true
 		});
 		toast.present();
-		await new Promise(resolve => setTimeout(resolve, 900));
-		this.toastIsShown = false;
+		setTimeout(() => { this.toastIsShown = false }, 1500);
 	}
 }

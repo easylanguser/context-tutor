@@ -15,8 +15,7 @@
 
 <ion-footer id="footer">
   <ion-toolbar mode="ios" no-padding class="no-selection">
-    <div [style.opacity]="this.displayButtons ? '1' : '0'"
-      [style.visibility]="this.displayButtons ? 'visible' : 'hidden'" id="chars">
+    <div id="chars">
       <div class="char-box" id="first-char-box" (click)="firstCharBoxClick()">
         <div class="front">{{firstCharBack}}</div>
         <div class="back">{{firstChar}}</div>
