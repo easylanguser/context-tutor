@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { UtilsService } from '../../services/utils/utils.service';
 import { ToastController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsService } from "src/app/services/lessons-data/lessons-data.service";
+import { Chart } from 'chart.js';
 import * as anime from 'animejs';
 
 @Component({
@@ -32,7 +33,7 @@ export class SentenceGuessPage implements OnInit {
 	// Single animation at a time flags
 	private sentenceTranslateIsPlayed: boolean = false;
 	private charactersRotationIsPlayed: boolean = false;
-	
+
 	// 3 random characters with one correct one
 	firstChar: string;
 	secondChar: string;
@@ -49,6 +50,9 @@ export class SentenceGuessPage implements OnInit {
 	greenHighlight = '0 0 5px 1px #50C878';
 	none = 'none';
 
+	@ViewChild('pieCanvas') pieCanvas;
+	pieChart: any;
+
 	constructor(private route: ActivatedRoute,
 		private loadingController: LoadingController,
 		private util: UtilsService,
@@ -60,12 +64,35 @@ export class SentenceGuessPage implements OnInit {
 		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('current')) + 1;
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
 		this.getData(true);
-	};
 
-	// TODO: change statistics manipulation
-	logStat() {
-		console.log(this.curSentence().statistics);
-	}
+		this.pieChart = new Chart(this.pieCanvas.nativeElement, {
+			type: 'pie',
+			data: {
+				datasets: [
+					{
+						data: [1, 0, 0],
+						backgroundColor: ['#999', '#999', '#999']
+					}
+				],
+			},
+			options: {
+				legend: {
+					display: false
+				},
+				tooltips: {
+					enabled: false
+				},
+				events: [],
+				elements: {
+					arc: {
+						borderWidth: 0
+					}
+				}
+			}
+		});
+
+		this.updateChart();
+	};
 
 	async animateFlip() {
 		if (this.charactersRotationIsPlayed) {
@@ -241,6 +268,7 @@ export class SentenceGuessPage implements OnInit {
 		this.curCharsIndexes = [];
 
 		this.animateSwipe();
+		this.updateChart();
 
 		if (!this.curSentence().isSolved) {
 			++this.curSentence().statistics.sentenceSkips; // Statistics
@@ -257,6 +285,7 @@ export class SentenceGuessPage implements OnInit {
 			this.sentenceShown = this.curSentence().text;
 			this.curSentence().isSolved = true;
 			this.highlightNext(this.greenHighlight);
+			this.highlightHint(this.none);
 		}
 	}
 
@@ -264,7 +293,8 @@ export class SentenceGuessPage implements OnInit {
 	hintClick() {
 		if (!this.curSentence().isSolved && !this.hintIsClicked) {
 			++this.curSentence().statistics.hintUsages; // Statistics
-			
+			this.updateChart();
+
 			if (this.curCorrectChar().toUpperCase() === (this.updateFront ? this.firstChar : this.firstCharBack)) {
 				this.highlightClickedCharBox(1, this.yellowHighlight);
 			} else if (this.curCorrectChar().toUpperCase() === (this.updateFront ? this.secondChar : this.secondCharBack)) {
@@ -412,6 +442,27 @@ export class SentenceGuessPage implements OnInit {
 		document.getElementById('hint-button').style.boxShadow = highlight;
 	}
 
+	private updateChart() {
+		const chartData = this.pieChart.data.datasets[0];
+		const stats = this.curSentence().statistics;
+
+		if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages === 0) {
+			chartData.data[0] = 1;
+			chartData.data[1] = 0;
+			chartData.data[2] = 0;
+			chartData.backgroundColor[0] = '#999';
+		} else {
+			chartData.data[0] = stats.correctAnswers;
+			chartData.data[1] = stats.wrongAnswers;
+			chartData.data[2] = stats.hintUsages;
+			chartData.backgroundColor[0] = '#0F0';
+			chartData.backgroundColor[1] = '#F00';
+			chartData.backgroundColor[2] = '#FF0';
+		}
+
+		this.pieChart.update();
+	}
+
 	// Handle keyboard event from desktop and clicks on char boxes from mobiles and desktop
 	handleKeyboardEvent(event: KeyboardEvent) {
 		if (this.curSentence().isSolved) {
@@ -451,6 +502,7 @@ export class SentenceGuessPage implements OnInit {
 						} else {
 							this.curSentence().isSolved = true;
 							this.highlightNext(this.greenHighlight);
+							this.updateChart();
 							return;
 						}
 					}
@@ -462,6 +514,7 @@ export class SentenceGuessPage implements OnInit {
 					this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
 
 				this.refreshCharBoxes();
+				this.updateChart();
 
 				return;
 			}
@@ -494,13 +547,15 @@ export class SentenceGuessPage implements OnInit {
 				}
 			}
 		}
+
+		this.updateChart();
 	}
 
 	private async showToast() {
 		this.toastIsShown = true;
 		const toast = await this.toastController.create({
 			message: 'Sentence is filled',
-			position: 'top',
+			position: 'middle',
 			duration: 1000,
 			animated: true
 		});

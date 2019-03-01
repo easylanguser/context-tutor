@@ -6,6 +6,9 @@
     <ion-title text-center>
       Sentence {{sentenceIndex}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}
     </ion-title>
+    <div style="height: 35px; width: 35px; float: right;">
+      <canvas #pieCanvas width="35" height="35"></canvas>
+    </div>
   </ion-toolbar>
 </ion-header>
 

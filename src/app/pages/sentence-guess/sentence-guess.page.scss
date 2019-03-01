@@ -5,7 +5,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
+} 
 
 #sentence-to-show {
     text-align: start;
@@ -14,8 +14,8 @@
     padding: 0;
     margin-left: 3vw;
     margin-right: 3vw;
-    line-height: 4vh;
-    max-height: 60vh;
+    line-height: 6vmin;
+    max-height: 60vmin;
     overflow-y: auto;
 }
 
