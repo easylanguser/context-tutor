@@ -14,7 +14,7 @@
     padding: 0;
     margin-left: 3vw;
     margin-right: 3vw;
-    line-height: 4vh;
+    line-height: 5vh;
     max-height: 60vh;
     overflow-y: auto;
 }
@@ -143,9 +143,6 @@ $chars-and-hint-height: 20vw;
 }
 
 @media (min-width: 992px) {
-    #sentence-to-show {
-        font-size: 3vw;
-    }
     #footer {
         height: 28vh;
         width: 72vw;
@@ -165,10 +162,12 @@ $chars-and-hint-height: 20vw;
     #give-up-button {
         height: 9vmin;
         width: 9vmin;
+        font-size: 2.3vmin;
     }
     #next-sentence-button {
         height: 9vmin;
         width: 9vmin;
+        font-size: 2.3vmin;
     }
     .char-box {
         height: 13vh;
@@ -177,15 +176,5 @@ $chars-and-hint-height: 20vw;
     }
     #give-up-button-container {
         height: 10vh;
-    }
-}
-
-@media (min-width: 700px) {
-    #give-up-button {
-        font-size: 3vmin;
-    }
-
-    #next-sentence-button {
-        font-size: 3vmin;
     }
 }
