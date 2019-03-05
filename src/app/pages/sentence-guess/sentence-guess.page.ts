@@ -34,7 +34,6 @@ export class SentenceGuessPage implements OnInit {
 	private sentenceTranslateIsPlayed: boolean = false;
 	private charactersRotationIsPlayed: boolean = false;
 
-	// 3 random characters with one correct one
 	firstChar: string;
 	secondChar: string;
 	thirdChar: string;
@@ -48,6 +47,7 @@ export class SentenceGuessPage implements OnInit {
 	// Highlights colors
 	yellowHighlight = '0 0 5px 1px #E0E306';
 	greenHighlight = '0 0 5px 1px #50C878';
+	redHighlight = '0px 0px 8px 0px rgba(167, 1, 6, 1)';
 	none = 'none';
 
 	@ViewChild('pieCanvas') pieCanvas;
@@ -94,60 +94,22 @@ export class SentenceGuessPage implements OnInit {
 		this.updateChart();
 	};
 
-	async animateFlip() {
-		if (this.charactersRotationIsPlayed) {
-			return;
-		}
-
-		this.charactersRotationIsPlayed = true;
-
-		await anime({
-			targets: [document.querySelector("#first-char-box"),
-			document.querySelector("#second-char-box"),
-			document.querySelector("#third-char-box"),
-			document.querySelector("#fourth-char-box")],
-			rotateY: '+=180',
-			easing: 'easeInOutSine',
-			duration: 500
-		}).finished;
-
-		this.charactersRotationIsPlayed = false;
+	ionViewWillLeave() {
+		this.saveData();
 	}
 
-	async animateSwipe() {
-		if (this.sentenceTranslateIsPlayed) {
-			return;
-		}
-
-		this.sentenceTranslateIsPlayed = true;
-
-		const textShownId = '#sentence-to-show';
-		await anime({
-			targets: [document.querySelector(textShownId)],
-			translateX: '+=105vw',
-			easing: 'easeInOutCirc',
-			duration: 400
-		}).finished;
-
-		await this.getData(false);
-
-		await anime({
-			targets: [document.querySelector(textShownId)],
-			translateX: '-=105vw',
-			easing: 'easeInOutCirc',
-			duration: 400
-		}).finished;
-
-		this.sentenceTranslateIsPlayed = false;
+	private saveData() {
+		this.curSentence().curWordIndex = this.curWordIndex;
+		this.curSentence().curCharsIndexes = this.curCharsIndexes;
+		this.curSentence().sentenceShown = this.sentenceShown;
 	}
-
 
 	// Get current Sentence object from service
 	private curSentence(): Sentence {
 		return this.lessonsData.getLessonByID(this.lessonId).sentences[this.sentenceIndex - 1];
 	}
 
-	// Get current character, to be filled
+	// Get current character to be filled
 	private curCorrectChar(): string {
 		return this.curSentence().hiddenChars[this.curWordIndex][this.curCharsIndexes[this.curWordIndex]];
 	}
@@ -168,88 +130,25 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		if (this.curSentence().isSolved) { // Display filled sentence, if it has already been solved
-			this.sentenceShown = this.curSentence().text;
+			this.sentenceShown = this.curSentence().sentenceShown;
 			if (showLoader) {
 				loading.dismiss();
 			}
 			this.highlightNext(this.greenHighlight);
-			return;
+		} else {
+			this.hintIsClicked = false;
+			this.highlightNext(this.none);
+
+			// Restore user progress
+			this.curWordIndex = this.curSentence().curWordIndex;
+			this.curCharsIndexes = this.curSentence().curCharsIndexes;
+			this.sentenceShown = this.curSentence().sentenceShown;
+
+			this.refreshCharBoxes();
 		}
-
-		this.highlightNext(this.none);
-
-		// Restore user progress
-		this.curWordIndex = this.curSentence().curWordIndex;
-		this.curCharsIndexes = this.curSentence().curCharsIndexes;
-
-		this.sentenceShown = this.curSentence().textUnderscored;
-
-		if (this.curCharsIndexes.length === 0) { // If user has no progress -> set current characters indexes to zeroes
-			for (let i in this.curSentence().hiddenChars) {
-				this.curCharsIndexes.push(0);
-			}
-		} else { // Else restore sentence guessed words
-			for (let i in this.curCharsIndexes) {
-				for (let j = 0; j < this.curCharsIndexes[i]; j++) {
-					this.sentenceShown = this.util.addCharByIndex(
-						this.sentenceShown,
-						this.curSentence().hiddenChars[i][j],
-						this.curSentence().hiddenWord[i][0] + j);
-				}
-			}
-		}
-
-		this.sentenceShown = this.util.addCharByIndex(
-			this.sentenceShown,
-			'?',
-			this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
-
-		this.refreshCharBoxes();
 
 		if (showLoader) {
 			loading.dismiss();
-		}
-	}
-
-	// Go to following unfilled word
-	nextWordClick() {
-		this.nextOrPreviousWordsHandle(true);
-	}
-
-	// Go to first previous unfilled word
-	previousWordClick() {
-		this.nextOrPreviousWordsHandle(false);
-	}
-
-	nextOrPreviousWordsHandle(isNext: boolean) {
-		if (!this.curSentence().isSolved && (isNext ?
-			this.curWordIndex < this.curSentence().hiddenChars.length - 1 :
-			this.curWordIndex > 0)) {
-			const savedNum = this.curWordIndex; // Save current word number in case switching cannot be done
-			do {
-				isNext ? ++this.curWordIndex : --this.curWordIndex;
-			} while ((isNext ? this.curWordIndex < this.curSentence().hiddenChars.length : this.curWordIndex > 0) &&
-				this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length);
-
-			if (this.curWordIndex === (isNext ? this.curSentence().hiddenChars.length : -1)) {
-				this.curWordIndex = savedNum;
-				return;
-			}
-
-			this.sentenceShown = this.util.addCharByIndex(
-				this.sentenceShown,
-				'_',
-				this.curSentence().hiddenWord[isNext ? this.curWordIndex - 1 : savedNum][0] +
-				this.curCharsIndexes[isNext ? this.curWordIndex - 1 : savedNum]);
-
-			this.sentenceShown = this.util.addCharByIndex(
-				this.sentenceShown,
-				'?',
-				this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
-
-			this.refreshCharBoxes();
-
-			++this.curSentence().statistics.wordSkips; // Statistics
 		}
 	}
 
@@ -259,10 +158,11 @@ export class SentenceGuessPage implements OnInit {
 			return;
 		}
 
-		this.sentenceIndex =
-			this.sentenceIndex === this.lessonsData.getLessonByID(this.lessonId).sentences.length
-				? 1
-				: this.sentenceIndex + 1;
+		this.saveData();
+
+		this.sentenceIndex = this.sentenceIndex === this.lessonsData.getLessonByID(this.lessonId).sentences.length
+			? 1
+			: this.sentenceIndex + 1;
 
 		this.curWordIndex = 0;
 		this.curCharsIndexes = [];
@@ -310,26 +210,22 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	firstCharBoxClick() {
-		const event = new KeyboardEvent('ev1',
-			{ key: (this.updateFront ? this.firstChar : this.firstCharBack).toLowerCase() });
+		const event = new KeyboardEvent('ev1', { key: (this.updateFront ? this.firstChar : this.firstCharBack).toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
 
 	secondCharBoxClick() {
-		const event = new KeyboardEvent('ev2',
-			{ key: (this.updateFront ? this.secondChar : this.secondCharBack).toLowerCase() });
+		const event = new KeyboardEvent('ev2', { key: (this.updateFront ? this.secondChar : this.secondCharBack).toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
 
 	thirdCharBoxClick() {
-		const event = new KeyboardEvent('ev3',
-			{ key: (this.updateFront ? this.thirdChar : this.thirdCharBack).toLowerCase() });
+		const event = new KeyboardEvent('ev3', { key: (this.updateFront ? this.thirdChar : this.thirdCharBack).toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
 
 	fourthCharBoxClick() {
-		const event = new KeyboardEvent('ev4',
-			{ key: (this.updateFront ? this.fourthChar : this.fourthCharBack).toLowerCase() });
+		const event = new KeyboardEvent('ev4', { key: (this.updateFront ? this.fourthChar : this.fourthCharBack).toLowerCase() });
 		this.handleKeyboardEvent(event);
 	}
 
@@ -338,8 +234,6 @@ export class SentenceGuessPage implements OnInit {
 		if (this.curSentence().text !== this.sentenceShown) {
 			++this.curSentence().statistics.lessonLeaves; // Statistics
 		}
-		this.curSentence().curWordIndex = this.curWordIndex;
-		this.curSentence().curCharsIndexes = this.curCharsIndexes;
 	}
 
 	private randomAlphabetIndex(): number {
@@ -381,31 +275,15 @@ export class SentenceGuessPage implements OnInit {
 		fourthRand === correctCharIndexInAlphabet || (vowelIsGuessed ? false : vowelsPositions.indexOf(fourthRand) !== -1));
 
 		if (this.updateFront) {
-			this.firstChar = correctCharBoxIndex === 1
-				? correctChar
-				: this.alphabet[firstRand];
-			this.secondChar = correctCharBoxIndex === 2
-				? correctChar
-				: this.alphabet[secondRand];
-			this.thirdChar = correctCharBoxIndex === 3
-				? correctChar
-				: this.alphabet[thirdRand];
-			this.fourthChar = correctCharBoxIndex === 4
-				? correctChar
-				: this.alphabet[fourthRand];
+			this.firstChar = correctCharBoxIndex === 1 ? correctChar : this.alphabet[firstRand];
+			this.secondChar = correctCharBoxIndex === 2 ? correctChar : this.alphabet[secondRand];
+			this.thirdChar = correctCharBoxIndex === 3 ? correctChar : this.alphabet[thirdRand];
+			this.fourthChar = correctCharBoxIndex === 4 ? correctChar : this.alphabet[fourthRand];
 		} else {
-			this.firstCharBack = correctCharBoxIndex === 1
-				? correctChar
-				: this.alphabet[firstRand];
-			this.secondCharBack = correctCharBoxIndex === 2
-				? correctChar
-				: this.alphabet[secondRand];
-			this.thirdCharBack = correctCharBoxIndex === 3
-				? correctChar
-				: this.alphabet[thirdRand];
-			this.fourthCharBack = correctCharBoxIndex === 4
-				? correctChar
-				: this.alphabet[fourthRand];
+			this.firstCharBack = correctCharBoxIndex === 1 ? correctChar : this.alphabet[firstRand];
+			this.secondCharBack = correctCharBoxIndex === 2 ? correctChar : this.alphabet[secondRand];
+			this.thirdCharBack = correctCharBoxIndex === 3 ? correctChar : this.alphabet[thirdRand];
+			this.fourthCharBack = correctCharBoxIndex === 4 ? correctChar : this.alphabet[fourthRand];
 		}
 
 		this.animateFlip();
@@ -414,13 +292,6 @@ export class SentenceGuessPage implements OnInit {
 	// Reset characters boxes highlighting and generate random characters
 	private refreshCharBoxes() {
 		this.resetColors();
-
-		if (this.curWordIndex === this.curSentence().hiddenWord.length) {
-			this.curSentence().isSolved = true;
-			this.resetColors();
-			return;
-		}
-
 		this.generateRandomCharacters();
 	}
 
@@ -463,8 +334,27 @@ export class SentenceGuessPage implements OnInit {
 		this.pieChart.update();
 	}
 
+	/*  
+	*	0 - current word is not guessed
+	*	1 - current word is guessed, current sentence is not guessed
+	*	2 - current word is guessed, current sentence is guessed 
+	*/
+	private status(): number {
+		if (this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length) {
+			if (this.curWordIndex === this.curSentence().hiddenChars.length - 1) {
+				return 2;
+			} else {
+				return 1;
+			}
+		}
+		return 0;
+	}
+
 	// Handle keyboard event from desktop and clicks on char boxes from mobiles and desktop
 	handleKeyboardEvent(event: KeyboardEvent) {
+		if (this.sentenceTranslateIsPlayed || this.charactersRotationIsPlayed) {
+			return;
+		}
 		if (this.curSentence().isSolved) {
 			if (!this.toastIsShown) {
 				this.showToast();
@@ -475,80 +365,101 @@ export class SentenceGuessPage implements OnInit {
 		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
 			++this.curSentence().statistics.correctAnswers; // Statistics
 
+			let spanColor = "<span class='green'>";
+
 			if (this.hintIsClicked) {
 				this.hintIsClicked = false;
 				this.highlightHint(this.none);
+				spanColor = "<span class='yellow'>";
 			}
 
 			// Fill guessed character
-			this.sentenceShown = this.util.addCharByIndex(this.sentenceShown,
-				this.curCorrectChar(),
-				this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
-
+			this.sentenceShown = this.util.addChar(this.sentenceShown, spanColor + this.curCorrectChar() + "</span>");
 			++this.curCharsIndexes[this.curWordIndex];
 
-			if (this.curCharsIndexes[this.curWordIndex] !== this.curSentence().hiddenWord[this.curWordIndex][1]) {
-				// If current word is not filled -> replace following char with '?'
-				this.sentenceShown = this.util.addCharByIndex(
-					this.sentenceShown,
-					'?',
-					this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
-			} else {
-				do { // If current word is filled -> find first word, that is not filled
-					++this.curWordIndex;
-					if (this.curWordIndex === this.curSentence().hiddenChars.length) {
-						if (this.sentenceShown !== this.curSentence().text) {
-							this.curWordIndex = 0;
-						} else {
-							this.curSentence().isSolved = true;
-							this.highlightNext(this.greenHighlight);
-							this.updateChart();
-							return;
-						}
-					}
-				} while (this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length);
-
-				this.sentenceShown = this.util.addCharByIndex(
-					this.sentenceShown,
-					'?',
-					this.curSentence().hiddenWord[this.curWordIndex][0] + this.curCharsIndexes[this.curWordIndex]);
-
-				this.refreshCharBoxes();
-				this.updateChart();
-
+			const status = this.status();
+			if (status === 1) {
+				++this.curWordIndex;
+			} else if (status === 2) {
+				this.curSentence().isSolved = true;
+				this.highlightNext(this.greenHighlight);
 				return;
 			}
 
-			if (this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenWord[this.curWordIndex][1]) {
-				++this.curWordIndex;
-			}
+			this.sentenceShown = this.util.addChar(this.sentenceShown, '?');
 
 			this.refreshCharBoxes();
 		} else {
 			++this.curSentence().statistics.wrongAnswers; // Statistics
 
-			const redHighlight = '0px 0px 8px 0px rgba(167, 1, 6, 1)';
 			switch (event.key) {
 				case (this.updateFront ? this.firstChar : this.firstCharBack).toLowerCase(): {
-					this.highlightClickedCharBox(1, redHighlight);
+					this.highlightClickedCharBox(1, this.redHighlight);
 					break;
 				}
 				case (this.updateFront ? this.secondChar : this.secondCharBack).toLowerCase(): {
-					this.highlightClickedCharBox(2, redHighlight);
+					this.highlightClickedCharBox(2, this.redHighlight);
 					break;
 				}
 				case (this.updateFront ? this.thirdChar : this.thirdCharBack).toLowerCase(): {
-					this.highlightClickedCharBox(3, redHighlight);
+					this.highlightClickedCharBox(3, this.redHighlight);
 					break;
 				}
 				case (this.updateFront ? this.fourthChar : this.fourthCharBack).toLowerCase(): {
-					this.highlightClickedCharBox(4, redHighlight);
+					this.highlightClickedCharBox(4, this.redHighlight);
 					break;
 				}
 			}
 		}
 
 		this.updateChart();
+	}
+
+	async animateFlip() {
+		if (this.charactersRotationIsPlayed) {
+			return;
+		}
+
+		this.charactersRotationIsPlayed = true;
+
+		await anime({
+			targets: [document.querySelector("#first-char-box"),
+			document.querySelector("#second-char-box"),
+			document.querySelector("#third-char-box"),
+			document.querySelector("#fourth-char-box")],
+			rotateY: '+=180',
+			easing: 'easeInOutSine',
+			duration: 300
+		}).finished;
+
+		this.charactersRotationIsPlayed = false;
+	}
+
+	async animateSwipe() {
+		if (this.sentenceTranslateIsPlayed) {
+			return;
+		}
+
+		this.sentenceTranslateIsPlayed = true;
+
+		const textShownId = '#sentence-to-show';
+		await anime({
+			targets: [document.querySelector(textShownId)],
+			translateX: '+=105vw',
+			easing: 'easeInOutCirc',
+			duration: 300
+		}).finished;
+
+		await this.getData(false);
+
+		await anime({
+			targets: [document.querySelector(textShownId)],
+			translateX: '-=105vw',
+			easing: 'easeInOutCirc',
+			duration: 300
+		}).finished;
+
+		this.sentenceTranslateIsPlayed = false;
 	}
 
 	private async showToast() {

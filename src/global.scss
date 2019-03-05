@@ -29,3 +29,13 @@ input:-webkit-autofill {
     -webkit-animation-name: autofill;
     -webkit-animation-fill-mode: both;
 }
+
+.green {
+    letter-spacing: 4px;
+    border-bottom: 4px solid green;
+}
+
+.yellow {
+    letter-spacing: 4px;
+    border-bottom: 4px solid yellow;
+}

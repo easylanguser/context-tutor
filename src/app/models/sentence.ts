@@ -9,6 +9,7 @@ export class Sentence {
         public hiddenChars: Array<string[]>,
         public curCharsIndexes: number[],
         public curWordIndex: number,
+        public sentenceShown: string,
         public isSolved: boolean,
         public statistics: Statistics) { }
 }

@@ -36,7 +36,13 @@ export class UtilsService {
 		return textWithHiddenCharacters;
 	}
 
-	addCharByIndex(input: string, replacement: string, index: number): string {
-		return input.substr(0, index) + replacement + input.substr(index + replacement.length);
+	addChar(input: string, replacement: string): string {
+		let firstUnderScoreIndex;
+		if (replacement.charAt(0) === '?') {
+			firstUnderScoreIndex = input.indexOf('_');
+		} else {
+			firstUnderScoreIndex = input.indexOf('?')
+		}
+		return input.substr(0, firstUnderScoreIndex) + replacement + input.substr(firstUnderScoreIndex + 1);
 	}
 }

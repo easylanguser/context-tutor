@@ -52,21 +52,25 @@ export class SentencesListPage {
 				let lsn = res[0];
 				for (let i = 0; i < lsn.length; i++) {
 					const hiddenChars: Array<string[]> = [];
+					const curCharsIndexes: number[] = [];
 					for (let j = 0; j < lsn[i].words.length; j++) {
 						const chars: string[] = [];
 						for (let k = 0; k < lsn[i].words[j][1]; k++) {
 							chars.push(lsn[i].text.charAt(lsn[i].words[j][0] + k));
 						}
 						hiddenChars.push(chars);
+						curCharsIndexes.push(0);
 					}
+					const hiddenSentence = this.util.hideChars(lsn[i].text, lsn[i].words);
 					const sentence = new Sentence(
 						lsn[i].id,
 						lsn[i].words,
 						lsn[i].text,
-						this.util.hideChars(lsn[i].text, lsn[i].words),
+						hiddenSentence,
 						hiddenChars,
-						[],
+						curCharsIndexes,
 						0,
+						this.util.addChar(hiddenSentence, '?'),
 						false,
 						new Statistics(0, 0, 0, 0, 0, 0, 0));
 					if (!this.lessonData.getLessonByID(lessonId).sentences.some(sntn => sntn.id === sentence.id)) {
