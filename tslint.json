@@ -19,7 +19,7 @@
     "import-spacing": true,
     "indent": [
       true,
-      "spaces"
+      "tabs"
     ],
     "interface-over-type-literal": true,
     "label-position": true,
@@ -56,7 +56,7 @@
     "no-empty-interface": true,
     "no-eval": true,
     "no-inferrable-types": [
-      true,
+      false,
       "ignore-params"
     ],
     "no-misused-new": true,
@@ -72,7 +72,7 @@
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
     "one-line": [
-      true,
+      false,
       "check-open-brace",
       "check-catch",
       "check-else",
@@ -128,7 +128,7 @@
     "no-output-on-prefix": true,
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
-    "use-host-property-decorator": true,
+    "use-host-property-decorator": false,
     "no-input-rename": true,
     "no-output-rename": true,
     "use-life-cycle-interface": true,

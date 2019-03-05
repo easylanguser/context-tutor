@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { LessonByNameService } from '../../services/lesson-by-name/lesson-by-name.service';
 import { ActivatedRoute } from '@angular/router';
@@ -14,7 +14,7 @@ import { Statistics } from 'src/app/models/statistics';
 	styleUrls: ['sentences-list.scss'],
 })
 
-export class SentencesListPage {
+export class SentencesListPage implements OnInit {
 
 	lessonId: number;
 
@@ -37,7 +37,7 @@ export class SentencesListPage {
 	}
 
 	doRefresh(event) {
-		this.getData(this.lessonId).then(_ => { event.target.complete() });
+		this.getData(this.lessonId).then(_ => { event.target.complete(); });
 		setTimeout(() => {
 			event.target.complete();
 		}, 5000);
@@ -49,7 +49,7 @@ export class SentencesListPage {
 		await loading.present();
 		this.api.getData(lessonId)
 			.subscribe(res => {
-				let lsn = res[0];
+				const lsn = res[0];
 				for (let i = 0; i < lsn.length; i++) {
 					const hiddenChars: Array<string[]> = [];
 					const curCharsIndexes: number[] = [];
@@ -62,6 +62,7 @@ export class SentencesListPage {
 						curCharsIndexes.push(0);
 					}
 					const hiddenSentence = this.util.hideChars(lsn[i].text, lsn[i].words);
+
 					const sentence = new Sentence(
 						lsn[i].id,
 						lsn[i].words,

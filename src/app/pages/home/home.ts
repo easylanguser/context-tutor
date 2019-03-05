@@ -25,11 +25,11 @@ export class HomePage implements OnInit {
 		private lessonDeleteService: LessonDeleteService) { }
 
 	ngOnInit() {
-		this.getData().then(res => res)
+		this.getData().then(res => res);
 	}
 
 	async deleteItem(slidingItem: IonItemSliding, lessonID: number) {
-		let alert = await this.alertCtrl.create({
+		const alert = await this.alertCtrl.create({
 			message: 'Are you sure you want to delete this lesson?',
 			buttons: [
 				{
@@ -41,11 +41,11 @@ export class HomePage implements OnInit {
 				},
 				{
 					text: 'Delete',
-					handler: () => { 
+					handler: () => {
 						slidingItem.close();
-						
+
 						this.lessonDeleteService.delete(lessonID);
-						
+
 						let i = 0;
 						for (i; i < this.displayedLessons.length; i++) {
 							if (this.displayedLessons[i].id === lessonID) {
@@ -88,7 +88,7 @@ export class HomePage implements OnInit {
 
 	doRefresh(event) {
 		this.clearSegmentBoolean = false;
-		this.getData().then(_ => { event.target.complete() });
+		this.getData().then(_ => { event.target.complete(); });
 		setTimeout(() => {
 			event.target.complete();
 		}, 5000);
@@ -100,7 +100,7 @@ export class HomePage implements OnInit {
 			message: 'Loading'
 		});
 		await loading.present();
-		
+
 		this.displayedLessons = this.lessonService.getLessons();
 
 		loading.dismiss();

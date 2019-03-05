@@ -4,7 +4,7 @@ import { LoadingController } from '@ionic/angular';
 import { UtilsService } from '../../services/utils/utils.service';
 import { ToastController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
-import { LessonsService } from "src/app/services/lessons-data/lessons-data.service";
+import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
 import * as anime from 'animejs';
 
@@ -92,7 +92,7 @@ export class SentenceGuessPage implements OnInit {
 		});
 
 		this.updateChart();
-	};
+	}
 
 	ionViewWillLeave() {
 		this.saveData();
@@ -150,6 +150,16 @@ export class SentenceGuessPage implements OnInit {
 		if (showLoader) {
 			loading.dismiss();
 		}
+	}
+
+	textClick(event: MouseEvent) {
+		const ratio = event.offsetX / document.getElementById('sentence-to-show').clientWidth;
+		if (ratio < 0.33) {
+			// prev word
+		} else if (ratio > 0.66) {
+			// next
+		}
+		console.log(ratio);
 	}
 
 	// Go to following sentence of the lesson
@@ -249,9 +259,9 @@ export class SentenceGuessPage implements OnInit {
 		const correctCharBoxIndex = Math.floor(Math.random() * 4) + 1;
 		const correctChar = this.curCorrectChar().toUpperCase();
 		const correctCharIndexInAlphabet = this.alphabet.indexOf(correctChar);
-		let vowelsPositions = [0, 4, 8, 14, 20, 24];
+		const vowelsPositions = [0, 4, 8, 14, 20, 24];
 		let firstRand: number, secondRand: number, thirdRand: number, fourthRand: number;
-		let vowelIsGuessed: boolean = vowelsPositions.indexOf(correctCharIndexInAlphabet) !== -1;
+		const vowelIsGuessed: boolean = vowelsPositions.indexOf(correctCharIndexInAlphabet) !== -1;
 
 		this.updateFront = !this.updateFront;
 
@@ -297,11 +307,11 @@ export class SentenceGuessPage implements OnInit {
 
 	private highlightClickedCharBox(charBoxNumber: number, color: string) {
 		let charBoxId: string;
-		if (charBoxNumber === 1) { charBoxId = 'first-char-box' }
-		else if (charBoxNumber === 2) { charBoxId = 'second-char-box' }
-		else if (charBoxNumber === 3) { charBoxId = 'third-char-box' }
-		else if (charBoxNumber === 4) { charBoxId = 'fourth-char-box' }
-		else { return }
+		if (charBoxNumber === 1) { charBoxId = 'first-char-box'; }
+		else if (charBoxNumber === 2) { charBoxId = 'second-char-box'; }
+		else if (charBoxNumber === 3) { charBoxId = 'third-char-box'; }
+		else if (charBoxNumber === 4) { charBoxId = 'fourth-char-box'; }
+		else { return; }
 		document.getElementById(charBoxId).style.boxShadow = color;
 	}
 
@@ -334,10 +344,10 @@ export class SentenceGuessPage implements OnInit {
 		this.pieChart.update();
 	}
 
-	/*  
+	/*
 	*	0 - current word is not guessed
 	*	1 - current word is guessed, current sentence is not guessed
-	*	2 - current word is guessed, current sentence is guessed 
+	*	2 - current word is guessed, current sentence is guessed
 	*/
 	private status(): number {
 		if (this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length) {
@@ -365,16 +375,16 @@ export class SentenceGuessPage implements OnInit {
 		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
 			++this.curSentence().statistics.correctAnswers; // Statistics
 
-			let spanColor = "<span class='green'>";
+			let spanColor = '<span class=\'green\'>';
 
 			if (this.hintIsClicked) {
 				this.hintIsClicked = false;
 				this.highlightHint(this.none);
-				spanColor = "<span class='yellow'>";
+				spanColor = '<span class=\'yellow\'>';
 			}
 
 			// Fill guessed character
-			this.sentenceShown = this.util.addChar(this.sentenceShown, spanColor + this.curCorrectChar() + "</span>");
+			this.sentenceShown = this.util.addChar(this.sentenceShown, spanColor + this.curCorrectChar() + '</span>');
 			++this.curCharsIndexes[this.curWordIndex];
 
 			const status = this.status();
@@ -423,10 +433,10 @@ export class SentenceGuessPage implements OnInit {
 		this.charactersRotationIsPlayed = true;
 
 		await anime({
-			targets: [document.querySelector("#first-char-box"),
-			document.querySelector("#second-char-box"),
-			document.querySelector("#third-char-box"),
-			document.querySelector("#fourth-char-box")],
+			targets: [document.querySelector('#first-char-box'),
+			document.querySelector('#second-char-box'),
+			document.querySelector('#third-char-box'),
+			document.querySelector('#fourth-char-box')],
 			rotateY: '+=180',
 			easing: 'easeInOutSine',
 			duration: 300
@@ -471,6 +481,6 @@ export class SentenceGuessPage implements OnInit {
 			animated: true
 		});
 		toast.present();
-		setTimeout(() => { this.toastIsShown = false }, 1500);
+		setTimeout(() => { this.toastIsShown = false; }, 1500);
 	}
 }

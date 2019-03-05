@@ -8,7 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClient }  from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { HttpClientModule } from '@angular/common/http'
 
 import { Storage, IonicStorageModule } from '@ionic/storage';
@@ -23,46 +23,46 @@ import { ForgetPageModule } from "./pages/forget/forget.module";
 import { ChangePageModule } from "./pages/change/change.module";
 
 export function jwtOptionsFactory(storage) {
-    return {
-        tokenGetter: () => {
-            return storage.get('access_token');
-        },
-        whitelistedDomains: ['http://165.227.159.35']
-    }
+	return {
+		tokenGetter: () => {
+			return storage.get('access_token');
+		},
+		whitelistedDomains: ['http://165.227.159.35']
+	}
 }
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), 
-      AppRoutingModule, 
-      HttpClientModule,
-      SentencesListPageModule,
-      SentenceGuessPageModule,
-      LoginPageModule,
-      SignUpPageModule, 
-      BrowserAnimationsModule,
-      AccountPageModule,
-      ForgetPageModule,
-      ChangePageModule,
-      IonicStorageModule.forRoot({
-      name: 'easy-db',
-      driverOrder: ['indexeddb', 'sqlite', 'websql']
-  }),
-      JwtModule.forRoot({
-          jwtOptionsProvider: {
-              provide: JWT_OPTIONS,
-              useFactory: jwtOptionsFactory,
-              deps: [Storage],
-          }
-      })],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    HttpClient,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  bootstrap: [AppComponent]
+	declarations: [AppComponent],
+	entryComponents: [],
+	imports: [BrowserModule, IonicModule.forRoot(),
+		AppRoutingModule,
+		HttpClientModule,
+		SentencesListPageModule,
+		SentenceGuessPageModule,
+		LoginPageModule,
+		SignUpPageModule,
+		BrowserAnimationsModule,
+		AccountPageModule,
+		ForgetPageModule,
+		ChangePageModule,
+		IonicStorageModule.forRoot({
+			name: 'easy-db',
+			driverOrder: ['indexeddb', 'sqlite', 'websql']
+		}),
+		JwtModule.forRoot({
+			jwtOptionsProvider: {
+				provide: JWT_OPTIONS,
+				useFactory: jwtOptionsFactory,
+				deps: [Storage],
+			}
+		})],
+	providers: [
+		StatusBar,
+		SplashScreen,
+		HttpClient,
+		{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+	],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
+	bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

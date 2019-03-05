@@ -41,7 +41,7 @@ export class UtilsService {
 		if (replacement.charAt(0) === '?') {
 			firstUnderScoreIndex = input.indexOf('_');
 		} else {
-			firstUnderScoreIndex = input.indexOf('?')
+			firstUnderScoreIndex = input.indexOf('?');
 		}
 		return input.substr(0, firstUnderScoreIndex) + replacement + input.substr(firstUnderScoreIndex + 1);
 	}
