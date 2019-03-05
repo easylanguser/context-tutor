@@ -19,7 +19,7 @@ export class UtilsService {
 				}
 			}
 			textWithHiddenCharacters += inputText.substr(
-				indexes[i][0] + indexes[i][1], 
+				indexes[i][0] + indexes[i][1],
 				indexes[i + 1][0] - (indexes[i][0] + indexes[i][1]));
 		}
 		for (let i = 0; i < indexes[indexes.length - 1][1]; i++) {

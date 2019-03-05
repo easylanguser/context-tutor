@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { forkJoin } from 'rxjs';
-import { HttpService } from "../http/rest/http.service";
+import { HttpService } from '../http/rest/http.service';
 
 const apiUrl = 'http://165.227.159.35/api/lessons/getLessons';
 
@@ -14,7 +14,7 @@ export class LessonsListService {
 	constructor(private httpService: HttpService) { }
 
 	getData(): Observable<any> {
-		let response = this.httpService.doGet(apiUrl);
+		const response = this.httpService.doGet(apiUrl);
 		return forkJoin([response]);
 	}
 }
