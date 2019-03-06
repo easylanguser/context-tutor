@@ -152,16 +152,6 @@ export class SentenceGuessPage implements OnInit {
 		}
 	}
 
-	textClick(event: MouseEvent) {
-		const ratio = event.offsetX / document.getElementById('sentence-to-show').clientWidth;
-		if (ratio < 0.33) {
-			// prev word
-		} else if (ratio > 0.66) {
-			// next
-		}
-		console.log(ratio);
-	}
-
 	// Go to following sentence of the lesson
 	nextSentenceClick() {
 		if (this.sentenceTranslateIsPlayed) {
@@ -190,9 +180,23 @@ export class SentenceGuessPage implements OnInit {
 		if (!this.curSentence().isSolved) {
 			++this.curSentence().statistics.giveUps; // Statistics
 
-			this.curWordIndex = this.curSentence().hiddenChars.length;
+			do {
+				do {
+					this.sentenceShown = this.util.addChar(this.sentenceShown,
+						'<span class=\'yellow\'>' + this.curCorrectChar() + '</span>');
+					if (this.curCharsIndexes[this.curWordIndex] !==
+						this.curSentence().hiddenChars[this.curWordIndex].length - 1 ||
+						this.curWordIndex !== this.curSentence().hiddenChars.length - 1) {
+						this.sentenceShown = this.util.addChar(this.sentenceShown, '?');
+					}
+					++this.curCharsIndexes[this.curWordIndex];
+				} while (this.curCharsIndexes[this.curWordIndex] <
+					this.curSentence().hiddenChars[this.curWordIndex].length);
+				++this.curWordIndex;
+			} while (this.curWordIndex < this.curSentence().hiddenChars.length);
+
+			this.updateChart();
 			this.resetColors();
-			this.sentenceShown = this.curSentence().text;
 			this.curSentence().isSolved = true;
 			this.highlightNext(this.greenHighlight);
 			this.highlightHint(this.none);
@@ -327,15 +331,15 @@ export class SentenceGuessPage implements OnInit {
 		const chartData = this.pieChart.data.datasets[0];
 		const stats = this.curSentence().statistics;
 
-		if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages === 0) {
+		if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps === 0) {
 			chartData.data[0] = 1;
 			chartData.data[1] = 0;
 			chartData.data[2] = 0;
-			chartData.backgroundColor[0] = '#999';
+			chartData.backgroundColor[0] = '#F0F0F0';
 		} else {
 			chartData.data[0] = stats.correctAnswers;
 			chartData.data[1] = stats.wrongAnswers;
-			chartData.data[2] = stats.hintUsages;
+			chartData.data[2] = stats.hintUsages + this.curSentence().hiddenWord.length * stats.giveUps;
 			chartData.backgroundColor[0] = '#0F0';
 			chartData.backgroundColor[1] = '#F00';
 			chartData.backgroundColor[2] = '#FF0';

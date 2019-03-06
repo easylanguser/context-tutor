@@ -144,37 +144,48 @@ $chars-and-hint-height: 20vw;
 
 @media (min-width: 992px) {
     #footer {
-        height: 28vh;
+        height: 10vh;
         width: 72vw;
     }
     #chars {
-        height: 18vh;
-        width: 56vw;
+        height: 10vh;
+        width: 32vw;
+        float: left;
     }
     #hint-button-div {
         width: 16vw; 
         height: 18vh;
+        float: none;
+        display: inline-block;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
     }
     #hint-button {
-        height: 13vh;
-        width: 13vh;
+        height: 7vh;
+        width: 7vh;
+        font-size: 6vh;
     }
     #give-up-button {
-        height: 9vmin;
-        width: 9vmin;
-        font-size: 2.3vmin;
+        height: 7vmin;
+        width: 7vmin;
+        font-size: 2vmin;
+        margin: 0;
     }
     #next-sentence-button {
-        height: 9vmin;
-        width: 9vmin;
-        font-size: 2.3vmin;
+        height: 7vmin;
+        width: 7vmin;
+        font-size: 2vmin;
+        margin: 0;
     }
     .char-box {
-        height: 13vh;
-        width: 13vh;
-        font-size: 9vh;
+        height: 7vh;
+        width: 7vh;
+        font-size: 5vh;
     }
     #give-up-button-container {
         height: 10vh;
+        width: 23vw;
+        padding: 1vw 1vw 0 1vw;
+        float: right;
     }
 }

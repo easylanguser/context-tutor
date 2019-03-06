@@ -54,10 +54,9 @@ export class LessonsService {
 					flooredValue = Math.floor(diff / 86400);
 					label = ' days ago';
 					if (flooredValue === 1) { label = ' day ago'; }
-				} else if (diff >= 604800 && diff < 2678400) {
+				} else if (diff >= 1209600 && diff < 2678400) {
 					flooredValue = Math.floor(diff / 604800);
 					label = ' weeks ago';
-					if (flooredValue === 1) { label = ' week ago'; }
 				} else {
 					flooredValue = Math.floor(diff / 2678400);
 					label = ' months ago';
