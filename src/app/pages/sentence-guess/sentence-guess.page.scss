@@ -14,6 +14,7 @@
     padding: 0;
     margin-left: 3vw;
     margin-right: 3vw;
+    min-height: 16vh;
     line-height: 5vh;
     max-height: 61vh;
     overflow-y: auto;
@@ -130,15 +131,54 @@ $chars-and-hint-height: 20vw;
     border: 1px solid #CECECE;
 }
 
-@media (min-width: 1px) and (max-width: 600px) {
+@media (min-width: 670px) {
     #sentence-to-show {
-        font-size: 6vw;
+        font-size: 5vh;
     }
-}
-
-@media (min-width: 600px) and (max-width: 992px) {
-    #sentence-to-show {
-        font-size: 4vw;
+    #footer {
+        height: 10vh;
+        width: 100vw;
+    }
+    #chars {
+        height: 10vh;
+        width: 45vw;
+        float: left;
+    }
+    #hint-button-div {
+        width: 22vw; 
+        height: 10vh;
+        float: none;
+        display: inline-block;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+    }
+    #hint-button {
+        height: 7vh;
+        width: 7vh;
+        font-size: 6vh;
+    }
+    #give-up-button {
+        height: 7vh;
+        width: 7vh;
+        font-size: 2vmin;
+        margin: 0;
+    }
+    #next-sentence-button {
+        height: 7vh;
+        width: 7vh;
+        font-size: 2vmin;
+        margin: 0;
+    }
+    .char-box {
+        height: 7vh;
+        width: 7vh;
+        font-size: 5vh;
+    }
+    #give-up-button-container {
+        height: 10vh;
+        width: 33vw;
+        padding: 1vw 3vw 0 3vw;
+        float: right;
     }
 }
 
@@ -154,38 +194,16 @@ $chars-and-hint-height: 20vw;
     }
     #hint-button-div {
         width: 16vw; 
-        height: 18vh;
+        height: 10vh;
         float: none;
         display: inline-block;
         border-left: 1px solid black;
         border-right: 1px solid black;
     }
-    #hint-button {
-        height: 7vh;
-        width: 7vh;
-        font-size: 6vh;
-    }
-    #give-up-button {
-        height: 7vmin;
-        width: 7vmin;
-        font-size: 2vmin;
-        margin: 0;
-    }
-    #next-sentence-button {
-        height: 7vmin;
-        width: 7vmin;
-        font-size: 2vmin;
-        margin: 0;
-    }
-    .char-box {
-        height: 7vh;
-        width: 7vh;
-        font-size: 5vh;
-    }
     #give-up-button-container {
         height: 10vh;
         width: 23vw;
-        padding: 1vw 1vw 0 1vw;
+        padding: 1vw 3vw 0 3vw;
         float: right;
     }
 }
