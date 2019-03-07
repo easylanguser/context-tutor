@@ -50,7 +50,7 @@ export class LessonsService {
 					flooredValue = Math.floor(diff / 3600);
 					label = ' hours ago';
 					if (flooredValue === 1) { label = ' hour ago'; }
-				} else if (diff >= 86400 && diff < 604800) {
+				} else if (diff >= 86400 && diff < 1209600) {
 					flooredValue = Math.floor(diff / 86400);
 					label = ' days ago';
 					if (flooredValue === 1) { label = ' day ago'; }
