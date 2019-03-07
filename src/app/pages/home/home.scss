@@ -20,6 +20,7 @@
 }
 
 .lesson-text-div {
+    width: 80vw;
     overflow: hidden;
     display: table-cell;
     vertical-align: top;
@@ -43,25 +44,11 @@
     color: #95949c;
 }
 
-@media (min-width: 650px) {
-    .date-text {
-        font-size: 1.5vmin;
-    }
-}
-
-.forward-icon {
-    bottom: 1vh;
-    right: 1vh;
-    position: absolute;
-}
-
-@media (min-width: 992px) {
-    #date-segment {
-        width: 67vw !important;
-    }
-    .lesson-text-div {
-        width: 50.4vw;
-    }
+.canvas-div {
+    height: 14vmin;
+    width: 14vmin;
+    float: right;
+    margin: 1vmin 3vw 0 0;
 }
 
 .try-again-sliding-option {
@@ -72,4 +59,29 @@
 .delete-sliding-option {
     width: 25vw;
     text-align: center;
+}
+
+.forward-icon {
+    bottom: 1vh;
+    right: 1vh;
+    position: absolute;
+}
+
+@media (min-width: 650px) {
+    .date-text {
+        font-size: 1.5vmin;
+    }
+    .canvas-div {
+        height: 8vmin;
+        width: 8vmin;
+    }    
+}
+
+@media (min-width: 992px) {
+    #date-segment {
+        width: 67vw !important;
+    }
+    .lesson-text-div {
+        width: 50.4vw;
+    }
 }

@@ -8,15 +8,15 @@
 </ion-header>
 
 <ion-content overflow-scroll="true">
-  <ion-segment [(ngModel)]="clearSegmentBoolean" id="date-segment">
-    <ion-segment-button (click)="weekAgoClick()">
-      Week ago
+  <ion-segment id="date-segment">
+    <ion-segment-button checked="true">
+      All
     </ion-segment-button>
-    <ion-segment-button (click)="monthAgoClick()">
-      Month ago
+    <ion-segment-button>
+      Red
     </ion-segment-button>
-    <ion-segment-button (click)="yearAgoClick()">
-      Year ago
+    <ion-segment-button>
+      Red + Yellow
     </ion-segment-button>
   </ion-segment>
   <ion-refresher [pullMax]="0" (ionRefresh)="doRefresh($event)">
@@ -34,6 +34,9 @@
             <span class="date-text">
               {{lesson.displayedDate}}
             </span>
+          </div>
+          <div class="canvas-div">
+            <canvas #chartsid width="50" height="50"></canvas>
           </div>
         </div>
       </ion-item>

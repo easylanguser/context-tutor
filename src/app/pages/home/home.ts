@@ -1,22 +1,21 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChildren, AfterViewInit, QueryList } from '@angular/core';
 import { LoadingController, IonItemSliding, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
 import { LessonDeleteService } from 'src/app/services/lesson-delete/lesson-delete.service';
+import { Chart } from 'chart.js';
 
 @Component({
 	selector: 'page-home',
 	templateUrl: 'home.html',
 	styleUrls: ['home.scss']
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, AfterViewInit {
 
 	displayedLessons: Lesson[];
-	clearSegmentBoolean: boolean;
-
-	// Week, month and year in milliseconds
-	periods: number[] = [1209600000, 5184000000, 63072000000];
+	@ViewChildren('chartsid') pieCanvases: any;
+	pieChart: Array<Chart> = [];
 
 	constructor(private loadingController: LoadingController,
 		private router: Router,
@@ -26,6 +25,38 @@ export class HomePage implements OnInit {
 
 	ngOnInit() {
 		this.getData().then(res => res);
+	}
+
+	ngAfterViewInit() {
+		this.pieCanvases.changes.subscribe(_ => {
+			for (let i = 0; i < this.pieCanvases._results.length; i++) {
+				this.pieChart.push(new Chart(this.pieCanvases._results[i].nativeElement, {
+					type: 'pie',
+					data: {
+						datasets: [
+							{
+								data: [1, 0, 0],
+								backgroundColor: ['#999', '#999', '#999']
+							}
+						],
+					},
+					options: {
+						legend: {
+							display: false
+						},
+						tooltips: {
+							enabled: false
+						},
+						events: [],
+						elements: {
+							arc: {
+								borderWidth: 0
+							}
+						}
+					}
+				}));
+			}
+		});
 	}
 
 	async deleteItem(slidingItem: IonItemSliding, lessonID: number) {
@@ -44,7 +75,7 @@ export class HomePage implements OnInit {
 					handler: () => {
 						slidingItem.close();
 
-						this.lessonDeleteService.delete(lessonID);
+						// this.lessonDeleteService.delete(lessonID);
 
 						let i = 0;
 						for (i; i < this.displayedLessons.length; i++) {
@@ -63,31 +94,7 @@ export class HomePage implements OnInit {
 		await alert.present();
 	}
 
-	async filterDate(periodNumber: number) {
-		const loading = await this.loadingController.create({
-			message: 'Loading'
-		});
-		await loading.present();
-		this.displayedLessons = this.lessonService.lessons.filter(
-			lesson => new Date().getTime() - new Date(lesson.created_at).getTime() <= this.periods[periodNumber]
-		);
-		loading.dismiss();
-	}
-
-	weekAgoClick() {
-		this.filterDate(0);
-	}
-
-	monthAgoClick() {
-		this.filterDate(1);
-	}
-
-	yearAgoClick() {
-		this.filterDate(2);
-	}
-
 	doRefresh(event) {
-		this.clearSegmentBoolean = false;
 		this.getData().then(_ => { event.target.complete(); });
 		setTimeout(() => {
 			event.target.complete();
@@ -96,13 +103,9 @@ export class HomePage implements OnInit {
 
 	// Get list of lessons, add them to displayed and to lessons data service
 	private async getData() {
-		const loading = await this.loadingController.create({
-			message: 'Loading'
-		});
+		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
-
-		this.displayedLessons = this.lessonService.getLessons();
-
+		this.displayedLessons = await this.lessonService.getLessons();
 		loading.dismiss();
 	}
 
