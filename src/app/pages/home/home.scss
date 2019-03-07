@@ -1,11 +1,12 @@
 #date-segment {
-    width: 95vw !important;
-    margin-left: 2.5vw;
-    margin-top: 1vh;
+    width: 100vw !important;
 }
 
 .ios :host #date-segment {
+    width: 95vw !important;
+    margin-top: 1vh;
     margin-bottom: 1vh;
+    margin-left: 2.5vw;
 }
 
 .lesson-card {
