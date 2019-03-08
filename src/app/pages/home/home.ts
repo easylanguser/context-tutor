@@ -15,7 +15,7 @@ export class HomePage implements OnInit, AfterViewInit {
 
 	displayedLessons: Lesson[];
 	@ViewChildren('chartsid') pieCanvases: any;
-	pieChart: Array<Chart> = [];
+	pieCharts: Array<Chart> = [];
 
 	constructor(private loadingController: LoadingController,
 		private router: Router,
@@ -27,10 +27,14 @@ export class HomePage implements OnInit, AfterViewInit {
 		this.getData().then(res => res);
 	}
 
+	ionViewDidEnter() {
+		this.updateCharts();
+	}
+
 	ngAfterViewInit() {
 		this.pieCanvases.changes.subscribe(_ => {
 			for (let i = 0; i < this.pieCanvases._results.length; i++) {
-				this.pieChart.push(new Chart(this.pieCanvases._results[i].nativeElement, {
+				this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, {
 					type: 'pie',
 					data: {
 						datasets: [
@@ -57,6 +61,38 @@ export class HomePage implements OnInit, AfterViewInit {
 				}));
 			}
 		});
+	}
+
+	private updateCharts() {
+		let i = 0;
+		for (const lesson of this.displayedLessons) {
+			const chartData = this.pieCharts[i].data.datasets[0];
+			chartData.data[0] = 1;
+			chartData.data[1] = 0;
+			chartData.data[2] = 0;
+			for (const sentence of lesson.sentences) {
+				const stats = sentence.statistics;
+				if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps > 0) {
+					chartData.data[0] += stats.correctAnswers;
+					chartData.data[1] += stats.wrongAnswers;
+					chartData.data[2] += stats.hintUsages + sentence.hiddenWord.length * stats.giveUps;
+				}
+			}
+
+			if (chartData.data[0] + chartData.data[1] + chartData.data[2] > 1) {
+				const sentencesNumber = lesson.sentences.length;
+				--chartData.data[0];
+				chartData.data[0] /= sentencesNumber;
+				chartData.data[1] /= sentencesNumber;
+				chartData.data[2] /= sentencesNumber;
+				chartData.backgroundColor[0] = '#0F0';
+				chartData.backgroundColor[1] = '#F00';
+				chartData.backgroundColor[2] = '#FF0';
+			}
+
+			this.pieCharts[i].update();
+			++i;
+		}
 	}
 
 	async deleteItem(slidingItem: IonItemSliding, lessonID: number) {

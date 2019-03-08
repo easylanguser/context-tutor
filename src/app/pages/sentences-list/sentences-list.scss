@@ -20,7 +20,15 @@
     table-layout: fixed;
 }
 
+.canvas-div {
+    height: 14vmin;
+    width: 14vmin;
+    float: right;
+    margin: 1vmin 3vw 0 0;
+}
+
 .sentence-text-div {
+    width: 80vw;
     overflow-y: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -37,12 +45,6 @@
     max-height: 6vh;
     margin-top: 0;
     color: #95949c;
-}
-
-.forward-icon {
-    bottom: 1vh;
-    right: 1vh;
-    position: absolute;
 }
 
 @media (min-width: 992px) {

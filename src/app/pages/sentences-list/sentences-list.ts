@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { LessonByNameService } from '../../services/lesson-by-name/lesson-by-name.service';
 import { ActivatedRoute } from '@angular/router';
@@ -7,6 +7,7 @@ import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Statistics } from 'src/app/models/statistics';
+import { Chart } from 'chart.js';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -14,9 +15,11 @@ import { Statistics } from 'src/app/models/statistics';
 	styleUrls: ['sentences-list.scss'],
 })
 
-export class SentencesListPage implements OnInit {
+export class SentencesListPage implements OnInit, AfterViewInit {
 
 	lessonId: number;
+	@ViewChildren('chartsid') pieCanvases: any;
+	pieCharts: Array<Chart> = [];
 
 	constructor(private api: LessonByNameService,
 		private loadingController: LoadingController,
@@ -28,6 +31,69 @@ export class SentencesListPage implements OnInit {
 	ngOnInit() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
 		this.getData(this.lessonId);
+	}
+
+	ionViewDidEnter() {
+		for (let i = 0; i < this.pieCanvases._results.length; i++) {
+			this.updateCharts(i);
+		}
+	}
+
+	ngAfterViewInit() {
+		if (this.pieCanvases._results.length === 0) {
+			this.pieCanvases.changes.subscribe(_ => {
+				this.handleCharts();
+			});
+		} else {
+			this.handleCharts();
+		}
+	}
+
+	private handleCharts() {
+		for (let i = 0; i < this.pieCanvases._results.length; i++) {
+			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, {
+				type: 'pie',
+				data: {
+					datasets: [
+						{
+							data: [1, 0, 0],
+							backgroundColor: ['#999', '#999', '#999']
+						}
+					],
+				},
+				options: {
+					legend: {
+						display: false
+					},
+					tooltips: {
+						enabled: false
+					},
+					events: [],
+					elements: {
+						arc: {
+							borderWidth: 0
+						}
+					}
+				}
+			}));
+
+			this.updateCharts(i);
+		}
+	}
+
+	private updateCharts(index: number) {
+		const sentence = this.lessonData.getLessonByID(this.lessonId).sentences[index];
+		const stats = sentence.statistics;
+		if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps !== 0) {
+			const chartData = this.pieCharts[index].data.datasets[0];
+			chartData.data[0] = stats.correctAnswers;
+			chartData.data[1] = stats.wrongAnswers;
+			chartData.data[2] = stats.hintUsages + sentence.hiddenWord.length * stats.giveUps;
+			chartData.backgroundColor[0] = '#0F0';
+			chartData.backgroundColor[1] = '#F00';
+			chartData.backgroundColor[2] = '#FF0';
+			this.pieCharts[index].update();
+		}
 	}
 
 	// Go to selected lesson sentences page
