@@ -27,7 +27,6 @@ $chars-and-hint-height: 20vw;
     float: right;
     display: flex;
     justify-content: center;
-    padding-top: 1vw;
 }
 
 #hint-button {
@@ -38,6 +37,7 @@ $chars-and-hint-height: 20vw;
     font-size: 7vh;
     outline: none;
     background: #FFF;
+    margin-top: 1vw;
     --background: #FFF;
     --color: #000;
     --border-radius: 50%;
@@ -54,7 +54,6 @@ $chars-and-hint-height: 20vw;
     height: $chars-and-hint-height;
     width: 78vw;
     transition: all .5s;
-    padding-left: 1vw;
 }
 
 .char-box {
@@ -143,6 +142,7 @@ $chars-and-hint-height: 20vw;
         height: 10vh;
         width: 45vw;
         float: left;
+        padding-left: calc(20.5vw - 14vh);
     }
     #hint-button-div {
         width: 22vw; 
@@ -156,6 +156,7 @@ $chars-and-hint-height: 20vw;
         height: 7vh;
         width: 7vh;
         font-size: 6vh;
+        margin-top: 1.5vh;
     }
     #give-up-button {
         height: 7vh;
@@ -173,11 +174,12 @@ $chars-and-hint-height: 20vw;
         height: 7vh;
         width: 7vh;
         font-size: 5vh;
+        margin-top: 1.5vh;
     }
     #give-up-button-container {
         height: 10vh;
         width: 33vw;
-        padding: 1vw 3vw 0 3vw;
+        padding: 1.5vh 3vw 0 3vw;
         float: right;
     }
 }
@@ -190,6 +192,7 @@ $chars-and-hint-height: 20vw;
     #chars {
         height: 10vh;
         width: 32vw;
+        padding-left: calc(14vw - 14vh);
         float: left;
     }
     #hint-button-div {
@@ -203,7 +206,6 @@ $chars-and-hint-height: 20vw;
     #give-up-button-container {
         height: 10vh;
         width: 23vw;
-        padding: 1vw 3vw 0 3vw;
         float: right;
     }
 }
