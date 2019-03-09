@@ -47,6 +47,13 @@
     color: #95949c;
 }
 
+@media (min-width: 650px) {
+    .canvas-div {
+        height: 8vmin;
+        width: 8vmin;
+    }    
+}
+
 @media (min-width: 992px) {
     #progress-segment {
         width: 67vw !important;
