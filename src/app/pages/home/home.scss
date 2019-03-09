@@ -46,10 +46,10 @@
 }
 
 .canvas-div {
-    height: 14vmin;
-    width: 14vmin;
+    height: 8vh;
+    width: 8vh;
     float: right;
-    margin: 1vmin 3vw 0 0;
+    margin: 1vh 3vw 0 0;
 }
 
 .try-again-sliding-option {
@@ -72,10 +72,6 @@
     .date-text {
         font-size: 1.5vmin;
     }
-    .canvas-div {
-        height: 8vmin;
-        width: 8vmin;
-    }    
 }
 
 @media (min-width: 992px) {

@@ -21,10 +21,10 @@
 }
 
 .canvas-div {
-    height: 14vmin;
-    width: 14vmin;
+    height: 8vh;
+    width: 8vh;
     float: right;
-    margin: 1vmin 3vw 0 0;
+    margin: 1vh 3vw 0 0;
 }
 
 .sentence-text-div {
@@ -45,13 +45,6 @@
     max-height: 6vh;
     margin-top: 0;
     color: #95949c;
-}
-
-@media (min-width: 650px) {
-    .canvas-div {
-        height: 8vmin;
-        width: 8vmin;
-    }    
 }
 
 @media (min-width: 992px) {
