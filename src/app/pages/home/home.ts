@@ -80,11 +80,7 @@ export class HomePage implements OnInit, AfterViewInit {
 			}
 
 			if (chartData.data[0] + chartData.data[1] + chartData.data[2] > 1) {
-				const sentencesNumber = lesson.sentences.length;
 				--chartData.data[0];
-				chartData.data[0] /= sentencesNumber;
-				chartData.data[1] /= sentencesNumber;
-				chartData.data[2] /= sentencesNumber;
 				chartData.backgroundColor[0] = '#0F0';
 				chartData.backgroundColor[1] = '#F00';
 				chartData.backgroundColor[2] = '#FF0';
