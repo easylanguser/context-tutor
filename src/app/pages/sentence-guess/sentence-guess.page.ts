@@ -27,7 +27,7 @@ export class SentenceGuessPage implements OnInit {
 	sentenceShown: string; // Current displayed sentence
 
 	private toastIsShown: boolean; // Single toast flag
-	private hintIsClicked: boolean = false;
+	hintIsClicked: boolean = false;
 	updateFront: boolean = false;
 
 	// Single animation at a time flags
@@ -134,10 +134,8 @@ export class SentenceGuessPage implements OnInit {
 			if (showLoader) {
 				loading.dismiss();
 			}
-			this.highlightNext(this.greenHighlight);
 		} else {
 			this.hintIsClicked = false;
-			this.highlightNext(this.none);
 
 			// Restore user progress
 			this.curWordIndex = this.curSentence().curWordIndex;
@@ -198,8 +196,6 @@ export class SentenceGuessPage implements OnInit {
 			this.updateChart();
 			this.resetColors();
 			this.curSentence().isSolved = true;
-			this.highlightNext(this.greenHighlight);
-			this.highlightHint(this.none);
 		}
 	}
 
@@ -218,7 +214,6 @@ export class SentenceGuessPage implements OnInit {
 			} else {
 				this.highlightClickedCharBox(4, this.yellowHighlight);
 			}
-			this.highlightHint(this.yellowHighlight);
 			this.hintIsClicked = true;
 		}
 	}
@@ -319,14 +314,6 @@ export class SentenceGuessPage implements OnInit {
 		document.getElementById(charBoxId).style.boxShadow = color;
 	}
 
-	private highlightNext(highlight: string) {
-		document.getElementById('next-sentence-button').style.boxShadow = highlight;
-	}
-
-	private highlightHint(highlight: string) {
-		document.getElementById('hint-button').style.boxShadow = highlight;
-	}
-
 	private updateChart() {
 		const chartData = this.pieChart.data.datasets[0];
 		const stats = this.curSentence().statistics;
@@ -383,7 +370,6 @@ export class SentenceGuessPage implements OnInit {
 
 			if (this.hintIsClicked) {
 				this.hintIsClicked = false;
-				this.highlightHint(this.none);
 				spanColor = '<span class=\'yellow\'>';
 			}
 
@@ -396,7 +382,6 @@ export class SentenceGuessPage implements OnInit {
 				++this.curWordIndex;
 			} else if (status === 2) {
 				this.curSentence().isSolved = true;
-				this.highlightNext(this.greenHighlight);
 				return;
 			}
 

@@ -38,8 +38,11 @@
         <div class="back">{{fourthChar}}</div>
       </div>
     </div>
-    <div id="hint-button-div" (click)="hintClick()">
-      <ion-button text-center shape="round" id="hint-button" (click)="hintClick()">
+    <div id="hint-button-div">
+      <ion-button text-center shape="round" id="hint-button" 
+        [ngStyle]="{'box-shadow': hintIsClicked ? yellowHighlight : 'none'}"
+        [disabled]="hintIsClicked"
+        (click)="hintClick()">
         ?
       </ion-button>
     </div>
@@ -47,7 +50,9 @@
       <ion-button text-center id="give-up-button" (click)="giveUpClick()">
         Give<br>up
       </ion-button>
-      <ion-button text-center id="next-sentence-button" (click)="nextSentenceClick()">
+      <ion-button text-center id="next-sentence-button" 
+        [ngStyle]="{'box-shadow': this.curSentence().isSolved ? greenHighlight : 'none'}" 
+        (click)="nextSentenceClick()">
         Next
       </ion-button>
     </div>
