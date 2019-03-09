@@ -105,7 +105,7 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	// Get current Sentence object from service
-	private curSentence(): Sentence {
+	curSentence(): Sentence {
 		return this.lessonsData.getLessonByID(this.lessonId).sentences[this.sentenceIndex - 1];
 	}
 
