@@ -78,8 +78,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	private updateCharts() {
-		if (this.displayedSentences === undefined || 
-			this.displayedSentences.length === 0 || 
+		if (this.displayedSentences === undefined ||
+			this.displayedSentences.length === 0 ||
 			this.pieCharts.length !== this.displayedSentences.length) {
 			return;
 		}
@@ -95,6 +95,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				chartData.backgroundColor[1] = '#F00';
 				chartData.backgroundColor[2] = '#FF0';
 				this.pieCharts[i].update();
+			} else {
+				this.pieCharts[i].update({ duration: 0 });
 			}
 			++i;
 		}

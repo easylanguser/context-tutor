@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, AfterViewInit, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
 import { LoadingController, IonItemSliding, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Lesson } from 'src/app/models/lesson';
@@ -90,9 +90,11 @@ export class HomePage implements OnInit, AfterViewInit {
 				chartData.backgroundColor[0] = '#0F0';
 				chartData.backgroundColor[1] = '#F00';
 				chartData.backgroundColor[2] = '#FF0';
+				this.pieCharts[i].update();
+			} else {
+				this.pieCharts[i].update({ duration: 0 });
 			}
 
-			this.pieCharts[i].update();
 			++i;
 		}
 	}
