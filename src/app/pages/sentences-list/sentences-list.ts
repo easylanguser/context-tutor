@@ -17,10 +17,10 @@ import { Chart } from 'chart.js';
 
 export class SentencesListPage implements OnInit, AfterViewInit {
 
+	displayedSentences: Sentence[];
 	lessonId: number;
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
-	displayedSentences: Sentence[];
 
 	constructor(private api: LessonByNameService,
 		private loadingController: LoadingController,
@@ -35,19 +35,13 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	ionViewDidEnter() {
-		for (let i = 0; i < this.pieCanvases._results.length; i++) {
-			this.updateCharts(i);
-		}
+		this.updateCharts();
 	}
 
 	ngAfterViewInit() {
-		if (this.pieCanvases._results.length === 0) {
-			this.pieCanvases.changes.subscribe(_ => {
-				this.handleCharts();
-			});
-		} else {
+		this.pieCanvases.changes.subscribe(_ => {
 			this.handleCharts();
-		}
+		});
 	}
 
 	private handleCharts() {
@@ -79,22 +73,30 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				}
 			}));
 
-			this.updateCharts(i);
+			this.updateCharts();
 		}
 	}
 
-	private updateCharts(index: number) {
-		const sentence = this.lessonData.getLessonByID(this.lessonId).sentences[index];
-		const stats = sentence.statistics;
-		if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps !== 0) {
-			const chartData = this.pieCharts[index].data.datasets[0];
-			chartData.data[0] = stats.correctAnswers;
-			chartData.data[1] = stats.wrongAnswers;
-			chartData.data[2] = stats.hintUsages + sentence.hiddenWord.length * stats.giveUps;
-			chartData.backgroundColor[0] = '#0F0';
-			chartData.backgroundColor[1] = '#F00';
-			chartData.backgroundColor[2] = '#FF0';
-			this.pieCharts[index].update();
+	private updateCharts() {
+		if (this.displayedSentences === undefined || 
+			this.displayedSentences.length === 0 || 
+			this.pieCharts.length !== this.displayedSentences.length) {
+			return;
+		}
+		let i = 0;
+		for (const sentence of this.displayedSentences) {
+			const stats = sentence.statistics;
+			if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps !== 0) {
+				const chartData = this.pieCharts[i].data.datasets[0];
+				chartData.data[0] = stats.correctAnswers;
+				chartData.data[1] = stats.wrongAnswers;
+				chartData.data[2] = stats.hintUsages + sentence.hiddenWord.length * stats.giveUps;
+				chartData.backgroundColor[0] = '#0F0';
+				chartData.backgroundColor[1] = '#F00';
+				chartData.backgroundColor[2] = '#FF0';
+				this.pieCharts[i].update();
+			}
+			++i;
 		}
 	}
 
@@ -147,6 +149,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 					}
 				}
 				this.displayedSentences = this.lessonData.getLessonByID(this.lessonId).sentences;
+				this.updateCharts();
 				loading.dismiss();
 			}, err => {
 				console.log(err);
