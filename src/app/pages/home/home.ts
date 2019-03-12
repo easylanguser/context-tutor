@@ -33,6 +33,7 @@ export class HomePage implements OnInit, AfterViewInit {
 
 	ngAfterViewInit() {
 		this.pieCanvases.changes.subscribe(_ => {
+			this.pieCharts = [];
 			for (let i = 0; i < this.pieCanvases._results.length; i++) {
 				this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, {
 					type: 'pie',
@@ -60,6 +61,7 @@ export class HomePage implements OnInit, AfterViewInit {
 					}
 				}));
 			}
+			this.updateCharts();
 		});
 	}
 
@@ -118,6 +120,7 @@ export class HomePage implements OnInit, AfterViewInit {
 
 						if (i !== this.displayedLessons.length) {
 							this.displayedLessons.splice(i, 1);
+							this.pieCharts.splice(i, 1);
 						}
 					}
 				}
@@ -138,6 +141,7 @@ export class HomePage implements OnInit, AfterViewInit {
 		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
 		this.displayedLessons = await this.lessonService.getLessons();
+		this.updateCharts();
 		loading.dismiss();
 	}
 
