@@ -9,13 +9,13 @@
 
 <ion-content overflow-scroll="true">
   <ion-segment id="date-segment">
-    <ion-segment-button checked="true">
+    <ion-segment-button checked="true" (click)="allClick()">
       All
     </ion-segment-button>
-    <ion-segment-button>
+    <ion-segment-button (click)="redClick()">
       Red
     </ion-segment-button>
-    <ion-segment-button>
+    <ion-segment-button (click)="redAndYellowClick()">
       Red + Yellow
     </ion-segment-button>
   </ion-segment>

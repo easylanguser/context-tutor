@@ -20,6 +20,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	lessonId: number;
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
+	displayedSentences: Sentence[];
 
 	constructor(private api: LessonByNameService,
 		private loadingController: LoadingController,
@@ -50,6 +51,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	private handleCharts() {
+		this.pieCharts = [];
 		for (let i = 0; i < this.pieCanvases._results.length; i++) {
 			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, {
 				type: 'pie',
@@ -144,10 +146,27 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 						this.lessonData.getLessonByID(lessonId).addSentence(sentence);
 					}
 				}
+				this.displayedSentences = this.lessonData.getLessonByID(this.lessonId).sentences;
 				loading.dismiss();
 			}, err => {
 				console.log(err);
 				loading.dismiss();
 			});
+	}
+
+	allClick() {
+		this.displayedSentences = this.lessonData.getLessonByID(this.lessonId).sentences;
+	}
+
+	redClick() {
+		this.displayedSentences = this.lessonData.getLessonByID(this.lessonId).sentences.filter(sentence =>
+			sentence.statistics.wrongAnswers > 0
+		);
+	}
+
+	redAndYellowClick() {
+		this.displayedSentences = this.lessonData.getLessonByID(this.lessonId).sentences.filter(sentence =>
+			sentence.statistics.wrongAnswers > 0 && sentence.statistics.hintUsages > 0
+		);
 	}
 }

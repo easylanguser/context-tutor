@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChildren, AfterViewInit, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewInit, QueryList } from '@angular/core';
 import { LoadingController, IonItemSliding, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Lesson } from 'src/app/models/lesson';
@@ -33,36 +33,40 @@ export class HomePage implements OnInit, AfterViewInit {
 
 	ngAfterViewInit() {
 		this.pieCanvases.changes.subscribe(_ => {
-			this.pieCharts = [];
-			for (let i = 0; i < this.pieCanvases._results.length; i++) {
-				this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, {
-					type: 'pie',
-					data: {
-						datasets: [
-							{
-								data: [1, 0, 0],
-								backgroundColor: ['#999', '#999', '#999']
-							}
-						],
+			this.syncCharts();
+		});
+	}
+
+	private syncCharts() {
+		this.pieCharts = [];
+		for (let i = 0; i < this.pieCanvases._results.length; i++) {
+			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, {
+				type: 'pie',
+				data: {
+					datasets: [
+						{
+							data: [1, 0, 0],
+							backgroundColor: ['#999', '#999', '#999']
+						}
+					],
+				},
+				options: {
+					legend: {
+						display: false
 					},
-					options: {
-						legend: {
-							display: false
-						},
-						tooltips: {
-							enabled: false
-						},
-						events: [],
-						elements: {
-							arc: {
-								borderWidth: 0
-							}
+					tooltips: {
+						enabled: false
+					},
+					events: [],
+					elements: {
+						arc: {
+							borderWidth: 0
 						}
 					}
-				}));
-			}
-			this.updateCharts();
-		});
+				}
+			}));
+		}
+		this.updateCharts();
 	}
 
 	private updateCharts() {
@@ -136,13 +140,28 @@ export class HomePage implements OnInit, AfterViewInit {
 		}, 5000);
 	}
 
-	// Get list of lessons, add them to displayed and to lessons data service
+	// Get list of lessons, add them to displayed and to lessons data serviced
 	private async getData() {
 		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
 		this.displayedLessons = await this.lessonService.getLessons();
-		this.updateCharts();
 		loading.dismiss();
+	}
+
+	allClick() {
+		this.displayedLessons = this.lessonService.getLessons();
+	}
+
+	redClick() {
+		this.displayedLessons = this.lessonService.getLessons().filter(lesson =>
+			lesson.sentences.some(snt => snt.statistics.wrongAnswers > 0)
+		);
+	}
+
+	redAndYellowClick() {
+		this.displayedLessons = this.lessonService.getLessons().filter(lesson =>
+			lesson.sentences.some(snt => snt.statistics.wrongAnswers > 0 && snt.statistics.hintUsages > 0)
+		);
 	}
 
 	// Go to selected lesson page
