@@ -91,8 +91,6 @@ export class HomePage implements OnInit, AfterViewInit {
 				chartData.backgroundColor[1] = '#F00';
 				chartData.backgroundColor[2] = '#FF0';
 				this.pieCharts[i].update();
-			} else {
-				this.pieCharts[i].update({ duration: 0 });
 			}
 
 			++i;
