@@ -158,10 +158,23 @@ export class HomePage implements OnInit, AfterViewInit {
 		);
 	}
 
+	redAndYellow(val: Lesson) {
+		let redIsPresent: boolean = false;
+		let yellowIsPresent: boolean = false;
+
+		for (const snt of val.sentences) {
+			if (snt.statistics.wrongAnswers > 0) {
+				redIsPresent = true;
+			}
+			if (snt.statistics.hintUsages > 0) {
+				yellowIsPresent = true;
+			}
+		}
+		return redIsPresent && yellowIsPresent;
+	}
+
 	redAndYellowClick() {
-		this.displayedLessons = this.lessonService.getLessons().filter(lesson =>
-			lesson.sentences.some(snt => snt.statistics.wrongAnswers > 0 && snt.statistics.hintUsages > 0)
-		);
+		this.displayedLessons = this.lessonService.getLessons().filter(this.redAndYellow);
 	}
 
 	// Go to selected lesson page
