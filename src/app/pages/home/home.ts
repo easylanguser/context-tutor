@@ -5,6 +5,7 @@ import { Lesson } from 'src/app/models/lesson';
 import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
 import { LessonDeleteService } from 'src/app/services/lesson-delete/lesson-delete.service';
 import { Chart } from 'chart.js';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
 	selector: 'page-home',
@@ -21,7 +22,8 @@ export class HomePage implements OnInit, AfterViewInit {
 		private router: Router,
 		private lessonService: LessonsService,
 		private alertCtrl: AlertController,
-		private lessonDeleteService: LessonDeleteService) { }
+		private lessonDeleteService: LessonDeleteService,
+		private utils: UtilsService) { }
 
 	ngOnInit() {
 		this.getData().then(res => res);
@@ -40,31 +42,7 @@ export class HomePage implements OnInit, AfterViewInit {
 	private syncCharts() {
 		this.pieCharts = [];
 		for (let i = 0; i < this.pieCanvases._results.length; i++) {
-			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, {
-				type: 'pie',
-				data: {
-					datasets: [
-						{
-							data: [1, 0, 0],
-							backgroundColor: ['#999', '#999', '#999']
-						}
-					],
-				},
-				options: {
-					legend: {
-						display: false
-					},
-					tooltips: {
-						enabled: false
-					},
-					events: [],
-					elements: {
-						arc: {
-							borderWidth: 0
-						}
-					}
-				}
-			}));
+			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, this.utils.getNewChartObject()));
 		}
 		this.updateCharts();
 	}

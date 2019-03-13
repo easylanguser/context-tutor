@@ -7,6 +7,34 @@ export class UtilsService {
 
 	constructor() { }
 
+	public getNewChartObject(): Object {
+		return new Object({
+			type: 'pie',
+			data: {
+				datasets: [
+					{
+						data: [1, 0, 0],
+						backgroundColor: ['#999', '#999', '#999']
+					}
+				],
+			},
+			options: {
+				legend: {
+					display: false
+				},
+				tooltips: {
+					enabled: false
+				},
+				events: [],
+				elements: {
+					arc: {
+						borderWidth: 0
+					}
+				}
+			}
+		});
+	}
+
 	hideChars(inputText: string, indexes: Array<[number, number]>): string {
 		let textWithHiddenCharacters = inputText.substr(0, indexes[0][0]);
 		for (let i = 0; i < indexes.length - 1; i++) {

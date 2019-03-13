@@ -24,7 +24,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	constructor(private api: LessonByNameService,
 		private loadingController: LoadingController,
-		private util: UtilsService,
+		private utils: UtilsService,
 		private route: ActivatedRoute,
 		private router: Router,
 		public lessonData: LessonsService) { }
@@ -40,41 +40,16 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	ngAfterViewInit() {
 		this.pieCanvases.changes.subscribe(_ => {
-			this.handleCharts();
+			this.syncCharts();
 		});
 	}
 
-	private handleCharts() {
+	private syncCharts() {
 		this.pieCharts = [];
 		for (let i = 0; i < this.pieCanvases._results.length; i++) {
-			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, {
-				type: 'pie',
-				data: {
-					datasets: [
-						{
-							data: [1, 0, 0],
-							backgroundColor: ['#999', '#999', '#999']
-						}
-					],
-				},
-				options: {
-					legend: {
-						display: false
-					},
-					tooltips: {
-						enabled: false
-					},
-					events: [],
-					elements: {
-						arc: {
-							borderWidth: 0
-						}
-					}
-				}
-			}));
-
-			this.updateCharts();
+			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, this.utils.getNewChartObject()));
 		}
+		this.updateCharts();
 	}
 
 	private updateCharts() {
@@ -132,7 +107,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 						hiddenChars.push(chars);
 						curCharsIndexes.push(0);
 					}
-					const hiddenSentence = this.util.hideChars(lsn[i].text, lsn[i].words);
+					const hiddenSentence = this.utils.hideChars(lsn[i].text, lsn[i].words);
 
 					const sentence = new Sentence(
 						lsn[i].id,
@@ -142,7 +117,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 						hiddenChars,
 						curCharsIndexes,
 						0,
-						this.util.addChar(hiddenSentence, '?'),
+						this.utils.addChar(hiddenSentence, '?'),
 						false,
 						new Statistics(0, 0, 0, 0, 0, 0, 0));
 					if (!this.lessonData.getLessonByID(lessonId).sentences.some(sntn => sntn.id === sentence.id)) {
