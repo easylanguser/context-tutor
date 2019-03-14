@@ -18,6 +18,15 @@
     cursor: pointer;
     display: table;
     table-layout: fixed;
+    &:hover {
+        background-color: var(--ion-color-step-100);
+        .lesson-text {
+            color: var(--ion-color-step-900);
+        }
+        .date-text {
+            color: var(--ion-color-step-900);
+        }
+    }
 }
 
 .lesson-text-div {
@@ -43,6 +52,9 @@
     position: absolute;
     font-size: 3vmin;
     color: #95949c;
+    @media (min-width: 650px) {
+        font-size: 1.5vmin;
+    }
 }
 
 .canvas-div {
@@ -60,18 +72,6 @@
 .delete-sliding-option {
     width: 25vw;
     text-align: center;
-}
-
-.forward-icon {
-    bottom: 1vh;
-    right: 1vh;
-    position: absolute;
-}
-
-@media (min-width: 650px) {
-    .date-text {
-        font-size: 1.5vmin;
-    }
 }
 
 @media (min-width: 992px) {

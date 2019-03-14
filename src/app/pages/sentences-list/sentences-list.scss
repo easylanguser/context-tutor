@@ -18,6 +18,12 @@
     cursor: pointer;
     display: table;
     table-layout: fixed;
+    &:hover {
+        background-color: var(--ion-color-step-100);
+        .sentence-text {
+            color: var(--ion-color-step-900);
+        }
+    }
 }
 
 .canvas-div {

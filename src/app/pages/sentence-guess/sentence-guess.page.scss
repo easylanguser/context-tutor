@@ -5,7 +5,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-} 
+}
 
 #sentence-to-show {
     text-align: start;
@@ -20,7 +20,6 @@
 }
 
 $chars-and-hint-height: 20vw;
-
 #hint-button-div {
     height: $chars-and-hint-height;
     width: 21vw;
@@ -97,15 +96,19 @@ $chars-and-hint-height: 20vw;
     -webkit-transform: rotateY(180deg);
 }
 
-#give-up-button-container {
+#give-up--and-next-button-container {
     height: 16vw;
 }
 
+$give-up-and-next-buttons-size: 14vmin;
+$give-up-and-next-buttons-container-margins: 6vh;
+$give-up-and-next-buttons-font-size: 4vmin;
+
 #give-up-button {
-    height: 14vmin;
-    width: 14vmin;
-    margin-left: 6vh;
-    font-size: 4vmin;
+    height: $give-up-and-next-buttons-size;
+    width: $give-up-and-next-buttons-size;
+    margin-left: $give-up-and-next-buttons-container-margins;
+    font-size: $give-up-and-next-buttons-font-size;
     outline: none;
     background: #FFF;
     --background: #FFF;
@@ -116,11 +119,11 @@ $chars-and-hint-height: 20vw;
 }
 
 #next-sentence-button {
-    height: 14vmin;
-    width: 14vmin;
+    height: $give-up-and-next-buttons-size;
+    width: $give-up-and-next-buttons-size;
     float: right;
-    margin-right: 6vh;
-    font-size: 4vmin;
+    margin-right: $give-up-and-next-buttons-container-margins;
+    font-size: $give-up-and-next-buttons-font-size;
     outline: none;
     background: #FFF;
     --background: #FFF;
@@ -142,15 +145,15 @@ $chars-and-hint-height: 20vw;
         height: 10vh;
         width: 48vw;
         float: left;
-        padding-left: calc(20.5vw - 14vh);
+        padding-left: calc(22vw - 14vh);
     }
     #hint-button-div {
-        width: 18vw; 
+        width: 18vw;
         height: 10vh;
         float: none;
         display: inline-block;
-        border-left: 1px solid black;
-        border-right: 1px solid black;
+        border-left: 1px solid var(--ion-color-step-950);
+        border-right: 1px solid var(--ion-color-step-950);
     }
     #hint-button {
         height: 7vh;
@@ -158,25 +161,30 @@ $chars-and-hint-height: 20vw;
         font-size: 6vh;
         margin-top: 1.5vh;
     }
+
+    $give-up-and-next-buttons-size: 7vh;
+    $give-up-and-next-buttons-font-size: 2vmin;
+
     #give-up-button {
-        height: 7vh;
-        width: 7vh;
-        font-size: 2vmin;
+        height: $give-up-and-next-buttons-size;
+        width: $give-up-and-next-buttons-size;
+        font-size: $give-up-and-next-buttons-font-size;
         margin: 0;
-    }
+    } 
     #next-sentence-button {
-        height: 7vh;
-        width: 7vh;
-        font-size: 2vmin;
+        height: $give-up-and-next-buttons-size;
+        width: $give-up-and-next-buttons-size;
+        font-size: $give-up-and-next-buttons-font-size;
         margin: 0;
     }
+
     .char-box {
         height: 7vh;
         width: 7vh;
         font-size: 5vh;
         margin-top: 1.5vh;
     }
-    #give-up-button-container {
+    #give-up-and-next-button-container {
         height: 10vh;
         width: 34vw;
         padding: 1.5vh 3vw 0 3vw;
@@ -186,26 +194,16 @@ $chars-and-hint-height: 20vw;
 
 @media (min-width: 992px) {
     #footer {
-        height: 10vh;
         width: 72vw;
     }
     #chars {
-        height: 10vh;
         width: 35vw;
-        padding-left: calc(14vw - 14vh);
-        float: left;
+        padding-left: calc(15.5vw - 14vh);
     }
     #hint-button-div {
-        width: 12vw; 
-        height: 10vh;
-        float: none;
-        display: inline-block;
-        border-left: 1px solid black;
-        border-right: 1px solid black;
+        width: 12vw;
     }
-    #give-up-button-container {
-        height: 10vh;
+    #give-up-and-next-button-container {
         width: 24vw;
-        float: right;
     }
 }
