@@ -140,12 +140,12 @@ $chars-and-hint-height: 20vw;
     }
     #chars {
         height: 10vh;
-        width: 45vw;
+        width: 48vw;
         float: left;
         padding-left: calc(20.5vw - 14vh);
     }
     #hint-button-div {
-        width: 22vw; 
+        width: 18vw; 
         height: 10vh;
         float: none;
         display: inline-block;
@@ -178,7 +178,7 @@ $chars-and-hint-height: 20vw;
     }
     #give-up-button-container {
         height: 10vh;
-        width: 33vw;
+        width: 34vw;
         padding: 1.5vh 3vw 0 3vw;
         float: right;
     }
@@ -191,12 +191,12 @@ $chars-and-hint-height: 20vw;
     }
     #chars {
         height: 10vh;
-        width: 32vw;
+        width: 35vw;
         padding-left: calc(14vw - 14vh);
         float: left;
     }
     #hint-button-div {
-        width: 16vw; 
+        width: 12vw; 
         height: 10vh;
         float: none;
         display: inline-block;
@@ -205,7 +205,7 @@ $chars-and-hint-height: 20vw;
     }
     #give-up-button-container {
         height: 10vh;
-        width: 23vw;
+        width: 24vw;
         float: right;
     }
 }
