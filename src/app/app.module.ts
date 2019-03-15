@@ -21,6 +21,7 @@ import { SentencesListPageModule } from './pages/sentences-list/sentences-list.m
 import { SentenceGuessPageModule } from './pages/sentence-guess/sentence-guess.module';
 import { ForgetPageModule } from './pages/forget/forget.module';
 import { ChangePageModule } from './pages/change/change.module';
+import { GuessBarComponent } from './components/guess-bar/guess-bar.component';
 
 export function jwtOptionsFactory(storage) {
 	return {
@@ -33,7 +34,7 @@ export function jwtOptionsFactory(storage) {
 
 @NgModule({
 	declarations: [AppComponent],
-	entryComponents: [],
+	entryComponents: [GuessBarComponent],
 	imports: [BrowserModule, IonicModule.forRoot(),
 		AppRoutingModule,
 		HttpClientModule,
