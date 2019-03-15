@@ -1,3 +1,4 @@
+import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
@@ -22,39 +23,14 @@ export class SentenceGuessPage implements OnInit {
 
 	constructor(private route: ActivatedRoute,
 		private toastController: ToastController,
-		public lessonsData: LessonsService) { }
+		public lessonsData: LessonsService,
+		private utils: UtilsService) { }
 
 	// Get number of sentence and id of the lesson from previous page
 	ngOnInit() {
 		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('current')) + 1;
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
-
-		this.pieChart = new Chart(this.pieCanvas.nativeElement, {
-			type: 'pie',
-			data: {
-				datasets: [
-					{
-						data: [1, 0, 0],
-						backgroundColor: ['#999', '#999', '#999']
-					}
-				],
-			},
-			options: {
-				legend: {
-					display: false
-				},
-				tooltips: {
-					enabled: false
-				},
-				events: [],
-				elements: {
-					arc: {
-						borderWidth: 0
-					}
-				}
-			}
-		});
-
+		this.pieChart = new Chart(this.pieCanvas.nativeElement, this.utils.getNewChartObject());
 		this.updateChart();
 	}
 
