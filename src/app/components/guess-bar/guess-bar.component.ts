@@ -87,7 +87,7 @@ export class GuessBarComponent implements OnInit {
 		}
 	}
 
-	private curSentence(): Sentence {
+	curSentence(): Sentence {
 		return this.guessPage.curSentence();
 	}
 
