@@ -1,13 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
-import { UtilsService } from '../../services/utils/utils.service';
 import { ToastController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
-import * as anime from 'animejs';
-import { GuessBarComponent } from 'src/app/components/guess-bar/guess-bar.component';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -25,8 +21,6 @@ export class SentenceGuessPage implements OnInit {
 	sentenceIndex: number = 1; // Number of current sentence in lesson
 
 	constructor(private route: ActivatedRoute,
-		private loadingController: LoadingController,
-		private util: UtilsService,
 		private toastController: ToastController,
 		public lessonsData: LessonsService) { }
 

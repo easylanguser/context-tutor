@@ -1,6 +1,5 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Sentence } from 'src/app/models/sentence';
-import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { LoadingController } from '@ionic/angular';
 import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
