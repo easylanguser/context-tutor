@@ -1,6 +1,10 @@
+import { UtilsService } from './../utils/utils.service';
+import { LessonByNameService } from './../lesson-by-name/lesson-by-name.service';
 import { Injectable } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsListService } from '../lessons-list/lessons-list.service';
+import { Sentence } from 'src/app/models/sentence';
+import { Statistics } from 'src/app/models/statistics';
 
 @Injectable({
 	providedIn: 'root'
@@ -9,8 +13,10 @@ export class LessonsService {
 
 	lessons: Lesson[] = [];
 
-	constructor(private api: LessonsListService) {
-	}
+	constructor(
+		private lessonsAPI: LessonsListService,
+		private sentencesAPI: LessonByNameService,
+		private utils: UtilsService) { }
 
 	addLesson(lesson: Lesson): void {
 		this.lessons.push(lesson);
@@ -31,8 +37,43 @@ export class LessonsService {
 		this.lessons[this.lessons.indexOf(this.getLessonByID(lesson.id))] = lesson;
 	}
 
+	getSentencesByLessonId(id: number): Sentence[] {
+		this.sentencesAPI.getData(id).subscribe(res => {
+			const lsn = res[0];
+			for (let i = 0; i < lsn.length; i++) {
+				const hiddenChars: Array<string[]> = [];
+				const curCharsIndexes: number[] = [];
+				for (let j = 0; j < lsn[i].words.length; j++) {
+					const chars: string[] = [];
+					for (let k = 0; k < lsn[i].words[j][1]; k++) {
+						chars.push(lsn[i].text.charAt(lsn[i].words[j][0] + k));
+					}
+					hiddenChars.push(chars);
+					curCharsIndexes.push(0);
+				}
+				const hiddenSentence = this.utils.hideChars(lsn[i].text, lsn[i].words);
+
+				const sentence = new Sentence(
+					lsn[i].id,
+					lsn[i].words,
+					lsn[i].text,
+					hiddenSentence,
+					hiddenChars,
+					curCharsIndexes,
+					0,
+					this.utils.addChar(hiddenSentence, '?'),
+					false,
+					new Statistics(0, 0, 0, 0, 0, 0, 0));
+				if (!this.getLessonByID(id).sentences.some(sntn => sntn.id === sentence.id)) {
+					this.getLessonByID(id).addSentence(sentence);
+				}
+			}
+		});
+		return this.getLessonByID(id).sentences;
+	}
+
 	getLessons(): Lesson[] {
-		this.api.getData().subscribe(res => {
+		this.lessonsAPI.getData().subscribe(res => {
 			const now = new Date().getTime();
 			for (let i = 0; i < res[0].length; i++) {
 				const diff = (now - new Date(res[0][i].created_at).getTime()) / 1000;
@@ -77,5 +118,4 @@ export class LessonsService {
 		});
 		return this.lessons;
 	}
-
 }
