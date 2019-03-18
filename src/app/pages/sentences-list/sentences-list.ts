@@ -144,8 +144,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	redAndYellowClick() {
-		this.displayedSentences = this.lessonData.getLessonByID(this.lessonId).sentences.filter(sentence =>
-			sentence.statistics.wrongAnswers > 0 && sentence.statistics.hintUsages > 0
-		);
+		this.displayedSentences = this.lessonData.getLessonByID(this.lessonId).sentences.filter(this.utils.redAndYellowFilter);
 	}
 }
