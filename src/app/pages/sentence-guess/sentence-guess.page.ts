@@ -1,6 +1,7 @@
+import { StatisticsUpdateService } from './../../services/statistics-update/statistics-update.service';
 import { HttpService } from './../../services/http/rest/http.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
@@ -26,7 +27,7 @@ export class SentenceGuessPage implements OnInit {
 		private toastController: ToastController,
 		public lessonsData: LessonsService,
 		private utils: UtilsService,
-		private httpService: HttpService) { }
+		private statisticsUpdateService: StatisticsUpdateService) {	}
 
 	// Get number of sentence and id of the lesson from previous page
 	ngOnInit() {
@@ -60,6 +61,16 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		this.pieChart.update();
+	}
+
+	saveStatistics() {
+		this.statisticsUpdateService.updateData('xx60a', this.curSentence().statistics).subscribe(response => {
+			console.log(response);
+		});
+	}
+
+	ionViewWillLeave() {
+		this.saveStatistics();
 	}
 
 	async showToast() {

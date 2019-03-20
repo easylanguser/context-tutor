@@ -21,6 +21,11 @@ export class HttpService {
         return this.http.post(url, body, headers)
     }
 
+    doPut(url: string, body?: Object): Observable<any> {
+        const headers = this.addHeaders();
+        return this.http.put(url, body, headers);
+    }
+
     doGet(url: string): Observable<any> {
         const headers = this.addHeaders();
         return this.http.get(url, headers)
