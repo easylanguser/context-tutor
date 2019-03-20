@@ -9,7 +9,7 @@ const apiUrl = 'http://165.227.159.35/api/sentences/getLessonSentences?lessonId=
 	providedIn: 'root'
 })
 
-export class LessonByNameService {
+export class SentencesByLessonService {
 
 	constructor(private httpService: HttpService) { }
 

@@ -1,5 +1,5 @@
-import { UtilsService } from './../utils/utils.service';
-import { LessonByNameService } from './../lesson-by-name/lesson-by-name.service';
+import { UtilsService } from '../utils/utils.service';
+import { SentencesByLessonService } from '../sentences-by-lesson/sentences-by-lesson.service';
 import { Injectable } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsListService } from '../lessons-list/lessons-list.service';
@@ -15,7 +15,7 @@ export class LessonsService {
 
 	constructor(
 		private lessonsAPI: LessonsListService,
-		private sentencesAPI: LessonByNameService,
+		private sentencesAPI: SentencesByLessonService,
 		private utils: UtilsService) { }
 
 	addLesson(lesson: Lesson): void {

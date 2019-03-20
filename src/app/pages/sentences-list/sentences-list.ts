@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { LessonByNameService } from '../../services/lesson-by-name/lesson-by-name.service';
+import { SentencesByLessonService } from '../../services/sentences-by-lesson/sentences-by-lesson.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
-import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
+import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { Chart } from 'chart.js';
 
 @Component({
@@ -21,7 +21,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
 
-	constructor(private api: LessonByNameService,
+	constructor(private api: SentencesByLessonService,
 		private loadingController: LoadingController,
 		private utils: UtilsService,
 		private route: ActivatedRoute,
@@ -75,7 +75,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		}
 	}
 
-	// Go to selected lesson sentences page
 	openSentence(sentenceNumber) {
 		this.router.navigate(['sentence-guess'],
 			{ queryParams: { current: sentenceNumber, lesson: this.lessonId } });
@@ -88,7 +87,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		}, 5000);
 	}
 
-	// Get sentences by certain lesson and add them to global data
 	private async getData() {
 		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();

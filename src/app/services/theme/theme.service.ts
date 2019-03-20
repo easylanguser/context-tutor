@@ -4,7 +4,7 @@ import { DOCUMENT } from '@angular/common';
 @Injectable({
 	providedIn: 'root'
 })
-export class SettingsService {
+export class ThemeService {
 
 	constructor(@Inject(DOCUMENT) private document: Document) { }
 

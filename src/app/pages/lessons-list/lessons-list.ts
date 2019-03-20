@@ -2,17 +2,17 @@ import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
 import { LoadingController, IonItemSliding, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Lesson } from 'src/app/models/lesson';
-import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
+import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { LessonDeleteService } from 'src/app/services/lesson-delete/lesson-delete.service';
 import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
-	selector: 'page-home',
-	templateUrl: 'home.html',
-	styleUrls: ['home.scss']
+	selector: 'page-lessons-list',
+	templateUrl: 'lessons-list.html',
+	styleUrls: ['lessons-list.scss']
 })
-export class HomePage implements OnInit, AfterViewInit {
+export class LessonsListPage implements OnInit, AfterViewInit {
 
 	displayedLessons: Lesson[];
 	@ViewChildren('chartsid') pieCanvases: any;

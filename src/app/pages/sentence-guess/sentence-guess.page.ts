@@ -1,11 +1,10 @@
 import { StatisticsUpdateService } from './../../services/statistics-update/statistics-update.service';
-import { HttpService } from './../../services/http/rest/http.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
-import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
+import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { Chart } from 'chart.js';
 
 @Component({

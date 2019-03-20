@@ -9,7 +9,7 @@ import { AuthService } from './services/auth/auth.service';
 
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
-import { SettingsService } from './services/settings/settings.service';
+import { ThemeService } from './services/theme/theme.service';
 
 @Component({
 	selector: 'app-root',
@@ -20,7 +20,7 @@ export class AppComponent {
 	appPages = [
 		{
 			title: 'My lessons',
-			url: '/home',
+			url: '/lessons-list',
 			icon: 'information-circle'
 		},
 	];
@@ -34,16 +34,16 @@ export class AppComponent {
 		private authService: AuthService,
 		private router: Router,
 		private storage: Storage,
-		private settings: SettingsService
+		private theme: ThemeService
 	) {
 		this.initializeApp();
 	}
 
 	onChangeTheme(ev: CustomEvent) {
 		if (ev.detail.value === 'dark') {
-			this.settings.enableDarkMode(true);
+			this.theme.enableDarkMode(true);
 		} else {
-			this.settings.enableDarkMode(false);
+			this.theme.enableDarkMode(false);
 		}
 	}
 

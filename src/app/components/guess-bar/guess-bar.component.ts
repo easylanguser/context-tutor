@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Sentence } from 'src/app/models/sentence';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { LoadingController } from '@ionic/angular';
-import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
+import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { SentenceGuessPage } from 'src/app/pages/sentence-guess/sentence-guess.page';
 import * as anime from 'animejs';
 

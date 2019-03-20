@@ -11,8 +11,9 @@ import { ForgetPage } from "./pages/forget/forget.page";
 import { ChangePage } from "./pages/change/change.page";
 
 const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: 'home', loadChildren: './pages/home/home.module#HomePageModule', canActivate: [AuthGuardService] },
+    { path: '', redirectTo: 'lessons-list', pathMatch: 'full' },
+    { path: 'lessons-list', loadChildren: './pages/lessons-list/lessons-list.module#LessonsListPageModule',
+        canActivate: [AuthGuardService] },
     { path: 'sentences-list', component: SentencesListPage, canActivate: [AuthGuardService] },
     { path: 'sentence-guess', component: SentenceGuessPage, canActivate: [AuthGuardService] },
     { path: 'login', component: LoginPage },
