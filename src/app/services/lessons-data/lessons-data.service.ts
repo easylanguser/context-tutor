@@ -37,8 +37,8 @@ export class LessonsService {
 		this.lessons[this.lessons.indexOf(this.getLessonByID(lesson.id))] = lesson;
 	}
 
-	getSentencesByLessonId(id: number): Sentence[] {
-		this.sentencesAPI.getData(id).subscribe(res => {
+	getSentencesByLessonId(id: number): Promise<Sentence[]> {
+		return this.sentencesAPI.getData(id).toPromise().then(res => {
 			const lsn = res[0];
 			for (let i = 0; i < lsn.length; i++) {
 				const hiddenChars: Array<string[]> = [];
@@ -63,17 +63,24 @@ export class LessonsService {
 					0,
 					this.utils.addChar(hiddenSentence, '?'),
 					false,
-					new Statistics(0, 0, 0, 0, 0, 0, 0));
+					new Statistics(
+						Math.floor(Math.random() * 2),
+						Math.floor(Math.random() * 2),
+						Math.floor(Math.random() * 2),
+						Math.floor(Math.random() * 2),
+						Math.floor(Math.random() * 2),
+						Math.floor(Math.random() * 2),
+						Math.floor(Math.random() * 2)));
 				if (!this.getLessonByID(id).sentences.some(sntn => sntn.id === sentence.id)) {
 					this.getLessonByID(id).addSentence(sentence);
 				}
 			}
+			return this.getLessonByID(id).sentences;
 		});
-		return this.getLessonByID(id).sentences;
 	}
 
-	getLessons(): Lesson[] {
-		this.lessonsAPI.getData().subscribe(res => {
+	getLessons(): Promise<Lesson[]> {
+		return this.lessonsAPI.getData().toPromise().then(res => {
 			const now = new Date().getTime();
 			for (let i = 0; i < res[0].length; i++) {
 				const diff = (now - new Date(res[0][i].created_at).getTime()) / 1000;
@@ -115,7 +122,13 @@ export class LessonsService {
 					this.addLesson(lesson);
 				}
 			}
+
+			const promises = [];
+
+			for (const lesson of this.lessons) {
+				promises.push(this.getSentencesByLessonId(lesson.id));
+			}
+			return Promise.all(promises);
 		});
-		return this.lessons;
 	}
 }

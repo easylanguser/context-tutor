@@ -1,3 +1,4 @@
+import { HttpService } from './../../services/http/rest/http.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -24,7 +25,8 @@ export class SentenceGuessPage implements OnInit {
 	constructor(private route: ActivatedRoute,
 		private toastController: ToastController,
 		public lessonsData: LessonsService,
-		private utils: UtilsService) { }
+		private utils: UtilsService,
+		private httpService: HttpService) { }
 
 	// Get number of sentence and id of the lesson from previous page
 	ngOnInit() {

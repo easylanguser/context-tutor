@@ -17,6 +17,7 @@ export class HomePage implements OnInit, AfterViewInit {
 	displayedLessons: Lesson[];
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
+	firstEnter: boolean = true;
 
 	constructor(private loadingController: LoadingController,
 		private router: Router,
@@ -26,11 +27,11 @@ export class HomePage implements OnInit, AfterViewInit {
 		private utils: UtilsService) { }
 
 	ngOnInit() {
-		this.getData().then(res => res);
+		this.getData();
 	}
 
 	ionViewDidEnter() {
-		this.updateCharts();
+		this.firstEnter ? this.firstEnter = false : this.updateCharts();
 	}
 
 	ngAfterViewInit() {
@@ -102,6 +103,7 @@ export class HomePage implements OnInit, AfterViewInit {
 
 						if (i !== this.displayedLessons.length) {
 							this.displayedLessons.splice(i, 1);
+							this.pieCharts[i].destroy();
 							this.pieCharts.splice(i, 1);
 						}
 					}
@@ -112,35 +114,37 @@ export class HomePage implements OnInit, AfterViewInit {
 	}
 
 	doRefresh(event) {
-		this.getData().then(_ => { event.target.complete(); });
+		this.getData().then(_ => {
+			event.target.complete();
+			this.updateCharts();
+		});
 		setTimeout(() => {
 			event.target.complete();
 		}, 5000);
 	}
 
-	// Get list of lessons, add them to displayed and to lessons data serviced
 	private async getData() {
 		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
-		this.displayedLessons = await this.lessonService.getLessons();
-		loading.dismiss();
+		await this.lessonService.getLessons().then(() => {
+			this.displayedLessons = this.lessonService.lessons;
+		}).then(() => loading.dismiss());
 	}
 
 	allClick() {
-		this.displayedLessons = this.lessonService.getLessons();
+		this.displayedLessons = this.lessonService.lessons;
 	}
 
 	redClick() {
-		this.displayedLessons = this.lessonService.getLessons().filter(lesson =>
+		this.displayedLessons = this.lessonService.lessons.filter(lesson =>
 			lesson.sentences.some(snt => snt.statistics.wrongAnswers > 0)
 		);
 	}
 
 	redAndYellowClick() {
-		this.displayedLessons = this.lessonService.getLessons().filter(this.utils.redAndYellowFilter);
+		this.displayedLessons = this.lessonService.lessons.filter(this.utils.redAndYellowFilter);
 	}
 
-	// Go to selected lesson page
 	openLesson(lessonID) {
 		this.router.navigate(['sentences-list'], { queryParams: { lessonID: lessonID } });
 	}

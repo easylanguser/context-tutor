@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsService } from 'src/app/services/lessons-data/lessons-data.service';
-import { Statistics } from 'src/app/models/statistics';
 import { Chart } from 'chart.js';
 
 @Component({
@@ -31,7 +30,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	ngOnInit() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
-		this.getData(this.lessonId);
+		this.getData();
 	}
 
 	ionViewDidEnter() {
@@ -83,17 +82,17 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	doRefresh(event) {
-		this.getData(this.lessonId).then(_ => { event.target.complete(); });
+		this.getData().then(_ => { event.target.complete(); });
 		setTimeout(() => {
 			event.target.complete();
 		}, 5000);
 	}
 
 	// Get sentences by certain lesson and add them to global data
-	private async getData(lessonId) {
+	private async getData() {
 		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
-		this.displayedSentences = await this.lessonData.getSentencesByLessonId(lessonId);
+		this.displayedSentences = await this.lessonData.getLessonByID(this.lessonId).sentences;
 		loading.dismiss();
 	}
 
@@ -108,6 +107,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	redAndYellowClick() {
-		this.displayedSentences = this.lessonData.getLessonByID(this.lessonId).sentences.filter(this.utils.redAndYellowFilter);
+		this.displayedSentences = this.lessonData.getLessonByID(this.lessonId)
+			.sentences.filter(this.utils.redAndYellowFilter);
 	}
 }
