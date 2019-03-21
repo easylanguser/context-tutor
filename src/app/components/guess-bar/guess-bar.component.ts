@@ -122,6 +122,8 @@ export class GuessBarComponent implements OnInit {
 
 		this.saveData();
 
+		this.guessPage.saveStatistics(this.curSentence());
+
 		this.guessPage.sentenceIndex = this.guessPage.sentenceIndex ===
 			this.lessonsData.getLessonByID(this.guessPage.lessonId).sentences.length
 			? 1

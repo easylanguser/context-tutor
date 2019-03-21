@@ -1,3 +1,4 @@
+import { Statistics } from './../../models/statistics';
 import { StatisticsUpdateService } from './../../services/statistics-update/statistics-update.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -62,14 +63,21 @@ export class SentenceGuessPage implements OnInit {
 		this.pieChart.update();
 	}
 
-	saveStatistics() {
-		this.statisticsUpdateService.updateData('xx60a', this.curSentence().statistics).subscribe(response => {
-			console.log(response);
+	saveStatistics(newStatistics: Sentence) {
+		this.statisticsUpdateService.updateData('xx60a', newStatistics).subscribe(async response => {
+			this.toastIsShown = true;
+			const toast = await this.toastController.create({
+				message: 'Statistics is updated\n\n' + JSON.stringify(response[0].a) + '\n\n\n\n\n' + newStatistics.sentenceShown,
+				position: 'middle',
+				duration: 8000,
+				animated: true
+			});
+			toast.present();
 		});
 	}
 
 	ionViewWillLeave() {
-		this.saveStatistics();
+		this.saveStatistics(this.curSentence());
 	}
 
 	async showToast() {
