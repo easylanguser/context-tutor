@@ -45,7 +45,7 @@ export class GuessBarComponent implements OnInit {
 		private loadingController: LoadingController,
 		private util: UtilsService,
 		public lessonsData: LessonsService,
-		private guessPage: SentenceGuessPage) { }
+		public guessPage: SentenceGuessPage) { }
 
 	ngOnInit() {
 		this.getData(true);
@@ -189,13 +189,6 @@ export class GuessBarComponent implements OnInit {
 	fourthCharBoxClick() {
 		const event = new KeyboardEvent('ev4', { key: (this.updateFront ? this.fourthChar : this.fourthCharBack).toLowerCase() });
 		this.handleKeyboardEvent(event);
-	}
-
-	// Save user progress and leave lesson
-	leaveLessonClick() {
-		if (this.curSentence().text !== this.guessPage.sentenceShown) {
-			++this.curSentence().statistics.lessonLeaves; // Statistics
-		}
 	}
 
 	private randomAlphabetIndex(): number {
