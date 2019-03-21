@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
-import { Observable } from "rxjs";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "../../../environments/environment";
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
 	providedIn: 'root'
@@ -9,16 +9,12 @@ import { environment } from "../../../environments/environment";
 export class UserService implements OnInit {
 
 	url = environment.url;
-	constructor(private http: HttpClient) {
-	}
 
-	ngOnInit() {
+	constructor(private http: HttpClient) {	}
 
-	}
+	ngOnInit() { }
 
 	sendPassResetRequest(email: string): Observable<any> {
 		return this.http.post(`${this.url}/api/user/sendPassword`, email);
 	}
-
 }
-

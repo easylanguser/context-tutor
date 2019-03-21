@@ -3,7 +3,7 @@ import { LoadingController, IonItemSliding, AlertController } from '@ionic/angul
 import { Router } from '@angular/router';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
-import { LessonDeleteService } from 'src/app/services/lesson-delete/lesson-delete.service';
+import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
 import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 

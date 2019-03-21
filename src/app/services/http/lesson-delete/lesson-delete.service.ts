@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpService } from '../http/rest/http.service';
-import { Observable, forkJoin } from 'rxjs';
+import { HttpService } from '../../http/rest/http.service';
 
 const apiUrl = 'http://165.227.159.35/api/lessons/delete?id=';
 

@@ -1,5 +1,4 @@
-import { Statistics } from './../../models/statistics';
-import { StatisticsUpdateService } from './../../services/statistics-update/statistics-update.service';
+import { StatisticsUpdateService } from '../../services/http/statistics-update/statistics-update.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -31,7 +30,7 @@ export class SentenceGuessPage implements OnInit {
 		private toastController: ToastController,
 		public lessonsData: LessonsService,
 		private utils: UtilsService,
-		private statisticsUpdateService: StatisticsUpdateService) {	}
+		private statisticsUpdateService: StatisticsUpdateService) { }
 
 	// Get number of sentence and id of the lesson from previous page
 	ngOnInit() {
@@ -68,15 +67,15 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	saveStatistics(newStatistics: Sentence) {
-		this.statisticsUpdateService.updateData('xx60a', newStatistics).subscribe(async response => {
-			this.toastIsShown = true;
+		this.statisticsUpdateService.updateData('xx60a', newStatistics).subscribe(response => {
+			/* this.toastIsShown = true;
 			const toast = await this.toastController.create({
 				message: JSON.stringify(response[0].a) + '\n\n\n' + newStatistics.sentenceShown,
 				position: 'bottom',
 				duration: 7000,
 				animated: true
 			});
-			toast.present();
+			toast.present(); */
 		});
 	}
 

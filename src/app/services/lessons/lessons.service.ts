@@ -1,8 +1,8 @@
 import { UtilsService } from '../utils/utils.service';
-import { SentencesByLessonService } from '../sentences-by-lesson/sentences-by-lesson.service';
+import { SentencesByLessonService } from '../http/sentences-by-lesson/sentences-by-lesson.service';
 import { Injectable } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
-import { LessonsListService } from '../lessons-list/lessons-list.service';
+import { LessonsListService } from '../http/lessons-list/lessons-list.service';
 import { Sentence } from 'src/app/models/sentence';
 import { Statistics } from 'src/app/models/statistics';
 

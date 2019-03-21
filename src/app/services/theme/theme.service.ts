@@ -17,7 +17,7 @@ export class ThemeService {
 	}
 
 	getDarkTheme() {
-		return ' \
+		return ` \
 			--ion-background-color: #353535; \
 			--ion-background-color-rgb: 0,0,0; \
 			--ion-text-color: #FFF; \
@@ -40,11 +40,11 @@ export class ThemeService {
 			--ion-color-step-800: #cccccc; \
 			--ion-color-step-850: #d9d9d9; \
 			--ion-color-step-900: #e6e6e6; \
-			--ion-color-step-950: #f2f2f2;';
+			--ion-color-step-950: #f2f2f2;`;
 	}
 
 	getLightTheme() {
-		return ' \
+		return ` \
 			--ion-background-color: #efeff4; \
 			--ion-background-color-rgb: 239, 239, 244; \
 			--ion-text-color: #000000; \
@@ -67,6 +67,6 @@ export class ThemeService {
 			--ion-color-step-800: #333333; \
 			--ion-color-step-850: #262626; \
 			--ion-color-step-900: #191919; \
-			--ion-color-step-950: #0d0d0d;';
+			--ion-color-step-950: #0d0d0d;`;
 	}
 }

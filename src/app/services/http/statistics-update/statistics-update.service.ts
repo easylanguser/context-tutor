@@ -1,6 +1,6 @@
 import { Observable, forkJoin } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpService } from '../http/rest/http.service';
+import { HttpService } from '../../http/rest/http.service';
 
 const apiUrl = 'https://api.myjson.com/bins/';
 

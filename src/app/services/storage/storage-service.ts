@@ -6,12 +6,9 @@ import { Storage } from '@ionic/storage';
 })
 export class StorageService implements OnInit {
 
-	constructor(private storage: Storage) {
-	}
+	constructor(private storage: Storage) { }
 
-	ngOnInit() {
-
-	}
+	ngOnInit() { }
 
 	get(key: string): Promise<any> {
 		return this.storage.get(key);
@@ -24,6 +21,4 @@ export class StorageService implements OnInit {
 	remove(key: string): Promise<any> {
 		return this.storage.remove(key);
 	}
-
 }
-

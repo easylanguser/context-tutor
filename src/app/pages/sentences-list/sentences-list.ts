@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { SentencesByLessonService } from '../../services/sentences-by-lesson/sentences-by-lesson.service';
+import { SentencesByLessonService } from '../../services/http/sentences-by-lesson/sentences-by-lesson.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
