@@ -9,6 +9,11 @@
     margin-left: 2.5vw;
 }
 
+.lesson-ion-item {
+    --inner-padding-end: 0px !important;
+    --inner-border-width: 0px !important;
+}
+
 .lesson-card {
     width: 100%;
     height: 10vh;

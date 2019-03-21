@@ -25,7 +25,7 @@
   </ion-refresher>
   <ion-list no-padding no-margin>
     <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem>
-      <ion-item no-padding style="--inner-padding-end: 0px !important;--inner-border-width:0px !important;">
+      <ion-item class="lesson-ion-item" no-padding>
         <div class="lesson-card" (click)="openLesson(lesson.id)">
           <div class="lesson-text-div">
             <p class="lesson-text">
