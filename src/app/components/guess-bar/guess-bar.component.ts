@@ -16,11 +16,7 @@ import * as anime from 'animejs';
 })
 export class GuessBarComponent implements OnInit {
 
-	curWordIndex: number = 0; // Number of word, that user is currently at
-	curCharsIndexes: number[] = []; // Number of character for each word, that user is currently at
-
 	alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	sentenceShown: string; // Current displayed sentence
 
 	hintIsClicked: boolean = false;
 	updateFront: boolean = false;
@@ -55,10 +51,6 @@ export class GuessBarComponent implements OnInit {
 		this.getData(true);
 	}
 
-	ionViewWillLeave() {
-		this.saveData();
-	}
-
 	async getData(showLoader: boolean) {
 		let loading: any;
 		if (showLoader) { // Show loader if sentence is loaded first time
@@ -67,7 +59,7 @@ export class GuessBarComponent implements OnInit {
 		}
 
 		if (this.curSentence().isSolved) { // Display filled sentence, if it has already been solved
-			this.sentenceShown = this.curSentence().sentenceShown;
+			this.guessPage.sentenceShown = this.curSentence().sentenceShown;
 			if (showLoader) {
 				loading.dismiss();
 			}
@@ -75,9 +67,9 @@ export class GuessBarComponent implements OnInit {
 			this.hintIsClicked = false;
 
 			// Restore user progress
-			this.curWordIndex = this.curSentence().curWordIndex;
-			this.curCharsIndexes = this.curSentence().curCharsIndexes;
-			this.sentenceShown = this.curSentence().sentenceShown;
+			this.guessPage.curWordIndex = this.curSentence().curWordIndex;
+			this.guessPage.curCharsIndexes = this.curSentence().curCharsIndexes;
+			this.guessPage.sentenceShown = this.curSentence().sentenceShown;
 
 			this.refreshCharBoxes();
 		}
@@ -95,15 +87,9 @@ export class GuessBarComponent implements OnInit {
 		this.guessPage.updateChart();
 	}
 
-	private saveData() {
-		this.curSentence().curWordIndex = this.curWordIndex;
-		this.curSentence().curCharsIndexes = this.curCharsIndexes;
-		this.curSentence().sentenceShown = this.sentenceShown;
-	}
-
 	// Get current character to be filled
 	private curCorrectChar(): string {
-		return this.curSentence().hiddenChars[this.curWordIndex][this.curCharsIndexes[this.curWordIndex]];
+		return this.curSentence().hiddenChars[this.guessPage.curWordIndex][this.guessPage.curCharsIndexes[this.guessPage.curWordIndex]];
 	}
 
 	// Remove characters boxes highlighting
@@ -120,7 +106,7 @@ export class GuessBarComponent implements OnInit {
 			return;
 		}
 
-		this.saveData();
+		this.guessPage.saveData();
 
 		this.guessPage.saveStatistics(this.curSentence());
 
@@ -129,8 +115,8 @@ export class GuessBarComponent implements OnInit {
 			? 1
 			: this.guessPage.sentenceIndex + 1;
 
-		this.curWordIndex = 0;
-		this.curCharsIndexes = [];
+		this.guessPage.curWordIndex = 0;
+		this.guessPage.curCharsIndexes = [];
 
 		this.animateSwipe();
 		this.updateChart();
@@ -147,18 +133,18 @@ export class GuessBarComponent implements OnInit {
 
 			do {
 				do {
-					this.sentenceShown = this.util.addChar(this.sentenceShown,
+					this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown,
 						'<span class=\'yellow\'>' + this.curCorrectChar() + '</span>');
-					if (this.curCharsIndexes[this.curWordIndex] !==
-						this.curSentence().hiddenChars[this.curWordIndex].length - 1 ||
-						this.curWordIndex !== this.curSentence().hiddenChars.length - 1) {
-						this.sentenceShown = this.util.addChar(this.sentenceShown, '?');
+					if (this.guessPage.curCharsIndexes[this.guessPage.curWordIndex] !==
+						this.curSentence().hiddenChars[this.guessPage.curWordIndex].length - 1 ||
+						this.guessPage.curWordIndex !== this.curSentence().hiddenChars.length - 1) {
+						this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '?');
 					}
-					++this.curCharsIndexes[this.curWordIndex];
-				} while (this.curCharsIndexes[this.curWordIndex] <
-					this.curSentence().hiddenChars[this.curWordIndex].length);
-				++this.curWordIndex;
-			} while (this.curWordIndex < this.curSentence().hiddenChars.length);
+					++this.guessPage.curCharsIndexes[this.guessPage.curWordIndex];
+				} while (this.guessPage.curCharsIndexes[this.guessPage.curWordIndex] <
+					this.curSentence().hiddenChars[this.guessPage.curWordIndex].length);
+				++this.guessPage.curWordIndex;
+			} while (this.guessPage.curWordIndex < this.curSentence().hiddenChars.length);
 
 			this.updateChart();
 			this.resetColors();
@@ -207,7 +193,7 @@ export class GuessBarComponent implements OnInit {
 
 	// Save user progress and leave lesson
 	leaveLessonClick() {
-		if (this.curSentence().text !== this.sentenceShown) {
+		if (this.curSentence().text !== this.guessPage.sentenceShown) {
 			++this.curSentence().statistics.lessonLeaves; // Statistics
 		}
 	}
@@ -287,8 +273,8 @@ export class GuessBarComponent implements OnInit {
 	*	2 - current word is guessed, current sentence is guessed
 	*/
 	private status(): number {
-		if (this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length) {
-			if (this.curWordIndex === this.curSentence().hiddenChars.length - 1) {
+		if (this.guessPage.curCharsIndexes[this.guessPage.curWordIndex] === this.curSentence().hiddenChars[this.guessPage.curWordIndex].length) {
+			if (this.guessPage.curWordIndex === this.curSentence().hiddenChars.length - 1) {
 				return 2;
 			} else {
 				return 1;
@@ -320,18 +306,18 @@ export class GuessBarComponent implements OnInit {
 			}
 
 			// Fill guessed character
-			this.sentenceShown = this.util.addChar(this.sentenceShown, spanColor + this.curCorrectChar() + '</span>');
-			++this.curCharsIndexes[this.curWordIndex];
+			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, spanColor + this.curCorrectChar() + '</span>');
+			++this.guessPage.curCharsIndexes[this.guessPage.curWordIndex];
 
 			const status = this.status();
 			if (status === 1) {
-				++this.curWordIndex;
+				++this.guessPage.curWordIndex;
 			} else if (status === 2) {
 				this.curSentence().isSolved = true;
 				return;
 			}
 
-			this.sentenceShown = this.util.addChar(this.sentenceShown, '?');
+			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '?');
 
 			this.refreshCharBoxes();
 		} else {

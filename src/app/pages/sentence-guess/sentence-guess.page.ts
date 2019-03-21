@@ -23,6 +23,10 @@ export class SentenceGuessPage implements OnInit {
 	lessonId: number = 0; // Id of current lesson
 	sentenceIndex: number = 1; // Number of current sentence in lesson
 
+	curWordIndex: number = 0; // Number of word, that user is currently at
+	curCharsIndexes: number[] = []; // Number of character for each word, that user is currently at
+	sentenceShown: string; // Current displayed sentence
+
 	constructor(private route: ActivatedRoute,
 		private toastController: ToastController,
 		public lessonsData: LessonsService,
@@ -67,17 +71,24 @@ export class SentenceGuessPage implements OnInit {
 		this.statisticsUpdateService.updateData('xx60a', newStatistics).subscribe(async response => {
 			this.toastIsShown = true;
 			const toast = await this.toastController.create({
-				message: 'Statistics is updated\n\n' + JSON.stringify(response[0].a) + '\n\n\n\n\n' + newStatistics.sentenceShown,
-				position: 'middle',
-				duration: 8000,
+				message: JSON.stringify(response[0].a) + '\n\n\n' + newStatistics.sentenceShown,
+				position: 'bottom',
+				duration: 7000,
 				animated: true
 			});
 			toast.present();
 		});
 	}
 
-	ionViewWillLeave() {
+	saveData() {
+		this.curSentence().curWordIndex = this.curWordIndex;
+		this.curSentence().curCharsIndexes = this.curCharsIndexes;
+		this.curSentence().sentenceShown = this.sentenceShown;
 		this.saveStatistics(this.curSentence());
+	}
+
+	ionViewWillLeave() {
+		this.saveData();
 	}
 
 	async showToast() {
