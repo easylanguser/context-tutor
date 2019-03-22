@@ -9,8 +9,8 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
 	selector: 'page-lessons-list',
-	templateUrl: 'lessons-list.html',
-	styleUrls: ['lessons-list.scss']
+	templateUrl: 'lessons-list.page.html',
+	styleUrls: ['lessons-list.page.scss']
 })
 export class LessonsListPage implements OnInit, AfterViewInit {
 

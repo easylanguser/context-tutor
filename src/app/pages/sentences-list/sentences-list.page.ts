@@ -10,8 +10,8 @@ import { Chart } from 'chart.js';
 
 @Component({
 	selector: 'page-sentences-list',
-	templateUrl: 'sentences-list.html',
-	styleUrls: ['sentences-list.scss'],
+	templateUrl: 'sentences-list.page.html',
+	styleUrls: ['sentences-list.page.scss'],
 })
 
 export class SentencesListPage implements OnInit, AfterViewInit {

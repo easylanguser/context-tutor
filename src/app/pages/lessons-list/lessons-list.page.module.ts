@@ -4,21 +4,21 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { LessonsListPage } from './lessons-list';
+import { LessonsListPage } from './lessons-list.page';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: LessonsListPage
-      }
-    ])
-  ],
-  declarations: [LessonsListPage],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		RouterModule.forChild([
+			{
+				path: '',
+				component: LessonsListPage
+			}
+		])
+	],
+	declarations: [LessonsListPage],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class LessonsListPageModule { }

@@ -17,7 +17,7 @@ import { LoginPageModule } from './pages/login/login.module';
 import { SignUpPageModule } from './pages/sign-up/sign-up.module';
 import { AccountPageModule } from './pages/account/account.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SentencesListPageModule } from './pages/sentences-list/sentences-list.module';
+import { SentencesListPageModule } from './pages/sentences-list/sentences-list.page.module';
 import { SentenceGuessPageModule } from './pages/sentence-guess/sentence-guess.module';
 import { ForgetPageModule } from './pages/forget/forget.module';
 import { ChangePageModule } from './pages/change/change.module';
