@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Sentence } from 'src/app/models/sentence';
+import { Lesson } from 'src/app/models/lesson';
 
 @Injectable({
 	providedIn: 'root'
@@ -74,28 +76,33 @@ export class UtilsService {
 		return input.substr(0, firstUnderScoreIndex) + replacement + input.substr(firstUnderScoreIndex + 1);
 	}
 
-	redAndYellowFilter(val) {
+	redAndYellowFilterSentence(val: Sentence) {
 		let redIsPresent: boolean = false;
 		let yellowIsPresent: boolean = false;
 
-		if (val.constructor.name === 'Lesson') {
-			for (const sentence of val.sentences) {
-				const stat = sentence.statistics;
-				if (stat.wrongAnswers > 0) {
-					redIsPresent = true;
-				}
-				if (stat.hintUsages > 0 || stat.giveUps > 0) {
-					yellowIsPresent = true;
-				}
-			}
-		} else {
-			const stat = val.statistics;
-			if (stat.wrongAnswers > 0 && (stat.hintUsages > 0 || stat.giveUps > 0)) {
+		const stat = val.statistics;
+		if (stat.wrongAnswers > 0 && (stat.hintUsages > 0 || stat.giveUps > 0)) {
+			redIsPresent = true;
+			yellowIsPresent = true;
+		}
+
+		return redIsPresent && yellowIsPresent;
+	}
+
+	redAndYellowFilterLesson(val: Lesson) {
+		let redIsPresent: boolean = false;
+		let yellowIsPresent: boolean = false;
+
+		for (const sentence of val.sentences) {
+			const stat = sentence.statistics;
+			if (stat.wrongAnswers > 0) {
 				redIsPresent = true;
+			}
+			if (stat.hintUsages > 0 || stat.giveUps > 0) {
 				yellowIsPresent = true;
 			}
 		}
-
+		
 		return redIsPresent && yellowIsPresent;
 	}
 }

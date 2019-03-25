@@ -142,7 +142,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	redAndYellowClick() {
-		this.displayedLessons = this.lessonService.lessons.filter(this.utils.redAndYellowFilter);
+		this.displayedLessons = this.lessonService.lessons.filter(this.utils.redAndYellowFilterLesson);
 	}
 
 	openLesson(lessonID) {

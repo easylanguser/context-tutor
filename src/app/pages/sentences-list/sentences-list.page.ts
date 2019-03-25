@@ -106,6 +106,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	redAndYellowClick() {
 		this.displayedSentences = this.lessonData.getLessonByID(this.lessonId)
-			.sentences.filter(this.utils.redAndYellowFilter);
+			.sentences.filter(this.utils.redAndYellowFilterSentence);
 	}
 }
