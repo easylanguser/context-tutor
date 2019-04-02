@@ -23,8 +23,15 @@
     cursor: pointer;
     display: table;
     table-layout: fixed;
+
+    transition: background-color 0.4s ease-in-out;
+    -o-transition: background-color 0.4s ease-in-out;
+    -ms-transition: background-color 0.4s ease-in-out;
+    -moz-transition: background-color 0.4s ease-in-out;
+    -webkit-transition: background-color 0.4s ease-in-out;
+
     &:hover {
-        background-color: var(--ion-color-step-100);
+        background-color: lightskyblue;
         .lesson-text {
             color: var(--ion-color-step-900);
         }
@@ -50,6 +57,12 @@
     max-height: 6vh;
     margin: 0;
     color: #95949c;
+
+    transition: color 0.4s ease-in-out;
+    -o-transition: color 0.4s ease-in-out;
+    -ms-transition: color 0.4s ease-in-out;
+    -moz-transition: color 0.4s ease-in-out;
+    -webkit-transition: color 0.4s ease-in-out;
 }
 
 .date-text {
@@ -60,6 +73,12 @@
     @media (min-width: 650px) {
         font-size: 1.5vmin;
     }
+
+    transition: color 0.4s ease-in-out;
+    -o-transition: color 0.4s ease-in-out;
+    -ms-transition: color 0.4s ease-in-out;
+    -moz-transition: color 0.4s ease-in-out;
+    -webkit-transition: color 0.4s ease-in-out;
 }
 
 .canvas-div {

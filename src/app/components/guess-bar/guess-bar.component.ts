@@ -367,18 +367,20 @@ export class GuessBarComponent implements OnInit {
 		const textShownId = '#sentence-to-show';
 		await anime({
 			targets: [document.querySelector(textShownId)],
-			translateX: '+=105vw',
-			easing: 'easeInOutCirc',
-			duration: 300
+			translateX: '+=30vw',
+			opacity: 0,
+			easing: 'easeInQuart',
+			duration: 400
 		}).finished;
 
 		await this.getData(false);
 
 		await anime({
 			targets: [document.querySelector(textShownId)],
-			translateX: '-=105vw',
-			easing: 'easeInOutCirc',
-			duration: 300
+			translateX: '-=30vw',
+			opacity: 1,
+			easing: 'easeInQuart',
+			duration: 500
 		}).finished;
 
 		this.sentenceTranslateIsPlayed = false;
