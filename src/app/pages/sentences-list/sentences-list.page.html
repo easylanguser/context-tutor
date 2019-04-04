@@ -9,7 +9,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content slot="fixed">
+
   <ion-segment id="progress-segment">
     <ion-segment-button checked="true" (click)="allClick()">
       All
@@ -22,20 +23,22 @@
     </ion-segment-button>
   </ion-segment>
 
-  <ion-refresher [pullMax]="0" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content>
-    </ion-refresher-content>
-  </ion-refresher>
+  <ion-content style="z-index: 0;">
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">
+      </ion-refresher-content>
+    </ion-refresher>
 
-  <div class="sentence-card" *ngFor="let sentence of displayedSentences;index as i"
-    (click)="openSentence(i)">
-    <div class="sentence-text-div">
-      <p class="sentence-text">
-        {{i + 1}}. {{sentence.textUnderscored}}
-      </p>
+    <div class="sentence-card" *ngFor="let sentence of displayedSentences;index as i" (click)="openSentence(i)">
+      <div class="sentence-text-div">
+        <p class="sentence-text">
+          {{i + 1}}. {{sentence.textUnderscored}}
+        </p>
+      </div>
+      <div class="canvas-div">
+        <canvas #chartsid width="50" height="50"></canvas>
+      </div>
     </div>
-    <div class="canvas-div">
-      <canvas #chartsid width="50" height="50"></canvas>
-    </div>
-  </div>
+  </ion-content>
+
 </ion-content>

@@ -7,7 +7,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content overflow-scroll="true">
+<ion-content>
+
   <ion-segment id="date-segment">
     <ion-segment-button checked="true" (click)="allClick()">
       All
@@ -19,32 +20,37 @@
       Red + Yellow
     </ion-segment-button>
   </ion-segment>
-  <ion-refresher [pullMax]="0" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content>
-    </ion-refresher-content>
-  </ion-refresher>
-  <ion-list no-padding no-margin>
-    <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem>
-      <ion-item class="lesson-ion-item" no-padding>
-        <div class="lesson-card" (click)="openLesson(lesson.id)">
-          <div class="lesson-text-div">
-            <p class="lesson-text">
-              {{i + 1}}. {{lesson.name}}
-            </p>
-            <span class="date-text">
-              {{lesson.displayedDate}}
-            </span>
+
+  <ion-content style="z-index: 0;">
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">
+      </ion-refresher-content>
+    </ion-refresher>
+
+    <ion-list no-padding no-margin>
+      <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem>
+        <ion-item class="lesson-ion-item" no-padding>
+          <div class="lesson-card" (click)="openLesson(lesson.id)">
+            <div class="lesson-text-div">
+              <p class="lesson-text">
+                {{i + 1}}. {{lesson.name}}
+              </p>
+              <span class="date-text">
+                {{lesson.displayedDate}}
+              </span>
+            </div>
+            <div class="canvas-div">
+              <canvas #chartsid width="50" height="50"></canvas>
+            </div>
           </div>
-          <div class="canvas-div">
-            <canvas #chartsid width="50" height="50"></canvas>
-          </div>
-        </div>
-      </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option class="delete-sliding-option" color="danger" (click)="deleteItem(slidingItem, lesson.id)">
-          Delete
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option class="delete-sliding-option" color="danger" (click)="deleteItem(slidingItem, lesson.id)">
+            Delete
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </ion-content>
+
 </ion-content>
