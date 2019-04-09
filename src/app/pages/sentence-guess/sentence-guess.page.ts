@@ -66,24 +66,30 @@ export class SentenceGuessPage implements OnInit {
 		this.pieChart.update();
 	}
 
-	saveStatistics(newStatistics: Sentence) {
-		this.statisticsUpdateService.updateData('xx60a', newStatistics).subscribe(response => {
-			/* this.toastIsShown = true;
-			const toast = await this.toastController.create({
-				message: JSON.stringify(response[0].a) + '\n\n\n' + newStatistics.sentenceShown,
-				position: 'bottom',
-				duration: 7000,
-				animated: true
-			});
-			toast.present(); */
-		});
+	saveStatistics() {
+		this.statisticsUpdateService
+			.updateData( {
+				sentenceId: this.curSentence().id,
+				curCharsIndexes: this.curSentence().curCharsIndexes,
+				curWordIndex: this.curSentence().curWordIndex,
+				sentenceShown: this.curSentence().sentenceShown,
+				solvedStatus: this.curSentence().isSolved,
+				correctAnswers: this.curSentence().statistics.correctAnswers,
+				giveUps: this.curSentence().statistics.giveUps,
+				hintUsages: this.curSentence().statistics.hintUsages,
+				lessonLeaves: this.curSentence().statistics.lessonLeaves,
+				sentenceSkips: this.curSentence().statistics.sentenceSkips,
+				wordSkips: this.curSentence().statistics.wordSkips,
+				wrongAnswers: this.curSentence().statistics.wrongAnswers
+			})
+			.subscribe(response => { });
 	}
 
 	saveData() {
 		this.curSentence().curWordIndex = this.curWordIndex;
 		this.curSentence().curCharsIndexes = this.curCharsIndexes;
 		this.curSentence().sentenceShown = this.sentenceShown;
-		this.saveStatistics(this.curSentence());
+		this.saveStatistics();
 	}
 
 	ionViewWillLeave() {

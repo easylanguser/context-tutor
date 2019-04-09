@@ -2,7 +2,7 @@ import { Observable, forkJoin } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpService } from '../../http/rest/http.service';
 
-const apiUrl = 'https://api.myjson.com/bins/';
+const apiUrl = 'http://46.101.122.247/api/sentences/updateSentenceStatistics';
 
 @Injectable({
 	providedIn: 'root'
@@ -11,8 +11,8 @@ export class StatisticsUpdateService {
 
 	constructor(private httpService: HttpService) { }
 
-	updateData(toUpdate: string, newStatistics: Object): Observable<any> {
-		const response = this.httpService.doPut(apiUrl + toUpdate, { 'a' : newStatistics });
+	updateData(newStatistics: Object): Observable<any> {
+		const response = this.httpService.doPut(apiUrl, newStatistics);
 		return forkJoin([response]);
 	}
 }
