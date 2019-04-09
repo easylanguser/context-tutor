@@ -28,7 +28,7 @@ export function jwtOptionsFactory(storage) {
 		tokenGetter: () => {
 			return storage.get('access_token');
 		},
-		whitelistedDomains: ['http://165.227.159.35']
+		whitelistedDomains: ['http://46.101.122.247']
 	};
 }
 

@@ -49,7 +49,7 @@ export class AccountPage implements OnInit {
 					text: 'Delete',
 					handler: (data) => {
 						alert.dismiss(true);
-						this.httpService.doPost('http://165.227.159.35/api/user/deleteAccount', data)
+						this.httpService.doPost('http://46.101.122.247/api/user/deleteAccount', data)
 							.subscribe(res => {
 								return this.authService.logout();
 							}, err => {

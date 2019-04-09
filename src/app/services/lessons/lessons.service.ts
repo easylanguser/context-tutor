@@ -59,18 +59,20 @@ export class LessonsService {
 					lsn[i].text,
 					hiddenSentence,
 					hiddenChars,
-					curCharsIndexes,
-					0,
-					this.utils.addChar(hiddenSentence, '?'),
-					false,
+					lsn[i].curCharsIndexes.length === 0 ? curCharsIndexes : lsn[i].curCharsIndexes,
+					lsn[i].curWordIndex,
+					lsn[i].sentenceShown === "" 
+						? this.utils.addChar(hiddenSentence, '?')
+						: lsn[i].sentenceShown,
+					lsn[i].isSolved,
 					new Statistics(
-						Math.floor(Math.random() * 2),
-						Math.floor(Math.random() * 2),
-						Math.floor(Math.random() * 2),
-						Math.floor(Math.random() * 2),
-						Math.floor(Math.random() * 2),
-						Math.floor(Math.random() * 2),
-						Math.floor(Math.random() * 2)));
+						lsn[i].correctAnswers,
+						lsn[i].wrongAnswers,
+						lsn[i].giveUps,
+						lsn[i].wordSkips,
+						lsn[i].sentenceSkips,
+						lsn[i].lessonLeaves,
+						lsn[i].hintUsages));
 				if (!this.getLessonByID(id).sentences.some(sntn => sntn.id === sentence.id)) {
 					this.getLessonByID(id).addSentence(sentence);
 				}

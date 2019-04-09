@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '../../http/rest/http.service';
 
-const apiUrl = 'http://165.227.159.35/api/lessons/delete?id=';
+const apiUrl = 'http://46.101.122.247/api/lessons/delete?id=';
 
 @Injectable({
 	providedIn: 'root'
