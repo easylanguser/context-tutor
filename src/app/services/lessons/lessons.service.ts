@@ -64,7 +64,7 @@ export class LessonsService {
 					lsn[i].sentenceShown === "" 
 						? this.utils.addChar(hiddenSentence, '?')
 						: lsn[i].sentenceShown,
-					lsn[i].isSolved,
+					lsn[i].solvedStatus,
 					new Statistics(
 						lsn[i].correctAnswers,
 						lsn[i].wrongAnswers,
