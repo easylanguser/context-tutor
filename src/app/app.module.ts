@@ -22,13 +22,14 @@ import { SentenceGuessPageModule } from './pages/sentence-guess/sentence-guess.m
 import { ForgetPageModule } from './pages/forget/forget.module';
 import { ChangePageModule } from './pages/change/change.module';
 import { GuessBarComponent } from './components/guess-bar/guess-bar.component';
+import { environment } from 'src/environments/environment';
 
 export function jwtOptionsFactory(storage) {
 	return {
 		tokenGetter: () => {
 			return storage.get('access_token');
 		},
-		whitelistedDomains: ['http://46.101.122.247']
+		whitelistedDomains: [environment.url]
 	};
 }
 

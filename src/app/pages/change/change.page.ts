@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {HttpService} from "../../services/http/rest/http.service";
 import {AlertController} from "@ionic/angular";
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
     selector: 'app-change',
@@ -33,7 +34,7 @@ export class ChangePage implements OnInit {
     changePassword() {
         this.submitted = true;
         if (this.credentialsForm.valid) {
-            this.httpService.doPost('http://46.101.122.247/api/user/changePassword', this.credentialsForm.value).subscribe(res => {
+            this.httpService.doPost(environment.url + '/api/user/changePassword', this.credentialsForm.value).subscribe(res => {
                 this.showAlert(res);
             });
         }

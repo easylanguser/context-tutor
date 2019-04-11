@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { HttpService } from '../../services/http/rest/http.service';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 const TOKEN_KEY = 'access_token';
 
@@ -49,7 +50,7 @@ export class AccountPage implements OnInit {
 					text: 'Delete',
 					handler: (data) => {
 						alert.dismiss(true);
-						this.httpService.doPost('http://46.101.122.247/api/user/deleteAccount', data)
+						this.httpService.doPost(environment.url + '/api/user/deleteAccount', data)
 							.subscribe(res => {
 								return this.authService.logout();
 							}, err => {

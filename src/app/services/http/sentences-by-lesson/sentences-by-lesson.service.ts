@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { forkJoin } from 'rxjs';
 import { HttpService } from '../../http/rest/http.service';
+import { environment } from 'src/environments/environment';
 
-const apiUrl = 'http://46.101.122.247/api/sentences/getLessonSentences?lessonId=';
+const apiUrl = environment.url + '/api/sentences/getLessonSentences?lessonId=';
 
 @Injectable({
 	providedIn: 'root'
