@@ -73,7 +73,7 @@ export class SentenceGuessPage implements OnInit {
 				curCharsIndexes: this.curSentence().curCharsIndexes,
 				curWordIndex: this.curSentence().curWordIndex,
 				sentenceShown: this.curSentence().sentenceShown,
-				solvedStatus: this.curSentence().isSolved,
+				solvedStatus: this.curSentence().solvedStatus,
 				correctAnswers: this.curSentence().statistics.correctAnswers,
 				giveUps: this.curSentence().statistics.giveUps,
 				hintUsages: this.curSentence().statistics.hintUsages,

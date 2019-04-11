@@ -33,7 +33,7 @@
         Give<br>up
       </ion-button>
       <ion-button text-center id="next-sentence-button"
-        [ngStyle]="{'box-shadow': this.curSentence().isSolved ? greenHighlight : 'none'}" (click)="nextSentenceClick()">
+        [ngStyle]="{'box-shadow': this.curSentence().solvedStatus ? greenHighlight : 'none'}" (click)="nextSentenceClick()">
         Next
       </ion-button>
     </div>

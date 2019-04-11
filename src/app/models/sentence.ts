@@ -10,6 +10,6 @@ export class Sentence {
 		public curCharsIndexes: number[],
 		public curWordIndex: number,
 		public sentenceShown: string,
-		public isSolved: boolean,
+		public solvedStatus: boolean,
 		public statistics: Statistics) { }
 }

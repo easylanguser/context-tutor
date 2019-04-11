@@ -54,11 +54,15 @@ export class GuessBarComponent implements OnInit {
 	async getData(showLoader: boolean) {
 		let loading: any;
 		if (showLoader) { // Show loader if sentence is loaded first time
-			loading = await this.loadingController.create({ message: 'Loading' });
+			loading = await this.loadingController.create({
+				message: 'Loading',
+				spinner: 'crescent',
+				duration: 8000
+			});
 			await loading.present();
 		}
 
-		if (this.curSentence().isSolved) { // Display filled sentence, if it has already been solved
+		if (this.curSentence().solvedStatus) { // Display filled sentence, if it has already been solved
 			this.guessPage.sentenceShown = this.curSentence().sentenceShown;
 			if (showLoader) {
 				loading.dismiss();
@@ -119,14 +123,14 @@ export class GuessBarComponent implements OnInit {
 		this.animateSwipe();
 		this.updateChart();
 
-		if (!this.curSentence().isSolved) {
+		if (!this.curSentence().solvedStatus) {
 			++this.curSentence().statistics.sentenceSkips; // Statistics
 		}
 	}
 
 	// Give up and show full sentence
 	giveUpClick() {
-		if (!this.curSentence().isSolved) {
+		if (!this.curSentence().solvedStatus) {
 			++this.curSentence().statistics.giveUps; // Statistics
 
 			do {
@@ -146,13 +150,13 @@ export class GuessBarComponent implements OnInit {
 
 			this.updateChart();
 			this.resetColors();
-			this.curSentence().isSolved = true;
+			this.curSentence().solvedStatus = true;
 		}
 	}
 
 	// Show user one current character
 	hintClick() {
-		if (!this.curSentence().isSolved && !this.hintIsClicked) {
+		if (!this.curSentence().solvedStatus && !this.hintIsClicked) {
 			++this.curSentence().statistics.hintUsages; // Statistics
 			this.updateChart();
 
@@ -279,7 +283,7 @@ export class GuessBarComponent implements OnInit {
 		if (this.sentenceTranslateIsPlayed || this.charactersRotationIsPlayed) {
 			return;
 		}
-		if (this.curSentence().isSolved) {
+		if (this.curSentence().solvedStatus) {
 			if (!this.guessPage.toastIsShown) {
 				this.guessPage.showToast();
 			}
@@ -304,7 +308,7 @@ export class GuessBarComponent implements OnInit {
 			if (status === 1) {
 				++this.guessPage.curWordIndex;
 			} else if (status === 2) {
-				this.curSentence().isSolved = true;
+				this.curSentence().solvedStatus = true;
 				return;
 			}
 
