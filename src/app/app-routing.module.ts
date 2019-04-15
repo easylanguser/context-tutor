@@ -9,6 +9,7 @@ import { SignUpPage } from './pages/sign-up/sign-up.page';
 import { AccountPage } from './pages/account/account.page';
 import { ForgetPage } from './pages/forget/forget.page';
 import { ChangePage } from './pages/change/change.page';
+import { AddLessonPage } from './pages/add-lesson/add-lesson.page';
 
 const routes: Routes = [
 	{ path: '', redirectTo: 'lessons-list', pathMatch: 'full' },
@@ -23,6 +24,7 @@ const routes: Routes = [
 	{ path: 'account', component: AccountPage, canActivate: [AuthGuardService] },
 	{ path: 'forget', component: ForgetPage },
 	{ path: 'change', component: ChangePage, canActivate: [AuthGuardService] },
+	{ path: 'add-lesson', component: AddLessonPage, canActivate: [AuthGuardService] }
 ];
 
 @NgModule({

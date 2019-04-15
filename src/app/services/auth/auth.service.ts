@@ -37,6 +37,7 @@ export class AuthService {
 					this.authenticationState.next(true);
 				} else {
 					this.storageService.remove(TOKEN_KEY);
+					this.storageService.remove("user_id");
 				}
 			}
 		});
@@ -56,7 +57,7 @@ export class AuthService {
 			.pipe(
 				tap(res => {
 					this.storageService.set(TOKEN_KEY, res['token']);
-					this.token = res['token']
+					this.storageService.set("user_id", res['id']);
 					this.authenticationState.next(true);
 				}),
 				catchError(e =>

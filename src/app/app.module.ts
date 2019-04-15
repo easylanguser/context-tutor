@@ -23,6 +23,7 @@ import { ForgetPageModule } from './pages/forget/forget.module';
 import { ChangePageModule } from './pages/change/change.module';
 import { GuessBarComponent } from './components/guess-bar/guess-bar.component';
 import { environment } from 'src/environments/environment';
+import { AddLessonPageModule } from './pages/add-lesson/add-lesson.module';
 
 export function jwtOptionsFactory(storage) {
 	return {
@@ -41,6 +42,7 @@ export function jwtOptionsFactory(storage) {
 		HttpClientModule,
 		SentencesListPageModule,
 		SentenceGuessPageModule,
+		AddLessonPageModule,
 		LoginPageModule,
 		SignUpPageModule,
 		BrowserAnimationsModule,

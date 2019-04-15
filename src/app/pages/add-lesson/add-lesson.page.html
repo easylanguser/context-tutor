@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  
+  <ion-item>
+    <ion-input [(ngModel)]="lessonName" placeholder="Enter lesson name"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-input [(ngModel)]="lessonUrl" placeholder="Enter lesson url"></ion-input>
+  </ion-item>
+
+  <ion-buttons (click)="addNewLesson()">
+    <ion-button>Save lesson</ion-button>
+  </ion-buttons>
+
+  <ion-item>
+    <ion-textarea [(ngModel)]="sentenceText" placeholder="Enter sentence text">
+    </ion-textarea>
+  </ion-item>
+
+  <ion-item>
+    <ion-textarea [(ngModel)]="sentenceHiddenWords" placeholder="Enter positions of hidden characters (e.g.  0 3|6 1|10 2 , first number is start position, second is number of sequent characters to hide)">
+    </ion-textarea>
+  </ion-item>
+
+  <ion-buttons (click)="addNewSentenceToLesson()">
+    <ion-button>Add sentence to lesson</ion-button>
+  </ion-buttons>
+
+</ion-content>

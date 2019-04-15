@@ -40,6 +40,10 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		});
 	}
 
+	addLesson() {
+		this.router.navigate(['add-lesson']);
+	}
+
 	private syncCharts() {
 		this.pieCharts = [];
 		for (let i = 0; i < this.pieCanvases._results.length; i++) {
