@@ -1,0 +1,15 @@
+#save-lesson-button {
+    margin-left: calc(50vw - 20vmin - 16px);
+    margin-top: 4vh;
+    @media (min-width: 992px) {
+        margin-left: calc(36vw - 20vmin - 16px);
+    }
+}
+
+#save-sentence-button {
+    margin-left: calc(50vw - 28vmin - 16px);
+    margin-top: 4vh;
+    @media (min-width: 992px) {
+        margin-left: calc(36vw - 28vmin - 16px);
+    }
+}

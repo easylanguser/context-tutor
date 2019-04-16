@@ -26,7 +26,7 @@ export class AddLessonPage implements OnInit {
 
   ngOnInit() { }
 
-  addNewSentenceToLesson() {
+  async addNewSentenceToLesson() {
     if (this.sentenceText !== undefined && this.sentenceHiddenWords !== undefined) {
       const words = this.sentenceHiddenWords.split('|');
       const indexesArray: Array<[number, number]> = [];
@@ -43,6 +43,14 @@ export class AddLessonPage implements OnInit {
 
       this.sentenceText = "";
       this.sentenceHiddenWords = "";
+
+      const toast = await this.toastController.create({
+        message: 'There are ' + this.sentences.length + ' sentences in current lesson',
+        position: 'bottom',
+        duration: 900,
+        animated: true
+      });
+      toast.present();
     }
   }
 
@@ -63,12 +71,12 @@ export class AddLessonPage implements OnInit {
               text: sentence.text
             });
           }
+          this.lessonName = "";
+          this.lessonUrl = "";
+          this.sentenceText = "";
+          this.sentenceHiddenWords = "";
+          this.sentences = [];
         });
-      }).then(() => {
-        this.lessonName = "";
-        this.lessonUrl = "";
-        this.sentenceText = "";
-        this.sentenceHiddenWords = "";
       }).then(async () => {
         const toast = await this.toastController.create({
           message: 'New lesson was added',

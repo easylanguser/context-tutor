@@ -3,35 +3,42 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
+    <ion-title>
+      Lesson adding
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  
+
   <ion-item>
-    <ion-input [(ngModel)]="lessonName" placeholder="Enter lesson name"></ion-input>
+    <ion-input style="text-align:center" [(ngModel)]="lessonName" inputmode="text" placeholder="Enter lesson name"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-input [(ngModel)]="lessonUrl" placeholder="Enter lesson url"></ion-input>
+    <ion-input style="text-align:center" [(ngModel)]="lessonUrl" inputmode="url" placeholder="Enter lesson url"></ion-input>
   </ion-item>
 
-  <ion-buttons (click)="addNewLesson()">
-    <ion-button>Save lesson</ion-button>
+  <ion-buttons (click)="addNewLesson()" id="save-lesson-button">
+    <ion-button style="width: 40vmin;" color="primary" fill="outline">Save lesson</ion-button>
   </ion-buttons>
 
-  <ion-item>
-    <ion-textarea [(ngModel)]="sentenceText" placeholder="Enter sentence text">
+  <ion-item style="margin-top: 10vh; text-align:center">
+    <ion-textarea [(ngModel)]="sentenceText" 
+      placeholder="Enter sentence text"
+      rows="4">
     </ion-textarea>
   </ion-item>
 
   <ion-item>
-    <ion-textarea [(ngModel)]="sentenceHiddenWords" placeholder="Enter positions of hidden characters (e.g.  0 3|6 1|10 2 , first number is start position, second is number of sequent characters to hide)">
+    <ion-textarea style="text-align:center" [(ngModel)]="sentenceHiddenWords"
+      rows="4"
+      placeholder="Enter positions of hiding start position and number of sequent characters to hide. Separate hidings with vertical slash, e.g.  0 3|6 1|10 2">
     </ion-textarea>
   </ion-item>
 
-  <ion-buttons (click)="addNewSentenceToLesson()">
-    <ion-button>Add sentence to lesson</ion-button>
+  <ion-buttons (click)="addNewSentenceToLesson()" id="save-sentence-button">
+    <ion-button style="width: 56vmin;" color="primary" fill="outline">Add sentence to lesson</ion-button>
   </ion-buttons>
 
 </ion-content>
