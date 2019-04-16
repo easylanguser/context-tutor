@@ -57,6 +57,7 @@ export class AuthService {
 			.pipe(
 				tap(res => {
 					this.storageService.set(TOKEN_KEY, res['token']);
+					this.token = res['token'];
 					this.storageService.set("user_id", res['id']);
 					this.authenticationState.next(true);
 				}),

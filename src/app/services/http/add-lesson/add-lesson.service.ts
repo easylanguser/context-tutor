@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '../rest/http.service';
 import { environment } from 'src/environments/environment';
-import { Observable, forkJoin } from 'rxjs';
 
 const apiUrl = environment.url + '/api/lessons/addLessons';
 
