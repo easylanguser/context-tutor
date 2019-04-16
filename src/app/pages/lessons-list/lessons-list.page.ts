@@ -96,7 +96,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 					handler: () => {
 						slidingItem.close();
 
-						// this.lessonDeleteService.delete(lessonID);
+						this.lessonDeleteService.delete(lessonID);
 
 						let i = 0;
 						for (i; i < this.displayedLessons.length; i++) {

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, IonItemSliding, AlertController } from '@ionic/angular';
 import { SentencesByLessonService } from '../../services/http/sentences-by-lesson/sentences-by-lesson.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { Chart } from 'chart.js';
+import { SentenceDeleteService } from 'src/app/services/http/sentence-delete/sentence-delete.service';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -23,10 +24,12 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	constructor(private api: SentencesByLessonService,
 		private loadingController: LoadingController,
+		private alertCtrl: AlertController,
 		private utils: UtilsService,
 		private route: ActivatedRoute,
 		private router: Router,
-		public lessonData: LessonsService) { }
+		public lessonData: LessonsService,
+		private sentenceDeleteService: SentenceDeleteService) { }
 
 	ngOnInit() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
@@ -49,6 +52,43 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, this.utils.getNewChartObject()));
 		}
 		this.updateCharts();
+	}
+
+	async deleteItem(slidingItem: IonItemSliding, sentenceID: number) {
+		const alert = await this.alertCtrl.create({
+			message: 'Are you sure you want to delete this sentence?',
+			buttons: [
+				{
+					text: 'Cancel',
+					role: 'cancel',
+					handler: () => {
+						slidingItem.close();
+					}
+				},
+				{
+					text: 'Delete',
+					handler: () => {
+						slidingItem.close();
+
+						this.sentenceDeleteService.delete(sentenceID);
+
+						let i = 0;
+						for (i; i < this.displayedSentences.length; i++) {
+							if (this.displayedSentences[i].id === sentenceID) {
+								break;
+							}
+						}
+
+						if (i !== this.displayedSentences.length) {
+							this.displayedSentences.splice(i, 1);
+							this.pieCharts[i].destroy();
+							this.pieCharts.splice(i, 1);
+						}
+					}
+				}
+			]
+		});
+		await alert.present();
 	}
 
 	private updateCharts() {
