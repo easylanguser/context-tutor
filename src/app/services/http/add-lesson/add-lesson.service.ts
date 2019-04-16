@@ -12,8 +12,7 @@ export class AddLessonService {
 
   constructor(private httpService: HttpService) { }
 
-  postNewLesson(lesson: Object): Observable<any> {
-		const response = this.httpService.doPost(apiUrl, lesson);
-		return forkJoin([response]);
+  postNewLesson(lesson: Object): Promise<any> {
+		return this.httpService.doPost(apiUrl, lesson).toPromise();
 	}
 }
