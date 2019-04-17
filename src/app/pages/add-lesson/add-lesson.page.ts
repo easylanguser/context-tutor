@@ -28,12 +28,24 @@ export class AddLessonPage implements OnInit {
 
   async addNewSentenceToLesson() {
     if (this.sentenceText !== undefined && this.sentenceHiddenWords !== undefined) {
+      this.sentenceHiddenWords = this.sentenceHiddenWords.replace(/\s/g, '');
       const words = this.sentenceHiddenWords.split('|');
       const indexesArray: Array<[number, number]> = [];
 
       for (const item of words) {
-        const indexes = item.split(' ');
+        const indexes = item.split('-');
         indexesArray.push([Number(indexes[0]), Number(indexes[1])]);
+      }
+
+      for (let i = 0; i < indexesArray.length - 1; i++) {
+        for (let j = i + 1; j < indexesArray.length; j++) {
+          if (!((indexesArray[i][0] < indexesArray[j][0] &&
+            indexesArray[i][0] + indexesArray[i][1] < indexesArray[j][0] + indexesArray[j][1]) ||
+            (indexesArray[i][0] > indexesArray[j][0] &&
+            indexesArray[i][0] + indexesArray[i][1] > indexesArray[j][0] + indexesArray[j][1]))) {
+            return;
+          }
+        }
       }
 
       this.sentences.push({
@@ -57,35 +69,35 @@ export class AddLessonPage implements OnInit {
   addNewLesson() {
     if (this.lessonName !== undefined && this.lessonUrl !== undefined) {
       this.storageService.get("user_id")
-      .then(userId => {
-        this.addLessonService.postNewLesson({
-          userId: userId,
-          name: this.lessonName,
-          url: this.lessonUrl
-        }).then(res => {
-          const newLessonId = res.id;
-          for (const sentence of this.sentences) {
-            this.addSentenceService.postNewSentence({
-              lessonId: newLessonId,
-              words: sentence.words,
-              text: sentence.text
-            });
-          }
-          this.lessonName = "";
-          this.lessonUrl = "";
-          this.sentenceText = "";
-          this.sentenceHiddenWords = "";
-          this.sentences = [];
+        .then(userId => {
+          this.addLessonService.postNewLesson({
+            userId: userId,
+            name: this.lessonName,
+            url: this.lessonUrl
+          }).then(res => {
+            const newLessonId = res.id;
+            for (const sentence of this.sentences) {
+              this.addSentenceService.postNewSentence({
+                lessonId: newLessonId,
+                words: sentence.words,
+                text: sentence.text
+              });
+            }
+            this.lessonName = "";
+            this.lessonUrl = "";
+            this.sentenceText = "";
+            this.sentenceHiddenWords = "";
+            this.sentences = [];
+          });
+        }).then(async () => {
+          const toast = await this.toastController.create({
+            message: 'New lesson was added',
+            position: 'bottom',
+            duration: 700,
+            animated: true
+          });
+          toast.present();
         });
-      }).then(async () => {
-        const toast = await this.toastController.create({
-          message: 'New lesson was added',
-          position: 'bottom',
-          duration: 700,
-          animated: true
-        });
-        toast.present();
-      });
     }
   }
 }
