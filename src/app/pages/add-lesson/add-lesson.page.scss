@@ -1,6 +1,7 @@
 #save-lesson-button {
     margin-left: calc(50vw - 20vmin - 16px);
     margin-top: 4vh;
+
     @media (min-width: 992px) {
         margin-left: calc(36vw - 20vmin - 16px);
     }
@@ -9,7 +10,35 @@
 #save-sentence-button {
     margin-left: calc(50vw - 28vmin - 16px);
     margin-top: 4vh;
+
     @media (min-width: 992px) {
         margin-left: calc(36vw - 28vmin - 16px);
     }
+}
+
+#lesson-name-input {
+    text-align: center;
+    border: 1px solid grey;
+    border-radius: 10px;
+}
+
+#lesson-url-input {
+    text-align: center;
+    margin-top: 2vh;
+    border: 1px solid grey;
+    border-radius: 10px;
+}
+
+#sentence-text-textarea {
+    margin-top: 4vh;
+    text-align: center;
+    border: 1px solid grey;
+    border-radius: 10px;
+}
+
+#sentence-words-textarea {
+    margin-top: 2vh;
+    text-align: center;
+    border: 1px solid grey;
+    border-radius: 10px;
 }
