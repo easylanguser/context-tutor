@@ -70,9 +70,9 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 			if (chartData.data[0] + chartData.data[1] + chartData.data[2] > 1) {
 				--chartData.data[0];
-				chartData.backgroundColor[0] = '#0F0';
-				chartData.backgroundColor[1] = '#F00';
-				chartData.backgroundColor[2] = '#FF0';
+				chartData.backgroundColor[0] = '#a6ed92';
+				chartData.backgroundColor[1] = '#ff9663';
+				chartData.backgroundColor[2] = '#ffe353';
 				this.pieCharts[i].update();
 			}
 

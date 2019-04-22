@@ -11,7 +11,7 @@ export class UtilsService {
 
 	public getNewChartObject(): Object {
 		return new Object({
-			type: 'pie',
+			type: 'doughnut',
 			data: {
 				datasets: [
 					{
@@ -28,6 +28,7 @@ export class UtilsService {
 					enabled: false
 				},
 				events: [],
+				cutoutPercentage: 67,
 				elements: {
 					arc: {
 						borderWidth: 0
