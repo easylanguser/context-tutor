@@ -3,7 +3,6 @@ import { StorageService } from 'src/app/services/storage/storage-service';
 import { AddLessonService } from 'src/app/services/http/add-lesson/add-lesson.service';
 import { AddSentenceService } from 'src/app/services/http/add-sentence/add-sentence.service';
 import { ToastController } from '@ionic/angular';
-import { color } from 'd3';
 
 @Component({
   selector: 'app-add-lesson',
@@ -23,6 +22,7 @@ export class AddLessonPage implements OnInit {
   sentenceWordsTextareaIsValidated: boolean = true;
 
   sentences: any[] = [];
+  indexesArray: Array<[number, number]> = [];
 
   constructor(
     private storageService: StorageService,
@@ -48,6 +48,22 @@ export class AddLessonPage implements OnInit {
     this.sentenceWordsTextareaIsValidated = event.target.value === "" ? false : true;
   }
 
+  addWordToSentence() {
+    const area = <HTMLTextAreaElement>document.getElementById("sentence-text-textarea").lastChild;
+    var start = area.selectionStart;
+    var finish = area.selectionEnd;
+    var sel = area.value.substring(start, finish);
+
+    const selObj = sel.toString();
+    for (let i = 0; i < selObj.length; i++) {
+      const charAtPos = selObj[i].charCodeAt(0);
+      if (!((charAtPos > 64 && charAtPos < 91) || (charAtPos > 96 && charAtPos < 123))) {
+        return;
+      }
+    }
+    this.indexesArray.push([start, finish - start]);
+  }
+
   async addNewSentenceToLesson() {
     let validated: boolean = true;
 
@@ -55,40 +71,33 @@ export class AddLessonPage implements OnInit {
       document.getElementById("sentence-text-textarea").style.borderColor = "#F00";
       validated = false;
     }
-    if (this.sentenceHiddenWords === undefined || this.sentenceHiddenWords === "") {
+    if (this.indexesArray.length === 0) {
       document.getElementById("sentence-words-textarea").style.borderColor = "#F00";
       validated = false;
     }
 
     if (!validated) return;
 
-    this.sentenceHiddenWords = this.sentenceHiddenWords.replace(/\s/g, '');
-    const words = this.sentenceHiddenWords.split('|');
-    const indexesArray: Array<[number, number]> = [];
-
-    for (const item of words) {
-      const indexes = item.split('-');
-      indexesArray.push([Number(indexes[0]), Number(indexes[1])]);
-    }
-
-    for (let i = 0; i < indexesArray.length - 1; i++) {
-      for (let j = i + 1; j < indexesArray.length; j++) {
-        if (!((indexesArray[i][0] < indexesArray[j][0] &&
-          indexesArray[i][0] + indexesArray[i][1] < indexesArray[j][0] + indexesArray[j][1]) ||
-          (indexesArray[i][0] > indexesArray[j][0] &&
-            indexesArray[i][0] + indexesArray[i][1] > indexesArray[j][0] + indexesArray[j][1]))) {
+    for (let i = 0; i < this.indexesArray.length - 1; i++) {
+      for (let j = i + 1; j < this.indexesArray.length; j++) {
+        if (!((this.indexesArray[i][0] < this.indexesArray[j][0] &&
+          this.indexesArray[i][0] + this.indexesArray[i][1] < this.indexesArray[j][0] + this.indexesArray[j][1]) ||
+          (this.indexesArray[i][0] > this.indexesArray[j][0] &&
+            this.indexesArray[i][0] + this.indexesArray[i][1] > this.indexesArray[j][0] + this.indexesArray[j][1]))) {
           return;
         }
       }
     }
 
+    this.indexesArray.sort((el1, el2) => el1[0] - el2[0]);
+
     this.sentences.push({
-      words: indexesArray,
+      words: this.indexesArray,
       text: this.sentenceText
     });
 
+    this.indexesArray = [];
     this.sentenceText = "";
-    this.sentenceHiddenWords = "";
 
     const toast = await this.toastController.create({
       message: 'There are ' + this.sentences.length + ' sentences in current lesson',
@@ -132,7 +141,6 @@ export class AddLessonPage implements OnInit {
           this.lessonName = "";
           this.lessonUrl = "";
           this.sentenceText = "";
-          this.sentenceHiddenWords = "";
           this.sentences = [];
         });
       }).then(async () => {

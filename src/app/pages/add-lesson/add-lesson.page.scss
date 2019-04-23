@@ -6,13 +6,37 @@
         margin-left: calc(36vw - 20vmin - 16px);
     }
 }
+#save-lesson-button-inner {
+    width: 40vmin;
+}
 
 #save-sentence-button {
-    margin-left: calc(50vw - 28vmin - 16px);
+    margin-left: calc(50vw - 40vmin - 16px);
     margin-top: 4vh;
-
     @media (min-width: 992px) {
-        margin-left: calc(36vw - 28vmin - 16px);
+        display: inline-block;
+        margin-left: 6vw;
+    }
+}
+#save-sentence-button-inner {
+    width: 80vmin;
+    @media (min-width: 992px) {
+        width: 28vw;
+    }
+}
+
+#save-words-button {
+    margin-left: calc(50vw - 40vmin - 16px);
+    margin-top: 2vh;
+    @media (min-width: 992px) {
+        display: inline-block;
+        margin-left: 2vw;
+    }
+}
+#save-words-button-inner {
+    width: 80vmin;
+    @media (min-width: 992px) {
+        width: 28vw;
     }
 }
 

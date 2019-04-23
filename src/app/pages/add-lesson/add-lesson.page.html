@@ -11,31 +11,28 @@
 
 <ion-content padding>
 
-  <ion-input (keyup)="onKeyLessonName($event)" 
-    [ngStyle]="{ 'border-color': lessonNameInputIsValidated ? '#808080' : '#F00' }"
-    id="lesson-name-input" [(ngModel)]="lessonName" inputmode="text" placeholder="Enter lesson name"></ion-input>
-  <ion-input id="lesson-url-input"
-  (keyup)="onKeyLessonUrl($event)"
-  [ngStyle]="{ 'border-color': lessonUrlInputIsValidated ? '#808080' : '#F00' }"
-  [(ngModel)]="lessonUrl" inputmode="url" placeholder="Enter lesson url"></ion-input>
+  <ion-input (keyup)="onKeyLessonName($event)"
+    [ngStyle]="{ 'border-color': lessonNameInputIsValidated ? '#808080' : '#F00' }" id="lesson-name-input"
+    [(ngModel)]="lessonName" inputmode="text" placeholder="Enter lesson name"></ion-input>
+  <ion-input id="lesson-url-input" (keyup)="onKeyLessonUrl($event)"
+    [ngStyle]="{ 'border-color': lessonUrlInputIsValidated ? '#808080' : '#F00' }" [(ngModel)]="lessonUrl"
+    inputmode="url" placeholder="Enter lesson url"></ion-input>
 
   <ion-buttons (click)="addNewLesson()" id="save-lesson-button">
-    <ion-button style="width: 40vmin;" color="primary" fill="outline">Save lesson</ion-button>
+    <ion-button id="save-lesson-button-inner" color="primary" fill="outline">Save lesson</ion-button>
   </ion-buttons>
 
-  <ion-textarea id="sentence-text-textarea"
-  (keyup)="onKeySentenceText($event)"
-  [ngStyle]="{ 'border-color': sentenceTextTextareaIsValidated ? '#808080' : '#F00' }"
-  [(ngModel)]="sentenceText" rows="4" placeholder="Enter sentence text">
-  </ion-textarea>
-  <ion-textarea id="sentence-words-textarea"
-  (keyup)="onKeySentenceWords($event)"
-  [ngStyle]="{ 'border-color': sentenceWordsTextareaIsValidated ? '#808080' : '#F00' }"
-  [(ngModel)]="sentenceHiddenWords" rows="4" placeholder="Enter positions of hiding start position and number of sequent characters to hide.&#10;Separate hidings with vertical slash, e.g.  0-3|6-1|10-2">
+  <ion-textarea id="sentence-text-textarea" (keyup)="onKeySentenceText($event)"
+    [ngStyle]="{ 'border-color': sentenceTextTextareaIsValidated ? '#808080' : '#F00' }" [(ngModel)]="sentenceText"
+    rows="4" placeholder="Enter sentence text">
   </ion-textarea>
 
   <ion-buttons (click)="addNewSentenceToLesson()" id="save-sentence-button">
-    <ion-button style="width: 56vmin;" color="primary" fill="outline">Add sentence to lesson</ion-button>
+    <ion-button id="save-sentence-button-inner" color="primary" fill="outline">Add sentence to lesson</ion-button>
+  </ion-buttons>
+
+  <ion-buttons (click)="addWordToSentence()" id="save-words-button">
+    <ion-button id="save-words-button-inner" color="tertiary" fill="outline">Add selected word to sentence</ion-button>
   </ion-buttons>
 
 </ion-content>
