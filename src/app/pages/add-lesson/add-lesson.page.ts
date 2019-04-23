@@ -1,3 +1,4 @@
+import { AddLessonFileService } from './../../services/http/add-lesson-file/add-lesson-file.service';
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from 'src/app/services/storage/storage-service';
 import { AddLessonService } from 'src/app/services/http/add-lesson/add-lesson.service';
@@ -28,7 +29,8 @@ export class AddLessonPage implements OnInit {
     private storageService: StorageService,
     private addLessonService: AddLessonService,
     private addSentenceService: AddSentenceService,
-    private toastController: ToastController) { }
+    private toastController: ToastController,
+    private addLessonFileService: AddLessonFileService) { }
 
   ngOnInit() { }
 
@@ -107,6 +109,14 @@ export class AddLessonPage implements OnInit {
     });
     toast.present();
 
+  }
+
+  saveFile() {
+    this.storageService.get('user_id')
+      .then(userId => {
+        this.addLessonFileService.postNewLessonFile(
+          (<HTMLInputElement>document.getElementById('file-input')).files, userId);
+      });
   }
 
   addNewLesson() {

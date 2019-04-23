@@ -19,6 +19,16 @@ export class HttpService {
 		return this.http.post(url, body, headers);
 	}
 
+	doPostForm(url: string, body?: Object): Observable<any> {
+		return this.http.post(url, body,
+			{
+				headers: new HttpHeaders({
+					'Authorization': this.authService.token,
+					'enctype': 'multipart/form-data; boundary=----WebKitFormBoundaryuL67FWkv1CA'
+				})
+			});
+	}
+
 	doPut(url: string, body?: Object): Observable<any> {
 		const headers = this.addHeaders();
 		return this.http.put(url, body, headers);
