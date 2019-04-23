@@ -1,12 +1,23 @@
 #date-segment {
-    width: 100vw !important;
-}
-
-.ios :host #date-segment {
     width: 95vw !important;
-    margin-top: 1vh;
     margin-bottom: 1vh;
     margin-left: 2.5vw;
+
+    border: 6px solid white;
+    border-radius: 20px;
+}
+
+.header-md:after {
+    background-image: none;
+}
+
+.header-ios ion-toolbar:last-child {
+    --border-width: 0;
+}
+
+.sc-ion-segment-ios-h {
+    --border-color: #59afff;
+    --background-checked: #59afff;
 }
 
 .lesson-ion-item {
@@ -24,6 +35,10 @@
     display: table;
     table-layout: fixed;
 
+    -webkit-box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
+    -moz-box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
+    box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
+
     transition: background-color 0.4s ease-in-out;
     -o-transition: background-color 0.4s ease-in-out;
     -ms-transition: background-color 0.4s ease-in-out;
@@ -32,9 +47,11 @@
 
     &:hover {
         background-color: lightskyblue;
+
         .lesson-text {
             color: var(--ion-color-step-900);
         }
+
         .date-text {
             color: var(--ion-color-step-900);
         }
@@ -71,6 +88,7 @@
     font-size: 3vmin;
     font-weight: bold;
     color: #6e6e6e;
+
     @media (min-width: 650px) {
         font-size: 1.5vmin;
     }
@@ -85,8 +103,7 @@
 .canvas-div {
     height: 4vh;
     width: 4vh;
-    float: right;
-    margin: 4vh 3vw 0 0;
+    margin: 4vh 5vw 0 0;
 }
 
 .try-again-sliding-option {
@@ -104,6 +121,7 @@
         width: 67vw !important;
         margin-left: 2.5vw;
     }
+
     .lesson-text-div {
         width: 50.4vw;
     }

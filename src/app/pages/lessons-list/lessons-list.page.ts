@@ -73,6 +73,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				chartData.backgroundColor[0] = '#a6ed92';
 				chartData.backgroundColor[1] = '#ff9663';
 				chartData.backgroundColor[2] = '#ffe353';
+				this.pieCharts[i].options.cutoutPercentage = 67;
 				this.pieCharts[i].update();
 			}
 

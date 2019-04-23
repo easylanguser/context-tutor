@@ -16,7 +16,7 @@ export class UtilsService {
 				datasets: [
 					{
 						data: [1, 0, 0],
-						backgroundColor: ['#999', '#999', '#999']
+						backgroundColor: ['#D0D0D0', '#D0D0D0', '#D0D0D0']
 					}
 				],
 			},
@@ -28,7 +28,7 @@ export class UtilsService {
 					enabled: false
 				},
 				events: [],
-				cutoutPercentage: 67,
+				cutoutPercentage: 0,
 				elements: {
 					arc: {
 						borderWidth: 0
