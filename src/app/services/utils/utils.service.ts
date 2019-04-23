@@ -11,12 +11,12 @@ export class UtilsService {
 
 	public getNewChartObject(): Object {
 		return new Object({
-			type: 'pie',
+			type: 'doughnut',
 			data: {
 				datasets: [
 					{
 						data: [1, 0, 0],
-						backgroundColor: ['#999', '#999', '#999']
+						backgroundColor: ['#D0D0D0', '#D0D0D0', '#D0D0D0']
 					}
 				],
 			},
@@ -28,6 +28,7 @@ export class UtilsService {
 					enabled: false
 				},
 				events: [],
+				cutoutPercentage: 0,
 				elements: {
 					arc: {
 						borderWidth: 0

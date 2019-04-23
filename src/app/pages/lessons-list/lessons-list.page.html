@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar mode="ios">
+  <ion-toolbar mode="ios" style="--background: none;">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -14,14 +14,14 @@
 
 <ion-content>
 
-  <ion-segment id="date-segment">
-    <ion-segment-button checked="true" (click)="allClick()">
+  <ion-segment id="date-segment" mode="ios">
+    <ion-segment-button mode="ios" checked="true" (click)="allClick()" style="border-radius: 18px 0 0 18px">
       All
     </ion-segment-button>
-    <ion-segment-button (click)="redClick()">
+    <ion-segment-button mode="ios" (click)="redClick()">
       Red
     </ion-segment-button>
-    <ion-segment-button (click)="redAndYellowClick()">
+    <ion-segment-button mode="ios" (click)="redAndYellowClick()" style="border-radius: 0 18px 18px 0">
       Red + Yellow
     </ion-segment-button>
   </ion-segment>
