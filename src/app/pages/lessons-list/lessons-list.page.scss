@@ -2,9 +2,18 @@
     width: 95vw !important;
     margin-bottom: 1vh;
     margin-left: 2.5vw;
-
     border: 6px solid white;
     border-radius: 20px;
+}
+
+#all-lessons-button {
+    border-radius: 18px 0 0 18px;
+}
+
+#red-lessons-button { }
+
+#red-yellow-lessons-button {
+    border-radius: 0 18px 18px 0;
 }
 
 .header-md:after {
