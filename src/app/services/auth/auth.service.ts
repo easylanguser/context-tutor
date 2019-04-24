@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { tap, catchError } from 'rxjs/operators';
 import { BehaviorSubject, of } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from 'src/environments/environment';
 import { StorageService } from '../storage/storage-service';
 
 const TOKEN_KEY = 'access_token';

@@ -29,7 +29,7 @@
       </ion-refresher-content>
     </ion-refresher>
 
-    <ion-list no-padding no-margin>
+    <ion-list no-padding no-margin style="padding-bottom: 15vw;">
       <ion-item-sliding #slidingItem *ngFor="let sentence of displayedSentences;index as i">
         <ion-item class="sentence-ion-item" no-padding>
           <div class="sentence-card" (click)="openSentence(i)">
