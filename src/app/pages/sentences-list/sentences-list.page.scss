@@ -7,6 +7,20 @@
     border-radius: 20px;
 }
 
+:host #all-sentences-button {
+    border-radius: 18px 0 0 18px;
+    background: white !important;
+}
+
+#red-sentences-button {
+    background: white;
+}
+
+#red-yellow-sentences-button {
+    border-radius: 0 18px 18px 0;
+    background: white;
+}
+
 .header-md:after {
     background-image: none;
 }

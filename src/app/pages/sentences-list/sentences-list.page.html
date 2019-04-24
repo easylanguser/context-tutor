@@ -12,13 +12,13 @@
 <ion-content slot="fixed">
 
   <ion-segment id="progress-segment" mode="ios">
-    <ion-segment-button mode="ios" checked="true" (click)="allClick()" style="border-radius: 18px 0 0 18px">
+    <ion-segment-button mode="ios" checked="true" (click)="allClick()" id="all-sentences-button">
       All
     </ion-segment-button>
-    <ion-segment-button mode="ios" (click)="redClick()">
+    <ion-segment-button mode="ios" (click)="redClick()" id="red-sentences-button">
       Red
     </ion-segment-button>
-    <ion-segment-button mode="ios" (click)="redAndYellowClick()" style="border-radius: 0 18px 18px 0">
+    <ion-segment-button mode="ios" (click)="redAndYellowClick()" id="red-yellow-sentences-button">
       Red + Yellow
     </ion-segment-button>
   </ion-segment>
