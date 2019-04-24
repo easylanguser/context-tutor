@@ -65,6 +65,7 @@ export class LessonsService {
 						? this.utils.addChar(hiddenSentence, '?')
 						: lsn[i].sentenceShown,
 					lsn[i].solvedStatus,
+					lsn[i].updated_at,
 					new Statistics(
 						lsn[i].correctAnswers,
 						lsn[i].wrongAnswers,
@@ -77,6 +78,9 @@ export class LessonsService {
 					this.getLessonByID(id).addSentence(sentence);
 				}
 			}
+			this.getLessonByID(id).sentences.sort(
+				(snt1, snt2) => new Date(snt2.updated_at).getTime() - new Date(snt1.updated_at).getTime()
+			);
 			return this.getLessonByID(id).sentences;
 		});
 	}
@@ -124,12 +128,17 @@ export class LessonsService {
 					res[0][i].name,
 					res[0][i].url,
 					res[0][i].created_at,
+					res[0][i].updated_at,
 					period[0] + period[1]);
 
 				if (this.getLessonByID(lesson.id) === undefined) {
 					this.addLesson(lesson);
 				}
 			}
+
+			this.lessons.sort(
+				(les1, les2) => new Date(les2.updated_at).getTime() - new Date(les1.updated_at).getTime()
+			);
 
 			const promises = [];
 			for (const lesson of this.lessons) {
