@@ -1,7 +1,6 @@
 #save-lesson-button {
     margin-left: calc(50vw - 20vmin - 16px);
     margin-top: 4vh;
-
     @media (min-width: 992px) {
         margin-left: calc(36vw - 20vmin - 16px);
     }
@@ -74,4 +73,7 @@
     margin-top: 4vh;
     height: 10vh;
     border: 2px dashed blue;
+    @media (min-width: 992px) {
+        margin-left: calc(6vw - 16px);
+    }
 }
