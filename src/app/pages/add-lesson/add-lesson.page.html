@@ -18,6 +18,8 @@
     [ngStyle]="{ 'border-color': lessonUrlInputIsValidated ? '#808080' : '#F00' }" [(ngModel)]="lessonUrl"
     inputmode="url" placeholder="Enter lesson url"></ion-input>
 
+  <input id="file-input" type="file">
+
   <ion-buttons (click)="addNewLesson()" id="save-lesson-button">
     <ion-button id="save-lesson-button-inner" color="primary" fill="outline">Save lesson</ion-button>
   </ion-buttons>
@@ -34,8 +36,5 @@
   <ion-buttons (click)="addWordToSentence()" id="save-words-button">
     <ion-button id="save-words-button-inner" color="tertiary" fill="outline">Add selected word to sentence</ion-button>
   </ion-buttons>
-
-  <input id="file-input" type="file">
-  <ion-button (click)="saveFile()"></ion-button>
 
 </ion-content>

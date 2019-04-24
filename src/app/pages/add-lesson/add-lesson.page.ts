@@ -74,7 +74,6 @@ export class AddLessonPage implements OnInit {
       validated = false;
     }
     if (this.indexesArray.length === 0) {
-      document.getElementById("sentence-words-textarea").style.borderColor = "#F00";
       validated = false;
     }
 
@@ -102,7 +101,9 @@ export class AddLessonPage implements OnInit {
     this.sentenceText = "";
 
     const toast = await this.toastController.create({
-      message: 'There are ' + this.sentences.length + ' sentences in current lesson',
+      message: 'There' + (this.sentences.length > 1 ? ' are ' : ' is ') + 
+              this.sentences.length +
+              (this.sentences.length > 1 ? ' sentences ' : ' sentence ') + 'in current lesson',
       position: 'bottom',
       duration: 900,
       animated: true
@@ -111,15 +112,23 @@ export class AddLessonPage implements OnInit {
 
   }
 
-  saveFile() {
-    this.storageService.get('user_id')
-      .then(userId => {
-        this.addLessonFileService.postNewLessonFile(
-          (<HTMLInputElement>document.getElementById('file-input')).files, userId);
-      });
-  }
-
   addNewLesson() {
+    const fileInput = <HTMLInputElement>document.getElementById('file-input');
+    if (fileInput.files != undefined && fileInput.files.length > 0) {
+      this.storageService.get('user_id')
+        .then(userId => {
+          this.addLessonFileService.postNewLessonFile(fileInput.files, userId);
+        }).then(async () => {
+          const toast = await this.toastController.create({
+            message: 'New lesson was added',
+            position: 'bottom',
+            duration: 700,
+            animated: true
+          });
+          toast.present();
+        }).then(() => fileInput.value = "");
+    }
+
     let validated: boolean = true;
 
     if (this.lessonName === undefined || this.lessonName === "") {

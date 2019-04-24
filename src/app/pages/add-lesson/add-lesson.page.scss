@@ -66,3 +66,12 @@
     border: 1px solid grey;
     border-radius: 10px;
 }
+
+#file-input {
+    width: 60vw;
+    margin-left: calc(20vw - 16px);
+    padding-top: 3.5vh;
+    margin-top: 4vh;
+    height: 10vh;
+    border: 2px dashed blue;
+}
