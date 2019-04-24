@@ -12,3 +12,11 @@
     -ms-user-select: none;
     user-select: none;
 }
+
+.header-ios ion-toolbar:last-child {
+    --border-width: 0;
+}
+
+.header-md:after {
+    background-image: none;
+}
