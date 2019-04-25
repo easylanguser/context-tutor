@@ -56,9 +56,9 @@ export class AppComponent {
 				this.statusBar.styleDefault();
 			}
 			this.splashScreen.hide();
-			
+
 			this.storageService.get("theme").then(themeName => {
-				const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} } );				
+				const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} });
 				themeName === "dark" ?
 					customEvent.detail.value = "dark" :
 					customEvent.detail.value = "light";

@@ -5,15 +5,15 @@ import { HttpService } from '../rest/http.service';
 const apiUrl = environment.url + '/api/lessons/v1/addLessons?userId=';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class AddLessonFileService {
 
-  constructor(private httpService: HttpService) { }
+	constructor(private httpService: HttpService) { }
 
-  postNewLessonFile(lesson: FileList, userId: number): Promise<any> {
-    const formData = new FormData();
-    formData.append('lesson', lesson[0]);
+	postNewLessonFile(lesson: FileList, userId: number): Promise<any> {
+		const formData = new FormData();
+		formData.append('lesson', lesson[0]);
 		return this.httpService.doPostForm(apiUrl + userId, formData).toPromise();
 	}
 }

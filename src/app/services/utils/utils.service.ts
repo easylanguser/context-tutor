@@ -103,7 +103,7 @@ export class UtilsService {
 				yellowIsPresent = true;
 			}
 		}
-		
+
 		return redIsPresent && yellowIsPresent;
 	}
 }

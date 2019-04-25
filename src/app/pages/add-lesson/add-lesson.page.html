@@ -13,10 +13,10 @@
 
   <ion-input (keyup)="onKeyLessonName($event)"
     [ngStyle]="{ 'border-color': lessonNameInputIsValidated ? '#808080' : '#F00' }" id="lesson-name-input"
-    [(ngModel)]="lessonName" inputmode="text" placeholder="Enter lesson name"></ion-input>
+    [(ngModel)]="lessonName" placeholder="Enter lesson name"></ion-input>
   <ion-input id="lesson-url-input" (keyup)="onKeyLessonUrl($event)"
-    [ngStyle]="{ 'border-color': lessonUrlInputIsValidated ? '#808080' : '#F00' }" [(ngModel)]="lessonUrl"
-    inputmode="url" placeholder="Enter lesson url"></ion-input>
+    [ngStyle]="{ 'border-color': lessonUrlInputIsValidated ? '#808080' : '#F00' }"
+    [(ngModel)]="lessonUrl" placeholder="Enter lesson url"></ion-input>
 
   <input id="file-input" type="file">
 

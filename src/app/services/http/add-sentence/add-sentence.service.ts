@@ -5,13 +5,13 @@ import { HttpService } from '../rest/http.service';
 const apiUrl = environment.url + '/api/sentences/addSentence?lessonId=';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class AddSentenceService {
 
-  constructor(private httpService: HttpService) { }
+	constructor(private httpService: HttpService) { }
 
-  postNewSentence(sentence: any): Promise<any> {
+	postNewSentence(sentence: any): Promise<any> {
 		return this.httpService.doPost(apiUrl + sentence.lessonId, sentence).toPromise();
 	}
 }

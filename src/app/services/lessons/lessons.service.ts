@@ -65,7 +65,7 @@ export class LessonsService {
 					hiddenChars,
 					lsn[i].curCharsIndexes.length === 0 ? curCharsIndexes : lsn[i].curCharsIndexes,
 					lsn[i].curWordIndex,
-					lsn[i].sentenceShown === "" 
+					lsn[i].sentenceShown === ""
 						? this.utils.addChar(hiddenSentence, '?')
 						: lsn[i].sentenceShown,
 					lsn[i].solvedStatus,

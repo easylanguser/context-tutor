@@ -18,7 +18,7 @@ export class ThemeService {
 			theme = this.getLightTheme();
 			this.storageService.set("theme", 'light');
 		}
-		
+
 		this.document.documentElement.style.cssText = theme;
 	}
 
