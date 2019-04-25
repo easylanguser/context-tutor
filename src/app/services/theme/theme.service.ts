@@ -1,18 +1,24 @@
 import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { StorageService } from '../storage/storage-service';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class ThemeService {
 
-	constructor(@Inject(DOCUMENT) private document: Document) { }
+	constructor(@Inject(DOCUMENT) private document: Document, private storageService: StorageService) { }
 
 	enableDarkMode(enableDarkMode: boolean) {
-		let theme = this.getLightTheme();
+		let theme;
 		if (enableDarkMode) {
 			theme = this.getDarkTheme();
+			this.storageService.set("theme", 'dark');
+		} else {
+			theme = this.getLightTheme();
+			this.storageService.set("theme", 'light');
 		}
+		
 		this.document.documentElement.style.cssText = theme;
 	}
 

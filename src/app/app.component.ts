@@ -1,15 +1,12 @@
 import { Component } from '@angular/core';
-
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-
 import { Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
-
-import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
 import { ThemeService } from './services/theme/theme.service';
+import { StorageService } from './services/storage/storage-service';
 
 @Component({
 	selector: 'app-root',
@@ -26,6 +23,7 @@ export class AppComponent {
 	];
 
 	loggedIn = false;
+	themeName: string;
 
 	constructor(
 		private platform: Platform,
@@ -33,17 +31,18 @@ export class AppComponent {
 		private statusBar: StatusBar,
 		private authService: AuthService,
 		private router: Router,
-		private storage: Storage,
-		private theme: ThemeService
-	) {
+		private theme: ThemeService,
+		private storageService: StorageService) {
 		this.initializeApp();
 	}
 
 	onChangeTheme(ev: CustomEvent) {
 		if (ev.detail.value === 'dark') {
 			this.theme.enableDarkMode(true);
+			this.themeName = 'dark';
 		} else {
 			this.theme.enableDarkMode(false);
+			this.themeName = 'light';
 		}
 	}
 
@@ -57,6 +56,14 @@ export class AppComponent {
 				this.statusBar.styleDefault();
 			}
 			this.splashScreen.hide();
+			
+			this.storageService.get("theme").then(themeName => {
+				const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} } );				
+				themeName === "dark" ?
+					customEvent.detail.value = "dark" :
+					customEvent.detail.value = "light";
+				this.onChangeTheme(customEvent);
+			});
 
 			this.authService.authenticationState.subscribe(state => {
 				if (state) {
