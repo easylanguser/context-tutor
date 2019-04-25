@@ -33,6 +33,10 @@ export class LessonsService {
 		return this.lessons.find(lesson => lesson.id === id);
 	}
 
+	getRangeOfLessonSentences(lessonId: number, from: number, to: number): Sentence[] {
+		return this.getLessonByID(lessonId).sentences.slice(from, to);
+	}
+
 	editLesson(lesson: Lesson): void {
 		this.lessons[this.lessons.indexOf(this.getLessonByID(lesson.id))] = lesson;
 	}

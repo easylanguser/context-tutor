@@ -9,8 +9,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content slot="fixed">
-
+<div>
   <ion-segment id="progress-segment" mode="ios">
     <ion-segment-button mode="ios" (click)="allClick()" id="all-sentences-button" checked="true">
       All
@@ -22,14 +21,17 @@
       Red + Yellow
     </ion-segment-button>
   </ion-segment>
+</div>
 
+<ion-content>
   <ion-content style="z-index: 0;">
+    
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">
       </ion-refresher-content>
     </ion-refresher>
 
-    <ion-list no-padding no-margin style="padding-bottom: 15vw;">
+    <ion-list no-padding no-margin>
       <ion-item-sliding #slidingItem *ngFor="let sentence of displayedSentences;index as i">
         <ion-item class="sentence-ion-item" no-padding>
           <div class="sentence-card" (click)="openSentence(i)">
@@ -50,6 +52,14 @@
         </ion-item-options>
       </ion-item-sliding>
     </ion-list>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Loading more lessons...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
   </ion-content>
 
 </ion-content>

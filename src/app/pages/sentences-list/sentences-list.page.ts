@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
 import { LoadingController, IonItemSliding, AlertController } from '@ionic/angular';
-import { SentencesByLessonService } from '../../services/http/sentences-by-lesson/sentences-by-lesson.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
@@ -21,8 +20,9 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	lessonId: number;
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
+	offset: number = 0;
 
-	constructor(private api: SentencesByLessonService,
+	constructor(
 		private loadingController: LoadingController,
 		private alertCtrl: AlertController,
 		private utils: UtilsService,
@@ -52,6 +52,17 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, this.utils.getNewChartObject()));
 		}
 		this.updateCharts();
+	}
+
+	loadData(event) {
+		this.offset += 10;
+		setTimeout(() => {
+			this.getData();
+			event.target.complete();
+			if (this.displayedSentences.length === this.lessonData.getLessonByID(this.lessonId).sentences.length) {
+				event.target.disabled = true;
+			}
+		}, 1000);
 	}
 
 	async deleteItem(slidingItem: IonItemSliding, sentenceID: number) {
@@ -131,22 +142,23 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	private async getData() {
 		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
-		this.displayedSentences = await this.lessonData.getLessonByID(this.lessonId).sentences;
+		this.displayedSentences = await this.getSentencesRange();
 		loading.dismiss();
 	}
 
 	allClick() {
-		this.displayedSentences = this.lessonData.getLessonByID(this.lessonId).sentences;
+		this.displayedSentences = this.getSentencesRange();
 	}
 
 	redClick() {
-		this.displayedSentences = this.lessonData.getLessonByID(this.lessonId).sentences.filter(sentence =>
-			sentence.statistics.wrongAnswers > 0
-		);
+		this.displayedSentences = this.getSentencesRange().filter(sentence => sentence.statistics.wrongAnswers > 0);
 	}
 
 	redAndYellowClick() {
-		this.displayedSentences = this.lessonData.getLessonByID(this.lessonId)
-			.sentences.filter(this.utils.redAndYellowFilterSentence);
+		this.displayedSentences = this.getSentencesRange().filter(this.utils.redAndYellowFilterSentence);
+	}
+
+	getSentencesRange(): Sentence[] {
+		return this.lessonData.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 10);
 	}
 }
