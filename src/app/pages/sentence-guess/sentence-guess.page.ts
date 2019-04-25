@@ -53,7 +53,6 @@ export class SentenceGuessPage implements OnInit {
 			chartData.data[0] = 1;
 			chartData.data[1] = 0;
 			chartData.data[2] = 0;
-			chartData.backgroundColor[0] = '#F0F0F0';
 		} else {
 			chartData.data[0] = stats.correctAnswers;
 			chartData.data[1] = stats.wrongAnswers;
