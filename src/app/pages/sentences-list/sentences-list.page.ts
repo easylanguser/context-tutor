@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
-import { LoadingController, IonItemSliding, AlertController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
@@ -7,6 +6,7 @@ import { Sentence } from 'src/app/models/sentence';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { Chart } from 'chart.js';
 import { SentenceDeleteService } from 'src/app/services/http/sentence-delete/sentence-delete.service';
+import { IonItemSliding, AlertController } from '@ionic/angular';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -23,7 +23,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	offset: number = 0;
 
 	constructor(
-		private loadingController: LoadingController,
 		private alertCtrl: AlertController,
 		private utils: UtilsService,
 		private route: ActivatedRoute,
@@ -140,22 +139,23 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	private async getData() {
-		const loading = await this.loadingController.create({ message: 'Loading' });
-		await loading.present();
 		this.displayedSentences = await this.getSentencesRange();
-		loading.dismiss();
 	}
 
 	allClick() {
-		this.displayedSentences = this.getSentencesRange();
+		this.getData();
 	}
 
 	redClick() {
-		this.displayedSentences = this.getSentencesRange().filter(sentence => sentence.statistics.wrongAnswers > 0);
+		this.getData().then(() => {
+			this.displayedSentences.filter(sentence => sentence.statistics.wrongAnswers > 0);
+		})		
 	}
 
 	redAndYellowClick() {
-		this.displayedSentences = this.getSentencesRange().filter(this.utils.redAndYellowFilterSentence);
+		this.getData().then(() => {
+			this.displayedSentences.filter(this.utils.redAndYellowFilterSentence);
+		})
 	}
 
 	getSentencesRange(): Sentence[] {

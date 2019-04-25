@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Sentence } from 'src/app/models/sentence';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { LoadingController } from '@ionic/angular';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { SentenceGuessPage } from 'src/app/pages/sentence-guess/sentence-guess.page';
 import * as anime from 'animejs';
@@ -42,31 +41,19 @@ export class GuessBarComponent implements OnInit {
 	none = 'none';
 
 	constructor(
-		private loadingController: LoadingController,
 		private util: UtilsService,
 		public lessonsData: LessonsService,
 		public guessPage: SentenceGuessPage) { }
 
 	ngOnInit() {
-		this.getData(true);
+		this.getData();
 	}
 
-	async getData(showLoader: boolean) {
+	async getData() {
 		let loading: any;
-		if (showLoader) { // Show loader if sentence is loaded first time
-			loading = await this.loadingController.create({
-				message: 'Loading',
-				spinner: 'crescent',
-				duration: 8000
-			});
-			await loading.present();
-		}
 
 		if (this.curSentence().solvedStatus) { // Display filled sentence, if it has already been solved
 			this.guessPage.sentenceShown = this.curSentence().sentenceShown;
-			if (showLoader) {
-				loading.dismiss();
-			}
 		} else {
 			this.hintIsClicked = false;
 
@@ -76,10 +63,6 @@ export class GuessBarComponent implements OnInit {
 			this.guessPage.sentenceShown = this.curSentence().sentenceShown;
 
 			this.refreshCharBoxes();
-		}
-
-		if (showLoader) {
-			loading.dismiss();
 		}
 	}
 
@@ -377,7 +360,7 @@ export class GuessBarComponent implements OnInit {
 			duration: 400
 		}).finished;
 
-		await this.getData(false);
+		await this.getData();
 
 		await anime({
 			targets: [document.querySelector(textShownId)],
