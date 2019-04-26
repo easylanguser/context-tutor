@@ -1,15 +1,15 @@
 <ion-header>
-  <ion-toolbar mode="ios" style="--background: none;">
-    <ion-buttons slot="start">
-      <ion-back-button text="Lessons"></ion-back-button>
+  <ion-toolbar id="toolbar" mode="ios">
+    <ion-buttons id="back-button" slot="start">
+      <ion-back-button icon="ios-arrow-back"></ion-back-button>
     </ion-buttons>
-    <ion-title>
-      {{this.lessonData.getLessonByID(lessonId).sentences.length.toString() + ' sentences'}}
+    <ion-title id="sentences-title">
+      {{this.lessonData.getLessonByID(lessonId).name.toString()}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<div>
+<div id="segments-div">
   <ion-segment id="progress-segment" mode="ios">
     <ion-segment-button mode="ios" (click)="allClick()" id="all-sentences-button" checked="true">
       All
@@ -31,7 +31,7 @@
       </ion-refresher-content>
     </ion-refresher>
 
-    <ion-list no-padding no-margin>
+    <ion-list no-padding no-margin style="padding-top: 2vh">
       <ion-item-sliding #slidingItem *ngFor="let sentence of displayedSentences;index as i">
         <ion-item class="sentence-ion-item" no-padding>
           <div class="sentence-card" (click)="openSentence(i)">
@@ -40,9 +40,11 @@
                 {{i + 1}}. {{sentence.textUnderscored}}
               </p>
             </div>
+            <div class="canvas-outer-div">
             <div class="canvas-div">
               <canvas #chartsid width="50" height="50"></canvas>
             </div>
+          </div>
           </div>
         </ion-item>
         <ion-item-options side="end">

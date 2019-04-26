@@ -2,15 +2,22 @@
     height: 33px;
     width: 33px;
     float: right;
+    margin-top: 4px;
+    margin-right: 10px;
 }
 
-.no-selection {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+#back-button {
+    color: rgb(69, 184, 255);
+    margin-left: 3vw;
+}
+
+#progress-title {
+    color: rgb(69, 184, 255);
+    font-size: 2.5vh;
+}
+
+#toolbar {
+    --background: none;
 }
 
 .header-ios ion-toolbar:last-child {

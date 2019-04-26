@@ -1,18 +1,13 @@
 <ion-header>
-  <ion-toolbar mode="ios" style="--background: none;">
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+  <ion-toolbar id="toolbar" mode="ios">
+    <ion-buttons id="menu-button" slot="start">
+      <ion-menu-button id="menu-button-inner"></ion-menu-button>
     </ion-buttons>
-    <ion-title>My lessons</ion-title>
-    <ion-buttons slot="end" (click)="addLesson()">
-      <ion-button>
-        <ion-icon slot="icon-only" name="add-circle"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ion-title id="lessons-title">My lessons</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<div>
+<div id="segments-div">
   <ion-segment id="date-segment" mode="ios">
     <ion-segment-button mode="ios" (click)="allClick()" id="all-lessons-button" checked="true">
       All
@@ -34,7 +29,7 @@
       </ion-refresher-content>
     </ion-refresher>
 
-    <ion-list no-padding no-margin>
+    <ion-list no-padding no-margin style="padding-top: 2vh">
       <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem>
         <ion-item class="lesson-ion-item" no-padding>
           <div class="lesson-card" (click)="openLesson(lesson.id)">
@@ -52,12 +47,19 @@
           </div>
         </ion-item>
         <ion-item-options side="end">
-          <ion-item-option class="delete-sliding-option" color="danger" (click)="deleteItem(slidingItem, lesson.id)">
+          <ion-item-option class="delete-sliding-option" color="danger"
+          (click)="deleteItem(slidingItem, lesson.id)">
             Delete
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>
     </ion-list>
   </ion-content>
+
+  <ion-fab id="add-lesson-fab" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addLesson()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>

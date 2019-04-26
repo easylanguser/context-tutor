@@ -1,9 +1,9 @@
 <ion-header>
-  <ion-toolbar mode="ios" class="no-selection" style="--background: none;">
-    <ion-buttons slot="start">
-      <ion-back-button text="Lesson"></ion-back-button>
+  <ion-toolbar id="toolbar" mode="ios" class="no-selection">
+    <ion-buttons id="back-button" slot="start">
+      <ion-back-button icon="ios-arrow-back"></ion-back-button>
     </ion-buttons>
-    <ion-title text-center>
+    <ion-title id="progress-title">
       Sentence {{sentenceIndex}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}
     </ion-title>
     <ion-buttons slot="end">

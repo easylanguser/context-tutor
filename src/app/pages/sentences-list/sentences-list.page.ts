@@ -54,14 +54,13 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	loadData(event) {
-		this.offset += 10;
+		this.offset += 20;
 		setTimeout(() => {
-			this.getData();
-			event.target.complete();
+			this.getData().then(() => event.target.complete());
 			if (this.displayedSentences.length === this.lessonData.getLessonByID(this.lessonId).sentences.length) {
 				event.target.disabled = true;
 			}
-		}, 1000);
+		}, 200);
 	}
 
 	async deleteItem(slidingItem: IonItemSliding, sentenceID: number) {
@@ -159,6 +158,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	getSentencesRange(): Sentence[] {
-		return this.lessonData.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 10);
+		return this.lessonData.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20);
 	}
 }
