@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar id="toolbar" mode="ios">
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+    <ion-buttons id="back-button" slot="start">
+      <ion-back-button mode="md" icon="ios-arrow-back"></ion-back-button>
     </ion-buttons>
     <ion-title>
       Lesson adding
@@ -15,8 +15,8 @@
     [ngStyle]="{ 'border-color': lessonNameInputIsValidated ? '#808080' : '#F00' }" id="lesson-name-input"
     [(ngModel)]="lessonName" placeholder="Enter lesson name"></ion-input>
   <ion-input id="lesson-url-input" (keyup)="onKeyLessonUrl($event)"
-    [ngStyle]="{ 'border-color': lessonUrlInputIsValidated ? '#808080' : '#F00' }"
-    [(ngModel)]="lessonUrl" placeholder="Enter lesson url"></ion-input>
+    [ngStyle]="{ 'border-color': lessonUrlInputIsValidated ? '#808080' : '#F00' }" [(ngModel)]="lessonUrl"
+    placeholder="Enter lesson url"></ion-input>
 
   <input id="file-input" type="file">
 
