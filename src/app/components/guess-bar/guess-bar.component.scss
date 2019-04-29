@@ -9,9 +9,14 @@
     max-height: 60vh;
     overflow-y: auto;
     word-wrap: break-word;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
 
 $chars-and-hint-height: 20vw;
+
 #hint-button-div {
     height: $chars-and-hint-height;
     width: 21vw;
@@ -131,16 +136,19 @@ $give-up-and-next-buttons-font-size: 4vmin;
     #sentence-to-show {
         font-size: 5vh;
     }
+
     #footer {
         height: 10vh;
         width: 100vw;
     }
+
     #chars {
         height: 10vh;
         width: 48vw;
         float: left;
         padding-left: calc(22vw - 14vh);
     }
+
     #hint-button-div {
         width: 18vw;
         height: 10vh;
@@ -149,6 +157,7 @@ $give-up-and-next-buttons-font-size: 4vmin;
         border-left: 1px solid var(--ion-color-step-950);
         border-right: 1px solid var(--ion-color-step-950);
     }
+
     #hint-button {
         height: 7vh;
         width: 7vh;
@@ -164,7 +173,8 @@ $give-up-and-next-buttons-font-size: 4vmin;
         width: $give-up-and-next-buttons-size;
         font-size: $give-up-and-next-buttons-font-size;
         margin: 0;
-    } 
+    }
+
     #next-sentence-button {
         height: $give-up-and-next-buttons-size;
         width: $give-up-and-next-buttons-size;
@@ -178,6 +188,7 @@ $give-up-and-next-buttons-font-size: 4vmin;
         font-size: 5vh;
         margin-top: 1.5vh;
     }
+
     #give-up-and-next-button-container {
         height: 10vh;
         width: 34vw;
@@ -190,13 +201,16 @@ $give-up-and-next-buttons-font-size: 4vmin;
     #footer {
         width: 72vw;
     }
+
     #chars {
         width: 35vw;
         padding-left: calc(13vw - 14vh);
     }
+
     #hint-button-div {
         width: 12vw;
     }
+
     #give-up-and-next-button-container {
         width: 24vw;
     }

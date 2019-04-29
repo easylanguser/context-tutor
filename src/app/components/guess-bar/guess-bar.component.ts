@@ -197,22 +197,23 @@ export class GuessBarComponent implements OnInit {
 
 		do {
 			firstRand = this.randomAlphabetIndex();
-		} while (firstRand === correctCharIndexInAlphabet || (vowelIsGuessed ? false : vowelsPositions.indexOf(firstRand) !== -1));
+		} while (firstRand === correctCharIndexInAlphabet ||
+			(vowelIsGuessed ? !vowelsPositions.includes(firstRand) : vowelsPositions.includes(firstRand)));
 
 		do {
 			secondRand = this.randomAlphabetIndex();
 		} while (secondRand === firstRand || secondRand === correctCharIndexInAlphabet ||
-			(vowelIsGuessed ? false : vowelsPositions.indexOf(secondRand) !== -1));
+			(vowelIsGuessed ? !vowelsPositions.includes(secondRand) : vowelsPositions.includes(secondRand)));
 
 		do {
 			thirdRand = this.randomAlphabetIndex();
 		} while (thirdRand === firstRand || thirdRand === secondRand || thirdRand === correctCharIndexInAlphabet ||
-			(vowelIsGuessed ? false : vowelsPositions.indexOf(thirdRand) !== -1));
+			(vowelIsGuessed ? !vowelsPositions.includes(thirdRand) : vowelsPositions.includes(thirdRand)));
 
 		do {
 			fourthRand = this.randomAlphabetIndex();
-		} while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand ||
-		fourthRand === correctCharIndexInAlphabet || (vowelIsGuessed ? false : vowelsPositions.indexOf(fourthRand) !== -1));
+		} while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand || fourthRand === correctCharIndexInAlphabet ||
+			(vowelIsGuessed ? !vowelsPositions.includes(fourthRand) : vowelsPositions.includes(fourthRand)));
 
 		if (this.updateFront) {
 			this.firstChar = correctCharBoxIndex === 1 ? correctChar : this.alphabet[firstRand];
