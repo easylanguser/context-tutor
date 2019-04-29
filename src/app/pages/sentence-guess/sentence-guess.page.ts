@@ -2,7 +2,7 @@ import { StatisticsUpdateService } from '../../services/http/statistics-update/s
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { ToastController, NavController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { Chart } from 'chart.js';
@@ -30,7 +30,8 @@ export class SentenceGuessPage implements OnInit {
 		private toastController: ToastController,
 		public lessonsData: LessonsService,
 		private utils: UtilsService,
-		private statisticsUpdateService: StatisticsUpdateService) { }
+		private statisticsUpdateService: StatisticsUpdateService,
+		private navCtrl: NavController) { }
 
 	// Get number of sentence and id of the lesson from previous page
 	ngOnInit() {
@@ -82,6 +83,10 @@ export class SentenceGuessPage implements OnInit {
 				wrongAnswers: this.curSentence().statistics.wrongAnswers
 			})
 			.subscribe(response => { });
+	}
+
+	goBack() {
+		this.navCtrl.pop();
 	}
 
 	saveData() {

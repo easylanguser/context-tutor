@@ -1,19 +1,22 @@
-<ion-header>
-  <ion-toolbar id="toolbar" mode="ios" class="no-selection">
-    <ion-buttons id="back-button" slot="start">
-      <ion-back-button mode="md" icon="ios-arrow-back"></ion-back-button>
-    </ion-buttons>
-    <ion-title id="progress-title">
-      Sentence {{sentenceIndex}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}
-    </ion-title>
-    <ion-buttons slot="end">
-      <div id="canvas-div">
-        <canvas #pieCanvas width="33" height="33"></canvas>
-      </div>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<ion-content scrollY="false">
 
-<ion-content scroll="false">
+  <ion-header>
+    <ion-toolbar id="toolbar" mode="ios" class="no-selection">
+      <ion-buttons id="back-button" slot="start" (click)="goBack()">
+        <ion-button>
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title id="progress-title">
+        Sentence {{sentenceIndex}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}
+      </ion-title>
+      <ion-buttons slot="end">
+        <div id="canvas-div">
+          <canvas #pieCanvas width="33" height="33"></canvas>
+        </div>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
   <app-guess-bar></app-guess-bar>
 </ion-content>

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
-import { LoadingController, IonItemSliding, AlertController } from '@ionic/angular';
+import { LoadingController, IonItemSliding, AlertController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
@@ -20,7 +20,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	firstEnter: boolean = true;
 
 	constructor(private loadingController: LoadingController,
-		private router: Router,
+		private navCtrl: NavController,
 		private lessonService: LessonsService,
 		private alertCtrl: AlertController,
 		private lessonDeleteService: LessonDeleteService,
@@ -41,7 +41,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	addLesson() {
-		this.router.navigate(['add-lesson']);
+		this.navCtrl.navigateForward(['add-lesson']);
 	}
 
 	private syncCharts() {
@@ -151,6 +151,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	openLesson(lessonID) {
-		this.router.navigate(['sentences-list'], { queryParams: { lessonID: lessonID } });
+		this.navCtrl.navigateForward(['sentences-list'], { queryParams: { lessonID: lessonID } });
 	}
 }

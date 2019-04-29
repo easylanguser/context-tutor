@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { StorageService } from 'src/app/services/storage/storage-service';
 import { AddLessonService } from 'src/app/services/http/add-lesson/add-lesson.service';
 import { AddSentenceService } from 'src/app/services/http/add-sentence/add-sentence.service';
-import { ToastController } from '@ionic/angular';
+import { ToastController, NavController } from '@ionic/angular';
 
 @Component({
 	selector: 'app-add-lesson',
@@ -29,7 +29,12 @@ export class AddLessonPage implements OnInit {
 		private addLessonService: AddLessonService,
 		private addSentenceService: AddSentenceService,
 		private toastController: ToastController,
-		private addLessonFileService: AddLessonFileService) { }
+		private addLessonFileService: AddLessonFileService,
+		private navCtrl: NavController) { }
+
+	goBack() {
+		this.navCtrl.pop();
+	}
 
 	ngOnInit() { }
 

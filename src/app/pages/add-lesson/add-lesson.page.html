@@ -1,40 +1,45 @@
-<ion-header>
-  <ion-toolbar id="toolbar" mode="ios">
-    <ion-buttons id="back-button" slot="start">
-      <ion-back-button mode="md" icon="ios-arrow-back"></ion-back-button>
+<ion-content>
+  <ion-header>
+    <ion-toolbar id="toolbar" mode="ios">
+      <ion-buttons id="back-button" slot="start" (click)="goBack()">
+        <ion-button>
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>
+        Lesson adding
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content padding>
+
+    <ion-input (keyup)="onKeyLessonName($event)"
+      [ngStyle]="{ 'border-color': lessonNameInputIsValidated ? '#808080' : '#F00' }" id="lesson-name-input"
+      [(ngModel)]="lessonName" placeholder="Enter lesson name"></ion-input>
+    <ion-input id="lesson-url-input" (keyup)="onKeyLessonUrl($event)"
+      [ngStyle]="{ 'border-color': lessonUrlInputIsValidated ? '#808080' : '#F00' }" [(ngModel)]="lessonUrl"
+      placeholder="Enter lesson url"></ion-input>
+
+    <input id="file-input" type="file">
+
+    <ion-buttons (click)="addNewLesson()" id="save-lesson-button">
+      <ion-button id="save-lesson-button-inner" color="primary" fill="outline">Save lesson</ion-button>
     </ion-buttons>
-    <ion-title>
-      Lesson adding
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content padding>
+    <ion-textarea id="sentence-text-textarea" (keyup)="onKeySentenceText($event)"
+      [ngStyle]="{ 'border-color': sentenceTextTextareaIsValidated ? '#808080' : '#F00' }" [(ngModel)]="sentenceText"
+      rows="4" placeholder="Enter sentence text">
+    </ion-textarea>
 
-  <ion-input (keyup)="onKeyLessonName($event)"
-    [ngStyle]="{ 'border-color': lessonNameInputIsValidated ? '#808080' : '#F00' }" id="lesson-name-input"
-    [(ngModel)]="lessonName" placeholder="Enter lesson name"></ion-input>
-  <ion-input id="lesson-url-input" (keyup)="onKeyLessonUrl($event)"
-    [ngStyle]="{ 'border-color': lessonUrlInputIsValidated ? '#808080' : '#F00' }" [(ngModel)]="lessonUrl"
-    placeholder="Enter lesson url"></ion-input>
+    <ion-buttons (click)="addNewSentenceToLesson()" id="save-sentence-button">
+      <ion-button id="save-sentence-button-inner" color="primary" fill="outline">Add sentence to lesson</ion-button>
+    </ion-buttons>
 
-  <input id="file-input" type="file">
+    <ion-buttons (click)="addWordToSentence()" id="save-words-button">
+      <ion-button id="save-words-button-inner" color="tertiary" fill="outline">Add selected word to sentence
+      </ion-button>
+    </ion-buttons>
 
-  <ion-buttons (click)="addNewLesson()" id="save-lesson-button">
-    <ion-button id="save-lesson-button-inner" color="primary" fill="outline">Save lesson</ion-button>
-  </ion-buttons>
-
-  <ion-textarea id="sentence-text-textarea" (keyup)="onKeySentenceText($event)"
-    [ngStyle]="{ 'border-color': sentenceTextTextareaIsValidated ? '#808080' : '#F00' }" [(ngModel)]="sentenceText"
-    rows="4" placeholder="Enter sentence text">
-  </ion-textarea>
-
-  <ion-buttons (click)="addNewSentenceToLesson()" id="save-sentence-button">
-    <ion-button id="save-sentence-button-inner" color="primary" fill="outline">Add sentence to lesson</ion-button>
-  </ion-buttons>
-
-  <ion-buttons (click)="addWordToSentence()" id="save-words-button">
-    <ion-button id="save-words-button-inner" color="tertiary" fill="outline">Add selected word to sentence</ion-button>
-  </ion-buttons>
-
+  </ion-content>
 </ion-content>

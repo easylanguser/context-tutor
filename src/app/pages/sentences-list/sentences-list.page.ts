@@ -6,7 +6,7 @@ import { Sentence } from 'src/app/models/sentence';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { Chart } from 'chart.js';
 import { SentenceDeleteService } from 'src/app/services/http/sentence-delete/sentence-delete.service';
-import { IonItemSliding, AlertController } from '@ionic/angular';
+import { IonItemSliding, AlertController, NavController } from '@ionic/angular';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -26,13 +26,17 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		private alertCtrl: AlertController,
 		private utils: UtilsService,
 		private route: ActivatedRoute,
-		private router: Router,
+		private navCtrl: NavController,
 		public lessonData: LessonsService,
 		private sentenceDeleteService: SentenceDeleteService) { }
 
 	ngOnInit() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
 		this.getData();
+	}
+
+	goBack() {
+		this.navCtrl.pop();
 	}
 
 	ionViewDidEnter() {
@@ -59,6 +63,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 			this.getData().then(() => event.target.complete());
 			if (this.displayedSentences.length === this.lessonData.getLessonByID(this.lessonId).sentences.length) {
 				event.target.disabled = true;
+				document.getElementById("sentences-list").style.paddingBottom = "15vh";
 			}
 		}, 200);
 	}
@@ -126,7 +131,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	openSentence(sentenceNumber) {
-		this.router.navigate(['sentence-guess'],
+		this.navCtrl.navigateForward(['sentence-guess'],
 			{ queryParams: { current: sentenceNumber, lesson: this.lessonId } });
 	}
 
@@ -138,7 +143,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	private async getData() {
-		this.displayedSentences = await this.getSentencesRange();
+		this.displayedSentences = await this.lessonData
+			.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20);
 	}
 
 	allClick() {
@@ -146,18 +152,14 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	redClick() {
-		this.getData().then(() => {
-			this.displayedSentences.filter(sentence => sentence.statistics.wrongAnswers > 0);
-		})		
+		this.displayedSentences = this.lessonData
+			.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20)
+			.filter(sentence => sentence.statistics.wrongAnswers > 0);
 	}
 
 	redAndYellowClick() {
-		this.getData().then(() => {
-			this.displayedSentences.filter(this.utils.redAndYellowFilterSentence);
-		})
-	}
-
-	getSentencesRange(): Sentence[] {
-		return this.lessonData.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20);
+		this.displayedSentences = this.lessonData
+			.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20)
+			.filter(this.utils.redAndYellowFilterSentence);
 	}
 }

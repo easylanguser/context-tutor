@@ -1,37 +1,41 @@
-<ion-header>
-  <ion-toolbar id="toolbar" mode="ios">
-    <ion-buttons id="back-button" slot="start">
-      <ion-back-button mode="md" icon="ios-arrow-back"></ion-back-button>
-    </ion-buttons>
-    <ion-title id="sentences-title">
-      {{this.lessonData.getLessonByID(lessonId).name.toString()}}
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content scrollY="false">
 
-<div id="segments-div">
-  <ion-segment id="progress-segment" mode="ios">
-    <ion-segment-button mode="ios" (click)="allClick()" id="all-sentences-button" checked="true">
-      All
-    </ion-segment-button>
-    <ion-segment-button mode="ios" (click)="redClick()" id="red-sentences-button">
-      Red
-    </ion-segment-button>
-    <ion-segment-button mode="ios" (click)="redAndYellowClick()" id="red-yellow-sentences-button">
-      Red + Yellow
-    </ion-segment-button>
-  </ion-segment>
-</div>
+  <ion-header>
+    <ion-toolbar id="toolbar" mode="ios">
+      <ion-buttons id="back-button" slot="start" (click)="goBack()">
+        <ion-button>
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title id="sentences-title">
+        {{this.lessonData.getLessonByID(lessonId).name.toString()}}
+      </ion-title>
+    </ion-toolbar>
 
-<ion-content>
-  <ion-content style="z-index: 0;">
+    <div id="segments-div">
+      <ion-segment id="progress-segment" mode="ios">
+        <ion-segment-button mode="ios" (click)="allClick()" id="all-sentences-button" checked="true">
+          All
+        </ion-segment-button>
+        <ion-segment-button mode="ios" (click)="redClick()" id="red-sentences-button">
+          Red
+        </ion-segment-button>
+        <ion-segment-button mode="ios" (click)="redAndYellowClick()" id="red-yellow-sentences-button">
+          Red + Yellow
+        </ion-segment-button>
+      </ion-segment>
+    </div>
     
+  </ion-header>
+
+  <ion-content style="z-index: 0;">
+
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">
       </ion-refresher-content>
     </ion-refresher>
 
-    <ion-list no-padding no-margin style="padding-top: 2vh">
+    <ion-list id="sentences-list" no-padding no-margin>
       <ion-item-sliding #slidingItem *ngFor="let sentence of displayedSentences;index as i">
         <ion-item class="sentence-ion-item" no-padding>
           <div class="sentence-card" (click)="openSentence(i)">
@@ -41,24 +45,22 @@
               </p>
             </div>
             <div class="canvas-outer-div">
-            <div class="canvas-div">
-              <canvas #chartsid width="50" height="50"></canvas>
+              <div class="canvas-div">
+                <canvas #chartsid width="50" height="50"></canvas>
+              </div>
             </div>
-          </div>
           </div>
         </ion-item>
         <ion-item-options side="end">
-          <ion-item-option class="delete-sliding-option" color="danger"
-            (click)="deleteItem(slidingItem, sentence.id)">
+          <ion-item-option class="delete-sliding-option" color="danger" (click)="deleteItem(slidingItem, sentence.id)">
             Delete
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>
     </ion-list>
 
-    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
-      <ion-infinite-scroll-content loadingSpinner="bubbles"
-        loadingText="Loading more lessons...">
+    <ion-infinite-scroll style="margin-bottom: 10vh;" threshold="100px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more lessons...">
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
 

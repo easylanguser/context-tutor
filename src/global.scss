@@ -34,3 +34,7 @@ $border-width: 4px;
     letter-spacing: $letter-spacings;
     border-bottom: $border-width solid yellow;
 }
+
+.ios #menu {
+    --padding-top: 20px;
+}

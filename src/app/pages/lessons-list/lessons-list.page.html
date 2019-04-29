@@ -1,27 +1,29 @@
-<ion-header>
-  <ion-toolbar id="toolbar" mode="ios">
-    <ion-buttons id="menu-button" slot="start">
-      <ion-menu-button mode="md" id="menu-button-inner"></ion-menu-button>
-    </ion-buttons>
-    <ion-title id="lessons-title">My lessons</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content scrollY="false">
 
-<div id="segments-div">
-  <ion-segment id="date-segment" mode="ios">
-    <ion-segment-button mode="ios" (click)="allClick()" id="all-lessons-button" checked="true">
-      All
-    </ion-segment-button>
-    <ion-segment-button mode="ios" (click)="redClick()" id="red-lessons-button">
-      Red
-    </ion-segment-button>
-    <ion-segment-button mode="ios" (click)="redAndYellowClick()" id="red-yellow-lessons-button">
-      Red + Yellow
-    </ion-segment-button>
-  </ion-segment>
-</div>
+  <ion-header>
+    <ion-toolbar id="toolbar" mode="ios">
+      <ion-buttons id="menu-button" slot="start">
+        <ion-menu-button mode="md" id="menu-button-inner"></ion-menu-button>
+      </ion-buttons>
+      <ion-title id="lessons-title">My lessons</ion-title>
+    </ion-toolbar>
 
-<ion-content>
+    <div id="segments-div">
+      <ion-segment id="date-segment" mode="ios">
+        <ion-segment-button mode="ios" (click)="allClick()" id="all-lessons-button" checked="true">
+          All
+        </ion-segment-button>
+        <ion-segment-button mode="ios" (click)="redClick()" id="red-lessons-button">
+          Red
+        </ion-segment-button>
+        <ion-segment-button mode="ios" (click)="redAndYellowClick()" id="red-yellow-lessons-button">
+          Red + Yellow
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+  </ion-header>
+
   <ion-content style="z-index: 0;">
 
     <ion-refresher (ionRefresh)="doRefresh($event)">
@@ -29,7 +31,7 @@
       </ion-refresher-content>
     </ion-refresher>
 
-    <ion-list no-padding no-margin style="padding-top: 2vh">
+    <ion-list no-padding no-margin style="padding-top: 2vh; padding-bottom: 15vh;">
       <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem>
         <ion-item class="lesson-ion-item" no-padding>
           <div class="lesson-card" (click)="openLesson(lesson.id)">
@@ -47,8 +49,7 @@
           </div>
         </ion-item>
         <ion-item-options side="end">
-          <ion-item-option class="delete-sliding-option" color="danger"
-          (click)="deleteItem(slidingItem, lesson.id)">
+          <ion-item-option class="delete-sliding-option" color="danger" (click)="deleteItem(slidingItem, lesson.id)">
             Delete
           </ion-item-option>
         </ion-item-options>
