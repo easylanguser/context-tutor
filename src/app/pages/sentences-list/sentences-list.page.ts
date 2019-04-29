@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';

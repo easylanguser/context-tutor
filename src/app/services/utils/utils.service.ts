@@ -15,8 +15,7 @@ export class UtilsService {
 			data: {
 				datasets: [
 					{
-						data: [1, 0, 0],
-						backgroundColor: ['#D0D0D0', '#D0D0D0', '#D0D0D0']
+						backgroundColor: []
 					}
 				],
 			},

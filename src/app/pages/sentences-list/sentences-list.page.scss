@@ -69,7 +69,6 @@ ion-segment-button {
     border-radius: 4vh;
     margin: 0.8vh 3vw;
     cursor: pointer;
-    text-align: center;
     table-layout: fixed;
     vertical-align: middle;
 
@@ -92,7 +91,7 @@ ion-segment-button {
 }
 
 .sentence-text-div {
-    width: 80vw;
+    width: 80%;
     display: table-cell;
     position: relative;
     vertical-align: top;
@@ -121,7 +120,6 @@ ion-segment-button {
 .canvas-div {
     height: 4vh;
     width: 4vh;
-    margin-right: 5vw;
     margin-top: 0.7vh;
     display: inline-block;
 }
