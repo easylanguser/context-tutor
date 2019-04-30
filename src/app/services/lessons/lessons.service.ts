@@ -44,12 +44,12 @@ export class LessonsService {
 	getSentencesByLessonId(id: number): Promise<Sentence[]> {
 		return this.sentencesAPI.getData(id).toPromise().then(res => {
 			const lsn = res[0];
-			for (let i in lsn) {
+			for (const i in lsn) {
 				const hiddenChars: Array<string[]> = [];
 				const curCharsIndexes: number[] = [];
-				for (let j in lsn[i].words) {
+				for (const j in lsn[i].words) {
 					const chars: string[] = [];
-					for (let k in lsn[i].words[j][1]) {
+					for (let k = 0; k < lsn[i].words[j][1]; k++) {
 						chars.push(lsn[i].text.charAt(lsn[i].words[j][0] + k));
 					}
 					hiddenChars.push(chars);

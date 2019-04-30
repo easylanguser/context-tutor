@@ -36,7 +36,7 @@ export class SignUpPage implements OnInit {
 	}
 
 	showAlert(res) {
-		let alert = this.alertController.create({
+		const alert = this.alertController.create({
 			message: res.msg,
 			header: 'Email confirmation',
 			buttons: ['OK']

@@ -50,14 +50,13 @@ export class GuessBarComponent implements OnInit {
 	}
 
 	async getData() {
-		let loading: any;
 
 		if (this.curSentence().solvedStatus) { // Display filled sentence, if it has already been solved
 			this.guessPage.sentenceShown = this.curSentence().sentenceShown;
 		} else {
 			this.hintIsClicked = false;
 
-			// Restore user progress
+			// Restore user progress 
 			this.guessPage.curWordIndex = this.curSentence().curWordIndex;
 			this.guessPage.curCharsIndexes = this.curSentence().curCharsIndexes;
 			this.guessPage.sentenceShown = this.curSentence().sentenceShown;
@@ -205,7 +204,10 @@ export class GuessBarComponent implements OnInit {
 		const correctChar = this.curCorrectChar().toUpperCase();
 		const correctCharIndexInAlphabet = this.alphabet.indexOf(correctChar);
 		const vowelsPositions = [0, 4, 8, 14, 20, 24];
-		let firstRand: number, secondRand: number, thirdRand: number, fourthRand: number;
+		let firstRand: number,
+			secondRand: number,
+			thirdRand: number,
+			fourthRand: number;
 		const vowelIsGuessed: boolean = vowelsPositions.indexOf(correctCharIndexInAlphabet) !== -1;
 
 		this.updateFront = !this.updateFront;

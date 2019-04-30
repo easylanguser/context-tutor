@@ -41,7 +41,7 @@ export class ChangePage implements OnInit {
 	}
 
 	showAlert(res) {
-		let alert = this.alertController.create({
+		const alert = this.alertController.create({
 			message: res.msg,
 			header: 'Change password',
 			buttons: ['OK']

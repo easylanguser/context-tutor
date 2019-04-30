@@ -36,7 +36,7 @@ export class AccountPage implements OnInit {
 	}
 
 	async deleteAccount() {
-		let alert = await this.alertController.create({
+		const alert = await this.alertController.create({
 			message: 'Are you sure you want to delete your account?',
 			inputs: [
 				{
@@ -80,7 +80,7 @@ export class AccountPage implements OnInit {
 	}
 
 	showAlert(res) {
-		let alert = this.alertController.create({
+		const alert = this.alertController.create({
 			message: res.msg,
 			// header: 'User deleting',
 		});

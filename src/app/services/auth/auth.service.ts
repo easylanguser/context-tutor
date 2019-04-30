@@ -85,7 +85,7 @@ export class AuthService {
 	}
 
 	showAlert(msg) {
-		let alert = this.alertController.create({
+		const alert = this.alertController.create({
 			message: msg,
 			header: 'Error',
 			buttons: ['OK']
