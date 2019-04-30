@@ -44,12 +44,12 @@ export class LessonsService {
 	getSentencesByLessonId(id: number): Promise<Sentence[]> {
 		return this.sentencesAPI.getData(id).toPromise().then(res => {
 			const lsn = res[0];
-			for (let i = 0; i < lsn.length; i++) {
+			for (let i in lsn) {
 				const hiddenChars: Array<string[]> = [];
 				const curCharsIndexes: number[] = [];
-				for (let j = 0; j < lsn[i].words.length; j++) {
+				for (let j in lsn[i].words) {
 					const chars: string[] = [];
-					for (let k = 0; k < lsn[i].words[j][1]; k++) {
+					for (let k in lsn[i].words[j][1]) {
 						chars.push(lsn[i].text.charAt(lsn[i].words[j][0] + k));
 					}
 					hiddenChars.push(chars);
@@ -82,9 +82,8 @@ export class LessonsService {
 					this.getLessonByID(id).addSentence(sentence);
 				}
 			}
-			this.getLessonByID(id).sentences.sort(
-				(snt1, snt2) => new Date(snt2.updated_at).getTime() - new Date(snt1.updated_at).getTime()
-			);
+			this.getLessonByID(id).sentences.sort(this.sortByTime);
+
 			return this.getLessonByID(id).sentences;
 		});
 	}
@@ -123,7 +122,7 @@ export class LessonsService {
 	getLessons(): Promise<Lesson[]> {
 		return this.lessonsAPI.getData().toPromise().then(res => {
 			const now = new Date().getTime();
-			for (let i = 0; i < res[0].length; i++) {
+			for (let i in res[0]) {
 				const diff = (now - new Date(res[0][i].created_at).getTime()) / 1000;
 				const period = this.calculatePeriod(diff);
 
@@ -140,9 +139,7 @@ export class LessonsService {
 				}
 			}
 
-			this.lessons.sort(
-				(les1, les2) => new Date(les2.updated_at).getTime() - new Date(les1.updated_at).getTime()
-			);
+			this.lessons.sort(this.sortByTime);
 
 			const promises = [];
 			for (const lesson of this.lessons) {
@@ -151,5 +148,9 @@ export class LessonsService {
 
 			return Promise.all(promises);
 		});
+	}
+
+	private sortByTime(first: any, second: any) {
+		return new Date(first.updated_at).getTime() < new Date(second.updated_at).getTime() ? 1 : -1;
 	}
 }

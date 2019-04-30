@@ -50,7 +50,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	private syncCharts() {
 		this.pieCharts = [];
-		for (let i = 0; i < this.pieCanvases._results.length; i++) {
+		for (let i in this.pieCanvases._results) {
 			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, this.utils.getNewChartObject()));
 		}
 		this.updateCharts();

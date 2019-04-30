@@ -4,6 +4,7 @@ import { StorageService } from 'src/app/services/storage/storage-service';
 import { AddLessonService } from 'src/app/services/http/add-lesson/add-lesson.service';
 import { AddSentenceService } from 'src/app/services/http/add-sentence/add-sentence.service';
 import { ToastController, NavController } from '@ionic/angular';
+import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 
 @Component({
 	selector: 'app-add-lesson',
@@ -60,9 +61,8 @@ export class AddLessonPage implements OnInit {
 		var finish = area.selectionEnd;
 		var sel = area.value.substring(start, finish);
 
-		const selObj = sel.toString();
-		for (let i = 0; i < selObj.length; i++) {
-			const charAtPos = selObj[i].charCodeAt(0);
+		for (const char of sel) {
+			const charAtPos = char.charCodeAt(0);
 			if (!((charAtPos > 64 && charAtPos < 91) || (charAtPos > 96 && charAtPos < 123))) {
 				return;
 			}
@@ -118,7 +118,7 @@ export class AddLessonPage implements OnInit {
 	addLessonAsFileIfExists() {
 		const fileInput = <HTMLInputElement>document.getElementById('file-input');
 		if (fileInput.files != undefined && fileInput.files.length > 0) {
-			this.storageService.get('user_id')
+			this.storageService.get(USER_ID_KEY)
 				.then(userId => {
 					this.addLessonFileService.postNewLessonFile(fileInput.files, userId);
 				}).then(async () => {

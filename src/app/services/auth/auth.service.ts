@@ -8,6 +8,12 @@ import { environment } from 'src/environments/environment';
 import { StorageService } from '../storage/storage-service';
 
 const TOKEN_KEY = 'access_token';
+export const USER_ID_KEY = 'user_id';
+
+interface AuthData {
+	token: string,
+	id: string
+}
 
 @Injectable({
 	providedIn: 'root'
@@ -37,7 +43,7 @@ export class AuthService {
 					this.authenticationState.next(true);
 				} else {
 					this.storageService.remove(TOKEN_KEY);
-					this.storageService.remove("user_id");
+					this.storageService.remove(USER_ID_KEY);
 				}
 			}
 		});
@@ -55,10 +61,10 @@ export class AuthService {
 	login(credentials) {
 		return this.http.post(`${this.url}/api/auth/login`, credentials)
 			.pipe(
-				tap(res => {
-					this.storageService.set(TOKEN_KEY, res['token']);
-					this.token = res['token'];
-					this.storageService.set("user_id", res['id']);
+				tap((res : AuthData) => {
+					this.storageService.set(TOKEN_KEY, res.token);
+					this.token = res.token;
+					this.storageService.set(USER_ID_KEY, res.id);
 					this.authenticationState.next(true);
 				}),
 				catchError(e =>
@@ -71,7 +77,6 @@ export class AuthService {
 		this.storageService.remove(TOKEN_KEY).then(() => {
 			this.authenticationState.next(false);
 			this.token = null;
-			window.location.reload();
 		});
 	}
 
