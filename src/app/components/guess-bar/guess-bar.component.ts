@@ -89,16 +89,31 @@ export class GuessBarComponent implements OnInit {
 
 	// Go to following sentence of the lesson
 	nextSentenceClick() {
+		this.changeSentence(true);
+	}
+
+	// Go to the previous sentence of the lesson
+	prevSentenceClick() {
+		this.changeSentence(false);
+	}
+
+	changeSentence(forward: boolean) {
 		if (this.sentenceTranslateIsPlayed) {
 			return;
 		}
 
 		this.guessPage.saveData();
 
-		this.guessPage.sentenceIndex = this.guessPage.sentenceIndex ===
-			this.lessonsData.getLessonByID(this.guessPage.lessonId).sentences.length
-			? 1
-			: this.guessPage.sentenceIndex + 1;
+		const lastSentenceNumber = this.lessonsData.getLessonByID(this.guessPage.lessonId).sentences.length;
+		if (forward) {
+			this.guessPage.sentenceIndex = (this.guessPage.sentenceIndex === lastSentenceNumber)
+				? 1
+				: this.guessPage.sentenceIndex + 1;
+		} else {
+			this.guessPage.sentenceIndex = (this.guessPage.sentenceIndex === 1)
+				? lastSentenceNumber
+				: this.guessPage.sentenceIndex - 1;
+		}
 
 		this.guessPage.curWordIndex = 0;
 		this.guessPage.curCharsIndexes = [];

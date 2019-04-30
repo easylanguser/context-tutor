@@ -2,7 +2,7 @@
   <p [innerHTML]="this.guessPage.sentenceShown" id="sentence-to-show"></p>
 </ion-content>
 <ion-footer id="footer">
-  <ion-toolbar mode="ios" no-padding class="no-selection">
+  <ion-toolbar mode="ios" no-padding class="no-selection" style="height: 40vmin;">
     <div id="chars">
       <div class="char-box" id="first-char-box" (click)="firstCharBoxClick()">
         <div class="front">{{firstCharBack}}</div>
@@ -28,7 +28,11 @@
         ?
       </ion-button>
     </div>
-    <div id="give-up-and-next-button-container">
+    <div id="bottom-bar-container">
+      <ion-button text-center id="prev-sentence-button"
+        [ngStyle]="{'box-shadow': this.curSentence().solvedStatus ? greenHighlight : 'none'}" (click)="prevSentenceClick()">
+        Previous
+      </ion-button>
       <ion-button text-center id="give-up-button" (click)="giveUpClick()">
         Give<br>up
       </ion-button>
