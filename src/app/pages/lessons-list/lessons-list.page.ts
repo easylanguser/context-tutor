@@ -138,6 +138,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		await loading.present();
 		await this.lessonService.getLessons().then(() => {
 			this.displayedLessons = this.lessonService.lessons;
+			this.displayedLessons.sort(this.lessonService.sortLessonsByTime);
 		}).then(() => loading.dismiss());
 	}
 

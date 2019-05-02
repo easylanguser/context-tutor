@@ -100,7 +100,9 @@ export class LessonsService {
 					this.getLessonByID(id).addSentence(sentence);
 				}
 			}
-			this.getLessonByID(id).sentences.sort(this.sortByTime);
+			if (this.getLessonByID(id).sentences.length > 0) {
+				this.getLessonByID(id).sentences.sort(this.sortSentencesByTime);
+			}
 
 			return this.getLessonByID(id).sentences;
 		});
@@ -157,8 +159,6 @@ export class LessonsService {
 				}
 			}
 
-			this.lessons.sort(this.sortByTime);
-
 			const promises = [];
 			for (const lesson of this.lessons) {
 				promises.push(this.getSentencesByLessonId(lesson.id));
@@ -168,7 +168,24 @@ export class LessonsService {
 		});
 	}
 
-	private sortByTime(first: any, second: any) {
-		return new Date(first.updated_at).getTime() < new Date(second.updated_at).getTime() ? 1 : -1;
+	sortSentencesByTime(first: Sentence, second: Sentence): number {
+		const firstTime = new Date(first.updated_at);
+		const secondTime = new Date(second.updated_at);
+		if (firstTime < secondTime) {
+			return 1;
+		} else if (firstTime === secondTime) {
+			return 0;
+		} else {
+			return -1;
+		}
+	}
+
+	sortLessonsByTime(first: Lesson, second: Lesson): number {
+		if (first.sentences.length === 0 || second.sentences.length === 0) {
+			return 0;
+		}
+		const firstDate = new Date(first.sentences[0].updated_at);
+		const secondDate = new Date(second.sentences[0].updated_at);
+		return firstDate < secondDate ? 1 : -1;
 	}
 }
