@@ -49,7 +49,8 @@ export class AppComponent {
 	authenticationState = new BehaviorSubject(false);
 
 	initializeApp() {
-		this.platform.ready().then(() => {
+		this.platform.ready()
+			.then(() => {
 			if (this.platform.is('android')) {
 				this.statusBar.styleBlackOpaque;
 			} else {
@@ -75,11 +76,28 @@ export class AppComponent {
 				}
 			});
 
-		});
+		})
+			.then(() => this.checkForIntent());
 	}
 
 	logout() {
 		this.authService.logout();
 		this.loggedIn = false;
 	}
+
+	private checkForIntent() {
+		if (!(window.receiveContent)) {
+			return Promise.resolve();
+		}
+
+		return window.receiveContent.receiveText()
+			.then(text => {
+				if (text) {
+					console.log(text);
+				}
+			})
+			.catch(err => console.error('ReceiveContent plugin error: ', err));
+	}
 }
+
+declare var window: any;

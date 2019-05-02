@@ -1,5 +1,5 @@
 var exec = require('cordova/exec');
-var PLUGIN_NAME = 'ReceiveContentPlugin';
+var PLUGIN_NAME = 'ReceiveContent';
 
 module.exports = {
     /**

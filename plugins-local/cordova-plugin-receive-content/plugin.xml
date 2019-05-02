@@ -3,8 +3,8 @@
     id="cordova-plugin-receive-content" version="0.0.1"
     xmlns="http://apache.org/cordova/ns/plugins/1.0">
     <name>ReceiveContent</name>
-    <js-module name="ReceiveContent" src="www/ReceiveContent.js">
-        <clobbers target="cordova.plugins.ReceiveContent" />
+    <js-module name="receiveContent" src="www/ReceiveContent.js">
+        <clobbers target="receiveContent" />
     </js-module>
 
     <platform name="android">
