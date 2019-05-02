@@ -4,35 +4,22 @@
 <ion-footer id="footer">
   <ion-toolbar mode="ios" no-padding class="no-selection" style="height: 40vmin;">
 
-    <div id="top-row-div">
-      <div id="chars-left">
-        <div class="char-box" id="first-char-box" (click)="firstCharBoxClick()">
-          <div class="front">{{firstCharBack}}</div>
-          <div class="back">{{firstChar}}</div>
-        </div>
-        <div class="char-box" id="second-char-box" (click)="secondCharBoxClick()">
-          <div class="front">{{secondCharBack}}</div>
-          <div class="back">{{secondChar}}</div>
-        </div>
+    <div id="chars">
+      <div class="char-box" id="first-char-box" (click)="firstCharBoxClick()">
+        <div class="front">{{firstCharBack}}</div>
+        <div class="back">{{firstChar}}</div>
       </div>
-
-      <div id="hint-button-div">
-        <ion-button text-center shape="round" id="hint-button"
-          [ngStyle]="{'box-shadow': hintIsClicked ? yellowHighlight : 'none'}" [disabled]="hintIsClicked"
-          (click)="hintClick()">
-          ?
-        </ion-button>
+      <div class="char-box" id="second-char-box" (click)="secondCharBoxClick()">
+        <div class="front">{{secondCharBack}}</div>
+        <div class="back">{{secondChar}}</div>
       </div>
-
-      <div id="chars-right">
-        <div class="char-box" id="third-char-box" (click)="thirdCharBoxClick()">
-          <div class="front">{{thirdCharBack}}</div>
-          <div class="back">{{thirdChar}}</div>
-        </div>
-        <div class="char-box" id="fourth-char-box" (click)="fourthCharBoxClick()">
-          <div class="front">{{fourthCharBack}}</div>
-          <div class="back">{{fourthChar}}</div>
-        </div>
+      <div class="char-box" id="third-char-box" (click)="thirdCharBoxClick()">
+        <div class="front">{{thirdCharBack}}</div>
+        <div class="back">{{thirdChar}}</div>
+      </div>
+      <div class="char-box" id="fourth-char-box" (click)="fourthCharBoxClick()">
+        <div class="front">{{fourthCharBack}}</div>
+        <div class="back">{{fourthChar}}</div>
       </div>
     </div>
 
@@ -42,9 +29,16 @@
         (click)="prevSentenceClick()">
         Previous
       </ion-button>
-      <ion-button text-center id="give-up-button" (click)="giveUpClick()">
-        Give<br>up
+
+      <ion-button shape="round" id="hint-button" [ngStyle]="{'box-shadow': hintIsClicked ? yellowHighlight : 'none'}"
+        [disabled]="hintIsClicked" (click)="hintClick()">
+        Open<br>*
       </ion-button>
+
+      <ion-button text-center id="give-up-button" (click)="giveUpClick()">
+        Open<br>****
+      </ion-button>
+
       <ion-button text-center id="next-sentence-button"
         [ngStyle]="{'box-shadow': this.curSentence().solvedStatus ? greenHighlight : 'none'}"
         (click)="nextSentenceClick()">

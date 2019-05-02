@@ -26,22 +26,21 @@ $chars-and-hint-height: 20vw;
 #hint-button-div {
     height: $chars-and-hint-height;
     width: 21vw;
-    display: table-cell;
+    display: inline-block;
 }
 
 #hint-button {
-    height: 14vw;
-    width: 14vw;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    font-size: 5vh;
-    margin-top: 4vw;
+    height: 16vw;
+    width: 16vw;
+    display: inline-block;
+    font-size: 2vh;
+    margin-left: 4vw;
     outline: none;
     background: #FFF;
     --background: #FFF;
     --color: #000;
     --border-radius: 50%;
+    --padding-top: 8px;
     border-radius: 50%;
     border: 1px solid rgba(100, 100, 100, 0.2);
 }
@@ -53,20 +52,12 @@ $chars-and-hint-height: 20vw;
     height: 40vmin;
 }
 
-#chars-left {
-    display: table-cell;
+#chars {
+    display: inline-block;
     height: $chars-and-hint-height;
-    width: 39vw;
+    width: 100vw;
     transition: all .5s;
-    padding-left: 3vw;
-}
-
-#chars-right {
-    display: table-cell;
-    height: $chars-and-hint-height;
-    width: 39vw;
-    transition: all .5s;
-    padding-right: 3vw;
+    padding-left: 15vw;
 }
 
 .char-box {
@@ -113,9 +104,9 @@ $chars-and-hint-height: 20vw;
 #give-up-button {
     height: 16vw;
     width: 16vw;
-    margin-left: 12.6vw;
-    font-size: 3vmin;
-
+    font-size: 2vh;
+    margin-left: 4vw;
+    --padding-top: 8px;
     outline: none;
     background: #FFF;
     --background: #FFF;
@@ -128,9 +119,8 @@ $chars-and-hint-height: 20vw;
 #prev-sentence-button {
     height: 16vw;
     width: 16vw;
-    margin-left: 13vw;
-    font-size: 2.6vmin;
-
+    font-size: 1.5vh;
+    margin-left: 11vw;
     outline: none;
     background: #FFF;
     --background: #FFF;
@@ -143,10 +133,8 @@ $chars-and-hint-height: 20vw;
 #next-sentence-button {
     height: 16vw;
     width: 16vw;
-    margin-right: 13vw;
-    font-size: 3vmin;
-    float: right;
-
+    font-size: 1.5vh;
+    margin-left: 4vw;
     outline: none;
     background: #FFF;
     --background: #FFF;
@@ -166,17 +154,14 @@ $chars-and-hint-height: 20vw;
         width: 72vw;
     }
 
-    #charsLeft {
-        height: 10vw;
+    #chars {
         width: 38vw;
-        float: left;
         padding-left: 0;
     }
 
     #hint-button-div {
         width: 12vw;
         height: 10vw;
-        float: none;
         display: inline-block;
         border-left: 1px solid var(--ion-color-step-950);
         border-right: 1px solid var(--ion-color-step-950);
@@ -185,30 +170,29 @@ $chars-and-hint-height: 20vw;
     #hint-button {
         height: 7vw;
         width: 7vw;
-        font-size: 5vw;
-        margin: 1.5vw auto;
+        font-size: 2vh;
+        margin-left: 1vw;
     }
 
     #give-up-button {
-        height: 5vw;
-        width: 5vw;
+        height: 7vw;
+        width: 7vw;
         font-size: 2vh;
-        margin-left: 1.75vw;
+        margin-left: 1vw;
     }
 
     #prev-sentence-button {
-        height: 5vw;
-        width: 5vw;
-        font-size: 1.4vh;
-        margin-left: 1.75vw;
+        height: 7vw;
+        width: 7vw;
+        font-size: 2vh;
+        margin-left: 0;
     }
 
     #next-sentence-button {
-        height: 5vw;
-        width: 5vw;
+        height: 7vw;
+        width: 7vw;
         font-size: 2vh;
-        margin-right: 1.75vw;
-        float: right;
+        margin-left: 1vw;
     }
 
     .char-box {
@@ -216,13 +200,35 @@ $chars-and-hint-height: 20vw;
         width: 7vw;
         font-size: 5vw;
         margin-top: 1.5vw;
-        margin-left: 2vw;
     }
 
     #bottom-bar-container {
         height: 10vw;
-        width: 22vw;
-        margin-top: 2.5vw;
+        width: 34vw;
+        padding-top: 1.5vw;
+        padding-left: 1vw;
         float: right;
+    }
+
+    ion-button {
+        margin-top: 0px;
+    }
+}
+
+@media (min-width: 1800px) {
+    #hint-button {
+        font-size: 2vh;
+    }
+
+    #give-up-button {
+        font-size: 2vh;
+    }
+
+    #prev-sentence-button {
+        font-size: 2vh;
+    }
+
+    #next-sentence-button {
+        font-size: 2vh;
     }
 }
