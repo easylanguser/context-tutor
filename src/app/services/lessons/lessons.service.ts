@@ -22,15 +22,32 @@ export class LessonsService {
 		this.lessons.push(lesson);
 	}
 
-	removeLesson(lessonToRemove: Lesson): void {
-		const index = this.lessons.indexOf(lessonToRemove);
+	removeLesson(lessonToRemoveId: number): void {
+		const index = this.lessons.indexOf(this.getLessonByID(lessonToRemoveId));
 		if (index > -1) {
 			this.lessons.splice(index, 1);
 		}
 	}
 
+	removeSentence(lessonId: number, sentenceToRemoveId: number): void {
+		const index = this.getSentenceNumberByIDs(lessonId, sentenceToRemoveId);
+		if (index > -1) {
+			this.getLessonByID(lessonId).sentences.splice(index, 1);
+		}
+	}
+
+	removeAllLessonSentences(lessonId: number): void {
+		this.getLessonByID(lessonId).sentences = [];
+	}
+
 	getLessonByID(id: number): Lesson {
 		return this.lessons.find(lesson => lesson.id === id);
+	}
+
+	getSentenceNumberByIDs(lessonId: number, sentenceId: number): number {
+		return this.getLessonByID(lessonId).sentences.findIndex(
+			(sentence: Sentence) => sentence.id === sentenceId
+		);
 	}
 
 	getRangeOfLessonSentences(lessonId: number, from: number, to: number): Sentence[] {
@@ -59,6 +76,7 @@ export class LessonsService {
 
 				const sentence = new Sentence(
 					lsn[i].id,
+					lsn[i].lessonId,
 					lsn[i].words,
 					lsn[i].text,
 					hiddenSentence,

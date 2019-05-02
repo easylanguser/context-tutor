@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { LoadingController, IonItemSliding, AlertController, NavController } from '@ionic/angular';
-import { Router } from '@angular/router';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
@@ -18,13 +17,15 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
+	statisticsIsNotEmpty: boolean = false;
 
 	constructor(private loadingController: LoadingController,
 		private navCtrl: NavController,
 		private lessonService: LessonsService,
 		private alertCtrl: AlertController,
 		private lessonDeleteService: LessonDeleteService,
-		private utils: UtilsService) { }
+		private utils: UtilsService,
+		private cdRef : ChangeDetectorRef) { }
 
 	ngOnInit() {
 		this.getData();
@@ -75,6 +76,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				chartData.backgroundColor[2] = '#ffe353';
 				this.pieCharts[i].options.cutoutPercentage = 67;
 				this.pieCharts[i].update();
+				this.statisticsIsNotEmpty = true;
+				this.cdRef.detectChanges();
 			}
 
 			++i;
@@ -98,6 +101,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 						slidingItem.close();
 
 						this.lessonDeleteService.delete(lessonID);
+						this.lessonService.removeAllLessonSentences(lessonID);
+						this.lessonService.removeLesson(lessonID);
 
 						let i = 0;
 						for (i; i < this.displayedLessons.length; i++) {

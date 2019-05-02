@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
@@ -20,6 +20,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
 	offset: number = 0;
+	statisticsIsNotEmpty: boolean = false;
 
 	constructor(
 		private alertCtrl: AlertController,
@@ -27,7 +28,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		private route: ActivatedRoute,
 		private navCtrl: NavController,
 		public lessonData: LessonsService,
-		private sentenceDeleteService: SentenceDeleteService) { }
+		private sentenceDeleteService: SentenceDeleteService,
+		private cdRef : ChangeDetectorRef) { }
 
 	ngOnInit() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
@@ -67,7 +69,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		}, 200);
 	}
 
-	async deleteItem(slidingItem: IonItemSliding, sentenceID: number) {
+	async deleteItem(slidingItem: IonItemSliding, lessonID: number, sentenceID: number) {
 		const alert = await this.alertCtrl.create({
 			message: 'Are you sure you want to delete this sentence?',
 			buttons: [
@@ -84,6 +86,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 						slidingItem.close();
 
 						this.sentenceDeleteService.delete(sentenceID);
+						this.lessonData.removeSentence(lessonID, sentenceID)
 
 						let i = 0;
 						for (i; i < this.displayedSentences.length; i++) {
@@ -123,6 +126,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				chartData.backgroundColor[2] = '#ffe353';
 				this.pieCharts[i].options.cutoutPercentage = 67;
 				this.pieCharts[i].update();
+				this.statisticsIsNotEmpty = true;
+				this.cdRef.detectChanges();
 			}
 
 			++i;

@@ -12,7 +12,7 @@
       </ion-title>
     </ion-toolbar>
 
-    <div id="segments-div">
+    <div id="segments-div" *ngIf="statisticsIsNotEmpty">
       <ion-segment id="progress-segment" mode="ios">
         <ion-segment-button mode="ios" (click)="allClick()" id="all-sentences-button" checked="true">
           All
@@ -52,7 +52,7 @@
           </div>
         </ion-item>
         <ion-item-options side="end">
-          <ion-item-option class="delete-sliding-option" color="danger" (click)="deleteItem(slidingItem, sentence.id)">
+          <ion-item-option class="delete-sliding-option" color="danger" (click)="deleteItem(slidingItem, sentence.lessonId, sentence.id)">
             Delete
           </ion-item-option>
         </ion-item-options>

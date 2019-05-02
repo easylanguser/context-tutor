@@ -5,10 +5,12 @@
       <ion-buttons id="menu-button" slot="start">
         <ion-menu-button mode="md" id="menu-button-inner"></ion-menu-button>
       </ion-buttons>
-      <ion-title id="lessons-title">My lessons</ion-title>
+      <ion-title id="lessons-title">
+        My lessons
+      </ion-title>
     </ion-toolbar>
 
-    <div id="segments-div">
+    <div id="segments-div" *ngIf="statisticsIsNotEmpty">
       <ion-segment id="date-segment" mode="ios">
         <ion-segment-button mode="ios" (click)="allClick()" id="all-lessons-button" checked="true">
           All
