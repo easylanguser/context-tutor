@@ -5,6 +5,7 @@ import { Lesson } from 'src/app/models/lesson';
 import { LessonsListService } from '../http/lessons-list/lessons-list.service';
 import { Sentence } from 'src/app/models/sentence';
 import { Statistics } from 'src/app/models/statistics';
+import { resolve } from 'q';
 
 @Injectable({
 	providedIn: 'root'
@@ -58,54 +59,58 @@ export class LessonsService {
 		this.lessons[this.lessons.indexOf(this.getLessonByID(lesson.id))] = lesson;
 	}
 
-	getSentencesByLessonId(id: number): Promise<Sentence[]> {
-		return this.sentencesAPI.getData(id).toPromise().then(res => {
-			const lsn = res[0];
-			for (const i in lsn) {
-				const hiddenChars: Array<string[]> = [];
-				const curCharsIndexes: number[] = [];
-				for (const j in lsn[i].words) {
-					const chars: string[] = [];
-					for (let k = 0; k < lsn[i].words[j][1]; k++) {
-						chars.push(lsn[i].text.charAt(lsn[i].words[j][0] + k));
-					}
-					hiddenChars.push(chars);
-					curCharsIndexes.push(0);
-				}
-				const hiddenSentence = this.utils.hideChars(lsn[i].text, lsn[i].words);
+	async getSentencesByLessonId(id: number): Promise<Sentence[]> {
+		const sntns = await this.sentencesAPI.getData(id).toPromise()
+			.then(res => resolve(res[0]))
+			.catch(error => console.log(error));
 
-				const sentence = new Sentence(
-					lsn[i].id,
-					lsn[i].lessonId,
-					lsn[i].words,
-					lsn[i].text,
-					hiddenSentence,
-					hiddenChars,
-					lsn[i].curCharsIndexes.length === 0 ? curCharsIndexes : lsn[i].curCharsIndexes,
-					lsn[i].curWordIndex,
-					lsn[i].sentenceShown === ""
-						? this.utils.addChar(hiddenSentence, '?')
-						: lsn[i].sentenceShown,
-					lsn[i].solvedStatus,
-					lsn[i].updated_at,
-					new Statistics(
-						lsn[i].correctAnswers,
-						lsn[i].wrongAnswers,
-						lsn[i].giveUps,
-						lsn[i].wordSkips,
-						lsn[i].sentenceSkips,
-						lsn[i].lessonLeaves,
-						lsn[i].hintUsages));
-				if (!this.getLessonByID(id).sentences.some(sntn => sntn.id === sentence.id)) {
-					this.getLessonByID(id).addSentence(sentence);
+		for (const i in sntns) {
+			const hiddenChars: Array<string[]> = [];
+			const curCharsIndexes: number[] = [];
+			for (const j in sntns[i].words) {
+				const chars: string[] = [];
+				for (let k = 0; k < sntns[i].words[j][1]; k++) {
+					chars.push(sntns[i].text.charAt(sntns[i].words[j][0] + k));
 				}
+				hiddenChars.push(chars);
+				curCharsIndexes.push(0);
 			}
-			if (this.getLessonByID(id).sentences.length > 0) {
-				this.getLessonByID(id).sentences.sort(this.sortSentencesByTime);
+			const hiddenSentence = this.utils.hideChars(sntns[i].text, sntns[i].words);
+			const sentence = new Sentence(
+				sntns[i].id,
+				sntns[i].lessonId,
+				sntns[i].words,
+				sntns[i].text,
+				hiddenSentence,
+				hiddenChars,
+				sntns[i].curCharsIndexes.length === 0
+					? curCharsIndexes
+					: sntns[i].curCharsIndexes,
+				sntns[i].curWordIndex,
+				sntns[i].sentenceShown === ""
+					? this.utils.addChar(hiddenSentence, '?')
+					: sntns[i].sentenceShown,
+				sntns[i].solvedStatus,
+				sntns[i].updated_at,
+				new Statistics(
+					sntns[i].correctAnswers,
+					sntns[i].wrongAnswers,
+					sntns[i].giveUps,
+					sntns[i].wordSkips,
+					sntns[i].sentenceSkips,
+					sntns[i].lessonLeaves,
+					sntns[i].hintUsages)
+			);
+			if (!this.getLessonByID(id).sentences.some(sntn => sntn.id === sentence.id)) {
+				this.getLessonByID(id).addSentence(sentence);
 			}
+		}
 
-			return this.getLessonByID(id).sentences;
-		});
+		if (this.getLessonByID(id).sentences.length > 0) {
+			this.getLessonByID(id).sentences.sort(this.sortSentencesByTime);
+		}
+
+		return this.getLessonByID(id).sentences;
 	}
 
 	calculatePeriod(diff: number): [number, string] {
@@ -139,33 +144,33 @@ export class LessonsService {
 		return [flooredValue, label];
 	}
 
-	getLessons(): Promise<Lesson[]> {
-		return this.lessonsAPI.getData().toPromise().then(res => {
-			const now = new Date().getTime();
-			for (let i in res[0]) {
-				const diff = (now - new Date(res[0][i].created_at).getTime()) / 1000;
-				const period = this.calculatePeriod(diff);
+	async getLessons(): Promise<Lesson[]> {
+		const lsn = await this.lessonsAPI.getData().toPromise()
+			.then(res => resolve(res[0]))
+			.catch(error => console.log(error));
+		const now = new Date().getTime();
 
-				const lesson = new Lesson(
-					res[0][i].id,
-					res[0][i].name,
-					res[0][i].url,
-					res[0][i].created_at,
-					res[0][i].updated_at,
-					period[0] + period[1]);
-
-				if (this.getLessonByID(lesson.id) === undefined) {
-					this.addLesson(lesson);
-				}
+		for (let i in lsn) {
+			const diff = (now - new Date(lsn[i].created_at).getTime()) / 1000;
+			const period = this.calculatePeriod(diff);
+			const lesson = new Lesson(
+				lsn[i].id,
+				lsn[i].name,
+				lsn[i].url,
+				lsn[i].created_at,
+				lsn[i].updated_at,
+				period[0] + period[1]);
+			if (this.getLessonByID(lesson.id) === undefined) {
+				this.addLesson(lesson);
 			}
+		}
 
-			const promises = [];
-			for (const lesson of this.lessons) {
-				promises.push(this.getSentencesByLessonId(lesson.id));
-			}
+		const promises = [];
+		for (const newLesson of this.lessons) {
+			promises.push(this.getSentencesByLessonId(newLesson.id));
+		}
 
-			return Promise.all(promises);
-		});
+		return Promise.all(promises);
 	}
 
 	sortSentencesByTime(first: Sentence, second: Sentence): number {
