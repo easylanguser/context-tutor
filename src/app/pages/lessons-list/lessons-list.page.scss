@@ -126,7 +126,7 @@ ion-segment-button {
     position: absolute;
     font-size: 3vmin;
     font-weight: bold;
-    color: #6e6e6e;
+    color: var(--ion-color-step-850);
 
     @media (min-width: 650px) {
         font-size: 1.5vmin;

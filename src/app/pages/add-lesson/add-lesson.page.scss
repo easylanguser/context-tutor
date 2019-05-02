@@ -70,13 +70,16 @@
 
 #file-input {
     width: 60vw;
+    background-color: var(--ion-color-step-550);
     margin-left: calc(20vw - 16px);
     padding-top: 3.5vh;
+    padding-left: 5vw;
     margin-top: 4vh;
     height: 10vh;
-    border: 2px dashed blue;
+    border: 3px dashed rgb(69, 69, 253);
     @media (min-width: 992px) {
         margin-left: calc(6vw - 16px);
+        padding-left: 35%;
     }
 }
 
