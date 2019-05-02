@@ -7,7 +7,7 @@ import { BehaviorSubject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { StorageService } from '../storage/storage-service';
 
-const TOKEN_KEY = 'access_token';
+export const TOKEN_KEY = 'access_token';
 export const USER_ID_KEY = 'user_id';
 
 interface AuthData {
@@ -25,8 +25,12 @@ export class AuthService {
 	authenticationState = new BehaviorSubject(false);
 	public token;
 
-	constructor(private http: HttpClient, private helper: JwtHelperService, private storageService: StorageService,
-		private plt: Platform, private alertController: AlertController) {
+	constructor(
+		private http: HttpClient,
+		private helper: JwtHelperService,
+		private storageService: StorageService,
+		private plt: Platform,
+		private alertController: AlertController) {
 		this.plt.ready().then(() => {
 			this.checkToken();
 		});
@@ -61,7 +65,7 @@ export class AuthService {
 	login(credentials) {
 		return this.http.post(`${this.url}/api/auth/login`, credentials)
 			.pipe(
-				tap((res : AuthData) => {
+				tap((res: AuthData) => {
 					this.storageService.set(TOKEN_KEY, res.token);
 					this.token = res.token;
 					this.storageService.set(USER_ID_KEY, res.id);
@@ -74,9 +78,11 @@ export class AuthService {
 	}
 
 	logout() {
-		this.storageService.remove(TOKEN_KEY).then(() => {
-			this.authenticationState.next(false);
-			this.token = null;
+		this.storageService.remove(USER_ID_KEY).then(() => {
+			this.storageService.remove(TOKEN_KEY).then(() => {
+				this.authenticationState.next(false);
+				this.token = null;
+			});
 		});
 	}
 

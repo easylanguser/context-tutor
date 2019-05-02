@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { AuthService } from '../../services/auth/auth.service';
+import { AuthService, TOKEN_KEY } from '../../services/auth/auth.service';
 import { HttpService } from '../../services/http/rest/http.service';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-
-const TOKEN_KEY = 'access_token';
 
 @Component({
 	selector: 'app-account',
@@ -19,8 +17,13 @@ const TOKEN_KEY = 'access_token';
 export class AccountPage implements OnInit {
 
 
-	constructor(private storage: Storage, private helper: JwtHelperService, private authService: AuthService, private httpService: HttpService,
-		private alertController: AlertController, private router: Router) {
+	constructor(
+		private storage: Storage,
+		private helper: JwtHelperService,
+		private authService: AuthService,
+		private httpService: HttpService,
+		private alertController: AlertController,
+		private router: Router) {
 	}
 
 	ngOnInit() {

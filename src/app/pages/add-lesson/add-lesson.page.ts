@@ -134,7 +134,7 @@ export class AddLessonPage implements OnInit {
 	}
 
 	addLessonAsText() {
-		this.storageService.get("user_id")
+		this.storageService.get(USER_ID_KEY)
 			.then(userId => {
 				this.addLessonService.postNewLesson({
 					userId: userId,

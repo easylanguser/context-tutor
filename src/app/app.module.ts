@@ -24,11 +24,12 @@ import { ChangePageModule } from './pages/change/change.module';
 import { GuessBarComponent } from './components/guess-bar/guess-bar.component';
 import { environment } from 'src/environments/environment';
 import { AddLessonPageModule } from './pages/add-lesson/add-lesson.module';
+import { TOKEN_KEY } from './services/auth/auth.service';
 
 export function jwtOptionsFactory(storage) {
 	return {
 		tokenGetter: () => {
-			return storage.get('access_token');
+			return storage.get(TOKEN_KEY);
 		},
 		whitelistedDomains: [environment.url]
 	};
