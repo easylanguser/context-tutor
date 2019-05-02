@@ -17,27 +17,33 @@
 
 $chars-and-hint-height: 20vw;
 
+#top-row-div {
+    height: $chars-and-hint-height;
+    width: 100%;
+    display: table;
+}
+
 #hint-button-div {
     height: $chars-and-hint-height;
     width: 21vw;
-    float: right;
-    display: flex;
-    justify-content: center;
+    display: table-cell;
 }
 
 #hint-button {
-    height: 13vw;
-    width: 13vw;
+    height: 14vw;
+    width: 14vw;
+    margin-left: auto;
+    margin-right: auto;
     display: block;
-    margin-right: 2vw;
     font-size: 5vh;
-    outline: none;
-    background: #f2f7ff;
     margin-top: 4vw;
-    --background: #f2f7ff;
+    outline: none;
+    background: #FFF;
+    --background: #FFF;
     --color: #000;
     --border-radius: 50%;
     border-radius: 50%;
+    border: 1px solid rgba(100, 100, 100, 0.2);
 }
 
 #footer {
@@ -47,12 +53,20 @@ $chars-and-hint-height: 20vw;
     height: 40vmin;
 }
 
-#chars {
-    display: inline-block;
+#chars-left {
+    display: table-cell;
     height: $chars-and-hint-height;
-    width: 78vw;
+    width: 39vw;
     transition: all .5s;
     padding-left: 3vw;
+}
+
+#chars-right {
+    display: table-cell;
+    height: $chars-and-hint-height;
+    width: 39vw;
+    transition: all .5s;
+    padding-right: 3vw;
 }
 
 .char-box {
@@ -99,7 +113,7 @@ $chars-and-hint-height: 20vw;
 #give-up-button {
     height: 16vw;
     width: 16vw;
-    margin-left: 13vw;
+    margin-left: 12.6vw;
     font-size: 3vmin;
 
     outline: none;
@@ -152,7 +166,7 @@ $chars-and-hint-height: 20vw;
         width: 72vw;
     }
 
-    #chars {
+    #charsLeft {
         height: 10vw;
         width: 38vw;
         float: left;
