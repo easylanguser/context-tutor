@@ -1,0 +1,17 @@
+{
+  "name": "cordova-plugin-receive-content",
+  "version": "0.0.1",
+  "description": "cordova plugin for receiving content from the other apps",
+  "cordova": {
+    "id": "cordova-plugin-receive-content",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "Lobach",
+  "license": "ISC"
+}
