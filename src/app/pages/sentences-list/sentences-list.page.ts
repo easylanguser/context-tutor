@@ -20,7 +20,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
 	offset: number = 0;
-	statisticsIsNotEmpty: boolean = false;
+	statisticsIsNotEmpty: boolean = true;
 
 	constructor(
 		private alertCtrl: AlertController,
@@ -108,6 +108,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	private updateCharts() {
+		let statisticsIsNotEmpty: boolean = false;
 		if (this.displayedSentences === undefined ||
 			this.displayedSentences.length === 0 ||
 			this.pieCharts.length !== this.displayedSentences.length) {
@@ -126,12 +127,13 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				chartData.backgroundColor[2] = '#ffe353';
 				this.pieCharts[i].options.cutoutPercentage = 67;
 				this.pieCharts[i].update();
-				this.statisticsIsNotEmpty = true;
-				this.cdRef.detectChanges();
+				statisticsIsNotEmpty = true;
 			}
 
 			++i;
 		}
+		this.statisticsIsNotEmpty = statisticsIsNotEmpty;
+		this.cdRef.detectChanges();
 	}
 
 	openSentence(sentenceNumber) {

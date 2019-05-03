@@ -17,7 +17,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
-	statisticsIsNotEmpty: boolean = false;
+	statisticsIsNotEmpty: boolean = true;
 
 	constructor(private loadingController: LoadingController,
 		private navCtrl: NavController,
@@ -54,7 +54,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	private updateCharts() {
-		let i = 0;
+		let i = 0, statisticsIsNotEmpty: boolean = false;
 		for (const lesson of this.displayedLessons) {
 			const chartData = this.pieCharts[i].data.datasets[0];
 			chartData.data[0] = 1;
@@ -76,12 +76,13 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				chartData.backgroundColor[2] = '#ffe353';
 				this.pieCharts[i].options.cutoutPercentage = 67;
 				this.pieCharts[i].update();
-				this.statisticsIsNotEmpty = true;
-				this.cdRef.detectChanges();
+				statisticsIsNotEmpty = true;
 			}
 
 			++i;
 		}
+		this.statisticsIsNotEmpty = statisticsIsNotEmpty;
+		this.cdRef.detectChanges();
 	}
 
 	async deleteItem(slidingItem: IonItemSliding, lessonID: number) {

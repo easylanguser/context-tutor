@@ -153,20 +153,16 @@ export class GuessBarComponent implements OnInit {
 
 	// Show user one current character
 	hintClick() {
-		if (!this.curSentence().solvedStatus && !this.hintIsClicked) {
+		if (!this.curSentence().solvedStatus) {
 			++this.curSentence().statistics.hintUsages; // Statistics
 			this.updateChart();
-
-			if (this.curCorrectChar().toUpperCase() === (this.updateFront ? this.firstChar : this.firstCharBack)) {
-				this.highlightClickedCharBox(1, this.yellowHighlight);
-			} else if (this.curCorrectChar().toUpperCase() === (this.updateFront ? this.secondChar : this.secondCharBack)) {
-				this.highlightClickedCharBox(2, this.yellowHighlight);
-			} else if (this.curCorrectChar().toUpperCase() === (this.updateFront ? this.thirdChar : this.thirdCharBack)) {
-				this.highlightClickedCharBox(3, this.yellowHighlight);
-			} else {
-				this.highlightClickedCharBox(4, this.yellowHighlight);
-			}
 			this.hintIsClicked = true;
+
+			const event = new KeyboardEvent('evHint', 
+			{
+				key: this.curCorrectChar()
+			});
+			this.handleKeyboardEvent(event);
 		}
 	}
 
@@ -292,13 +288,13 @@ export class GuessBarComponent implements OnInit {
 		}
 
 		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
-			++this.curSentence().statistics.correctAnswers; // Statistics
-
-			let spanColor = '<span class=\'green\'>';
-
+			let spanColor;
 			if (this.hintIsClicked) {
 				this.hintIsClicked = false;
 				spanColor = '<span class=\'yellow\'>';
+			} else {
+				++this.curSentence().statistics.correctAnswers; // Statistics
+				spanColor = '<span class=\'green\'>';
 			}
 
 			// Fill guessed character
