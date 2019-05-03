@@ -27,7 +27,7 @@
       <ion-button text-center id="prev-sentence-button"
         [ngStyle]="{'box-shadow': this.curSentence().solvedStatus ? greenHighlight : 'none'}"
         (click)="prevSentenceClick()">
-        Previous
+        <ion-icon name="ios-arrow-back" style="font-size: 7vh"></ion-icon>
       </ion-button>
 
       <ion-button shape="round" id="hint-button" [ngStyle]="{'box-shadow': hintIsClicked ? yellowHighlight : 'none'}"
@@ -42,7 +42,7 @@
       <ion-button text-center id="next-sentence-button"
         [ngStyle]="{'box-shadow': this.curSentence().solvedStatus ? greenHighlight : 'none'}"
         (click)="nextSentenceClick()">
-        Next
+        <ion-icon name="ios-arrow-forward" style="font-size: 7vh;"></ion-icon>
       </ion-button>
     </div>
 

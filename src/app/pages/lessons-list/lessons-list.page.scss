@@ -78,21 +78,19 @@ ion-segment-button {
     -moz-box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
     box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
 
-    transition: background-color 0.4s ease-in-out;
-    -o-transition: background-color 0.4s ease-in-out;
-    -ms-transition: background-color 0.4s ease-in-out;
-    -moz-transition: background-color 0.4s ease-in-out;
-    -webkit-transition: background-color 0.4s ease-in-out;
+    transition: color 0.4s ease-in-out;
+    -o-transition: color 0.4s ease-in-out;
+    -ms-transition: color 0.4s ease-in-out;
+    -moz-transition: color 0.4s ease-in-out;
+    -webkit-transition: color 0.4s ease-in-out;
 
     &:hover {
-        background-color: lightskyblue;
-
         .lesson-text {
-            color: var(--ion-color-step-900);
+            color: rgb(69, 184, 255);
         }
 
         .date-text {
-            color: var(--ion-color-step-900);
+            color: rgb(69, 184, 255);
         }
     }
 }
