@@ -88,7 +88,7 @@ export class LessonsService {
 					: sntns[i].curCharsIndexes,
 				sntns[i].curWordIndex,
 				sntns[i].sentenceShown === ""
-					? this.utils.addChar(hiddenSentence, '?')
+					? this.utils.addChar(hiddenSentence, '*')
 					: sntns[i].sentenceShown,
 				sntns[i].solvedStatus,
 				sntns[i].updated_at,

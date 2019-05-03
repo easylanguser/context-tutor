@@ -117,7 +117,7 @@ export class GuessBarComponent implements OnInit {
 		this.guessPage.curWordIndex = 0;
 		this.guessPage.curCharsIndexes = [];
 
-		this.animateSwipe();
+		this.animateSwipe(forward);
 		this.updateChart();
 
 		if (!this.curSentence().solvedStatus) {
@@ -137,7 +137,7 @@ export class GuessBarComponent implements OnInit {
 					if (this.guessPage.curCharsIndexes[this.guessPage.curWordIndex] !==
 						this.curSentence().hiddenChars[this.guessPage.curWordIndex].length - 1 ||
 						this.guessPage.curWordIndex !== this.curSentence().hiddenChars.length - 1) {
-						this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '?');
+						this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '*');
 					}
 					++this.guessPage.curCharsIndexes[this.guessPage.curWordIndex];
 				} while (this.guessPage.curCharsIndexes[this.guessPage.curWordIndex] <
@@ -309,7 +309,7 @@ export class GuessBarComponent implements OnInit {
 				return;
 			}
 
-			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '?');
+			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '*');
 
 			this.refreshCharBoxes();
 		} else {
@@ -358,7 +358,7 @@ export class GuessBarComponent implements OnInit {
 		this.charactersRotationIsPlayed = false;
 	}
 
-	async animateSwipe() {
+	async animateSwipe(forward: boolean) {
 		if (this.sentenceTranslateIsPlayed) {
 			return;
 		}
@@ -368,19 +368,19 @@ export class GuessBarComponent implements OnInit {
 		const textShownId = '#sentence-to-show';
 		await anime({
 			targets: [document.querySelector(textShownId)],
-			translateX: '+=30vw',
+			translateX: forward ? '+=40vw' : '-=40vw',
 			opacity: 0,
-			easing: 'easeInQuart',
-			duration: 400
+			easing: 'easeInOutBack',
+			duration: 500
 		}).finished;
 
 		await this.getData();
 
 		await anime({
 			targets: [document.querySelector(textShownId)],
-			translateX: '-=30vw',
+			translateX: forward ? '-=40vw' : '+=40vw',
 			opacity: 1,
-			easing: 'easeInQuart',
+			easing: 'easeInOutBack',
 			duration: 500
 		}).finished;
 

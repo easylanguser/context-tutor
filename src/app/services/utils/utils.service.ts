@@ -67,12 +67,7 @@ export class UtilsService {
 	}
 
 	addChar(input: string, replacement: string): string {
-		let firstUnderScoreIndex;
-		if (replacement.charAt(0) === '?') {
-			firstUnderScoreIndex = input.indexOf('*');
-		} else {
-			firstUnderScoreIndex = input.indexOf('?');
-		}
+		let firstUnderScoreIndex = input.indexOf('*');
 		return input.substr(0, firstUnderScoreIndex) + replacement + input.substr(firstUnderScoreIndex + 1);
 	}
 
