@@ -57,13 +57,24 @@ export class AddLessonPage implements OnInit {
 
 	addWordToSentence() {
 		const area = <HTMLTextAreaElement>document.getElementById("sentence-text-textarea").lastChild;
-		var start = area.selectionStart;
-		var finish = area.selectionEnd;
-		var sel = area.value.substring(start, finish);
+		const start = area.selectionStart;
+		const finish = area.selectionEnd;
+		const sel = area.value.substring(start, finish);
+
+		if (finish <= start) {
+			return;
+		}
 
 		for (const char of sel) {
 			const charAtPos = char.charCodeAt(0);
 			if (!((charAtPos > 64 && charAtPos < 91) || (charAtPos > 96 && charAtPos < 123))) {
+				return;
+			}
+		}
+
+		for (let i = 0; i < this.indexesArray.length; i++) {
+			if ((this.indexesArray[i][0] <= start && this.indexesArray[i][0] + this.indexesArray[i][1] >= start) ||
+				(this.indexesArray[i][0] <= finish && this.indexesArray[i][0] + this.indexesArray[i][1] >= finish)) {
 				return;
 			}
 		}
@@ -83,17 +94,6 @@ export class AddLessonPage implements OnInit {
 
 		if (!validated) return;
 
-		for (let i = 0; i < this.indexesArray.length - 1; i++) {
-			for (let j = i + 1; j < this.indexesArray.length; j++) {
-				if (!((this.indexesArray[i][0] < this.indexesArray[j][0] &&
-					this.indexesArray[i][0] + this.indexesArray[i][1] < this.indexesArray[j][0] + this.indexesArray[j][1]) ||
-					(this.indexesArray[i][0] > this.indexesArray[j][0] &&
-						this.indexesArray[i][0] + this.indexesArray[i][1] > this.indexesArray[j][0] + this.indexesArray[j][1]))) {
-					return;
-				}
-			}
-		}
-
 		this.indexesArray.sort((el1, el2) => el1[0] - el2[0]);
 
 		this.sentences.push({
@@ -109,28 +109,27 @@ export class AddLessonPage implements OnInit {
 				this.sentences.length +
 				(this.sentences.length > 1 ? ' sentences ' : ' sentence ') + 'in current lesson',
 			position: 'bottom',
-			duration: 900,
+			duration: 2500,
 			animated: true
 		});
 		toast.present();
 	}
 
-	addLessonAsFileIfExists() {
-		const fileInput = <HTMLInputElement>document.getElementById('file-input');
-		if (fileInput.files != undefined && fileInput.files.length > 0) {
-			this.storageService.get(USER_ID_KEY)
-				.then(userId => {
-					this.addLessonFileService.postNewLessonFile(fileInput.files, userId);
-				}).then(async () => {
-					const toast = await this.toastController.create({
-						message: 'New lesson was added',
-						position: 'bottom',
-						duration: 700,
-						animated: true
-					});
-					toast.present();
-				}).then(() => fileInput.value = "");
-		}
+	addLessonAsFile(fileInput: HTMLInputElement) {
+		this.storageService.get(USER_ID_KEY)
+			.then(userId => {
+				this.addLessonFileService.postNewLessonFile(fileInput.files, userId);
+			})
+			.then(async () => {
+				const toast = await this.toastController.create({
+					message: 'New lesson was added',
+					position: 'bottom',
+					duration: 2500,
+					animated: true
+				});
+				toast.present();
+			})
+			.then(() => fileInput.value = "");
 	}
 
 	addLessonAsText() {
@@ -158,7 +157,7 @@ export class AddLessonPage implements OnInit {
 				const toast = await this.toastController.create({
 					message: 'New lesson was added',
 					position: 'bottom',
-					duration: 700,
+					duration: 2500,
 					animated: true
 				});
 				toast.present();
@@ -166,19 +165,23 @@ export class AddLessonPage implements OnInit {
 	}
 
 	addNewLesson() {
-		this.addLessonAsFileIfExists();
+		const fileInput = <HTMLInputElement>document.getElementById('file-input');
+		if (fileInput.files != undefined && fileInput.files.length > 0) {
+			this.addLessonAsFile(fileInput);
+		} else {
+			let validated: boolean = true;
 
-		let validated: boolean = true;
-		if (this.lessonName === undefined || this.lessonName === "") {
-			document.getElementById("lesson-name-input").style.borderColor = "#F00";
-			validated = false;
-		}
-		if (this.lessonUrl === undefined || this.lessonUrl === "") {
-			document.getElementById("lesson-url-input").style.borderColor = "#F00";
-			validated = false;
-		}
-		if (!validated) return;
+			if (this.lessonName === undefined || this.lessonName === "") {
+				document.getElementById("lesson-name-input").style.borderColor = "#F00";
+				validated = false;
+			}
+			if (this.lessonUrl === undefined || this.lessonUrl === "") {
+				document.getElementById("lesson-url-input").style.borderColor = "#F00";
+				validated = false;
+			}
+			if (!validated) return;
 
-		this.addLessonAsText();
+			this.addLessonAsText();
+		}
 	}
 }
