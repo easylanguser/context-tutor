@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
 import { LoadingController, IonItemSliding, AlertController, NavController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
@@ -14,17 +14,30 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 })
 export class LessonsListPage implements OnInit, AfterViewInit {
 
+	intentText: string;
+	changeLessonMode: boolean;
 	displayedLessons: Lesson[];
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
 
 	constructor(private loadingController: LoadingController,
+		private router: Router,
+		private route: ActivatedRoute,
 		private navCtrl: NavController,
 		private lessonService: LessonsService,
 		private alertCtrl: AlertController,
 		private lessonDeleteService: LessonDeleteService,
-		private utils: UtilsService) { }
+		private utils: UtilsService) {
+		this.route.queryParams.subscribe(params => {
+			if (this.router.getCurrentNavigation().extras.state) {
+				this.intentText = this.router.getCurrentNavigation().extras.state.text.textStr;
+				if (this.intentText) {
+					this.changeLessonMode = true;
+				}
+			}
+		});
+	}
 
 	ngOnInit() {
 		this.getData();

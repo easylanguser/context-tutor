@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
 import { BehaviorSubject } from 'rxjs';
 import { ThemeService } from './services/theme/theme.service';
@@ -14,6 +14,7 @@ import { StorageService } from './services/storage/storage-service';
 
 })
 export class AppComponent {
+
 	appPages = [
 		{
 			title: 'My lessons',
@@ -22,6 +23,7 @@ export class AppComponent {
 		},
 	];
 
+	navigationExtras: NavigationExtras;
 	loggedIn = false;
 	themeName: string;
 
@@ -69,7 +71,7 @@ export class AppComponent {
 			this.authService.authenticationState.subscribe(state => {
 				if (state) {
 					this.loggedIn = true;
-					this.router.navigate(['/']);
+					this.router.navigate(['/'], this.navigationExtras);
 				} else {
 					this.loggedIn = false;
 					this.router.navigate(['login']);
@@ -93,7 +95,15 @@ export class AppComponent {
 		return window.receiveContent.receiveText()
 			.then(text => {
 				if (text) {
-					console.log(text);
+					const extraText = {
+						textStr: text,
+					};
+
+					this.navigationExtras = {
+						state: {
+							text: extraText
+						}
+					};
 				}
 			})
 			.catch(err => console.error('ReceiveContent plugin error: ', err));

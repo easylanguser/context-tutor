@@ -57,10 +57,11 @@
     </ion-list>
   </ion-content>
 
-  <ion-fab id="add-lesson-fab" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab *ngIf="!changeLessonMode" id="add-lesson-fab" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="addLesson()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+  <span *ngIf="changeLessonMode">{{intentText}}</span>
 
 </ion-content>
