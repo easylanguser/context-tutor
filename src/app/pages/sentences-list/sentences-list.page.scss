@@ -11,6 +11,10 @@
     --color: #45b8ff;
 }
 
+#sentences-list {
+    padding-top: 2vh;
+}
+
 #toolbar {
     --background: none;
 }
@@ -140,6 +144,6 @@ ion-segment-button {
         margin-left: 2.5vw;
     }
     .sentence-text-div {
-        width: 50.4vw;
+        width: 61.8vw;
     }
 }

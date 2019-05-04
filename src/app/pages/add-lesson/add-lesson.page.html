@@ -6,7 +6,7 @@
           <ion-icon name="arrow-back"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title>
+      <ion-title style="color: #45b8ff">
         Lesson adding
       </ion-title>
     </ion-toolbar>
@@ -14,14 +14,18 @@
 
   <ion-content padding>
 
+    <input id="file-input" type="file">
+
+    <div style="text-align: center; margin: 5vh 0; font-weight: bold;font-size: 2vh;">
+      Or add new lesson manually
+    </div>
+
     <ion-input (keyup)="onKeyLessonName($event)"
       [ngStyle]="{ 'border-color': lessonNameInputIsValidated ? '#808080' : '#F00' }" id="lesson-name-input"
       [(ngModel)]="lessonName" placeholder="Enter lesson name"></ion-input>
     <ion-input id="lesson-url-input" (keyup)="onKeyLessonUrl($event)"
       [ngStyle]="{ 'border-color': lessonUrlInputIsValidated ? '#808080' : '#F00' }" [(ngModel)]="lessonUrl"
       placeholder="Enter lesson url"></ion-input>
-
-    <input id="file-input" type="file">
 
     <ion-buttons (click)="addNewLesson()" id="save-lesson-button">
       <ion-button id="save-lesson-button-inner" color="primary" fill="outline">Save lesson</ion-button>

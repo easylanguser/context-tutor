@@ -1,12 +1,5 @@
-#save-lesson-button {
-    margin-left: calc(50vw - 20vmin - 16px);
-    margin-top: 4vh;
-    @media (min-width: 992px) {
-        margin-left: calc(36vw - 20vmin - 16px);
-    }
-}
-#save-lesson-button-inner {
-    width: 40vmin;
+#toolbar {
+    --background: none;
 }
 
 #back-button {
@@ -14,72 +7,78 @@
     margin-left: 3vw;
 }
 
-#toolbar {
-    --background: none;
-}
-
-#save-sentence-button {
-    margin-left: calc(50vw - 40vmin - 16px);
-    margin-top: 4vh;
+#file-input {
+    width: 60vw;
+    background-color: var(--ion-color-step-550);
+    margin-left: calc(20vw - 16px);
+    padding-top: 3.5vh;
+    height: 10vh;
+    border: 3px dashed rgb(69, 69, 253);
+    border-radius: 8px;
     @media (min-width: 992px) {
-        display: inline-block;
-        margin-left: 6vw;
-    }
-}
-#save-sentence-button-inner {
-    width: 80vmin;
-    @media (min-width: 992px) {
-        width: 28vw;
+        margin-left: calc(6vw - 16px);
+        padding-left: 33%;
     }
 }
 
-#save-words-button {
-    margin-left: calc(50vw - 40vmin - 16px);
-    margin-top: 2vh;
-    @media (min-width: 992px) {
-        display: inline-block;
-        margin-left: 2vw;
-    }
-}
-#save-words-button-inner {
-    width: 80vmin;
-    @media (min-width: 992px) {
-        width: 28vw;
-    }
-}
+$inputs-border: 1px solid grey;
 
 #lesson-name-input {
     text-align: center;
-    border: 1px solid grey;
+    border: $inputs-border;
     border-radius: 10px;
 }
 
 #lesson-url-input {
     text-align: center;
     margin-top: 2vh;
-    border: 1px solid grey;
+    border: $inputs-border;
     border-radius: 10px;
+}
+
+#save-lesson-button {
+    margin-left: calc(50vw - 20vmin - 16px);
+    margin-top: 4vh;
+    @media (min-width: 992px) {
+        margin-left: calc(36vw - 20vmin - 16px);
+    }
+}
+
+#save-lesson-button-inner {
+    width: 40vmin;
 }
 
 #sentence-text-textarea {
     margin-top: 4vh;
     text-align: center;
-    border: 1px solid grey;
+    border: $inputs-border;
     border-radius: 10px;
 }
 
-#file-input {
-    width: 60vw;
-    background-color: var(--ion-color-step-550);
-    margin-left: calc(20vw - 16px);
-    padding-top: 3.5vh;
-    padding-left: 5vw;
+$buttons-margin: calc(50vw - 40vmin - 16px);
+
+#save-sentence-button {
+    margin-left: $buttons-margin;
     margin-top: 4vh;
-    height: 10vh;
-    border: 3px dashed rgb(69, 69, 253);
     @media (min-width: 992px) {
-        margin-left: calc(6vw - 16px);
-        padding-left: 35%;
+        display: inline-block;
+        margin-left: 6vw;
+    }
+}
+
+#save-words-button {
+    margin-left: $buttons-margin;
+    margin-top: 2vh;
+    @media (min-width: 992px) {
+        display: inline-block;
+        margin-left: 2vw;
+    }
+}
+
+#save-words-button-inner, #save-sentence-button-inner {
+    width: 80vmin;
+    @media (min-width: 992px) {
+        width: 28vw;
     }
 }
 
