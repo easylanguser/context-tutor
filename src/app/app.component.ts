@@ -2,16 +2,18 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
 import { BehaviorSubject } from 'rxjs';
 import { ThemeService } from './services/theme/theme.service';
 import { StorageService } from './services/storage/storage-service';
 
+export const SHARED_TEXT_ID_KEY = "shared_text_id";
+export var sharedText = [];
+
 @Component({
 	selector: 'app-root',
 	templateUrl: 'app.component.html',
-
 })
 export class AppComponent {
 
@@ -20,10 +22,9 @@ export class AppComponent {
 			title: 'My lessons',
 			url: '/lessons-list',
 			icon: 'information-circle'
-		},
+		}
 	];
 
-	navigationExtras: NavigationExtras;
 	loggedIn = false;
 	themeName: string;
 
@@ -52,34 +53,37 @@ export class AppComponent {
 
 	initializeApp() {
 		this.platform.ready()
+			.then(() => this.checkForIntent())
 			.then(() => {
-			if (this.platform.is('android')) {
-				this.statusBar.styleBlackOpaque;
-			} else {
-				this.statusBar.styleDefault();
-			}
-			this.splashScreen.hide();
-
-			this.storageService.get("theme").then(themeName => {
-				const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} });
-				themeName === "dark" ?
-					customEvent.detail.value = "dark" :
-					customEvent.detail.value = "light";
-				this.onChangeTheme(customEvent);
-			});
-
-			this.authService.authenticationState.subscribe(state => {
-				if (state) {
-					this.loggedIn = true;
-					this.router.navigate(['/'], this.navigationExtras);
+				if (this.platform.is('android')) {
+					this.statusBar.styleBlackOpaque;
 				} else {
-					this.loggedIn = false;
-					this.router.navigate(['login']);
+					this.statusBar.styleDefault();
 				}
-			});
+				this.splashScreen.hide();
 
-		})
-			.then(() => this.checkForIntent());
+				this.storageService.get("theme").then(themeName => {
+					const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} });
+					themeName === "dark" ?
+						customEvent.detail.value = "dark" :
+						customEvent.detail.value = "light";
+					this.onChangeTheme(customEvent);
+				});
+
+				this.authService.authenticationState.subscribe(state => {
+					if (state) {
+						this.loggedIn = true;
+						if (!sharedText[0]) {
+							this.router.navigate(['share-adding-choice-page']);
+						} else {
+							this.router.navigate(['/']);
+						}
+					} else {
+						this.loggedIn = false;
+						this.router.navigate(['login']);
+					}
+				});
+			});
 	}
 
 	logout() {
@@ -93,17 +97,9 @@ export class AppComponent {
 		}
 
 		return window.receiveContent.receiveText()
-			.then(text => {
+			.then((text: string) => {
 				if (text) {
-					const extraText = {
-						textStr: text,
-					};
-
-					this.navigationExtras = {
-						state: {
-							text: extraText
-						}
-					};
+					sharedText.push(text);
 				}
 			})
 			.catch(err => console.error('ReceiveContent plugin error: ', err));

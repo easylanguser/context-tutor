@@ -5,6 +5,8 @@ import { AddLessonService } from 'src/app/services/http/add-lesson/add-lesson.se
 import { AddSentenceService } from 'src/app/services/http/add-sentence/add-sentence.service';
 import { ToastController, NavController } from '@ionic/angular';
 import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
+import { sharedText } from 'src/app/app.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'app-add-lesson',
@@ -26,18 +28,23 @@ export class AddLessonPage implements OnInit {
 	sentenceWordsTextareaIsValidated: boolean = true;
 
 	constructor(
+		private activeRoute: ActivatedRoute,
 		private storageService: StorageService,
 		private addLessonService: AddLessonService,
 		private addSentenceService: AddSentenceService,
 		private toastController: ToastController,
 		private addLessonFileService: AddLessonFileService,
-		private navCtrl: NavController) { }
+		private navCtrl: NavController) {
+	}
 
 	goBack() {
 		this.navCtrl.pop();
 	}
 
-	ngOnInit() { }
+	ngOnInit() {
+		this.sentenceText = this.activeRoute.snapshot.queryParamMap.get('text');
+		sharedText[0] = undefined;
+	}
 
 	onKeyLessonName(event: any) {
 		this.lessonNameInputIsValidated = event.target.value === "" ? false : true;

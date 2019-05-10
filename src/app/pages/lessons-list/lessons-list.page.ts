@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
 import { LoadingController, IonItemSliding, AlertController, NavController } from '@ionic/angular';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
@@ -14,30 +13,18 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 })
 export class LessonsListPage implements OnInit, AfterViewInit {
 
-	intentText: string;
-	changeLessonMode: boolean;
 	displayedLessons: Lesson[];
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
 
-	constructor(private loadingController: LoadingController,
-		private router: Router,
-		private route: ActivatedRoute,
+	constructor(
+		private loadingController: LoadingController,
 		private navCtrl: NavController,
 		private lessonService: LessonsService,
 		private alertCtrl: AlertController,
 		private lessonDeleteService: LessonDeleteService,
-		private utils: UtilsService) {
-		this.route.queryParams.subscribe(params => {
-			if (this.router.getCurrentNavigation().extras.state) {
-				this.intentText = this.router.getCurrentNavigation().extras.state.text.textStr;
-				if (this.intentText) {
-					this.changeLessonMode = true;
-				}
-			}
-		});
-	}
+		private utils: UtilsService) { }
 
 	ngOnInit() {
 		this.getData();
@@ -48,7 +35,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		this.pieCanvases.changes.subscribe(_ => {
+		this.pieCanvases.changes.subscribe(() => {
 			this.syncCharts();
 		});
 	}
@@ -164,6 +151,11 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	openLesson(lessonID) {
-		this.navCtrl.navigateForward(['sentences-list'], { queryParams: { lessonID: lessonID } });
+		this.navCtrl.navigateForward(
+			['sentences-list'], {
+				queryParams: {
+					lessonID: lessonID
+				}
+			});
 	}
 }
