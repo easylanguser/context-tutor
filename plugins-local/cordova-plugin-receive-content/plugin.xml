@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-plugin-receive-content" version="0.0.1"
+    xmlns="http://apache.org/cordova/ns/plugins/1.0">
+    <name>ReceiveContent</name>
+    <js-module name="receiveContent" src="www/ReceiveContent.js">
+        <clobbers target="receiveContent" />
+    </js-module>
+
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="ReceiveContent">
+                <param name="android-package"
+                    value="receiveContent.ReceiveContent" />
+            </feature>
+        </config-file>
+        <config-file parent="application/activity" target="AndroidManifest.xml">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </config-file>
+        <source-file src="src/android/ReceiveContent.java"
+            target-dir="src/receiveContent" />
+    </platform>
+
+</plugin>

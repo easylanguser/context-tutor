@@ -19,7 +19,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	firstEnter: boolean = true;
 	statisticsIsNotEmpty: boolean = true;
 
-	constructor(private loadingController: LoadingController,
+	constructor(
+		private loadingController: LoadingController,
 		private navCtrl: NavController,
 		private lessonService: LessonsService,
 		private alertCtrl: AlertController,
@@ -36,7 +37,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		this.pieCanvases.changes.subscribe(_ => {
+		this.pieCanvases.changes.subscribe(() => {
 			this.syncCharts();
 		});
 	}
@@ -158,6 +159,11 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	openLesson(lessonID) {
-		this.navCtrl.navigateForward(['sentences-list'], { queryParams: { lessonID: lessonID } });
+		this.navCtrl.navigateForward(
+			['sentences-list'], {
+				queryParams: {
+					lessonID: lessonID
+				}
+			});
 	}
 }

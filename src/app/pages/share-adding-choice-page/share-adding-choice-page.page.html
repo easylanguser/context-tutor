@@ -1,0 +1,46 @@
+<ion-content style="z-index: 0;">
+
+  <div style="height: 9vh;">
+    <ion-item id="search-bar">
+      <ion-icon name="search" slot="start" style="color: #b9c5d8"></ion-icon>
+      <ion-input type="search" autocomplete="on"></ion-input>
+    </ion-item>
+
+    <div class="no-selection" id="add-to-label-div">Add to</div>
+  </div>
+
+  <ion-list no-padding no-margin id="available-lessons-list">
+    <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem>
+      <ion-item class="lesson-ion-item" no-padding>
+        <div class="lesson-card">
+          <div class="lesson-text-div">
+            <p class="lesson-text">
+              {{i + 1}}. {{lesson.name}}
+            </p>
+            <span class="date-text">
+              {{lesson.displayedDate}}
+            </span>
+          </div>
+          <div class="canvas-div">
+            <canvas #chartsid width="50" height="50"></canvas>
+          </div>
+        </div>
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>
+
+  <div id="or-div">
+    <div id="left-line">
+    </div>
+    <div class="no-selection" id="or-text">
+      or
+    </div>
+    <div id="right-line">
+    </div>
+  </div>
+
+  <button id="sign-in-button">
+    New lesson
+  </button>
+
+</ion-content>
