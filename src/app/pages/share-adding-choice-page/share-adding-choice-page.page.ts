@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
 import { Chart } from 'chart.js';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
@@ -17,6 +17,7 @@ export class ShareAddingChoicePagePage implements OnInit {
 	pieCharts: Array<Chart> = [];
 
 	constructor(
+		private navCtrl: NavController,
 		private loadingController: LoadingController,
 		private lessonService: LessonsService,
 		private utils: UtilsService) { }
@@ -74,5 +75,13 @@ export class ShareAddingChoicePagePage implements OnInit {
 		await this.lessonService.getLessons().then(() => {
 			this.displayedLessons = this.lessonService.lessons;
 		}).then(() => loading.dismiss());
+	}
+
+	addToExistingLesson(lessonId: number) {
+		this.navCtrl.navigateForward(['sentence-adding-page'], { queryParams: { lessonId: lessonId } });
+	}
+
+	createNewLesson() {
+		this.navCtrl.navigateForward(['sentence-adding-page']);
 	}
 }

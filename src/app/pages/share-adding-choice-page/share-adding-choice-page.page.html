@@ -10,7 +10,8 @@
   </div>
 
   <ion-list no-padding no-margin id="available-lessons-list">
-    <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem>
+    <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i"
+      #slidingItem (click)="addToExistingLesson(lesson.id)">
       <ion-item class="lesson-ion-item" no-padding>
         <div class="lesson-card">
           <div class="lesson-text-div">
@@ -39,7 +40,7 @@
     </div>
   </div>
 
-  <button id="sign-in-button">
+  <button id="sign-in-button" (click)="createNewLesson()">
     New lesson
   </button>
 
