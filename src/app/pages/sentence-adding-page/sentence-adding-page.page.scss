@@ -1,0 +1,17 @@
+#sentence-title {
+    font-size: 5vh;
+    text-align: center;
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+}
+
+#selectable-sentence-div {
+    max-height: 70vh;
+    overflow-y: scroll;
+    font-size: 3vh;
+    text-align: center;
+    -o-user-select: text;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    user-select: text;
+}
