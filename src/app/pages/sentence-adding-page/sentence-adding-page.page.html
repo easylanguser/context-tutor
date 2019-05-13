@@ -1,9 +1,23 @@
 <ion-content padding>
-    <div id="sentence-title">
+    <div class="no-selection" id="sentence-title">
         {{title}}
     </div>
 
-    <ion-textarea id="selectable-sentence-div">
+    <div id="selectable-sentence-div">
         {{sentence}}
-    </ion-textarea>
+    </div>
+
+    <div style="display: table; width: 100%; margin-top: 5vh;">
+        <div id="cancel-btn">
+            <ion-icon name="close" style="background: #38dbff; border-radius: 5vh; padding: 1.5vh;"></ion-icon>
+        </div>
+        <div id="submit-btn" (click)="submitSelections()">
+            <ion-icon name="checkmark" style="background: #00f2d0; border-radius: 5vh; padding: 1.5vh;"></ion-icon>
+        </div>
+    </div>
+
 </ion-content>
+
+<div id="select-btn" (click)="addSelectedWord()">
+    <ion-icon name="add"></ion-icon>
+</div>

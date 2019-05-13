@@ -3,6 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { sharedText } from 'src/app/app.component';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
 
+const lastSelOffsets: Array<number> = [0, 0];
+const lastSelCoords: Array<number> = [0, 0];
+
 @Component({
 	selector: 'app-sentence-adding-page',
 	templateUrl: './sentence-adding-page.page.html',
@@ -21,60 +24,6 @@ export class SentenceAddingPagePage implements OnInit {
 		document.addEventListener('touchstart', this.showSelectionButton);
 	}
 
-	showSelectionButton(event?: any) {
-		setTimeout(() => {
-			if (window.getSelection().toString() === "") return;
-			if (document.getElementById('select-btn')) {
-				document.getElementById('select-btn').remove();
-			}
-			const selection: any = window.getSelection().getRangeAt(0).getClientRects()[0];
-			const selectBtn = document.createElement('div');
-			const style = selectBtn.style;
-			selectBtn.id = 'select-btn';
-			selectBtn.innerHTML = '<ion-icon name="add"></ion-icon>';
-			style.cursor = 'pointer';
-			style.textAlign = 'center';
-			style.fontSize = '50px';
-			style.color = 'white';
-			style.backgroundColor = '#7dddff';
-			style.height = '50px';
-			style.width = '50px';
-			style.borderRadius = '25px';
-			style.outline = 'none';
-			style.position = 'absolute';
-			style.marginLeft = String(selection.x) + 'px';
-			style.marginTop = String(selection.y + 50) + 'px';
-			selectBtn.addEventListener('click', this.addSelectedWord, false);
-			document.body.appendChild(selectBtn);
-		}, 700);
-	}
-
-	addSelectedWord() {
-		const area = <HTMLTextAreaElement>document.getElementById("selectable-sentence-div").lastChild;
-		const start = area.selectionStart;
-		const finish = area.selectionEnd;
-		const sel = area.value.substring(start, finish);
-
-		if (finish <= start) {
-			return;
-		}
-
-		for (const char of sel) {
-			const charAtPos = char.charCodeAt(0);
-			if (!((charAtPos > 64 && charAtPos < 91) || (charAtPos > 96 && charAtPos < 123))) {
-				return;
-			}
-		}
-
-		for (let i = 0; i < this.indexesArray.length; i++) {
-			if ((this.indexesArray[i][0] <= start && this.indexesArray[i][0] + this.indexesArray[i][1] >= start) ||
-				(this.indexesArray[i][0] <= finish && this.indexesArray[i][0] + this.indexesArray[i][1] >= finish)) {
-				return;
-			}
-		}
-		this.indexesArray.push([start, finish - start]);
-	}
-
 	ngOnInit() {
 		const lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
 		if (lessonId) {
@@ -83,5 +32,91 @@ export class SentenceAddingPagePage implements OnInit {
 			this.title = new Date().toJSON().slice(0, 10).replace(/-/g, '/') + ' ' + sharedText[0].substr(0, 10);
 		}
 		this.sentence = sharedText[0];
+	}
+
+	submitSelections() {
+		if (this.indexesArray.length === 0) return;
+
+		this.indexesArray.sort((el1, el2) => el1[0] - el2[0]);
+		console.log(this.indexesArray);
+	}
+
+	showSelectionButton() {
+		setTimeout(function () {
+			if (window.getSelection().toString() === "") return;
+			const selection: any = window.getSelection().getRangeAt(0).getClientRects()[0];
+			const leftMargin: string = String(selection.x) + 'px';
+			const selectBtn = document.getElementById("select-btn");
+			const btnStyle = selectBtn.style;
+			btnStyle.position = 'absolute';
+			btnStyle.display = 'block';
+			btnStyle.marginLeft = window.innerWidth < 992 ?
+				leftMargin :
+				'calc(' + leftMargin + ' - 28vw)';
+			btnStyle.marginTop = String(selection.y + 50) + 'px';
+			
+			lastSelOffsets[0] = window.getSelection().getRangeAt(0).startOffset;
+			lastSelOffsets[1] = window.getSelection().getRangeAt(0).endOffset;
+
+			lastSelCoords[0] = selection.x;
+			lastSelCoords[1] = selection.y;
+			lastSelCoords[2] = selection.width;
+			lastSelCoords[3] = selection.height;
+		}, 700);
+	}
+
+	addSelectedWord() {
+		const textArea = document.getElementById("selectable-sentence-div");
+		const start = lastSelOffsets[0] - 1;
+		const finish = lastSelOffsets[1] - 1;
+		const sel = textArea.innerText.substring(start, finish);
+
+		if (finish <= start) {
+			return;
+		}
+
+		for (const char of sel) {
+			const charAtPos = char.charCodeAt(0);
+			if (!((charAtPos > 64 && charAtPos < 91) || (charAtPos > 96 && charAtPos < 123) || charAtPos === 39)) {
+				return;
+			}
+		}
+
+		for (let i = 0; i < this.indexesArray.length; i++) {
+			if ((this.indexesArray[i][0] <= start &&
+				this.indexesArray[i][0] + this.indexesArray[i][1] >= start) ||
+				(this.indexesArray[i][0] <= finish &&
+				this.indexesArray[i][0] + this.indexesArray[i][1] >= finish)) {
+				return;
+			}
+		}
+		this.indexesArray.push([start, finish - start]);
+
+		this.generateBorderForSelectedWord(textArea);
+	}
+
+	private generateBorderForSelectedWord(textArea: HTMLElement) {
+		const border = document.createElement('div');
+		const brdrStyle = border.style;
+		const topMargin = String(lastSelCoords[1]) + 'px';
+		brdrStyle.marginLeft = window.innerWidth < 992 ?
+			String(lastSelCoords[0] - 3) + 'px' :
+			'calc(' + String(lastSelCoords[0] - 3) + 'px - 28vw)';
+		border.id = 'calc(' + topMargin + ' + ' + String(textArea.scrollTop) + 'px)'
+		border.className = 'border';
+		brdrStyle.marginTop = topMargin;
+		brdrStyle.width = String(lastSelCoords[2] + 6) + 'px';
+		brdrStyle.height = String(lastSelCoords[3] + 3) + 'px';
+		brdrStyle.position = 'absolute';
+		brdrStyle.backgroundColor = 'blue';
+		brdrStyle.opacity = '0.4';
+		brdrStyle.borderRadius = '10px';
+		const borders = document.getElementsByClassName('border');
+		document.getElementById('selectable-sentence-div').onscroll = () => {
+			Array.from(borders).forEach((brdr) => {
+				brdr.style.marginTop = 'calc(' + brdr.id + ' - ' + String(textArea.scrollTop) + 'px)';
+			});
+		};
+		document.getElementsByTagName('app-sentence-adding-page')[0].appendChild(border);
 	}
 }

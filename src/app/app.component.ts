@@ -99,6 +99,7 @@ export class AppComponent {
 		return window.receiveContent.receiveText()
 			.then((text: string) => {
 				if (text) {
+					text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
 					sharedText.push(text);
 				}
 			})

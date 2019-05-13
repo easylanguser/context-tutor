@@ -6,7 +6,7 @@
 }
 
 #selectable-sentence-div {
-    max-height: 70vh;
+    height: 60vh;
     overflow-y: scroll;
     font-size: 3vh;
     text-align: center;
@@ -14,4 +14,28 @@
     -moz-user-select: text;
     -webkit-user-select: text;
     user-select: text;
+}
+
+#select-btn {
+    height: 50px;
+    width: 50px;
+    display: none;
+    position: absolute;
+    z-index: 101;
+	cursor: pointer;
+	text-align: center;
+	font-size: 50px;
+	color: white;
+	background-color: #7dddff;
+	border-radius: 25px;
+	outline: none;
+}
+
+#submit-btn, #cancel-btn {
+    width: 10vh;
+    height: 10vh;
+    font-size: 7vh;
+    display: table-cell;
+    text-align: center;
+    color: white;
 }
