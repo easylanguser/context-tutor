@@ -5,6 +5,7 @@ import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
 import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { sharedText } from 'src/app/app.component';
 
 @Component({
 	selector: 'page-lessons-list',
@@ -26,7 +27,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private alertCtrl: AlertController,
 		private lessonDeleteService: LessonDeleteService,
 		private utils: UtilsService,
-		private cdRef : ChangeDetectorRef) { }
+		private cdRef: ChangeDetectorRef) { }
 
 	ngOnInit() {
 		this.getData();
@@ -141,7 +142,35 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		await this.lessonService.getLessons().then(() => {
 			this.displayedLessons = this.lessonService.lessons;
 			this.displayedLessons.sort(this.lessonService.sortLessonsByTime);
-		}).then(() => loading.dismiss());
+		}).then(() => loading.dismiss())
+		.then(() => {
+			setTimeout(() => {
+				if (document.hasFocus()) {
+					const nav: any = window.navigator;
+					nav.clipboard.readText().then( async (text: string) => {
+						if (text.length > 30) {
+							const alert = await this.alertCtrl.create({
+								message: "You've got large text in clipboard. Create new sentence with it?",
+								buttons: [
+									{
+										text: 'Cancel',
+										role: 'cancel',
+									},
+									{
+										text: 'Ok',
+										handler: () => {
+											sharedText[0] = text;
+											this.navCtrl.navigateForward(['share-adding-choice-page']);
+										}
+									}
+								]
+							});
+							await alert.present();
+						}
+					});
+				}
+			}, 1000);
+		});
 	}
 
 	allClick() {
