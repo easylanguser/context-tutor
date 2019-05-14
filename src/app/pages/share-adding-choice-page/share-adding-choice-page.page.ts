@@ -13,8 +13,10 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 export class ShareAddingChoicePagePage implements OnInit {
 
 	displayedLessons: Lesson[];
+	allLessons: Lesson[];
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
+	searchValue: string;
 
 	constructor(
 		private navCtrl: NavController,
@@ -30,6 +32,11 @@ export class ShareAddingChoicePagePage implements OnInit {
 		this.pieCanvases.changes.subscribe(() => {
 			this.syncCharts();
 		});
+	}
+
+	filterLessons(event: CustomEvent) {
+		const fltr = String(event.detail.value);
+		this.displayedLessons = this.allLessons.filter(lsn => lsn.name.toLowerCase().indexOf(fltr.toLowerCase()) >= 0);
 	}
 
 	private syncCharts() {
@@ -74,6 +81,7 @@ export class ShareAddingChoicePagePage implements OnInit {
 		await loading.present();
 		await this.lessonService.getLessons().then(() => {
 			this.displayedLessons = this.lessonService.lessons;
+			this.allLessons = Object.assign([], this.displayedLessons);
 		}).then(() => loading.dismiss());
 	}
 

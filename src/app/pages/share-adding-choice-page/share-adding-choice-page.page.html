@@ -3,7 +3,7 @@
   <div style="height: 9vh;">
     <ion-item id="search-bar">
       <ion-icon name="search" slot="start" style="color: #b9c5d8"></ion-icon>
-      <ion-input type="search" autocomplete="on"></ion-input>
+      <ion-input type="search" autocomplete="on" (ionChange)="filterLessons($event)"></ion-input>
     </ion-item>
 
     <div class="no-selection" id="add-to-label-div">Add to</div>
