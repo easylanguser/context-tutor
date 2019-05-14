@@ -1,3 +1,7 @@
+::selection {
+    background: #7dddff;
+}
+
 #sentence-title {
     font-size: 5vh;
     text-align: center;
@@ -16,7 +20,7 @@
     user-select: text;
 }
 
-#select-btn {
+.select-btn {
     height: 50px;
     width: 50px;
     display: none;
