@@ -159,7 +159,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 									{
 										text: 'Ok',
 										handler: () => {
-											sharedText[0] = text;
+											sharedText[0] = text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
 											this.navCtrl.navigateForward(['share-adding-choice-page']);
 										}
 									}
