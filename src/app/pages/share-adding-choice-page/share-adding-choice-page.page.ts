@@ -28,6 +28,10 @@ export class ShareAddingChoicePagePage implements OnInit {
 		this.getData();
 	}
 
+	goBack() {
+		this.navCtrl.pop();
+	}
+
 	ngAfterViewInit() {
 		this.pieCanvases.changes.subscribe(() => {
 			this.syncCharts();

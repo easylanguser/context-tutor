@@ -40,6 +40,10 @@ export class SentenceAddingPagePage implements OnInit {
 		this.sentence = sharedText[0];
 	}
 
+	goBack() {
+		this.navCtrl.pop();
+	}
+
 	ionViewDidEnter() {
 		this.updateTitle();
 	}

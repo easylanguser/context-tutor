@@ -1,10 +1,20 @@
-<ion-content padding>
-    <ion-item class="no-selection" id="sentence-title">
-        <ion-label style="margin: 0;">
-            {{title}}
-        </ion-label>
-        <ion-icon id="edit-icon" name="create" slot="end" (click)="editTitle()"></ion-icon>
-    </ion-item>
+<ion-content>
+    <ion-header>
+        <ion-toolbar id="toolbar" mode="ios">
+            <ion-buttons slot="start" (click)="goBack()">
+                <ion-button style="color: #45b8ff">
+                    <ion-icon name="arrow-back"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+
+            <ion-item class="no-selection" id="sentence-title">
+                <ion-label style="margin: 0;">
+                    {{title}}
+                </ion-label>
+                <ion-icon id="edit-icon" name="create" slot="end" (click)="editTitle()"></ion-icon>
+            </ion-item>
+        </ion-toolbar>
+    </ion-header>
 
     <div id="selectable-sentence-div">
         {{sentence}}

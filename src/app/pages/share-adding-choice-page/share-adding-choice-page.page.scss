@@ -1,9 +1,12 @@
+#toolbar {
+    padding-top: 2vh;
+    --background: none;
+}
+
 #search-bar {
-    height: 3.6vh;
     width: 50vw;
     --background: #FFF;
     --border-radius: 32px;
-    margin: 3vh 0 0 5vw;
     --inner-border-width: 0;
     --highlight-color-focused: none;
     border-radius: 32px;
@@ -11,6 +14,14 @@
     @media (min-width: 992px) {
         width: 30vw;
     }
+}
+
+.header-md:after {
+    background-image: none;
+}
+
+.header-ios ion-toolbar:last-child {
+    --border-width: 0;
 }
 
 #add-to-label-div {

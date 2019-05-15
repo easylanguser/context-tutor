@@ -1,17 +1,26 @@
 <ion-content style="z-index: 0;">
 
-  <div style="height: 9vh;">
-    <ion-item id="search-bar">
-      <ion-icon name="search" slot="start" style="color: #b9c5d8"></ion-icon>
-      <ion-input type="search" autocomplete="on" (ionChange)="filterLessons($event)"></ion-input>
-    </ion-item>
+  <ion-header>
+    <ion-toolbar id="toolbar" mode="ios">
 
-    <div class="no-selection" id="add-to-label-div">Add to</div>
-  </div>
+      <ion-buttons slot="start" (click)="goBack()">
+        <ion-button style="color: #45b8ff">
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
+      <ion-item id="search-bar">
+        <ion-icon name="search" slot="start" style="color: #b9c5d8"></ion-icon>
+        <ion-input type="search" autocomplete="on" (ionChange)="filterLessons($event)"></ion-input>
+      </ion-item>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="no-selection" id="add-to-label-div">Add to</div>
 
   <ion-list no-padding no-margin id="available-lessons-list">
-    <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i"
-      #slidingItem (click)="addToExistingLesson(lesson.id)">
+    <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem
+      (click)="addToExistingLesson(lesson.id)">
       <ion-item class="lesson-ion-item" no-padding>
         <div class="lesson-card">
           <div class="lesson-text-div">
