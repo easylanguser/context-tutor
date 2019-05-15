@@ -20,7 +20,7 @@ export class SentenceGuessPage implements OnInit {
 
 	toastIsShown: boolean; // Single toast flag
 	lessonId: number = 0; // Id of current lesson
-	sentenceIndex: number = 1; // Number of current sentence in lesson
+	sentenceId: number; // Number of current sentence in lesson
 
 	curWordIndex: number = 0; // Number of word, that user is currently at
 	curCharsIndexes: number[] = []; // Number of character for each word, that user is currently at
@@ -35,7 +35,7 @@ export class SentenceGuessPage implements OnInit {
 
 	// Get number of sentence and id of the lesson from previous page
 	ngOnInit() {
-		this.sentenceIndex = Number(this.route.snapshot.queryParamMap.get('current')) + 1;
+		this.sentenceId = Number(this.route.snapshot.queryParamMap.get('current'));
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
 		this.pieChart = new Chart(this.pieCanvas.nativeElement, this.utils.getNewChartObject());
 		this.updateChart();
@@ -43,7 +43,8 @@ export class SentenceGuessPage implements OnInit {
 
 	// Get current Sentence object from service
 	curSentence(): Sentence {
-		return this.lessonsData.getLessonByID(this.lessonId).sentences[this.sentenceIndex - 1];
+		const lessonSentences = this.lessonsData.getLessonByID(this.lessonId).sentences;
+		return lessonSentences.find(sentence => sentence.id === this.sentenceId);
 	}
 
 	updateChart() {

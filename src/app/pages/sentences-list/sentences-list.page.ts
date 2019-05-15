@@ -136,9 +136,9 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		this.cdRef.detectChanges();
 	}
 
-	openSentence(sentenceNumber) {
+	openSentence(sentenceId: number) {
 		this.navCtrl.navigateForward(['sentence-guess'],
-			{ queryParams: { current: sentenceNumber, lesson: this.lessonId } });
+			{ queryParams: { current: sentenceId, lesson: this.lessonId } });
 	}
 
 	doRefresh(event) {

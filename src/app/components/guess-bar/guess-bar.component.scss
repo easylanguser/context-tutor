@@ -20,6 +20,10 @@
     position: absolute;
     bottom: 0;
     height: 40vmin;
+
+    ion-toolbar {
+        height: 40vmin;
+    }
 }
 
 $chars-and-hint-height: 20vw;
@@ -83,6 +87,10 @@ $chars-and-hint-height: 20vw;
     --border-radius: 50%;
     border-radius: 50%;
     border: 1px solid rgba(100, 100, 100, 0.2);
+
+    ion-icon {
+        font-size: 7vh;
+    }
 }
 
 #hint-button {
@@ -127,6 +135,10 @@ $chars-and-hint-height: 20vw;
     --border-radius: 50%;
     border-radius: 50%;
     border: 1px solid rgba(100, 100, 100, 0.2);
+
+    ion-icon {
+        font-size: 7vh;
+    }
 }
 
 @media (min-width: 992px) {

@@ -1,23 +1,27 @@
+#toolbar {
+    --background: none;
+
+    :first-child {
+        color: rgb(69, 184, 255);
+        margin-left: 3%;
+        
+        :first-child {
+            color: #45b8ff;
+        }
+    }
+
+    ion-title {
+        color: rgb(69, 184, 255);
+        font-size: 2.5vh;
+    }
+}
+
 #canvas-div {
     height: 33px;
     width: 33px;
     float: right;
     margin-top: 4px;
     margin-right: 10px;
-}
-
-#back-button {
-    color: rgb(69, 184, 255);
-    margin-left: 3vw;
-}
-
-#progress-title {
-    color: rgb(69, 184, 255);
-    font-size: 2.5vh;
-}
-
-#toolbar {
-    --background: none;
 }
 
 .header-ios ion-toolbar:last-child {

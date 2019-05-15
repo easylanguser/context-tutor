@@ -2,13 +2,13 @@
 
   <ion-header>
     <ion-toolbar id="toolbar" mode="ios" class="no-selection">
-      <ion-buttons id="back-button" slot="start" (click)="goBack()">
-        <ion-button style="color: #45b8ff">
+      <ion-buttons slot="start" (click)="goBack()">
+        <ion-button>
           <ion-icon name="arrow-back"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title id="progress-title">
-        Sentence {{sentenceIndex}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}
+      <ion-title>
+        Sentence {{this.lessonsData.getSentenceNumberByIDs(this.lessonId, this.sentenceId) + 1}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}
       </ion-title>
       <ion-buttons slot="end">
         <div id="canvas-div">

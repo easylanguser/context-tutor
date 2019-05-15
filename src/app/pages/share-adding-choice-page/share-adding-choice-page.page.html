@@ -4,13 +4,13 @@
     <ion-toolbar id="toolbar" mode="ios">
 
       <ion-buttons slot="start" (click)="goBack()">
-        <ion-button style="color: #45b8ff">
+        <ion-button>
           <ion-icon name="arrow-back"></ion-icon>
         </ion-button>
       </ion-buttons>
 
       <ion-item id="search-bar">
-        <ion-icon name="search" slot="start" style="color: #b9c5d8"></ion-icon>
+        <ion-icon name="search" slot="start"></ion-icon>
         <ion-input type="search" autocomplete="on" (ionChange)="filterLessons($event)"></ion-input>
       </ion-item>
     </ion-toolbar>
@@ -22,16 +22,16 @@
     <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem
       (click)="addToExistingLesson(lesson.id)">
       <ion-item class="lesson-ion-item" no-padding>
-        <div class="lesson-card">
-          <div class="lesson-text-div">
-            <p class="lesson-text">
+        <div>
+          <div>
+            <p>
               {{i + 1}}. {{lesson.name}}
             </p>
-            <span class="date-text">
+            <span>
               {{lesson.displayedDate}}
             </span>
           </div>
-          <div class="canvas-div">
+          <div>
             <canvas #chartsid width="50" height="50"></canvas>
           </div>
         </div>

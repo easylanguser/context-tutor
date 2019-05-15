@@ -1,6 +1,18 @@
 #toolbar {
     padding-top: 2vh;
     --background: none;
+
+    ion-icon {
+        color: #45b8ff;
+    }
+}
+
+.header-md:after {
+    background-image: none;
+}
+
+.header-ios ion-toolbar:last-child {
+    --border-width: 0;
 }
 
 #search-bar {
@@ -14,14 +26,14 @@
     @media (min-width: 992px) {
         width: 30vw;
     }
-}
 
-.header-md:after {
-    background-image: none;
-}
+    ion-icon {
+        color: #b9c5d8;
+    }
 
-.header-ios ion-toolbar:last-child {
-    --border-width: 0;
+    ion-input {
+        color: black;
+    }
 }
 
 #add-to-label-div {
@@ -45,7 +57,7 @@
     --inner-border-width: 0px !important;
 }
 
-.lesson-card {
+.lesson-ion-item > :first-child {
     width: 94vw;
     height: 12vh;
     background-color: var(--ion-color-step-50);
@@ -66,62 +78,60 @@
     -webkit-transition: color 0.4s ease-in-out;
 
     &:hover {
-        .lesson-text {
-            color: rgb(69, 184, 255);
-        }
-
-        .date-text {
-            color: rgb(69, 184, 255);
+        >:first-child {
+            p, span {
+                color: rgb(69, 184, 255);
+            }
         }
     }
-}
 
-.lesson-text-div {
-    width: 80%;
-    overflow: hidden;
-    display: table-cell;
-    vertical-align: top;
-    padding: 1vh 4vw 0 4vw;
-}
+    >:first-child {
+        width: 80%;
+        overflow: hidden;
+        display: table-cell;
+        vertical-align: top;
+        padding: 1vh 4vw 0 4vw;
 
-.lesson-text {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    line-height: 6vh;
-    max-height: 6vh;
-    margin: 0;
-    font-weight: bold;
+        p {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            line-height: 6vh;
+            max-height: 6vh;
+            margin: 0;
+            font-weight: bold;
 
-    transition: color 0.4s ease-in-out;
-    -o-transition: color 0.4s ease-in-out;
-    -ms-transition: color 0.4s ease-in-out;
-    -moz-transition: color 0.4s ease-in-out;
-    -webkit-transition: color 0.4s ease-in-out;
-}
+            transition: color 0.4s ease-in-out;
+            -o-transition: color 0.4s ease-in-out;
+            -ms-transition: color 0.4s ease-in-out;
+            -moz-transition: color 0.4s ease-in-out;
+            -webkit-transition: color 0.4s ease-in-out;
+        }
 
-.canvas-div {
-    height: 4vh;
-    width: 4vh;
-    margin: 4vh 5vw 0 0;
-}
+        span {
+            bottom: 3.5vh;
+            position: absolute;
+            font-size: 3vmin;
+            font-weight: bold;
+            color: var(--ion-color-step-850);
 
-.date-text {
-    bottom: 3.5vh;
-    position: absolute;
-    font-size: 3vmin;
-    font-weight: bold;
-    color: #6e6e6e;
+            transition: color 0.4s ease-in-out;
+            -o-transition: color 0.4s ease-in-out;
+            -ms-transition: color 0.4s ease-in-out;
+            -moz-transition: color 0.4s ease-in-out;
+            -webkit-transition: color 0.4s ease-in-out;
 
-    @media (min-width: 650px) {
-        font-size: 1.5vmin;
+            @media (min-width: 650px) {
+                font-size: 1.5vmin;
+            }
+        }
     }
 
-    transition: color 0.4s ease-in-out;
-    -o-transition: color 0.4s ease-in-out;
-    -ms-transition: color 0.4s ease-in-out;
-    -moz-transition: color 0.4s ease-in-out;
-    -webkit-transition: color 0.4s ease-in-out;
+    >:last-child {
+        height: 4vh;
+        width: 4vh;
+        margin: 4vh 5vw 0 0;
+    }
 }
 
 #or-div {
@@ -197,16 +207,5 @@
 
     &:hover {
         background: linear-gradient(rgb(69, 184, 255), rgb(68, 207, 255));
-    }
-}
-
-@media (min-width: 992px) {
-    #date-segment {
-        width: 67vw !important;
-        margin-left: 2.5vw;
-    }
-
-    .lesson-text-div {
-        width: 50.4vw;
     }
 }

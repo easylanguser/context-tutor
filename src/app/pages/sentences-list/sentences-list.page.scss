@@ -1,47 +1,19 @@
-#progress-segment {
-    width: 86vw !important;
-    margin-bottom: 1vh;
-    margin-left: 7vw;
-    border-radius: 20px;
-    --border-color: #45b8ff;
-    --background-checked: #45b8ff;
-}
-
-.sc-ion-segment-ios-h {
-    --color: #45b8ff;
-}
-
-#sentences-list {
-    padding-top: 2vh;
-}
-
-#toolbar {
+ion-toolbar {
     --background: none;
-}
 
-#back-button {
-    color: rgb(69, 184, 255);
-    margin-left: 3vw;
-}
+    ion-buttons {
+        color: rgb(69, 184, 255);
+        margin-left: 3vw;
 
-#sentences-title {
-    color: rgb(69, 184, 255);
-    font-size: 2.5vh;
-}
+        ion-button {
+            color: #45b8ff;
+        }
+    }
 
-:host #all-sentences-button {
-    border-radius: 18px 0 0 18px;
-}
-
-#red-sentences-button { }
-
-#red-yellow-sentences-button {
-    border-radius: 0 18px 18px 0;
-}
-
-#segments-div {
-    border-bottom: 3px solid white;
-    border-radius: 18px;
+    ion-title {
+        color: rgb(69, 184, 255);
+        font-size: 2.5vh;
+    }
 }
 
 .header-md:after {
@@ -52,8 +24,43 @@
     --border-width: 0;
 }
 
-ion-segment-button {
-    --border-width: 2px;
+#segments-div {
+    border-bottom: 3px solid white;
+    border-radius: 18px;
+
+    .sc-ion-segment-ios-h {
+        --color: #45b8ff;
+    }
+
+    >:first-child {
+        width: 86vw !important;
+        margin-bottom: 1vh;
+        margin-left: 7vw;
+        border-radius: 20px;
+        --border-color: #45b8ff;
+        --background-checked: #45b8ff;
+
+        @media (min-width: 992px) {
+            width: 67vw !important;
+            margin-left: 2.5vw;
+        }
+
+        ion-segment-button {
+            --border-width: 2px;
+        }
+
+        >:first-child {
+            border-radius: 18px 0 0 18px;
+        }
+
+        >:last-child {
+            border-radius: 0 18px 18px 0;
+        }
+    }
+}
+
+#sentences-list {
+    padding-top: 2vh;
 }
 
 .sentence-ion-item {
@@ -61,12 +68,7 @@ ion-segment-button {
     --inner-border-width: 0px !important;
 }
 
-.sc-ion-segment-ios-h {
-    --border-color: #59afff;
-    --background-checked: #59afff;
-}
-
-.sentence-card {
+.sentence-ion-item> :first-child {
     width: 94vw;
     height: auto;
     background-color: var(--ion-color-step-50);
@@ -91,40 +93,44 @@ ion-segment-button {
             color: rgb(69, 184, 255);
         }
     }
-}
 
-.sentence-text-div {
-    width: 80%;
-    display: table-cell;
-    position: relative;
-    vertical-align: top;
-    padding: 1vh 4vw 1vh 4vw;
-}
+    >:first-child {
+        width: 80%;
+        display: table-cell;
+        position: relative;
+        vertical-align: top;
+        padding: 1vh 4vw 1vh 4vw;
 
-.sentence-text {
-    word-wrap: break-word;
-    font-weight: bold;
-    font-size: 3.4vmin;
+        @media (min-width: 992px) {
+            width: 61.8vw;
+        }
 
-    transition: color 0.4s ease-in-out;
-    -o-transition: color 0.4s ease-in-out;
-    -ms-transition: color 0.4s ease-in-out;
-    -moz-transition: color 0.4s ease-in-out;
-    -webkit-transition: color 0.4s ease-in-out;
-}
+        >:first-child {
+            word-wrap: break-word;
+            font-weight: bold;
+            font-size: 3.4vmin;
 
-.canvas-outer-div {
-    width: 20vw;
-    display: table-cell;
-    position: relative;
-    vertical-align: middle;
-}
+            transition: color 0.4s ease-in-out;
+            -o-transition: color 0.4s ease-in-out;
+            -ms-transition: color 0.4s ease-in-out;
+            -moz-transition: color 0.4s ease-in-out;
+            -webkit-transition: color 0.4s ease-in-out;
+        }
+    }
 
-.canvas-div {
-    height: 4vh;
-    width: 4vh;
-    margin-top: 0.7vh;
-    display: inline-block;
+    >:last-child {
+        width: 20vw;
+        display: table-cell;
+        position: relative;
+        vertical-align: middle;
+
+        >:first-child {
+            height: 4vh;
+            width: 4vh;
+            margin-top: 0.7vh;
+            display: inline-block;
+        }
+    }
 }
 
 .delete-sliding-option {
@@ -136,14 +142,4 @@ ion-segment-button {
 
 .item-options-ios.item-options-end {
     border-bottom-width: 0;
-}
-
-@media (min-width: 992px) {
-    #progress-segment {
-        width: 67vw !important;
-        margin-left: 2.5vw;
-    }
-    .sentence-text-div {
-        width: 61.8vw;
-    }
 }

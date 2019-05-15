@@ -1,3 +1,19 @@
+.header-md:after {
+    background-image: none;
+}
+
+.header-ios ion-toolbar:last-child {
+    --border-width: 0;
+}
+
+#toolbar {
+    --background: none;
+
+    ion-icon {
+        color: #45b8ff;
+    }
+}
+
 #info-div {
     height: 4vh;
     width: 90vw;
@@ -6,7 +22,6 @@
     font-size: 4vh;
     font-weight: bold;
     text-align: center;
-
     @media (min-width: 992px) {
         width: 60vw;
         margin-left: 6vw;
@@ -31,7 +46,7 @@
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     margin-left: 10vw;
-
+    color: black;
     @media (min-width: 992px) {
         width: 50vw;
         min-width: 50vw;
@@ -51,16 +66,4 @@
         padding: 1.5vh;
         cursor: pointer;
     }
-}
-
-.header-md:after {
-    background-image: none;
-}
-
-ion-segment-button {
-    --border-width: 2px;
-}
-
-.header-ios ion-toolbar:last-child {
-    --border-width: 0;
 }

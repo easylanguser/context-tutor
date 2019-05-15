@@ -1,9 +1,9 @@
 <ion-content>
 
     <ion-header>
-        <ion-toolbar mode="ios" style="--background: none;">
+        <ion-toolbar id="toolbar" mode="ios">
             <ion-buttons slot="start" (click)="goBack()">
-                <ion-button style="color: #45b8ff">
+                <ion-button>
                     <ion-icon name="arrow-back"></ion-icon>
                 </ion-button>
             </ion-buttons>
@@ -21,4 +21,5 @@
     <div id="submit-title-btn">
         <ion-icon name="checkmark" (click)="submitNewTitle()"></ion-icon>
     </div>
+    
 </ion-content>

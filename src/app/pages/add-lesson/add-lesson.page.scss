@@ -1,10 +1,26 @@
-#toolbar {
-    --background: none;
+.header-md:after {
+    background-image: none;
 }
 
-#back-button {
-    color: rgb(69, 184, 255);
-    margin-left: 3vw;
+.header-ios ion-toolbar:last-child {
+    --border-width: 0;
+}
+
+ion-toolbar {
+    --background: none;
+
+    :first-child {
+        color: rgb(69, 184, 255);
+        margin-left: 3%;
+
+        ion-button {
+            color: #45b8ff;
+        }
+    }
+
+    ion-title {
+        color: #45b8ff;
+    }
 }
 
 #file-input {
@@ -19,6 +35,13 @@
         margin-left: calc(6vw - 16px);
         padding-left: 33%;
     }
+}
+
+#info-div {
+    text-align: center;
+    margin: 5vh 0;
+    font-weight: bold;
+    font-size: 2vh;
 }
 
 $inputs-border: 1px solid grey;
@@ -42,10 +65,10 @@ $inputs-border: 1px solid grey;
     @media (min-width: 992px) {
         margin-left: calc(36vw - 20vmin - 16px);
     }
-}
 
-#save-lesson-button-inner {
-    width: 40vmin;
+    ion-button {
+        width: 40vmin;
+    }
 }
 
 #sentence-text-textarea {
@@ -75,17 +98,10 @@ $buttons-margin: calc(50vw - 40vmin - 16px);
     }
 }
 
-#save-words-button-inner, #save-sentence-button-inner {
+#save-words-button ion-button,
+#save-sentence-button ion-button {
     width: 80vmin;
     @media (min-width: 992px) {
         width: 28vw;
     }
-}
-
-.header-md:after {
-    background-image: none;
-}
-
-.header-ios ion-toolbar:last-child {
-    --border-width: 0;
 }

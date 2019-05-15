@@ -1,24 +1,24 @@
 <ion-content scrollY="false">
 
   <ion-header>
-    <ion-toolbar id="toolbar" mode="ios">
-      <ion-buttons id="menu-button" slot="start">
-        <ion-menu-button mode="md" id="menu-button-inner"></ion-menu-button>
+    <ion-toolbar mode="ios">
+      <ion-buttons slot="start">
+        <ion-menu-button mode="md"></ion-menu-button>
       </ion-buttons>
-      <ion-title id="lessons-title">
+      <ion-title>
         My lessons
       </ion-title>
     </ion-toolbar>
 
     <div id="segments-div" *ngIf="statisticsIsNotEmpty">
-      <ion-segment id="date-segment" mode="ios">
-        <ion-segment-button mode="ios" (click)="allClick()" id="all-lessons-button" checked="true">
+      <ion-segment mode="ios">
+        <ion-segment-button mode="ios" (click)="allClick()" checked="true">
           All lessons
         </ion-segment-button>
-        <ion-segment-button mode="ios" (click)="redClick()" id="red-lessons-button">
+        <ion-segment-button mode="ios" (click)="redClick()">
           Wrong
         </ion-segment-button>
-        <ion-segment-button mode="ios" (click)="redAndYellowClick()" id="red-yellow-lessons-button">
+        <ion-segment-button mode="ios" (click)="redAndYellowClick()">
           In progress
         </ion-segment-button>
       </ion-segment>
@@ -36,25 +36,26 @@
     <ion-list no-padding no-margin style="padding-top: 2vh; padding-bottom: 15vh;">
       <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem>
         <ion-item class="lesson-ion-item" no-padding>
-          <div class="lesson-card" (click)="openLesson(lesson.id)">
-            <div class="lesson-text-div">
-              <p class="lesson-text">
+          <div (click)="openLesson(lesson.id)">
+            <div>
+              <p>
                 {{i + 1}}. {{lesson.name}}
               </p>
-              <span class="date-text">
+              <span>
                 {{lesson.displayedDate}}
               </span>
             </div>
-            <div class="canvas-div">
+            <div>
               <canvas #chartsid width="50" height="50"></canvas>
             </div>
           </div>
         </ion-item>
+        
         <ion-item-options side="end">
-          <ion-item-option class="sliding-option" color="warning" (click)="editItem(slidingItem, lesson.id)">
+          <ion-item-option color="warning" (click)="editItem(slidingItem, lesson.id)">
             Edit
           </ion-item-option>
-          <ion-item-option class="sliding-option" color="danger" (click)="deleteItem(slidingItem, lesson.id)">
+          <ion-item-option color="danger" (click)="deleteItem(slidingItem, lesson.id)">
             Delete
           </ion-item-option>
         </ion-item-options>

@@ -42,7 +42,7 @@ export class GuessBarComponent implements OnInit {
 
 	constructor(
 		private util: UtilsService,
-		public lessonsData: LessonsService,
+		public lessonsService: LessonsService,
 		public guessPage: SentenceGuessPage) { }
 
 	ngOnInit() {
@@ -103,15 +103,20 @@ export class GuessBarComponent implements OnInit {
 
 		this.guessPage.saveData();
 
-		const lastSentenceNumber = this.lessonsData.getLessonByID(this.guessPage.lessonId).sentences.length;
+		const lessonSentences = this.lessonsService.getLessonByID(this.guessPage.lessonId).sentences;
+		const currentLessonIndex = this.lessonsService
+			.getSentenceNumberByIDs(this.guessPage.lessonId, this.guessPage.sentenceId);
+		const firstSentenceId = lessonSentences[0].id
+		const lastSentenceId = lessonSentences[lessonSentences.length - 1].id;
+		
 		if (forward) {
-			this.guessPage.sentenceIndex = (this.guessPage.sentenceIndex === lastSentenceNumber)
-				? 1
-				: this.guessPage.sentenceIndex + 1;
+			this.guessPage.sentenceId = (this.guessPage.sentenceId === lastSentenceId)
+				? firstSentenceId
+				: lessonSentences[currentLessonIndex + 1].id;
 		} else {
-			this.guessPage.sentenceIndex = (this.guessPage.sentenceIndex === 1)
-				? lastSentenceNumber
-				: this.guessPage.sentenceIndex - 1;
+			this.guessPage.sentenceId = (this.guessPage.sentenceId === firstSentenceId)
+				? lastSentenceId
+				: lessonSentences[currentLessonIndex - 1].id;
 		}
 
 		this.guessPage.curWordIndex = 0;
