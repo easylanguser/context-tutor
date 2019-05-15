@@ -26,7 +26,8 @@ const routes: Routes = [
 	{ path: 'change', component: ChangePage, canActivate: [AuthGuardService] },
 	{ path: 'add-lesson', component: AddLessonPage, canActivate: [AuthGuardService] },
 	{ path: 'share-adding-choice-page', loadChildren: './pages/share-adding-choice-page/share-adding-choice-page.module#ShareAddingChoicePagePageModule' },
-	{ path: 'sentence-adding-page', loadChildren: './pages/sentence-adding-page/sentence-adding-page.module#SentenceAddingPagePageModule' }
+	{ path: 'sentence-adding-page', loadChildren: './pages/sentence-adding-page/sentence-adding-page.module#SentenceAddingPagePageModule' },
+	{ path: 'edit-lesson-title', loadChildren: './pages/edit-lesson-title/edit-lesson-title.module#EditLessonTitlePageModule' }
 ];
 
 @NgModule({

@@ -1,7 +1,10 @@
 <ion-content padding>
-    <div class="no-selection" id="sentence-title">
-        {{title}}
-    </div>
+    <ion-item class="no-selection" id="sentence-title">
+        <ion-label style="margin: 0;">
+            {{title}}
+        </ion-label>
+        <ion-icon id="edit-icon" name="create" slot="end" (click)="editTitle()"></ion-icon>
+    </ion-item>
 
     <div id="selectable-sentence-div">
         {{sentence}}
@@ -9,10 +12,10 @@
 
     <div style="display: table; width: 100%; margin-top: 5vh;">
         <div id="cancel-btn">
-            <ion-icon name="close" style="background: #38dbff; border-radius: 5vh; padding: 1.5vh; cursor: pointer;"></ion-icon>
+            <ion-icon name="close"></ion-icon>
         </div>
         <div id="submit-btn" (click)="submitSelections()">
-            <ion-icon name="checkmark" style="background: #00f2d0; border-radius: 5vh; padding: 1.5vh; cursor: pointer;"></ion-icon>
+            <ion-icon name="checkmark"></ion-icon>
         </div>
     </div>
 

@@ -30,7 +30,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private cdRef: ChangeDetectorRef) { }
 
 	ngOnInit() {
-		this.getData();
+		this.getData(true);
 	}
 
 	ionViewDidEnter() {
@@ -126,8 +126,13 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		await alert.present();
 	}
 
+	async editItem(slidingItem: IonItemSliding, lessonId: number) {
+		slidingItem.close();
+		this.navCtrl.navigateForward(['edit-lesson-title'], { queryParams: { lessonId: lessonId } });
+	}
+
 	doRefresh(event) {
-		this.getData().then(_ => {
+		this.getData(false).then(_ => {
 			event.target.complete();
 			this.updateCharts();
 		});
@@ -136,41 +141,44 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		}, 5000);
 	}
 
-	private async getData() {
+	private async getData(checkClipboard: boolean) {
 		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
 		await this.lessonService.getLessons().then(() => {
 			this.displayedLessons = this.lessonService.lessons;
 			this.displayedLessons.sort(this.lessonService.sortLessonsByTime);
 		}).then(() => loading.dismiss())
-		.then(() => {
-			setTimeout(() => {
-				if (document.hasFocus()) {
-					const nav: any = window.navigator;
-					nav.clipboard.readText().then( async (text: string) => {
-						if (text.length > 30) {
-							const alert = await this.alertCtrl.create({
-								message: "You've got large text in clipboard. Create new sentence with it?",
-								buttons: [
-									{
-										text: 'Cancel',
-										role: 'cancel',
-									},
-									{
-										text: 'Ok',
-										handler: () => {
-											sharedText[0] = text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
-											this.navCtrl.navigateForward(['share-adding-choice-page']);
+			.then(() => {
+				if (!checkClipboard)
+					return;
+
+				setTimeout(() => {
+					if (document.hasFocus()) {
+						const nav: any = window.navigator;
+						nav.clipboard.readText().then(async (text: string) => {
+							if (text.length > 30) {
+								const alert = await this.alertCtrl.create({
+									message: "You've got large text in clipboard. Create new sentence with it?",
+									buttons: [
+										{
+											text: 'Cancel',
+											role: 'cancel',
+										},
+										{
+											text: 'Ok',
+											handler: () => {
+												sharedText[0] = text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+												this.navCtrl.navigateForward(['share-adding-choice-page']);
+											}
 										}
-									}
-								]
-							});
-							await alert.present();
-						}
-					});
-				}
-			}, 1000);
-		});
+									]
+								});
+								await alert.present();
+							}
+						});
+					}
+				}, 1000);
+			});
 	}
 
 	allClick() {

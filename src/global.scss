@@ -46,3 +46,15 @@ $border-width: 4px;
     -ms-user-select: none;
     user-select: none;
 }
+
+.alert-wrapper.sc-ion-alert-md {
+    border-radius: 16px;
+}
+
+.alert-button-group.sc-ion-alert-md {
+    justify-content: center;
+}
+
+.alert-message.sc-ion-alert-md {
+    text-align: center;
+}

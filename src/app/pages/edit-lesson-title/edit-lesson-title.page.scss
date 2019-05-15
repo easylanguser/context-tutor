@@ -1,0 +1,66 @@
+#info-div {
+    height: 4vh;
+    width: 90vw;
+    margin-top: 10vh;
+    margin-left: 5vw;
+    font-size: 4vh;
+    font-weight: bold;
+    text-align: center;
+
+    @media (min-width: 992px) {
+        width: 60vw;
+        margin-left: 6vw;
+    }
+}
+
+#edit-text-area {
+    width: 80vw;
+    min-width: 80vw;
+    max-width: 80vw;
+    height: 30vh;
+    min-height: 10vh;
+    max-height: 70vh;
+    font-size: 5vh;
+    line-height: 5vh;
+    margin-top: 4vh;
+    margin-bottom: 4vh;
+    padding: 1vh;
+    outline: none;
+    border: 1px solid;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    margin-left: 10vw;
+
+    @media (min-width: 992px) {
+        width: 50vw;
+        min-width: 50vw;
+        max-width: 50vw;
+        margin-left: 11vw;
+    }
+}
+
+#submit-title-btn {
+    font-size: 7vh;
+    text-align: center;
+    color: white;
+
+    ion-icon {
+        background: #00f2d0;
+        border-radius: 5vh;
+        padding: 1.5vh;
+        cursor: pointer;
+    }
+}
+
+.header-md:after {
+    background-image: none;
+}
+
+ion-segment-button {
+    --border-width: 2px;
+}
+
+.header-ios ion-toolbar:last-child {
+    --border-width: 0;
+}

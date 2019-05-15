@@ -21,8 +21,7 @@ export class SentenceAddingPagePage implements OnInit {
 	indexesArray: Array<[number, number]> = [];
 	title: string;
 	sentence: string;
-
-	lessonId: any;
+	lessonId: number;
 
 	constructor(
 		private navCtrl: NavController,
@@ -37,11 +36,22 @@ export class SentenceAddingPagePage implements OnInit {
 
 	ngOnInit() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
+		this.updateTitle();
+		this.sentence = sharedText[0];
+	}
+
+	ionViewDidEnter() {
+		this.updateTitle();
+	}
+
+	updateTitle() {
 		this.lessonId ?
 			this.title = this.lessonsService.getLessonByID(this.lessonId).name :
-			this.title = new Date().toJSON().slice(0, 10).replace(/-/g, '/') +
-			' ' + sharedText[0].substr(0, 10);
-		this.sentence = sharedText[0];
+			this.title = new Date().toJSON().slice(0, 10).replace(/-/g, '/') + ' ' + sharedText[0].substr(0, 10);
+	}
+
+	editTitle() {
+		this.navCtrl.navigateForward(['edit-lesson-title'], { queryParams: { lessonId: this.lessonId } });
 	}
 
 	submitSelections() {

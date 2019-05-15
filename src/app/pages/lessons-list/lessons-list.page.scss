@@ -148,11 +148,12 @@ ion-segment-button {
     text-align: center;
 }
 
-.delete-sliding-option {
+.sliding-option {
+    height: 12vh;
     width: 25vw;
     text-align: center;
     border-radius: 25px;
-    margin-right: 3vw;
+    margin: 1vh 3vw 1vh 0;
 }
 
 #add-lesson-fab {
