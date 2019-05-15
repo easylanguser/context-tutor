@@ -15,13 +15,13 @@
     <div id="segments-div" *ngIf="statisticsIsNotEmpty">
       <ion-segment id="progress-segment" mode="ios">
         <ion-segment-button mode="ios" (click)="allClick()" id="all-sentences-button" checked="true">
-          All
+          All sentences
         </ion-segment-button>
         <ion-segment-button mode="ios" (click)="redClick()" id="red-sentences-button">
-          Red
+          Wrong
         </ion-segment-button>
         <ion-segment-button mode="ios" (click)="redAndYellowClick()" id="red-yellow-sentences-button">
-          Red + Yellow
+          In progress
         </ion-segment-button>
       </ion-segment>
     </div>
