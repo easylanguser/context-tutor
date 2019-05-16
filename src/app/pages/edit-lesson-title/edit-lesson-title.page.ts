@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { NavController } from '@ionic/angular';
+import { LessonNameUpdateService } from 'src/app/services/http/lesson-name-update/lesson-name-update.service';
 
 @Component({
 	selector: 'app-edit-lesson-title',
@@ -14,6 +15,7 @@ export class EditLessonTitlePage implements OnInit {
 	lessonId: number;
 
 	constructor(
+		private lessonNameUpdateService: LessonNameUpdateService,
 		private navCtrl: NavController,
 		private route: ActivatedRoute,
 		private lessonsService: LessonsService) { }
@@ -27,7 +29,10 @@ export class EditLessonTitlePage implements OnInit {
 		const lessonToEdit = this.lessonsService.getLessonByID(this.lessonId);
 		lessonToEdit.name = this.lessonTitle;
 		this.lessonsService.editLesson(lessonToEdit);
-		this.navCtrl.pop();
+		this.lessonNameUpdateService.updateData(String(this.lessonId), this.lessonTitle.replace(/\s+/g, '%20'))
+			.subscribe(() => {
+				this.navCtrl.pop();
+			});
 	}
 
 	goBack() {
