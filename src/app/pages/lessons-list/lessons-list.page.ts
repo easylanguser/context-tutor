@@ -27,10 +27,12 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private alertCtrl: AlertController,
 		private lessonDeleteService: LessonDeleteService,
 		private utils: UtilsService,
-		private cdRef: ChangeDetectorRef) { }
+		private cdRef: ChangeDetectorRef) {
+		this.checkClipboard();
+	}
 
 	ngOnInit() {
-		this.getData(true);
+		this.getData();
 	}
 
 	ionViewDidEnter() {
@@ -45,6 +47,32 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	addLesson() {
 		this.navCtrl.navigateForward(['add-lesson']);
+	}
+
+	private checkClipboard() {
+		window.focus();
+		const nav: any = window.navigator;
+		nav.clipboard.readText().then(async (text: string) => {
+			if (text.length > 30) {
+				const alert = await this.alertCtrl.create({
+					message: "You've got large text in clipboard. Create new sentence with it?",
+					buttons: [
+						{
+							text: 'Cancel',
+							role: 'cancel',
+						},
+						{
+							text: 'Ok',
+							handler: () => {
+								sharedText[0] = text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+								this.navCtrl.navigateForward(['share-adding-choice-page']);
+							}
+						}
+					]
+				});
+				await alert.present();
+			}
+		});
 	}
 
 	private syncCharts() {
@@ -132,7 +160,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	doRefresh(event) {
-		this.getData(false).then(_ => {
+		this.getData().then(_ => {
 			event.target.complete();
 			this.updateCharts();
 		});
@@ -141,44 +169,13 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		}, 5000);
 	}
 
-	private async getData(checkClipboard: boolean) {
+	private async getData() {
 		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
 		await this.lessonService.getLessons().then(() => {
 			this.displayedLessons = this.lessonService.lessons;
 			this.displayedLessons.sort(this.lessonService.sortLessonsByTime);
-		}).then(() => loading.dismiss())
-			.then(() => {
-				if (!checkClipboard)
-					return;
-
-				setTimeout(() => {
-					if (document.hasFocus()) {
-						const nav: any = window.navigator;
-						nav.clipboard.readText().then(async (text: string) => {
-							if (text.length > 30) {
-								const alert = await this.alertCtrl.create({
-									message: "You've got large text in clipboard. Create new sentence with it?",
-									buttons: [
-										{
-											text: 'Cancel',
-											role: 'cancel',
-										},
-										{
-											text: 'Ok',
-											handler: () => {
-												sharedText[0] = text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
-												this.navCtrl.navigateForward(['share-adding-choice-page']);
-											}
-										}
-									]
-								});
-								await alert.present();
-							}
-						});
-					}
-				}, 1000);
-			});
+		}).then(() => loading.dismiss());
 	}
 
 	allClick() {
