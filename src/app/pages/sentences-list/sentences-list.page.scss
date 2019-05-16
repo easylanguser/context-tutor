@@ -89,7 +89,7 @@ ion-toolbar {
     -webkit-transition: color 0.4s ease-in-out;
 
     &:hover {
-        .sentence-text {
+        >:first-child >:first-child {
             color: rgb(69, 184, 255);
         }
     }
