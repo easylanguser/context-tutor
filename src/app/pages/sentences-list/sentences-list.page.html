@@ -78,4 +78,16 @@
 
   </ion-content>
 
+  <ion-fab id="add-sentence-fab" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="addSentenceToLesson()">
+      <ion-icon name="md-add-circle-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab id="edit-sentence-fab" vertical="bottom" horizontal="start">
+    <ion-fab-button (click)="editSentence()">
+      <ion-icon id="edit-sentence-icon" name="md-create"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>

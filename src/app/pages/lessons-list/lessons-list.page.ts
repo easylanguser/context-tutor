@@ -28,7 +28,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private lessonDeleteService: LessonDeleteService,
 		private utils: UtilsService,
 		private cdRef: ChangeDetectorRef) {
-		this.checkClipboard();
+		this.utils.checkClipboard();
 	}
 
 	ngOnInit() {
@@ -47,32 +47,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	addLesson() {
 		this.navCtrl.navigateForward(['add-lesson']);
-	}
-
-	private checkClipboard() {
-		window.focus();
-		const nav: any = window.navigator;
-		nav.clipboard.readText().then(async (text: string) => {
-			if (text.length > 30) {
-				const alert = await this.alertCtrl.create({
-					message: "You've got large text in clipboard. Create new sentence with it?",
-					buttons: [
-						{
-							text: 'Cancel',
-							role: 'cancel',
-						},
-						{
-							text: 'Ok',
-							handler: () => {
-								sharedText[0] = text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
-								this.navCtrl.navigateForward(['share-adding-choice-page']);
-							}
-						}
-					]
-				});
-				await alert.present();
-			}
-		});
 	}
 
 	private syncCharts() {

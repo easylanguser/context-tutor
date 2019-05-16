@@ -5,7 +5,8 @@ import { Sentence } from 'src/app/models/sentence';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { Chart } from 'chart.js';
 import { SentenceDeleteService } from 'src/app/services/http/sentence-delete/sentence-delete.service';
-import { IonItemSliding, AlertController, NavController } from '@ionic/angular';
+import { IonItemSliding, AlertController, NavController, ToastController } from '@ionic/angular';
+import * as anime from 'animejs';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -21,15 +22,18 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	pieCharts: Array<Chart> = [];
 	offset: number = 0;
 	statisticsIsNotEmpty: boolean = true;
+	toast: HTMLIonToastElement = null;
+	addButtonIsAnimating: boolean = false;
 
 	constructor(
+		private toastController: ToastController,
 		private alertCtrl: AlertController,
 		private utils: UtilsService,
 		private route: ActivatedRoute,
 		private navCtrl: NavController,
 		public lessonData: LessonsService,
 		private sentenceDeleteService: SentenceDeleteService,
-		private cdRef : ChangeDetectorRef) { }
+		private cdRef: ChangeDetectorRef) { }
 
 	ngOnInit() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
@@ -48,6 +52,12 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		this.pieCanvases.changes.subscribe(_ => {
 			this.syncCharts();
 		});
+	}
+
+	ionViewWillLeave() {
+		if (this.toast) {
+			this.toast.dismiss().then(() => this.toast = null);
+		}
 	}
 
 	private syncCharts() {
@@ -136,9 +146,62 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		this.cdRef.detectChanges();
 	}
 
+	async addSentenceToLesson() {
+		this.utils.checkClipboard(this.lessonId);
+	}
+
+	async editSentence() {
+		if (this.addButtonIsAnimating)
+			return;
+		this.addButtonIsAnimating = true;
+
+		if (!this.toast) {
+			await anime({
+				targets: ['#edit-sentence-icon'],
+				rotate: 180,
+				easing: 'easeInOutBack',
+				duration: 500
+			}).finished;
+
+			this.toast = await this.toastController.create({
+				message: 'Select sentence to edit, or click button again to dismiss',
+				mode: 'ios',
+				cssClass: 'toast-black',
+				position: 'top'
+			});
+
+			this.toast.present().then(() => this.addButtonIsAnimating = false);
+		} else {
+			await anime({
+				targets: ['#edit-sentence-icon'],
+				rotate: 0,
+				easing: 'easeInOutBack',
+				duration: 500
+			}).finished;
+
+			this.toast.dismiss().then(() => {
+				this.toast = null;
+				this.addButtonIsAnimating = false;
+			});
+		}
+	}
+
 	openSentence(sentenceId: number) {
-		this.navCtrl.navigateForward(['sentence-guess'],
-			{ queryParams: { current: sentenceId, lesson: this.lessonId } });
+		if (!this.toast) {
+			this.navCtrl.navigateForward(['sentence-guess'], {
+				queryParams: {
+					current: sentenceId,
+					lesson: this.lessonId
+				}
+			});
+		} else {
+			this.navCtrl.navigateForward(['sentence-adding-page'], {
+				queryParams: {
+					toEdit: sentenceId,
+					lessonId: this.lessonId
+				}
+			});
+		}
 	}
 
 	doRefresh(event) {

@@ -51,6 +51,12 @@ export class LessonsService {
 		);
 	}
 
+	getSentenceByIDs(lessonId: number, sentenceId: number): Sentence {
+		return this.getLessonByID(lessonId).sentences.find(
+			(sentence: Sentence) => sentence.id === sentenceId
+		);
+	}
+
 	getRangeOfLessonSentences(lessonId: number, from: number, to: number): Sentence[] {
 		return this.getLessonByID(lessonId).sentences.slice(from, to);
 	}

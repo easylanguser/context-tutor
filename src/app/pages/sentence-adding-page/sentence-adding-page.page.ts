@@ -7,6 +7,7 @@ import { AddLessonService } from 'src/app/services/http/add-lesson/add-lesson.se
 import { StorageService } from 'src/app/services/storage/storage-service';
 import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 import { NavController } from '@ionic/angular';
+import { SentenceResetService } from 'src/app/services/http/sentence-reset/sentence-reset.service';
 
 const lastSelOffsets: Array<number> = [0, 0];
 const lastSelCoords: Array<number> = [0, 0];
@@ -22,6 +23,7 @@ export class SentenceAddingPagePage implements OnInit {
 	title: string;
 	sentence: string;
 	lessonId: number;
+	sentenceToEditId: string;
 
 	constructor(
 		private navCtrl: NavController,
@@ -29,15 +31,21 @@ export class SentenceAddingPagePage implements OnInit {
 		private addSentenceService: AddSentenceService,
 		private addLessonService: AddLessonService,
 		private route: ActivatedRoute,
-		private lessonsService: LessonsService) {
+		private lessonsService: LessonsService,
+		private sentenceResetService: SentenceResetService) {
 		document.addEventListener('mouseup', this.showSelectionButton);
 		document.addEventListener('touchstart', this.showSelectionButton);
 	}
 
 	ngOnInit() {
+		this.sentenceToEditId = this.route.snapshot.queryParamMap.get('toEdit');
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
+
+		this.sentence = this.sentenceToEditId ?
+			this.lessonsService.getSentenceByIDs(this.lessonId, Number(this.sentenceToEditId)).text :
+			sharedText[0];
+
 		this.updateTitle();
-		this.sentence = sharedText[0];
 	}
 
 	goBack() {
@@ -61,15 +69,22 @@ export class SentenceAddingPagePage implements OnInit {
 	submitSelections() {
 		if (this.indexesArray.length === 0)
 			return;
-		
+
 		this.indexesArray.sort((el1, el2) => el1[0] - el2[0]);
 
 		if (this.lessonId) {
-			this.addSentenceService.postNewSentence({
-				lessonId: this.lessonId,
-				words: this.indexesArray,
-				text: this.sentence
-			});
+			if (this.sentenceToEditId) {
+				this.sentenceResetService.updateData(
+					this.sentenceToEditId,
+					this.indexesArray
+				).subscribe();
+			} else {
+				this.addSentenceService.postNewSentence({
+					lessonId: this.lessonId,
+					words: this.indexesArray,
+					text: this.sentence
+				});
+			}
 		} else {
 			this.storageService.get(USER_ID_KEY).then(userId => {
 				this.addLessonService.postNewLesson({

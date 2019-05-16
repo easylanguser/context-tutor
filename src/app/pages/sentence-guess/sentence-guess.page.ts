@@ -82,8 +82,7 @@ export class SentenceGuessPage implements OnInit {
 				sentenceSkips: this.curSentence().statistics.sentenceSkips,
 				wordSkips: this.curSentence().statistics.wordSkips,
 				wrongAnswers: this.curSentence().statistics.wrongAnswers
-			})
-			.subscribe(response => { });
+			}).subscribe();
 	}
 
 	goBack() {

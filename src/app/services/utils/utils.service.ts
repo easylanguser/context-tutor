@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Sentence } from 'src/app/models/sentence';
 import { Lesson } from 'src/app/models/lesson';
+import { AlertController, NavController } from '@ionic/angular';
+import { sharedText } from 'src/app/app.component';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class UtilsService {
 
-	constructor() { }
+	constructor(
+		private alertCtrl: AlertController,
+		private navCtrl: NavController) { }
 
 	public getNewChartObject(): Object {
 		return new Object({
@@ -99,5 +103,37 @@ export class UtilsService {
 		}
 
 		return redIsPresent && yellowIsPresent;
+	}
+
+	checkClipboard(lessonId?: number): boolean {
+		window.focus();
+		const nav: any = window.navigator;
+		if (document.hasFocus()) {
+			nav.clipboard.readText().then(async (text: string) => {
+				if (text.length > (lessonId ? 0 : 30)) {
+					const alert = await this.alertCtrl.create({
+						message: "You've got large text in clipboard. Create new sentence with it?",
+						buttons: [
+							{
+								text: 'Cancel',
+								role: 'cancel',
+							},
+							{
+								text: 'Ok',
+								handler: () => {
+									sharedText[0] = text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+									!lessonId ?
+										this.navCtrl.navigateForward(['share-adding-choice-page']) :
+										this.navCtrl.navigateForward(['sentence-adding-page'], { queryParams: { lessonId: lessonId } });
+										return true;
+								}
+							}
+						]
+					});
+					await alert.present();
+				}
+			});
+		}
+		return false;
 	}
 }

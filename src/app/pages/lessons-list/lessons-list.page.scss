@@ -158,4 +158,9 @@ ion-item-option {
 #add-lesson-fab {
     margin-right: 20px;
     margin-bottom: 20px;
+
+    :first-child {
+        --background: rgb(69, 184, 255);
+        
+    }
 }

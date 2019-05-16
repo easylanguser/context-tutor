@@ -33,7 +33,7 @@ ion-toolbar {
     }
 
     >:first-child {
-        width: 86vw !important;
+        width: 86vw;
         margin-bottom: 1vh;
         margin-left: 7vw;
         border-radius: 20px;
@@ -41,7 +41,7 @@ ion-toolbar {
         --background-checked: #45b8ff;
 
         @media (min-width: 992px) {
-            width: 67vw !important;
+            width: 67vw;
             margin-left: 2.5vw;
         }
 
@@ -142,4 +142,24 @@ ion-toolbar {
 
 .item-options-ios.item-options-end {
     border-bottom-width: 0;
+}
+
+#add-sentence-fab {
+    margin-right: 5px;
+    margin-bottom: 5px;
+
+    :first-child {
+        --background: rgb(69, 184, 255); 
+        font-size: 40px;      
+    }
+}
+
+#edit-sentence-fab {
+    margin-left: 5px;
+    margin-bottom: 5px;
+
+    :first-child {
+        --background: rgb(69, 184, 255); 
+        font-size: 30px;      
+    }
 }
