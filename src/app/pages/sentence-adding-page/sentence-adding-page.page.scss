@@ -45,7 +45,11 @@
 
 #selectable-sentence-div {
     width: 90%;
-    height: 60vh;
+    height: 50vh;
+    box-shadow: inset 0px 0px 1px 1px #1b4cee, 0px 0px 1px 1px #1b4cee;
+    border-radius: 4px;
+    padding: 10px;
+    outline: none;
     overflow-y: scroll;
     font-size: 3vh;
     margin-left: 5%;
@@ -58,7 +62,7 @@
 #btns-div {
     display: table;
     width: 100%;
-    margin-top: 5vh;
+    margin-top: 15vh;
 }
 
 .select-btn {

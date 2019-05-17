@@ -104,36 +104,4 @@ export class UtilsService {
 
 		return redIsPresent && yellowIsPresent;
 	}
-
-	checkClipboard(lessonId?: number): boolean {
-		window.focus();
-		const nav: any = window.navigator;
-		if (document.hasFocus()) {
-			nav.clipboard.readText().then(async (text: string) => {
-				if (text.length > (lessonId ? 0 : 30)) {
-					const alert = await this.alertCtrl.create({
-						message: "<p>Would you like to create new sentence from text in your clipboard?</p><b>" + text.substr(0, 25) + '...</b>',
-						buttons: [
-							{
-								text: 'No',
-								role: 'cancel',
-							},
-							{
-								text: 'Yes',
-								handler: () => {
-									sharedText[0] = text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
-									!lessonId ?
-										this.navCtrl.navigateForward(['share-adding-choice-page']) :
-										this.navCtrl.navigateForward(['sentence-adding-page'], { queryParams: { lessonId: lessonId } });
-										return true;
-								}
-							}
-						]
-					});
-					await alert.present();
-				}
-			});
-		}
-		return false;
-	}
 }

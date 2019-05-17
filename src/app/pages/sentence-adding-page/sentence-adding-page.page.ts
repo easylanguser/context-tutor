@@ -38,6 +38,13 @@ export class SentenceAddingPagePage implements OnInit {
 	}
 
 	ngOnInit() {
+		document.getElementById("selectable-sentence-div").focus();
+		document.getElementById("selectable-sentence-div").addEventListener("paste", function (e: ClipboardEvent) {
+			e.preventDefault();
+			var text = e.clipboardData.getData("text/plain");
+			document.execCommand("insertText", false, text.replace(/^\s+|\s+$|\s+(?=\s)/g, ""));
+		});
+
 		this.sentenceToEditId = this.route.snapshot.queryParamMap.get('toEdit');
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
 
@@ -82,7 +89,7 @@ export class SentenceAddingPagePage implements OnInit {
 				this.addSentenceService.postNewSentence({
 					lessonId: this.lessonId,
 					words: this.indexesArray,
-					text: this.sentence
+					text: document.getElementById("selectable-sentence-div").innerText
 				});
 			}
 		} else {
@@ -101,6 +108,7 @@ export class SentenceAddingPagePage implements OnInit {
 				});
 			});
 		}
+		sharedText[0] = undefined;
 		this.navCtrl.navigateForward(['lessons-list']);
 	}
 
@@ -121,6 +129,11 @@ export class SentenceAddingPagePage implements OnInit {
 
 			lastSelOffsets[0] = window.getSelection().getRangeAt(0).startOffset;
 			lastSelOffsets[1] = window.getSelection().getRangeAt(0).endOffset;
+			
+			if (document.getElementById("selectable-sentence-div").innerText.substring(lastSelOffsets[0], lastSelOffsets[1]) !== window.getSelection().toString()) {
+				--lastSelOffsets[0];
+				--lastSelOffsets[1];
+			}
 
 			lastSelCoords[0] = selection.x;
 			lastSelCoords[1] = selection.y;
@@ -131,8 +144,8 @@ export class SentenceAddingPagePage implements OnInit {
 
 	addSelectedWord() {
 		const textArea = document.getElementById("selectable-sentence-div");
-		const start = lastSelOffsets[0] - 1;
-		const finish = lastSelOffsets[1] - 1;
+		const start = lastSelOffsets[0];
+		const finish = lastSelOffsets[1];
 		const sel = textArea.innerText.substring(start, finish);
 
 		if (finish <= start) {

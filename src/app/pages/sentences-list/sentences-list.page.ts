@@ -147,7 +147,11 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	async addSentenceToLesson() {
-		this.utils.checkClipboard(this.lessonId);
+		this.navCtrl.navigateForward(['sentence-adding-page'], {
+			queryParams: {
+				lessonId: this.lessonId
+			}
+		});
 	}
 
 	async editSentence() {

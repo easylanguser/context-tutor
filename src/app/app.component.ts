@@ -53,7 +53,11 @@ export class AppComponent {
 
 	initializeApp() {
 		this.platform.ready()
-			.then(() => this.checkForIntent())
+			.then(() => {
+				if (this.platform.is('android')) {
+					this.checkForIntent();
+				}
+			})
 			.then(() => {
 				if (this.platform.is('android')) {
 					this.statusBar.styleBlackOpaque;

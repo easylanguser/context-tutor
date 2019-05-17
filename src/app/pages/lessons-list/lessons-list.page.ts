@@ -27,9 +27,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private alertCtrl: AlertController,
 		private lessonDeleteService: LessonDeleteService,
 		private utils: UtilsService,
-		private cdRef: ChangeDetectorRef) {
-		this.utils.checkClipboard();
-	}
+		private cdRef: ChangeDetectorRef) { }
 
 	ngOnInit() {
 		this.getData();
