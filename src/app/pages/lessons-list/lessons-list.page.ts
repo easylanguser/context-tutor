@@ -45,8 +45,12 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		});
 	}
 
-	addLesson() {
+	addLessonFile() {
 		this.navCtrl.navigateForward(['add-lesson']);
+	}
+
+	addLessonText() {
+		this.navCtrl.navigateForward(['add-lesson'], { queryParams : { hideFileInput: true } });
 	}
 
 	private syncCharts() {

@@ -156,11 +156,19 @@ ion-item-option {
 }
 
 #add-lesson-fab {
-    margin-right: 20px;
-    margin-bottom: 20px;
+    margin-right: 3vh;
+    margin-bottom: 3vh;
 
     :first-child {
         --background: rgb(69, 184, 255);
-        
+    }
+
+    :last-child {
+        :first-child {
+            --background: rgb(221, 221, 221);
+        }
+        :last-child {
+            --background: rgb(211, 152, 26);
+        }
     }
 }

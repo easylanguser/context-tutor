@@ -145,18 +145,18 @@ ion-toolbar {
 }
 
 #add-sentence-fab {
-    margin-right: 5px;
-    margin-bottom: 5px;
+    margin-right: 3vh;
+    margin-bottom: 3vh;
 
     :first-child {
         --background: rgb(69, 184, 255); 
-        font-size: 40px;      
+        font-size: 30px;      
     }
 }
 
 #edit-sentence-fab {
-    margin-left: 5px;
-    margin-bottom: 5px;
+    margin-left: 3vh;
+    margin-bottom: 3vh;
 
     :first-child {
         --background: rgb(69, 184, 255); 

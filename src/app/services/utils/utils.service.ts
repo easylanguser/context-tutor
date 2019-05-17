@@ -112,14 +112,14 @@ export class UtilsService {
 			nav.clipboard.readText().then(async (text: string) => {
 				if (text.length > (lessonId ? 0 : 30)) {
 					const alert = await this.alertCtrl.create({
-						message: "You've got large text in clipboard. Create new sentence with it?",
+						message: "<p>Would you like to create new sentence from text in your clipboard?</p><b>" + text.substr(0, 25) + '...</b>',
 						buttons: [
 							{
-								text: 'Cancel',
+								text: 'No',
 								role: 'cancel',
 							},
 							{
-								text: 'Ok',
+								text: 'Yes',
 								handler: () => {
 									sharedText[0] = text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
 									!lessonId ?
