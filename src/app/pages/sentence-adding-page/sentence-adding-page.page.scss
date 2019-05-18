@@ -77,7 +77,10 @@
 	color: white;
 	background-color: #7dddff;
 	border-radius: 25px;
-	outline: none;
+    outline: none;
+    
+    transition: margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
+    -webkit-transition: margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
 }
 
 #submit-btn, #cancel-btn {

@@ -6,11 +6,13 @@ import { AddSentenceService } from 'src/app/services/http/add-sentence/add-sente
 import { AddLessonService } from 'src/app/services/http/add-lesson/add-lesson.service';
 import { StorageService } from 'src/app/services/storage/storage-service';
 import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { SentenceResetService } from 'src/app/services/http/sentence-reset/sentence-reset.service';
 
-const lastSelOffsets: Array<number> = [0, 0];
-const lastSelCoords: Array<number> = [0, 0];
+let lastSelOffsets: Array<number> = [];
+let lastSelCoords: Array<number> = [];
+let indexesArray: Array<[number, number]> = [];
+let selectionDelay: number = 0;
 
 @Component({
 	selector: 'app-sentence-adding-page',
@@ -19,13 +21,13 @@ const lastSelCoords: Array<number> = [0, 0];
 })
 export class SentenceAddingPagePage implements OnInit {
 
-	indexesArray: Array<[number, number]> = [];
 	title: string;
 	sentence: string;
 	lessonId: number;
 	sentenceToEditId: string;
 
 	constructor(
+		private platform: Platform,
 		private navCtrl: NavController,
 		private storageService: StorageService,
 		private addSentenceService: AddSentenceService,
@@ -33,13 +35,18 @@ export class SentenceAddingPagePage implements OnInit {
 		private route: ActivatedRoute,
 		private lessonsService: LessonsService,
 		private sentenceResetService: SentenceResetService) {
+		platform.ready().then(() => {
+			if (platform.is('android') || platform.is('ios')) {
+				selectionDelay = 700;
+			}
+		})
 		document.addEventListener('mouseup', this.showSelectionButton);
 		document.addEventListener('touchstart', this.showSelectionButton);
 	}
 
 	ngOnInit() {
 		document.getElementById("selectable-sentence-div").focus();
-		document.getElementById("selectable-sentence-div").addEventListener("paste", function (e: ClipboardEvent) {
+		document.getElementById("selectable-sentence-div").addEventListener("paste", (e: ClipboardEvent) => {
 			e.preventDefault();
 			var text = e.clipboardData.getData("text/plain");
 			document.execCommand("insertText", false, text.replace(/^\s+|\s+$|\s+(?=\s)/g, ""));
@@ -53,6 +60,16 @@ export class SentenceAddingPagePage implements OnInit {
 			sharedText[0];
 
 		this.updateTitle();
+
+		document.getElementById("selectable-sentence-div").addEventListener("input", () => {
+			indexesArray = [];
+			lastSelOffsets = [0, 0];
+			lastSelCoords = [0, 0];
+			const allHighlights = document.getElementsByClassName('border');
+			for (let i = allHighlights.length - 1; i >= 0; i--) {
+				allHighlights[i].parentNode.removeChild(allHighlights[i]);
+			}		
+		});
 	}
 
 	goBack() {
@@ -74,21 +91,21 @@ export class SentenceAddingPagePage implements OnInit {
 	}
 
 	submitSelections() {
-		if (this.indexesArray.length === 0)
+		if (indexesArray.length === 0)
 			return;
 
-		this.indexesArray.sort((el1, el2) => el1[0] - el2[0]);
+		indexesArray.sort((el1, el2) => el1[0] - el2[0]);
 
 		if (this.lessonId) {
 			if (this.sentenceToEditId) {
 				this.sentenceResetService.updateData(
 					this.sentenceToEditId,
-					this.indexesArray
+					indexesArray
 				).subscribe();
 			} else {
 				this.addSentenceService.postNewSentence({
 					lessonId: this.lessonId,
-					words: this.indexesArray,
+					words: indexesArray,
 					text: document.getElementById("selectable-sentence-div").innerText
 				});
 			}
@@ -102,7 +119,7 @@ export class SentenceAddingPagePage implements OnInit {
 					const newLessonId = res.id;
 					this.addSentenceService.postNewSentence({
 						lessonId: newLessonId,
-						words: this.indexesArray,
+						words: indexesArray,
 						text: this.sentence
 					});
 				});
@@ -124,7 +141,7 @@ export class SentenceAddingPagePage implements OnInit {
 			btnStyle.marginLeft = window.innerWidth < 992 ?
 				leftMargin :
 				'calc(' + leftMargin + ' - 28vw)';
-			btnStyle.marginTop = String(selection.y + 50) + 'px';
+			btnStyle.marginTop = String(selection.y + 60) + 'px';
 			selectBtn.id = btnStyle.marginTop;
 
 			lastSelOffsets[0] = window.getSelection().getRangeAt(0).startOffset;
@@ -139,7 +156,7 @@ export class SentenceAddingPagePage implements OnInit {
 			lastSelCoords[1] = selection.y;
 			lastSelCoords[2] = selection.width;
 			lastSelCoords[3] = selection.height;
-		}, 700);
+		}, selectionDelay);
 	}
 
 	addSelectedWord() {
@@ -159,15 +176,15 @@ export class SentenceAddingPagePage implements OnInit {
 			}
 		}
 
-		for (let i = 0; i < this.indexesArray.length; i++) {
-			if ((this.indexesArray[i][0] <= start &&
-				this.indexesArray[i][0] + this.indexesArray[i][1] >= start) ||
-				(this.indexesArray[i][0] <= finish &&
-					this.indexesArray[i][0] + this.indexesArray[i][1] >= finish)) {
+		for (let i = 0; i < indexesArray.length; i++) {
+			if ((indexesArray[i][0] <= start &&
+				indexesArray[i][0] + indexesArray[i][1] >= start) ||
+				(indexesArray[i][0] <= finish &&
+					indexesArray[i][0] + indexesArray[i][1] >= finish)) {
 				return;
 			}
 		}
-		this.indexesArray.push([start, finish - start]);
+		indexesArray.push([start, finish - start]);
 
 		this.generateBorderForSelectedWord(textArea);
 	}
