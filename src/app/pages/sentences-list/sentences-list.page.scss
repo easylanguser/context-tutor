@@ -3,7 +3,7 @@ ion-toolbar {
 
     ion-buttons {
         color: rgb(69, 184, 255);
-        margin-left: 3vw;
+        margin-left: 4%;
 
         ion-button {
             color: #45b8ff;
@@ -106,7 +106,7 @@ ion-toolbar {
         }
 
         >:first-child {
-            word-wrap: break-word;
+            word-break: break-all;
             font-weight: bold;
             font-size: 3.4vmin;
 

@@ -8,9 +8,12 @@
 
 #toolbar {
     --background: none;
+    ion-buttons {
+        margin-left: 4%;
 
-    ion-icon {
-        color: #45b8ff;
+        ion-icon {
+            color: #45b8ff;
+        }
     }
 }
 

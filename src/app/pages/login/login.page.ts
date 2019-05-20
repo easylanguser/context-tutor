@@ -6,7 +6,7 @@ import { AuthService } from '../../services/auth/auth.service';
 @Component({
 	selector: 'page-login',
 	templateUrl: 'login.page.html',
-	styleUrls: ['./login.page.scss'],
+	styleUrls: ['../sign-up/sign-up.page.scss'],
 })
 export class LoginPage implements OnInit {
 	credentialsForm: FormGroup;

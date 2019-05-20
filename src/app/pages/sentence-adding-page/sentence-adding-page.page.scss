@@ -4,8 +4,14 @@
 
 #toolbar {
     --background: none;
-    ion-button {
-        color: #45b8ff;
+    ion-buttons {
+        position: absolute;
+        margin-left: 4%;
+        top: 4px;
+
+        ion-button {
+            color: #45b8ff;
+        }
     }
 }
 
@@ -20,7 +26,7 @@
 #sentence-title {
     font-size: 5vh;
     text-align: center;
-    margin: 2vh 5vw 4vh 0;
+    margin: 4vh 5vw 4vh 5vw;
 
     ion-label {
         margin: 0;

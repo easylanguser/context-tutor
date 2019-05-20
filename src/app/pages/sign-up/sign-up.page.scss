@@ -1,0 +1,93 @@
+.sc-ion-input-md-h {
+    --padding-bottom: 3px;
+    --padding-start: 2px;
+}
+
+.header-md:after {
+    background-image: none;
+}
+
+#header {
+    border-radius: 0 0 25px 25px;
+}
+
+#toolbar {
+    --background: rgb(69, 184, 255);
+    border-radius: 0 0 20px 20px;
+}
+
+#menu-button-outer {
+    color: white;
+    margin-left: 5vw;
+}
+#menu-button-inner {
+    --color: white;
+}
+
+#sign-up-title, #sign-in-title {
+    color: white;
+    font-size: 2.5vh;
+}
+
+#form-div {
+    background: white;
+    -webkit-box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
+    -moz-box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
+    box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
+    border-radius: 35px;
+    margin: 4vh 3vw 0 3vw;
+    height: auto;
+    padding: 7vmin;
+}
+
+#email-label {
+    font-size: 1.8vh;
+    color: #000;
+}
+#email-input {
+    border-bottom: 2px solid rgb(196, 196, 196);
+}
+
+#password-label {
+    font-size: 1.8vh;
+    color: #000;
+}
+#password-input {
+    border-bottom: 2px solid rgb(196, 196, 196);
+}
+
+#sign-up-button, #sign-in-button {
+    width: 40vw;
+    margin-left: calc(30vw - 16px);
+    height: 6vh;
+    border-radius: 100px;
+    background: linear-gradient(rgb(68, 207, 255), rgb(69, 184, 255));
+    color: white;
+    font-size: 3vh;
+    margin-top: 6vh;
+    outline: none;
+    -webkit-box-shadow: 0px 0px 10px 1px rgba(9, 130, 235, 0.25);
+    -moz-box-shadow: 0px 0px 10px 1px rgba(9, 130, 235, 0.25);
+    box-shadow: 0px 0px 10px 1px rgba(9, 130, 235, 0.25);
+    @media (min-width: 992px) {
+        margin-left: calc(16vw - 16px);
+    }
+
+    transition: background 0.4s ease-in-out;
+    -o-transition: background 0.4s ease-in-out;
+    -ms-transition: background 0.4s ease-in-out;
+    -moz-transition: background 0.4s ease-in-out;
+    -webkit-transition: background 0.4s ease-in-out;
+
+    &:hover {
+        background: linear-gradient(rgb(69, 184, 255), rgb(68, 207, 255));
+    }
+}
+
+.error-label {
+    font-size: 16px;
+    color: red;
+    text-align: center;
+    padding-top: 8px;
+    font-weight: bold;
+}
