@@ -1,4 +1,4 @@
-import { Observable, forkJoin } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpService } from '../../http/rest/http.service';
 import { environment } from 'src/environments/environment';
@@ -13,7 +13,6 @@ export class StatisticsUpdateService {
 	constructor(private httpService: HttpService) { }
 
 	updateData(newStatistics: any): Observable<any> {
-		const response = this.httpService.doPut(apiUrl + newStatistics.sentenceId, newStatistics);
-		return forkJoin([response]);
+		return this.httpService.doPut(apiUrl + newStatistics.sentenceId, newStatistics);
 	}
 }

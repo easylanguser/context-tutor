@@ -66,9 +66,7 @@ export class LessonsService {
 	}
 
 	async getSentencesByLessonId(id: number): Promise<Sentence[]> {
-		const sntns = await this.sentencesAPI.getData(id).toPromise()
-			.then(res => resolve(res[0]))
-			.catch(error => console.log(error));
+		const sntns = await this.sentencesAPI.getData(id);
 
 		for (const i in sntns) {
 			const hiddenChars: Array<string[]> = [];
@@ -151,9 +149,7 @@ export class LessonsService {
 	}
 
 	async getLessons(): Promise<Lesson[]> {
-		const lsn = await this.lessonsAPI.getData().toPromise()
-			.then(res => resolve(res[0]))
-			.catch(error => console.log(error));
+		const lsn = await this.lessonsAPI.getData();
 		const now = new Date().getTime();
 
 		for (let i in lsn) {

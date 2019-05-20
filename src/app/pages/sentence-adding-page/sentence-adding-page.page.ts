@@ -98,10 +98,7 @@ export class SentenceAddingPagePage implements OnInit {
 
 		if (this.lessonId) {
 			if (this.sentenceToEditId) {
-				this.sentenceResetService.updateData(
-					this.sentenceToEditId,
-					indexesArray
-				).subscribe();
+				this.sentenceResetService.updateData(this.sentenceToEditId, indexesArray);
 			} else {
 				this.addSentenceService.postNewSentence({
 					lessonId: this.lessonId,

@@ -29,10 +29,8 @@ export class EditLessonTitlePage implements OnInit {
 		const lessonToEdit = this.lessonsService.getLessonByID(this.lessonId);
 		lessonToEdit.name = this.lessonTitle;
 		this.lessonsService.editLesson(lessonToEdit);
-		this.lessonNameUpdateService.updateData(String(this.lessonId), this.lessonTitle.replace(/\s+/g, '%20'))
-			.subscribe(() => {
-				this.navCtrl.pop();
-			});
+		this.lessonNameUpdateService.updateLessonName(String(this.lessonId), this.lessonTitle.replace(/\s+/g, '%20'))
+			.then(() => this.navCtrl.pop());
 	}
 
 	goBack() {
