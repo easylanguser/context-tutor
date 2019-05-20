@@ -65,6 +65,11 @@ export class LessonsService {
 		this.lessons[this.lessons.indexOf(this.getLessonByID(lesson.id))] = lesson;
 	}
 
+	editSentence(lessonId: number, newSentence: Sentence): void {
+		const idx = this.getSentenceNumberByIDs(lessonId, newSentence.id);
+		this.getLessonByID(lessonId).sentences[idx] = newSentence;
+	}
+
 	async getSentencesByLessonId(id: number): Promise<Sentence[]> {
 		const sntns = await this.sentencesAPI.getData(id);
 

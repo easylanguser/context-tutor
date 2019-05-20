@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { sharedText } from 'src/app/app.component';
+import { sharedText, updateIsRequired } from 'src/app/app.component';
 import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { AddSentenceService } from 'src/app/services/http/add-sentence/add-sentence.service';
 import { AddLessonService } from 'src/app/services/http/add-lesson/add-lesson.service';
@@ -8,6 +8,7 @@ import { StorageService } from 'src/app/services/storage/storage-service';
 import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 import { NavController, Platform } from '@ionic/angular';
 import { SentenceResetService } from 'src/app/services/http/sentence-reset/sentence-reset.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 let lastSelOffsets: Array<number> = [];
 let lastSelCoords: Array<number> = [];
@@ -123,7 +124,12 @@ export class SentenceAddingPagePage implements OnInit {
 			});
 		}
 		sharedText[0] = undefined;
-		this.navCtrl.navigateForward(['lessons-list']);
+		updateIsRequired[0] = true;
+		this.navCtrl.navigateBack(['sentences-list'], {
+			queryParams: {
+				lessonID: this.lessonId
+			}
+		});
 	}
 
 	showSelectionButton() {

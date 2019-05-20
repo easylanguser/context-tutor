@@ -5,7 +5,7 @@ import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
 import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { sharedText } from 'src/app/app.component';
+import { sharedText, updateIsRequired } from 'src/app/app.component';
 
 @Component({
 	selector: 'page-lessons-list',
@@ -34,7 +34,15 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	ionViewDidEnter() {
-		this.firstEnter ? this.firstEnter = false : this.updateCharts();
+		if (this.firstEnter) {
+			this.firstEnter = false;
+		} else {
+			this.updateCharts();
+			if (updateIsRequired[0]) {
+				this.getData();
+				updateIsRequired[0] = false;
+			}
+		}
 	}
 
 	ngAfterViewInit() {
@@ -136,7 +144,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	doRefresh(event) {
-		this.getData().then(_ => {
+		this.getData().then(() => {
 			event.target.complete();
 			this.updateCharts();
 		});

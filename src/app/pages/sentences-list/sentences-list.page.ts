@@ -7,6 +7,7 @@ import { Chart } from 'chart.js';
 import { SentenceDeleteService } from 'src/app/services/http/sentence-delete/sentence-delete.service';
 import { IonItemSliding, AlertController, NavController, ToastController } from '@ionic/angular';
 import * as anime from 'animejs';
+import { updateIsRequired } from 'src/app/app.component';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -46,6 +47,12 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	ionViewDidEnter() {
 		this.updateCharts();
+		if (updateIsRequired[0]) {
+			this.lessonData.getSentencesByLessonId(this.lessonId).then(() => {
+				this.getData();
+				updateIsRequired[0] = false;
+			});
+		}
 	}
 
 	ngAfterViewInit() {

@@ -1,17 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Sentence } from 'src/app/models/sentence';
 import { Lesson } from 'src/app/models/lesson';
-import { AlertController, NavController } from '@ionic/angular';
-import { sharedText } from 'src/app/app.component';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class UtilsService {
 
-	constructor(
-		private alertCtrl: AlertController,
-		private navCtrl: NavController) { }
+	constructor() { }
 
 	public getNewChartObject(): Object {
 		return new Object({

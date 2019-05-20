@@ -5,8 +5,9 @@ import { AddLessonService } from 'src/app/services/http/add-lesson/add-lesson.se
 import { AddSentenceService } from 'src/app/services/http/add-sentence/add-sentence.service';
 import { ToastController, NavController } from '@ionic/angular';
 import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
-import { sharedText } from 'src/app/app.component';
+import { sharedText, updateIsRequired } from 'src/app/app.component';
 import { ActivatedRoute } from '@angular/router';
+import { LessonsService } from 'src/app/services/lessons/lessons.service';
 
 @Component({
 	selector: 'app-add-lesson',
@@ -17,7 +18,6 @@ export class AddLessonPage implements OnInit {
 
 	lessonName: string;
 	lessonUrl: string;
-	sentenceText: string;
 
 	sentences: any[] = [];
 
@@ -28,7 +28,6 @@ export class AddLessonPage implements OnInit {
 		private activeRoute: ActivatedRoute,
 		private storageService: StorageService,
 		private addLessonService: AddLessonService,
-		private addSentenceService: AddSentenceService,
 		private toastController: ToastController,
 		private addLessonFileService: AddLessonFileService,
 		private navCtrl: NavController) { }
@@ -80,28 +79,19 @@ export class AddLessonPage implements OnInit {
 					userId: userId,
 					name: this.lessonName,
 					url: this.lessonUrl
-				}).then(res => {
-					const newLessonId = res.id;
-					for (const sentence of this.sentences) {
-						this.addSentenceService.postNewSentence({
-							lessonId: newLessonId,
-							words: sentence.words,
-							text: sentence.text
-						});
-					}
+				}).then(() => {
 					this.lessonName = "";
 					this.lessonUrl = "";
-					this.sentenceText = "";
 					this.sentences = [];
+				}).then(async () => {
+					const toast = await this.toastController.create({
+						message: 'New lesson was added',
+						position: 'bottom',
+						duration: 2500,
+						animated: true
+					});
+					toast.present();
 				});
-			}).then(async () => {
-				const toast = await this.toastController.create({
-					message: 'New lesson was added',
-					position: 'bottom',
-					duration: 2500,
-					animated: true
-				});
-				toast.present();
 			});
 	}
 
@@ -124,5 +114,7 @@ export class AddLessonPage implements OnInit {
 
 			this.addLessonAsText();
 		}
+		updateIsRequired[0] = true;
+		this.navCtrl.pop();
 	}
 }

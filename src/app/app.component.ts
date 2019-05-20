@@ -9,7 +9,8 @@ import { ThemeService } from './services/theme/theme.service';
 import { StorageService } from './services/storage/storage-service';
 
 export const SHARED_TEXT_ID_KEY = "shared_text_id";
-export var sharedText = [];
+export let sharedText = [];
+export let updateIsRequired = [false];
 
 @Component({
 	selector: 'app-root',
