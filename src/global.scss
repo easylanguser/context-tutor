@@ -78,7 +78,10 @@ $border-width: 4px;
         margin-left: 30.5vw;
     }
 
-    .loading-wrapper.sc-ion-loading-md, .loading-wrapper.sc-ion-loading-ios {
+    .sc-ion-loading-md-h.sc-ion-loading-md-s {
+        .loading-wrapper.sc-ion-loading-md, .loading-wrapper.sc-ion-loading-ios {
+            margin-left: 0;
+        }
         margin-left: 28vw;
     }
 }

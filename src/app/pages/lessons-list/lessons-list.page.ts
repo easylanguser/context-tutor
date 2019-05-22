@@ -5,7 +5,7 @@ import { LessonsService } from 'src/app/services/lessons/lessons.service';
 import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
 import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { sharedText, updateIsRequired } from 'src/app/app.component';
+import { updateIsRequired } from 'src/app/app.component';
 
 @Component({
 	selector: 'page-lessons-list',
