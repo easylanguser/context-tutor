@@ -39,6 +39,7 @@ export class AuthService {
 	checkToken() {
 		this.storageService.get(TOKEN_KEY).then(token => {
 			if (token) {
+				parent.postMessage({ token: this.token }, '*');
 				let decoded = this.helper.decodeToken(token);
 				let isExpired = this.helper.isTokenExpired(token);
 
@@ -68,6 +69,8 @@ export class AuthService {
 				tap((res: AuthData) => {
 					this.storageService.set(TOKEN_KEY, res.token);
 					this.token = res.token;
+					parent.postMessage({ token: this.token }, '*');
+
 					this.storageService.set(USER_ID_KEY, res.id);
 					this.authenticationState.next(true);
 				}),
