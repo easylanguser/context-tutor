@@ -64,7 +64,7 @@ export class AddLessonPage implements OnInit {
 				const toast = await this.toastController.create({
 					message: 'New lesson was added',
 					position: 'bottom',
-					duration: 2500,
+					duration: 2000,
 					animated: true
 				});
 				toast.present();

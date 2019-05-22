@@ -78,7 +78,7 @@ export class SentenceAddingPagePage implements OnInit {
 	}
 
 	goBack() {
-		this.navCtrl.navigateBack(['lessons-list']);
+		this.navCtrl.pop();
 	}
 
 	ionViewDidEnter() {

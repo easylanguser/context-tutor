@@ -72,6 +72,17 @@ $border-width: 4px;
     }
 }
 
+@media (min-width: 992px) {
+    ion-toast {
+        width: 67vw;
+        margin-left: 30.5vw;
+    }
+
+    .loading-wrapper.sc-ion-loading-md, .loading-wrapper.sc-ion-loading-ios {
+        margin-left: 28vw;
+    }
+}
+
 ion-toast.toast-black {
     font-size: 1.2em;
     font-weight: 900;

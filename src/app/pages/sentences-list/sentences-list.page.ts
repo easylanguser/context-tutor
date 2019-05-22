@@ -49,11 +49,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		this.updateCharts();
 		if (updateIsRequired[0]) {
 			this.lessonsService.getSentencesByLessonId(this.lessonId).then(() => {
-				this.getData().then(() => {
-				for (var i = 0; i < this.lessonsService.getLessonByID(this.lessonId).sentences.length; i++) {
-					console.log(this.lessonsService.getLessonByID(this.lessonId).sentences[i].textUnderscored);
-					}
-				});
+				this.getData();
 				updateIsRequired[0] = false;
 			});
 		}
@@ -158,6 +154,13 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	async addSentenceToLesson() {
+		if (this.toast) {
+			anime({
+				targets: ['#edit-sentence-icon'],
+				rotate: 0,
+				duration: 0
+			});
+		}
 		this.navCtrl.navigateForward(['sentence-adding-page'], {
 			queryParams: {
 				lessonId: this.lessonId
@@ -215,6 +218,11 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 					toEdit: sentenceId,
 					lessonId: this.lessonId
 				}
+			});
+			anime({
+				targets: ['#edit-sentence-icon'],
+				rotate: 0,
+				duration: 0
 			});
 		}
 	}
