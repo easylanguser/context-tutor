@@ -5,7 +5,6 @@ import { Lesson } from 'src/app/models/lesson';
 import { LessonsListService } from '../http/lessons-list/lessons-list.service';
 import { Sentence } from 'src/app/models/sentence';
 import { Statistics } from 'src/app/models/statistics';
-import { resolve } from 'q';
 
 @Injectable({
 	providedIn: 'root'

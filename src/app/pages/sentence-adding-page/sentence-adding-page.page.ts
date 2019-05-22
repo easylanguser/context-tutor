@@ -8,7 +8,9 @@ import { StorageService } from 'src/app/services/storage/storage-service';
 import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 import { NavController, Platform } from '@ionic/angular';
 import { SentenceResetService } from 'src/app/services/http/sentence-reset/sentence-reset.service';
+import { Sentence } from 'src/app/models/sentence';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { Statistics } from 'src/app/models/statistics';
 
 let lastSelOffsets: Array<number> = [];
 let lastSelCoords: Array<number> = [];
@@ -35,7 +37,8 @@ export class SentenceAddingPagePage implements OnInit {
 		private addLessonService: AddLessonService,
 		private route: ActivatedRoute,
 		private lessonsService: LessonsService,
-		private sentenceResetService: SentenceResetService) {
+		private sentenceResetService: SentenceResetService,
+		private utils: UtilsService) {
 		platform.ready().then(() => {
 			if (platform.is('android') || platform.is('ios')) {
 				selectionDelay = 700;
@@ -56,6 +59,7 @@ export class SentenceAddingPagePage implements OnInit {
 		this.sentenceToEditId = this.route.snapshot.queryParamMap.get('toEdit');
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
 
+		indexesArray = [];
 		this.sentence = this.sentenceToEditId ?
 			this.lessonsService.getSentenceByIDs(this.lessonId, Number(this.sentenceToEditId)).text :
 			sharedText[0];
@@ -69,12 +73,12 @@ export class SentenceAddingPagePage implements OnInit {
 			const allHighlights = document.getElementsByClassName('border');
 			for (let i = allHighlights.length - 1; i >= 0; i--) {
 				allHighlights[i].parentNode.removeChild(allHighlights[i]);
-			}		
+			}
 		});
 	}
 
 	goBack() {
-		this.navCtrl.pop();
+		this.navCtrl.navigateBack(['lessons-list']);
 	}
 
 	ionViewDidEnter() {
@@ -97,9 +101,36 @@ export class SentenceAddingPagePage implements OnInit {
 
 		indexesArray.sort((el1, el2) => el1[0] - el2[0]);
 
-		if (this.lessonId) {
-			if (this.sentenceToEditId) {
+		const textAreaValue = document.getElementById("selectable-sentence-div").innerText;
+		if (this.lessonId) { // Sentence is added to an existing lesson
+			if (this.sentenceToEditId) { // Existing sentence is being edited
 				this.sentenceResetService.updateData(this.sentenceToEditId, indexesArray);
+
+				const hiddenSentence = this.utils.hideChars(textAreaValue, indexesArray);
+				const hiddenChars: Array<string[]> = [];
+				const curCharsIndexes: number[] = [];
+				for (const j in indexesArray) {
+					const chars: string[] = [];
+					for (let k = 0; k < indexesArray[j][1]; k++) {
+						chars.push(textAreaValue.charAt(indexesArray[j][0] + k));
+					}
+					hiddenChars.push(chars);
+					curCharsIndexes.push(0);
+				}
+				this.lessonsService.editSentence(this.lessonId,
+					new Sentence(
+						Number(this.sentenceToEditId),
+						this.lessonId,
+						indexesArray,
+						textAreaValue,
+						hiddenSentence,
+						hiddenChars,
+						curCharsIndexes,
+						0,
+						this.utils.addChar(hiddenSentence, '*'),
+						false,
+						new Date().toISOString(),
+						new Statistics(0, 0, 0, 0, 0, 0, 0)));
 			} else {
 				this.addSentenceService.postNewSentence({
 					lessonId: this.lessonId,
@@ -107,7 +138,7 @@ export class SentenceAddingPagePage implements OnInit {
 					text: document.getElementById("selectable-sentence-div").innerText
 				});
 			}
-		} else {
+		} else { // Sentence is added to a new lesson
 			this.storageService.get(USER_ID_KEY).then(userId => {
 				this.addLessonService.postNewLesson({
 					userId: userId,
@@ -149,7 +180,7 @@ export class SentenceAddingPagePage implements OnInit {
 
 			lastSelOffsets[0] = window.getSelection().getRangeAt(0).startOffset;
 			lastSelOffsets[1] = window.getSelection().getRangeAt(0).endOffset;
-			
+
 			if (document.getElementById("selectable-sentence-div").innerText.substring(lastSelOffsets[0], lastSelOffsets[1]) !== window.getSelection().toString()) {
 				--lastSelOffsets[0];
 				--lastSelOffsets[1];
