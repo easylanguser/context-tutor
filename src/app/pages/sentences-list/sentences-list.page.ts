@@ -174,12 +174,12 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		this.addButtonIsAnimating = true;
 
 		if (!this.toast) {
-			await anime({
+			anime({
 				targets: ['#edit-sentence-icon'],
 				rotate: 180,
 				easing: 'easeInOutBack',
 				duration: 500
-			}).finished;
+			});
 
 			this.toast = await this.toastController.create({
 				message: 'Select sentence to edit, or click button again to dismiss',
@@ -190,12 +190,12 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 			this.toast.present().then(() => this.addButtonIsAnimating = false);
 		} else {
-			await anime({
+			anime({
 				targets: ['#edit-sentence-icon'],
 				rotate: 0,
 				easing: 'easeInOutBack',
 				duration: 500
-			}).finished;
+			});
 
 			this.toast.dismiss().then(() => {
 				this.toast = null;
