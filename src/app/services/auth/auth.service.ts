@@ -39,7 +39,7 @@ export class AuthService {
 	checkToken() {
 		this.storageService.get(TOKEN_KEY).then(token => {
 			if (token) {
-				parent.postMessage({ token: this.token }, '*');
+				parent.postMessage({ token: token }, '*');
 				let decoded = this.helper.decodeToken(token);
 				let isExpired = this.helper.isTokenExpired(token);
 
