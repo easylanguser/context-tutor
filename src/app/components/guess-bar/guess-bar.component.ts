@@ -153,6 +153,9 @@ export class GuessBarComponent implements OnInit {
 			this.updateChart();
 			this.resetColors();
 			this.curSentence().solvedStatus = true;
+			if (!this.guessPage.toastIsShown) {
+				this.guessPage.showToast();
+			}
 		}
 	}
 
@@ -311,6 +314,9 @@ export class GuessBarComponent implements OnInit {
 				++this.guessPage.curWordIndex;
 			} else if (status === 2) {
 				this.curSentence().solvedStatus = true;
+				if (!this.guessPage.toastIsShown) {
+					this.guessPage.showToast();
+				}
 				return;
 			}
 

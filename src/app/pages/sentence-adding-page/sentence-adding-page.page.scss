@@ -2,6 +2,15 @@
     background: #7dddff;
 }
 
+ion-icon {
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+    -o-transition: color 0.3s ease-in-out;
+    -ms-transition: color 0.3s ease-in-out;
+    -moz-transition: color 0.3s ease-in-out;
+    -webkit-transition: color 0.3s ease-in-out;
+}
+
 #toolbar {
     --background: none;
     ion-buttons {
@@ -10,6 +19,7 @@
         top: 4px;
 
         ion-button {
+            --border-radius: 50%;
             color: #45b8ff;
         }
     }
@@ -35,13 +45,6 @@
     ion-icon {
         font-size: 5vh;
         margin: 0;
-        cursor: pointer;
-        
-        transition: color 0.4s ease-in-out;
-        -o-transition: color 0.4s ease-in-out;
-        -ms-transition: color 0.4s ease-in-out;
-        -moz-transition: color 0.4s ease-in-out;
-        -webkit-transition: color 0.4s ease-in-out;
     
         &:hover {
             color: rgb(69, 184, 255);
@@ -68,7 +71,7 @@
 #btns-div {
     display: table;
     width: 100%;
-    margin-top: 15vh;
+    margin-top: 8vh;
 }
 
 .select-btn {
@@ -102,12 +105,16 @@
     background: #00f2d0;
     border-radius: 5vh;
     padding: 1.5vh;
-    cursor: pointer;
+    &:hover {
+        color: greenyellow;
+    }
 }
 
 #cancel-btn ion-icon {
     background: #38dbff;
     border-radius: 5vh;
     padding: 1.5vh;
-    cursor: pointer;
+    &:hover {
+        color: red;
+    }
 }

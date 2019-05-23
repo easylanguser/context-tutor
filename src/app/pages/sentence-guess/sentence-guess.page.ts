@@ -103,9 +103,10 @@ export class SentenceGuessPage implements OnInit {
 	async showToast() {
 		this.toastIsShown = true;
 		const toast = await this.toastController.create({
-			message: 'Sentence is filled',
+			message: 'Good work!',
 			position: 'middle',
 			duration: 1000,
+			cssClass: 'toast-black',
 			animated: true
 		});
 		toast.present();

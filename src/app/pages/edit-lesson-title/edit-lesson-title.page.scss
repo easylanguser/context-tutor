@@ -11,8 +11,11 @@
     ion-buttons {
         margin-left: 4%;
 
-        ion-icon {
-            color: #45b8ff;
+        ion-button {
+            --border-radius: 50%;
+            ion-icon {
+                color: #45b8ff;
+            }
         }
     }
 }

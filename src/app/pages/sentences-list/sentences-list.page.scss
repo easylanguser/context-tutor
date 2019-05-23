@@ -6,6 +6,7 @@ ion-toolbar {
         margin-left: 4%;
 
         ion-button {
+            --border-radius: 50%;
             color: #45b8ff;
         }
     }
