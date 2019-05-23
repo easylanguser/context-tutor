@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef } fro
 import { ActivatedRoute } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
-import { LessonsService } from 'src/app/services/lessons/lessons.service';
+import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
 import { SentenceDeleteService } from 'src/app/services/http/sentence-delete/sentence-delete.service';
 import { IonItemSliding, AlertController, NavController, ToastController } from '@ionic/angular';
@@ -32,7 +32,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		private utils: UtilsService,
 		private route: ActivatedRoute,
 		private navCtrl: NavController,
-		public lessonsService: LessonsService,
+		public lessonsDataService: LessonsDataService,
 		private sentenceDeleteService: SentenceDeleteService,
 		private cdRef: ChangeDetectorRef) { }
 
@@ -48,7 +48,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	ionViewDidEnter() {
 		this.updateCharts();
 		if (updateIsRequired[0]) {
-			this.lessonsService.getSentencesByLessonId(this.lessonId).then(() => {
+			this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {
 				this.getData();
 				updateIsRequired[0] = false;
 			});
@@ -79,7 +79,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		this.offset += 20;
 		setTimeout(() => {
 			this.getData().then(() => event.target.complete());
-			if (this.displayedSentences.length === this.lessonsService.getLessonByID(this.lessonId).sentences.length) {
+			if (this.displayedSentences.length === this.lessonsDataService.getLessonByID(this.lessonId).sentences.length) {
 				event.target.disabled = true;
 				document.getElementById("sentences-list").style.paddingBottom = "15vh";
 			}
@@ -103,7 +103,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 						slidingItem.close();
 
 						this.sentenceDeleteService.delete(sentenceID);
-						this.lessonsService.removeSentence(lessonID, sentenceID)
+						this.lessonsDataService.removeSentence(lessonID, sentenceID)
 
 						let i = 0;
 						for (i; i < this.displayedSentences.length; i++) {
@@ -235,7 +235,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	private async getData() {
-		this.displayedSentences = await this.lessonsService
+		this.displayedSentences = await this.lessonsDataService
 			.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20);
 	}
 
@@ -244,13 +244,13 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	redClick() {
-		this.displayedSentences = this.lessonsService
+		this.displayedSentences = this.lessonsDataService
 			.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20)
 			.filter(sentence => sentence.statistics.wrongAnswers > 0);
 	}
 
 	redAndYellowClick() {
-		this.displayedSentences = this.lessonsService
+		this.displayedSentences = this.lessonsDataService
 			.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20)
 			.filter(this.utils.redAndYellowFilterSentence);
 	}

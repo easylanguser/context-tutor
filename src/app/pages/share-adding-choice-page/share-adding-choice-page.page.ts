@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChildren } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
 import { Chart } from 'chart.js';
 import { LoadingController, NavController } from '@ionic/angular';
-import { LessonsService } from 'src/app/services/lessons/lessons.service';
+import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
@@ -21,7 +21,7 @@ export class ShareAddingChoicePagePage implements OnInit {
 	constructor(
 		private navCtrl: NavController,
 		private loadingController: LoadingController,
-		private lessonService: LessonsService,
+		private lessonsDataService: LessonsDataService,
 		private utils: UtilsService) { }
 
 	ngOnInit() {
@@ -83,8 +83,8 @@ export class ShareAddingChoicePagePage implements OnInit {
 	private async getData() {
 		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
-		await this.lessonService.getLessons().then(() => {
-			this.displayedLessons = this.lessonService.lessons;
+		await this.lessonsDataService.getLessons().then(() => {
+			this.displayedLessons = this.lessonsDataService.lessons;
 			this.allLessons = Object.assign([], this.displayedLessons);
 		}).then(() => loading.dismiss());
 	}

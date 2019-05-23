@@ -90,6 +90,6 @@ ion-toast.toast-black {
     font-size: 1.2em;
     font-weight: 900;
     text-align: center;
-    --background: #000;
-    --color: #FFF;
+    --background: var(--ion-color-step-950);
+    --color: var(--ion-color-step-50);
 }

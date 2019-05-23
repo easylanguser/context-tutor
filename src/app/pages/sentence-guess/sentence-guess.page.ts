@@ -4,7 +4,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastController, NavController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
-import { LessonsService } from 'src/app/services/lessons/lessons.service';
+import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
 
 @Component({
@@ -28,7 +28,7 @@ export class SentenceGuessPage implements OnInit {
 
 	constructor(private route: ActivatedRoute,
 		private toastController: ToastController,
-		public lessonsData: LessonsService,
+		public lessonsDataService: LessonsDataService,
 		private utils: UtilsService,
 		private statisticsUpdateService: StatisticsUpdateService,
 		private navCtrl: NavController) { }
@@ -43,7 +43,7 @@ export class SentenceGuessPage implements OnInit {
 
 	// Get current Sentence object from service
 	curSentence(): Sentence {
-		const lessonSentences = this.lessonsData.getLessonByID(this.lessonId).sentences;
+		const lessonSentences = this.lessonsDataService.getLessonByID(this.lessonId).sentences;
 		return lessonSentences.find(sentence => sentence.id === this.sentenceId);
 	}
 

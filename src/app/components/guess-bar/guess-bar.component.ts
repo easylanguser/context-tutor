@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Sentence } from 'src/app/models/sentence';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { LessonsService } from 'src/app/services/lessons/lessons.service';
+import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { SentenceGuessPage } from 'src/app/pages/sentence-guess/sentence-guess.page';
 import * as anime from 'animejs';
 
@@ -42,7 +42,7 @@ export class GuessBarComponent implements OnInit {
 
 	constructor(
 		private util: UtilsService,
-		public lessonsService: LessonsService,
+		public lessonsDataService: LessonsDataService,
 		public guessPage: SentenceGuessPage) { }
 
 	ngOnInit() {
@@ -103,8 +103,8 @@ export class GuessBarComponent implements OnInit {
 
 		this.guessPage.saveData();
 
-		const lessonSentences = this.lessonsService.getLessonByID(this.guessPage.lessonId).sentences;
-		const currentLessonIndex = this.lessonsService
+		const lessonSentences = this.lessonsDataService.getLessonByID(this.guessPage.lessonId).sentences;
+		const currentLessonIndex = this.lessonsDataService
 			.getSentenceNumberByIDs(this.guessPage.lessonId, this.guessPage.sentenceId);
 		const firstSentenceId = lessonSentences[0].id
 		const lastSentenceId = lessonSentences[lessonSentences.length - 1].id;

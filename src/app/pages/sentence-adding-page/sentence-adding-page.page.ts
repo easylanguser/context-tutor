@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { sharedText, updateIsRequired } from 'src/app/app.component';
-import { LessonsService } from 'src/app/services/lessons/lessons.service';
+import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { AddSentenceService } from 'src/app/services/http/add-sentence/add-sentence.service';
 import { AddLessonService } from 'src/app/services/http/add-lesson/add-lesson.service';
 import { StorageService } from 'src/app/services/storage/storage-service';
@@ -36,7 +36,7 @@ export class SentenceAddingPagePage implements OnInit {
 		private addSentenceService: AddSentenceService,
 		private addLessonService: AddLessonService,
 		private route: ActivatedRoute,
-		private lessonsService: LessonsService,
+		private lessonsDataService: LessonsDataService,
 		private sentenceResetService: SentenceResetService,
 		private utils: UtilsService) {
 		platform.ready().then(() => {
@@ -61,7 +61,7 @@ export class SentenceAddingPagePage implements OnInit {
 
 		indexesArray = [];
 		this.sentence = this.sentenceToEditId ?
-			this.lessonsService.getSentenceByIDs(this.lessonId, Number(this.sentenceToEditId)).text :
+			this.lessonsDataService.getSentenceByIDs(this.lessonId, Number(this.sentenceToEditId)).text :
 			sharedText[0];
 
 		this.updateTitle();
@@ -87,7 +87,7 @@ export class SentenceAddingPagePage implements OnInit {
 
 	updateTitle() {
 		this.lessonId ?
-			this.title = this.lessonsService.getLessonByID(this.lessonId).name :
+			this.title = this.lessonsDataService.getLessonByID(this.lessonId).name :
 			this.title = new Date().toJSON().slice(0, 10).replace(/-/g, '/') + ' ' + sharedText[0].substr(0, 10);
 	}
 
@@ -117,7 +117,7 @@ export class SentenceAddingPagePage implements OnInit {
 					hiddenChars.push(chars);
 					curCharsIndexes.push(0);
 				}
-				this.lessonsService.editSentence(this.lessonId,
+				this.lessonsDataService.editSentence(this.lessonId,
 					new Sentence(
 						Number(this.sentenceToEditId),
 						this.lessonId,

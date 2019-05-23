@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { LoadingController, IonItemSliding, AlertController, NavController } from '@ionic/angular';
 import { Lesson } from 'src/app/models/lesson';
-import { LessonsService } from 'src/app/services/lessons/lessons.service';
+import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
 import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
@@ -23,7 +23,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	constructor(
 		private loadingController: LoadingController,
 		private navCtrl: NavController,
-		private lessonService: LessonsService,
+		private lessonsDataService: LessonsDataService,
 		private alertCtrl: AlertController,
 		private lessonDeleteService: LessonDeleteService,
 		private utils: UtilsService,
@@ -116,8 +116,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 						slidingItem.close();
 
 						this.lessonDeleteService.delete(lessonID);
-						this.lessonService.removeAllLessonSentences(lessonID);
-						this.lessonService.removeLesson(lessonID);
+						this.lessonsDataService.removeAllLessonSentences(lessonID);
+						this.lessonsDataService.removeLesson(lessonID);
 
 						let i = 0;
 						for (i; i < this.displayedLessons.length; i++) {
@@ -156,24 +156,24 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	private async getData() {
 		const loading = await this.loadingController.create({ message: 'Loading' });
 		await loading.present();
-		await this.lessonService.getLessons().then(() => {
-			this.displayedLessons = this.lessonService.lessons;
-			this.displayedLessons.sort(this.lessonService.sortLessonsByTime);
+		await this.lessonsDataService.getLessons().then(() => {
+			this.displayedLessons = this.lessonsDataService.lessons;
+			this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);
 		}).then(() => loading.dismiss());
 	}
 
 	allClick() {
-		this.displayedLessons = this.lessonService.lessons;
+		this.displayedLessons = this.lessonsDataService.lessons;
 	}
 
 	redClick() {
-		this.displayedLessons = this.lessonService.lessons.filter(lesson =>
+		this.displayedLessons = this.lessonsDataService.lessons.filter(lesson =>
 			lesson.sentences.some(snt => snt.statistics.wrongAnswers > 0)
 		);
 	}
 
 	redAndYellowClick() {
-		this.displayedLessons = this.lessonService.lessons.filter(this.utils.redAndYellowFilterLesson);
+		this.displayedLessons = this.lessonsDataService.lessons.filter(this.utils.redAndYellowFilterLesson);
 	}
 
 	openLesson(lessonID) {

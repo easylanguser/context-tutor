@@ -8,7 +8,7 @@
         </ion-button>
       </ion-buttons>
       <ion-title>
-        Sentence {{this.lessonsData.getSentenceNumberByIDs(this.lessonId, this.sentenceId) + 1}} of {{this.lessonsData.getLessonByID(this.lessonId).sentences.length}}
+        Sentence {{this.lessonsDataService.getSentenceNumberByIDs(this.lessonId, this.sentenceId) + 1}} of {{this.lessonsDataService.getLessonByID(this.lessonId).sentences.length}}
       </ion-title>
       <ion-buttons slot="end">
         <div id="canvas-div">

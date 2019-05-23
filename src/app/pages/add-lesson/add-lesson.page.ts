@@ -2,12 +2,10 @@ import { AddLessonFileService } from './../../services/http/add-lesson-file/add-
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from 'src/app/services/storage/storage-service';
 import { AddLessonService } from 'src/app/services/http/add-lesson/add-lesson.service';
-import { AddSentenceService } from 'src/app/services/http/add-sentence/add-sentence.service';
 import { ToastController, NavController } from '@ionic/angular';
 import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 import { sharedText, updateIsRequired } from 'src/app/app.component';
 import { ActivatedRoute } from '@angular/router';
-import { LessonsService } from 'src/app/services/lessons/lessons.service';
 
 @Component({
 	selector: 'app-add-lesson',

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LessonsService } from 'src/app/services/lessons/lessons.service';
+import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { NavController } from '@ionic/angular';
 import { LessonNameUpdateService } from 'src/app/services/http/lesson-name-update/lesson-name-update.service';
 
@@ -18,17 +18,17 @@ export class EditLessonTitlePage implements OnInit {
 		private lessonNameUpdateService: LessonNameUpdateService,
 		private navCtrl: NavController,
 		private route: ActivatedRoute,
-		private lessonsService: LessonsService) { }
+		private lessonsDataService: LessonsDataService) { }
 
 	ngOnInit() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
-		this.lessonTitle = this.lessonsService.getLessonByID(this.lessonId).name;
+		this.lessonTitle = this.lessonsDataService.getLessonByID(this.lessonId).name;
 	}
 
 	submitNewTitle() {
-		const lessonToEdit = this.lessonsService.getLessonByID(this.lessonId);
+		const lessonToEdit = this.lessonsDataService.getLessonByID(this.lessonId);
 		lessonToEdit.name = this.lessonTitle;
-		this.lessonsService.editLesson(lessonToEdit);
+		this.lessonsDataService.editLesson(lessonToEdit);
 		this.lessonNameUpdateService.updateLessonName(String(this.lessonId), this.lessonTitle.replace(/\s+/g, '%20'))
 			.then(() => this.navCtrl.pop());
 	}

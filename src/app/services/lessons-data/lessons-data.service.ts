@@ -9,7 +9,7 @@ import { Statistics } from 'src/app/models/statistics';
 @Injectable({
 	providedIn: 'root'
 })
-export class LessonsService {
+export class LessonsDataService {
 
 	lessons: Lesson[] = [];
 
