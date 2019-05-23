@@ -85,6 +85,7 @@ export class AuthService {
 			this.storageService.remove(TOKEN_KEY).then(() => {
 				this.authenticationState.next(false);
 				this.token = null;
+				parent.postMessage({ userLoggedOut: true }, '*');
 			});
 		});
 	}

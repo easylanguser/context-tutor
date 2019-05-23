@@ -56,7 +56,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		this.pieCanvases.changes.subscribe(_ => {
+		this.pieCanvases.changes.subscribe(() => {
 			this.syncCharts();
 		});
 	}

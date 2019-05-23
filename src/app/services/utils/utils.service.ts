@@ -72,16 +72,7 @@ export class UtilsService {
 	}
 
 	redAndYellowFilterSentence(val: Sentence) {
-		let redIsPresent: boolean = false;
-		let yellowIsPresent: boolean = false;
-
-		const stat = val.statistics;
-		if (stat.wrongAnswers > 0 && (stat.hintUsages > 0 || stat.giveUps > 0)) {
-			redIsPresent = true;
-			yellowIsPresent = true;
-		}
-
-		return redIsPresent && yellowIsPresent;
+		return val.statistics.wrongAnswers > 0 && (val.statistics.hintUsages > 0 || val.statistics.giveUps > 0);
 	}
 
 	redAndYellowFilterLesson(val: Lesson) {
