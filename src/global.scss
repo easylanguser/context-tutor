@@ -24,6 +24,11 @@
     }
 }
 
+* {
+    font-family: "Comfortaa";
+    --ion-font-family: "Comfortaa";
+}
+
 input:-webkit-autofill {
     animation-name: autofill;
     animation-fill-mode: both;
