@@ -97,7 +97,8 @@ export class GuessBarComponent implements OnInit {
 	}
 
 	changeSentence(forward: boolean) {
-		if (this.sentenceTranslateIsPlayed) {
+		if (this.sentenceTranslateIsPlayed ||
+			this.lessonsDataService.getLessonByID(this.guessPage.lessonId).sentences.length === 1) {
 			return;
 		}
 
