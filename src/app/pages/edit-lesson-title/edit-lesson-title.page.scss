@@ -8,11 +8,13 @@
 
 #toolbar {
     --background: none;
+
     ion-buttons {
         margin-left: 4%;
 
         ion-button {
             --border-radius: 50%;
+
             ion-icon {
                 color: #45b8ff;
             }
@@ -28,6 +30,7 @@
     font-size: 4vh;
     font-weight: bold;
     text-align: center;
+
     @media (min-width: 992px) {
         width: 60vw;
         margin-left: 6vw;
@@ -40,7 +43,7 @@
     max-width: 80vw;
     height: 30vh;
     min-height: 10vh;
-    max-height: 70vh;
+    max-height: 50vh;
     font-size: 5vh;
     line-height: 5vh;
     margin-top: 4vh;
@@ -53,6 +56,7 @@
     border-bottom-left-radius: 20px;
     margin-left: 10vw;
     color: black;
+
     @media (min-width: 992px) {
         width: 50vw;
         min-width: 50vw;
@@ -71,5 +75,15 @@
         border-radius: 5vh;
         padding: 1.5vh;
         cursor: pointer;
+        
+        transition: color 0.3s ease-in-out;
+        -o-transition: color 0.3s ease-in-out;
+        -ms-transition: color 0.3s ease-in-out;
+        -moz-transition: color 0.3s ease-in-out;
+        -webkit-transition: color 0.3s ease-in-out;
+
+        &:hover {
+            color: greenyellow;
+        }
     }
 }

@@ -141,6 +141,11 @@ ion-toolbar {
     margin: 0.5vh 3vw 0.5vh 0;
 }
 
+ion-item-option {
+    max-width: 160px;
+    font-weight: bold;
+}
+
 .item-options-ios.item-options-end {
     border-bottom-width: 0;
 }
