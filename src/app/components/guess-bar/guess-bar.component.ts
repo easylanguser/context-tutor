@@ -321,7 +321,7 @@ export class GuessBarComponent implements OnInit {
 				return;
 			}
 
-			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '*');
+			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '<span class=\'red-text\'>*</span>');
 
 			this.refreshCharBoxes();
 		} else {

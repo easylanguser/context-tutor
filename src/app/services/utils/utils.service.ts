@@ -68,7 +68,12 @@ export class UtilsService {
 
 	addChar(input: string, replacement: string): string {
 		let firstUnderScoreIndex = input.indexOf('*');
-		return input.substr(0, firstUnderScoreIndex) + replacement + input.substr(firstUnderScoreIndex + 1);
+		let length = 1;
+		if (input.charAt(firstUnderScoreIndex - 3) === 't') {
+			firstUnderScoreIndex -= 23;
+			length = 31;
+		}
+		return input.substr(0, firstUnderScoreIndex) + replacement + input.substr(firstUnderScoreIndex + length);
 	}
 
 	redAndYellowFilterSentence(val: Sentence) {
