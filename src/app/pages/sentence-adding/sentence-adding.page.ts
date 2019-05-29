@@ -19,10 +19,10 @@ let selectionDelay: number = 0;
 
 @Component({
 	selector: 'app-sentence-adding-page',
-	templateUrl: './sentence-adding-page.page.html',
-	styleUrls: ['./sentence-adding-page.page.scss'],
+	templateUrl: './sentence-adding.page.html',
+	styleUrls: ['./sentence-adding.page.scss'],
 })
-export class SentenceAddingPagePage implements OnInit {
+export class SentenceAddingPage implements OnInit {
 
 	title: string;
 	sentence: string;

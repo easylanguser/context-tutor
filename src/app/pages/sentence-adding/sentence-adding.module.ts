@@ -2,15 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
-
 import { IonicModule } from '@ionic/angular';
-
-import { SentenceAddingPagePage } from './sentence-adding-page.page';
+import { SentenceAddingPage } from './sentence-adding.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: SentenceAddingPagePage
+    component: SentenceAddingPage
   }
 ];
 
@@ -21,6 +19,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [SentenceAddingPagePage]
+  declarations: [SentenceAddingPage]
 })
-export class SentenceAddingPagePageModule {}
+export class SentenceAddingPageModule {}

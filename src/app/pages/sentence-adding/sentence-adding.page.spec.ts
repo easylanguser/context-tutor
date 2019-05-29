@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ShareAddingChoicePagePage } from './share-adding-choice-page.page';
+import { SentenceAddingPage } from './sentence-adding.page';
 
-describe('ShareAddingChoicePagePage', () => {
-  let component: ShareAddingChoicePagePage;
-  let fixture: ComponentFixture<ShareAddingChoicePagePage>;
+describe('SentenceAddingPage', () => {
+  let component: SentenceAddingPage;
+  let fixture: ComponentFixture<SentenceAddingPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ShareAddingChoicePagePage ],
+      declarations: [ SentenceAddingPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ShareAddingChoicePagePage);
+    fixture = TestBed.createComponent(SentenceAddingPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

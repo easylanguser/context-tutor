@@ -25,6 +25,9 @@ import { GuessBarComponent } from './components/guess-bar/guess-bar.component';
 import { environment } from 'src/environments/environment';
 import { AddLessonPageModule } from './pages/add-lesson/add-lesson.module';
 import { TOKEN_KEY } from './services/auth/auth.service';
+import { ShareAddingChoicePageModule } from './pages/share-adding-choice/share-adding-choice.module';
+import { SentenceAddingPageModule } from './pages/sentence-adding/sentence-adding.module';
+import { EditLessonTitlePageModule } from './pages/edit-lesson-title/edit-lesson-title.module';
 
 export function jwtOptionsFactory(storage) {
 	return {
@@ -44,6 +47,9 @@ export function jwtOptionsFactory(storage) {
 		SentencesListPageModule,
 		SentenceGuessPageModule,
 		AddLessonPageModule,
+		ShareAddingChoicePageModule,
+		SentenceAddingPageModule,
+		EditLessonTitlePageModule,
 		LoginPageModule,
 		SignUpPageModule,
 		BrowserAnimationsModule,

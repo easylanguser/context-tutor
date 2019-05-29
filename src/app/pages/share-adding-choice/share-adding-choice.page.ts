@@ -6,11 +6,11 @@ import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.s
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
-	selector: 'app-share-adding-choice-page',
-	templateUrl: './share-adding-choice-page.page.html',
-	styleUrls: ['./share-adding-choice-page.page.scss'],
+	selector: 'app-share-adding-choice',
+	templateUrl: './share-adding-choice.page.html',
+	styleUrls: ['./share-adding-choice.page.scss'],
 })
-export class ShareAddingChoicePagePage implements OnInit {
+export class ShareAddingChoicePage implements OnInit {
 
 	displayedLessons: Lesson[];
 	allLessons: Lesson[];
