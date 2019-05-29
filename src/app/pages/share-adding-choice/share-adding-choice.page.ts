@@ -90,10 +90,10 @@ export class ShareAddingChoicePage implements OnInit {
 	}
 
 	addToExistingLesson(lessonId: number) {
-		this.navCtrl.navigateForward(['sentence-adding-page'], { queryParams: { lessonId: lessonId } });
+		this.navCtrl.navigateForward(['sentence-adding'], { queryParams: { lessonId: lessonId } });
 	}
 
 	createNewLesson() {
-		this.navCtrl.navigateForward(['sentence-adding-page']);
+		this.navCtrl.navigateForward(['sentence-adding']);
 	}
 }

@@ -60,12 +60,14 @@ export class AppComponent {
 				}
 			})
 			.then(() => {
-				if (this.platform.is('android')) {
-					this.statusBar.styleBlackOpaque;
-				} else {
-					this.statusBar.styleDefault();
+				if (this.platform.is('mobile')) {
+					if (this.platform.is('android')) {
+						this.statusBar.styleBlackOpaque;
+					} else if (this.platform.is('ios')) {
+						this.statusBar.styleDefault;
+					}
+					this.splashScreen.hide();
 				}
-				this.splashScreen.hide();
 
 				this.storageService.get("theme").then(themeName => {
 					const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} });
@@ -79,7 +81,7 @@ export class AppComponent {
 					if (state) {
 						this.loggedIn = true;
 						if (sharedText[0]) {
-							this.router.navigate(['share-adding-choice-page']);
+							this.router.navigate(['share-adding-choice']);
 						} else {
 							this.router.navigate(['/']);
 						}

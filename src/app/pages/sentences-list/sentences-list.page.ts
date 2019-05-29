@@ -161,7 +161,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				duration: 0
 			});
 		}
-		this.navCtrl.navigateForward(['sentence-adding-page'], {
+		this.navCtrl.navigateForward(['sentence-adding'], {
 			queryParams: {
 				lessonId: this.lessonId
 			}
@@ -213,7 +213,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				}
 			});
 		} else {
-			this.navCtrl.navigateForward(['sentence-adding-page'], {
+			this.navCtrl.navigateForward(['sentence-adding'], {
 				queryParams: {
 					toEdit: sentenceId,
 					lessonId: this.lessonId

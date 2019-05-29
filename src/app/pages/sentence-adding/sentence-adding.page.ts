@@ -18,7 +18,7 @@ let indexesArray: Array<[number, number]> = [];
 let selectionDelay: number = 0;
 
 @Component({
-	selector: 'app-sentence-adding-page',
+	selector: 'app-sentence-adding',
 	templateUrl: './sentence-adding.page.html',
 	styleUrls: ['./sentence-adding.page.scss'],
 })
@@ -256,6 +256,6 @@ export class SentenceAddingPage implements OnInit {
 				selBtn.style.display = 'none' :
 				selBtn.style.display = 'block';
 		};
-		document.getElementsByTagName('app-sentence-adding-page')[0].appendChild(border);
+		document.getElementsByTagName('app-sentence-adding')[0].appendChild(border);
 	}
 }

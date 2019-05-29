@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
-import { AlertController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { AlertController, NavController } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'app-sign-up',
@@ -13,8 +13,12 @@ export class SignUpPage implements OnInit {
 	credentialsForm: FormGroup;
 	submitted: boolean;
 
-	constructor(private formBuilder: FormBuilder, private authService: AuthService,
-		private alertController: AlertController, private router: Router) { }
+	constructor(
+		private formBuilder: FormBuilder,
+		private authService: AuthService,
+		private alertController: AlertController,
+		private navCtrl: NavController,
+		private route: ActivatedRoute) { }
 
 	get f() { return this.credentialsForm.controls; }
 
@@ -24,13 +28,24 @@ export class SignUpPage implements OnInit {
 			password: ['', [Validators.required, Validators.minLength(6)]]
 		});
 	}
+
+	ionViewDidEnter() {
+		const typedEmail = this.route.snapshot.queryParamMap.get('email');
+		const typedPassword = this.route.snapshot.queryParamMap.get('password');
+		if (typedEmail && typedPassword) {
+			this.credentialsForm.setValue({
+				email: typedEmail,
+				password: typedPassword
+			});
+		}
+	}
+
 	register() {
 		this.submitted = true;
 		if (this.credentialsForm.valid) {
 			this.authService.register(this.credentialsForm.value).subscribe(res => {
 				this.showAlert(res);
-				// Call Login to automatically login the new user
-				// this.authService.login(this.credentialsForm.value).subscribe();
+				this.toSignIn();
 			});
 		}
 	}
@@ -45,6 +60,11 @@ export class SignUpPage implements OnInit {
 	}
 
 	toSignIn() {
-		this.router.navigate(['login']);
+		this.navCtrl.navigateForward(['login'], {
+			queryParams: {
+				email: this.credentialsForm.get('email').value,
+				password: this.credentialsForm.get('password').value
+			}
+		});
 	}
 }

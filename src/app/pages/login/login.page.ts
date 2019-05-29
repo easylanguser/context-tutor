@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
 	selector: 'page-login',
@@ -12,8 +13,11 @@ export class LoginPage implements OnInit {
 	credentialsForm: FormGroup;
 	submitted: boolean;
 
-	constructor(private formBuilder: FormBuilder, private authService: AuthService,
-		private router: Router) { }
+	constructor(
+		private formBuilder: FormBuilder,
+		private authService: AuthService,
+		private navCtrl: NavController,
+		private route: ActivatedRoute) { }
 
 	get f() { return this.credentialsForm.controls; }
 
@@ -22,6 +26,17 @@ export class LoginPage implements OnInit {
 			email: ['', [Validators.required, Validators.pattern("[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}")]],
 			password: ['', [Validators.required, Validators.minLength(6)]]
 		});
+	}
+
+	ionViewDidEnter() {
+		const typedEmail = this.route.snapshot.queryParamMap.get('email');
+		const typedPassword = this.route.snapshot.queryParamMap.get('password');
+		if (typedEmail && typedPassword) {
+			this.credentialsForm.setValue({
+				email: typedEmail,
+				password: typedPassword
+			});
+		}
 	}
 
 	onSubmit() {
@@ -34,18 +49,22 @@ export class LoginPage implements OnInit {
 	register() {
 		this.submitted = true;
 		if (this.credentialsForm.valid) {
-			this.authService.register(this.credentialsForm.value).subscribe(res => {
-				// Call Login to automatically login the new user
+			this.authService.register(this.credentialsForm.value).subscribe(() => {
 				this.authService.login(this.credentialsForm.value).subscribe();
 			});
 		}
 	}
 
 	goToSignUp() {
-		this.router.navigate(['sign-up']);
+		this.navCtrl.navigateForward(['sign-up'], {
+			queryParams: {
+				email: this.credentialsForm.get('email').value,
+				password: this.credentialsForm.get('password').value
+			}
+		});
 	}
 
 	toForget() {
-		this.router.navigate(['forget']);
+		this.navCtrl.navigateForward(['forget']);
 	}
 }
