@@ -61,6 +61,29 @@ ion-toolbar {
     }
 }
 
+#no-lessons-info {
+    color: gray;
+    font-size: 4vh;
+    text-align: center;
+    margin-top: 10vh;
+}
+
+#tip-add-lesson {
+    position: absolute;
+    z-index: 102;
+    width: 240px;
+    bottom: calc(3vh + 20px);
+    right: calc(3vh + 50px);
+    text-align: center;
+    color: var(--ion-color-primary);
+
+    transition: right 200ms ease-in-out, bottom 200ms ease-in-out;
+    -o-transition:  right 200ms ease-in-out, bottom 200ms ease-in-out;
+    -ms-transition: right 200ms ease-in-out, bottom 200ms ease-in-out;
+    -moz-transition: right 200ms ease-in-out, bottom 200ms ease-in-out;
+    -webkit-transition: right 200ms ease-in-out, bottom 200ms ease-in-out;
+}
+
 .lesson-ion-item {
     --inner-padding-end: 0px !important;
     --inner-border-width: 0px !important;

@@ -14,11 +14,12 @@ import { updateIsRequired } from 'src/app/app.component';
 })
 export class LessonsListPage implements OnInit, AfterViewInit {
 
-	displayedLessons: Lesson[];
+	displayedLessons: Lesson[] = [];
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
 	statisticsIsNotEmpty: boolean = true;
+	displayHints: boolean = false;
 
 	constructor(
 		private loadingController: LoadingController,
@@ -30,7 +31,26 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private cdRef: ChangeDetectorRef) { }
 
 	ngOnInit() {
+		this.configureTipsFloating();
 		this.getData();
+	}
+
+	configureTipsFloating() {
+		const fab: HTMLElement = <HTMLElement>(document.getElementById("add-lesson-fab").firstChild);
+		fab.addEventListener('click', () => {
+			if (!this.displayedLessons.length) {
+				const tip = document.getElementById('tip-add-lesson');
+				if (fab.classList.contains('fab-button-close-active')) {
+					tip.style.bottom = 'calc(3vh + 20px)';
+					tip.style.right = 'calc(3vh + 50px)';
+					tip.innerHTML = "Click button \u21e8 <br>to add a <b>new lesson</b>"
+				} else {
+					tip.style.bottom = 'calc(3vh + 80px)';
+					tip.style.right = 'calc(3vh + 5px)';
+					tip.innerHTML = "Choose <b>file</b> or add <b>manually</b><br> \u21e9 \u21e9"
+				}
+			}
+		});
 	}
 
 	ionViewDidEnter() {
@@ -48,6 +68,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	ngAfterViewInit() {
 		this.pieCanvases.changes.subscribe(() => {
 			this.syncCharts();
+			this.displayHints = this.displayedLessons.length === 0;
+			this.cdRef.detectChanges();
 		});
 	}
 
@@ -56,7 +78,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	addLessonText() {
-		this.navCtrl.navigateForward(['add-lesson'], { queryParams : { hideFileInput: true } });
+		this.navCtrl.navigateForward(['add-lesson'], { queryParams: { hideFileInput: true } });
 	}
 
 	private syncCharts() {
@@ -158,6 +180,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		await loading.present();
 		await this.lessonsDataService.getLessons().then(() => {
 			this.displayedLessons = this.lessonsDataService.lessons;
+			this.displayHints = this.displayedLessons.length === 0;
 			this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);
 		}).then(() => loading.dismiss());
 	}

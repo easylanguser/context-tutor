@@ -89,6 +89,9 @@ ion-icon {
     outline: none;
     
     transition: margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
+    -o-transition:  margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
+    -ms-transition: margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
+    -moz-transition: margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
     -webkit-transition: margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
 }
 
