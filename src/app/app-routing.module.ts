@@ -11,24 +11,22 @@ import { AddLessonPage } from './pages/add-lesson/add-lesson.page';
 import { EditLessonTitlePage } from './pages/edit-lesson-title/edit-lesson-title.page';
 import { SentenceAddingPage } from './pages/sentence-adding/sentence-adding.page';
 import { ShareAddingChoicePage } from './pages/share-adding-choice/share-adding-choice.page';
+import { AuthGuardService } from './services/guard/auth-guard.service';
 
 const routes: Routes = [
 	{ path: '', redirectTo: 'lessons-list', pathMatch: 'full' },
-	{
-		path: 'lessons-list', loadChildren: './pages/lessons-list/lessons-list.page.module#LessonsListPageModule',
-		
-	},
-	{ path: 'sentences-list', component: SentencesListPage },
-	{ path: 'sentence-guess', component: SentenceGuessPage },
-	{ path: 'login', component: LoginPage },
-	{ path: 'sign-up', component: SignUpPage },
-	{ path: 'account', component: AccountPage },
-	{ path: 'forget', component: ForgetPage },
-	{ path: 'change', component: ChangePage },
-	{ path: 'add-lesson', component: AddLessonPage },
-	{ path: 'share-adding-choice', component: ShareAddingChoicePage },
-	{ path: 'sentence-adding', component: SentenceAddingPage },
-	{ path: 'edit-lesson-title', component: EditLessonTitlePage }
+	{ path: 'lessons-list', loadChildren: './pages/lessons-list/lessons-list.page.module#LessonsListPageModule', canActivate: [AuthGuardService] },
+	{ path: 'sentences-list', component: SentencesListPage, canActivate: [AuthGuardService] },
+	{ path: 'sentence-guess', component: SentenceGuessPage, canActivate: [AuthGuardService]  },
+	{ path: 'login', component: LoginPage, canActivate: [AuthGuardService]  },
+	{ path: 'sign-up', component: SignUpPage, canActivate: [AuthGuardService]  },
+	{ path: 'account', component: AccountPage, canActivate: [AuthGuardService]  },
+	{ path: 'forget', component: ForgetPage, canActivate: [AuthGuardService]  },
+	{ path: 'change', component: ChangePage, canActivate: [AuthGuardService]  },
+	{ path: 'add-lesson', component: AddLessonPage, canActivate: [AuthGuardService]  },
+	{ path: 'share-adding-choice', component: ShareAddingChoicePage, canActivate: [AuthGuardService]  },
+	{ path: 'sentence-adding', component: SentenceAddingPage, canActivate: [AuthGuardService]  },
+	{ path: 'edit-lesson-title', component: EditLessonTitlePage, canActivate: [AuthGuardService]  }
 ];
 
 @NgModule({
