@@ -41,7 +41,11 @@ export class LoginPage implements OnInit {
 		}
 	}
 
-	toSignUp() {
+	goToSignUp() {
+		this.router.navigate(['sign-up']);
+	}
+
+	toForget() {
 		this.router.navigate(['forget']);
 	}
 }
