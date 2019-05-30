@@ -77,11 +77,11 @@ ion-toolbar {
     text-align: center;
     color: var(--ion-color-primary);
 
-    transition: right 200ms ease-in-out, bottom 200ms ease-in-out;
-    -o-transition:  right 200ms ease-in-out, bottom 200ms ease-in-out;
-    -ms-transition: right 200ms ease-in-out, bottom 200ms ease-in-out;
-    -moz-transition: right 200ms ease-in-out, bottom 200ms ease-in-out;
-    -webkit-transition: right 200ms ease-in-out, bottom 200ms ease-in-out;
+    transition: right 200ms ease-out, bottom 200ms ease-out;
+    -o-transition:  right 200ms ease-out, bottom 200ms ease-out;
+    -ms-transition: right 200ms ease-out, bottom 200ms ease-out;
+    -moz-transition: right 200ms ease-out, bottom 200ms ease-out;
+    -webkit-transition: right 200ms ease-out, bottom 200ms ease-out;
 }
 
 .lesson-ion-item {

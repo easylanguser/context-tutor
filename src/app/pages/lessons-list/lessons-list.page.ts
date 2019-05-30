@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { LoadingController, IonItemSliding, AlertController, NavController } from '@ionic/angular';
+import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { LoadingController, IonItemSliding, AlertController, NavController, IonFab } from '@ionic/angular';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
@@ -16,6 +16,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	displayedLessons: Lesson[] = [];
 	@ViewChildren('chartsid') pieCanvases: any;
+	@ViewChild('fab') fabBtn: IonFab;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
 	statisticsIsNotEmpty: boolean = true;
@@ -43,11 +44,11 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				if (fab.classList.contains('fab-button-close-active')) {
 					tip.style.bottom = 'calc(3vh + 20px)';
 					tip.style.right = 'calc(3vh + 50px)';
-					tip.innerHTML = "Click button \u21e8 <br>to add a <b>new lesson</b>"
+					tip.innerHTML = "Click button \u21e8 <br>to add a <b>new lesson</b>";
 				} else {
 					tip.style.bottom = 'calc(3vh + 80px)';
 					tip.style.right = 'calc(3vh + 5px)';
-					tip.innerHTML = "Choose <b>file</b> or add <b>manually</b><br> \u21e9 \u21e9"
+					tip.innerHTML = "Choose <b>file</b> or add <b>manually</b><br> \u21e9 \u21e9";
 				}
 			}
 		});
@@ -63,6 +64,12 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				updateIsRequired[0] = false;
 			}
 		}
+	}
+
+	ionViewWillLeave() {
+		const fab: HTMLElement = <HTMLElement>(document.getElementById("add-lesson-fab").firstChild);
+		fab.dispatchEvent(new Event('click'));
+		this.fabBtn.close();
 	}
 
 	ngAfterViewInit() {
@@ -176,7 +183,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	private async getData() {
-		const loading = await this.loadingController.create({ message: 'Loading' });
+		const loading = await this.loadingController.create({ message: 'Loading', duration: 8000 });
 		await loading.present();
 		await this.lessonsDataService.getLessons().then(() => {
 			this.displayedLessons = this.lessonsDataService.lessons;
