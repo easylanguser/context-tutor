@@ -22,7 +22,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
 	offset: number = 0;
-	statisticsIsNotEmpty: boolean = true;
 	toast: HTMLIonToastElement = null;
 	addButtonIsAnimating: boolean = false;
 
@@ -125,7 +124,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	private updateCharts() {
-		let statisticsIsNotEmpty: boolean = false;
 		if (this.displayedSentences === undefined ||
 			this.displayedSentences.length === 0 ||
 			this.pieCharts.length !== this.displayedSentences.length) {
@@ -144,12 +142,11 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				chartData.backgroundColor[2] = '#ffe353';
 				this.pieCharts[i].options.cutoutPercentage = 67;
 				this.pieCharts[i].update();
-				statisticsIsNotEmpty = true;
 			}
 
 			++i;
 		}
-		this.statisticsIsNotEmpty = statisticsIsNotEmpty;
+		
 		this.cdRef.detectChanges();
 	}
 

@@ -19,7 +19,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	@ViewChild('fab') fabBtn: IonFab;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
-	statisticsIsNotEmpty: boolean = true;
 	displayHints: boolean = false;
 
 	constructor(
@@ -39,7 +38,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	configureTipsFloating() {
 		const fab: HTMLElement = <HTMLElement>(document.getElementById("add-lesson-fab").firstChild);
 		fab.addEventListener('click', () => {
-			if (!this.displayedLessons.length) {
+			if (!this.lessonsDataService.lessons.length) {
 				const tip = document.getElementById('tip-add-lesson');
 				if (fab.classList.contains('fab-button-close-active')) {
 					tip.style.bottom = 'calc(3vh + 20px)';
@@ -75,7 +74,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	ngAfterViewInit() {
 		this.pieCanvases.changes.subscribe(() => {
 			this.syncCharts();
-			this.displayHints = this.displayedLessons.length === 0;
 			this.cdRef.detectChanges();
 		});
 	}
@@ -97,7 +95,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	private updateCharts() {
-		let i = 0, statisticsIsNotEmpty: boolean = false;
+		let i = 0;
 		for (const lesson of this.displayedLessons) {
 			const chartData = this.pieCharts[i].data.datasets[0];
 			chartData.data[0] = 1;
@@ -119,12 +117,10 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				chartData.backgroundColor[2] = '#ffe353';
 				this.pieCharts[i].options.cutoutPercentage = 67;
 				this.pieCharts[i].update();
-				statisticsIsNotEmpty = true;
 			}
-
 			++i;
 		}
-		this.statisticsIsNotEmpty = statisticsIsNotEmpty;
+		
 		this.cdRef.detectChanges();
 	}
 
