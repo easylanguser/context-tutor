@@ -75,6 +75,9 @@ export class LessonsDataService {
 		for (const i in sntns) {
 			const hiddenChars: Array<string[]> = [];
 			const curCharsIndexes: number[] = [];
+
+			sntns[i].words.sort((a,b) => a[0] - b[0]);
+			
 			for (const j in sntns[i].words) {
 				const chars: string[] = [];
 				for (let k = 0; k < sntns[i].words[j][1]; k++) {
