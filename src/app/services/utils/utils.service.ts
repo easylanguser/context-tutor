@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Sentence } from 'src/app/models/sentence';
 import { Lesson } from 'src/app/models/lesson';
 
+export const acceptedCodes = [32, 39, 45, 96];
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -41,8 +43,7 @@ export class UtilsService {
 		let textWithHiddenCharacters = inputText.substr(0, indexes[0][0]);
 		for (let i = 0; i < indexes.length - 1; i++) {
 			for (let j = 0; j < indexes[i][1]; j++) {
-				const charAscii = inputText.charAt(indexes[i][0] + j).toUpperCase().charCodeAt(0);
-				if (charAscii > 64 && charAscii < 91) {
+				if (this.isEnglishChar(inputText.charAt(indexes[i][0] + j))) {
 					textWithHiddenCharacters += '*';
 				} else {
 					textWithHiddenCharacters += inputText.charAt(indexes[i][0] + j);
@@ -53,8 +54,7 @@ export class UtilsService {
 				indexes[i + 1][0] - (indexes[i][0] + indexes[i][1]));
 		}
 		for (let i = 0; i < indexes[indexes.length - 1][1]; i++) {
-			const charAscii = inputText.charAt(indexes[indexes.length - 1][0] + i).toUpperCase().charCodeAt(0);
-			if (charAscii > 64 && charAscii < 91) {
+			if (this.isEnglishChar(inputText.charAt(indexes[indexes.length - 1][0] + i))) {
 				textWithHiddenCharacters += '*';
 			} else {
 				textWithHiddenCharacters += inputText.charAt(indexes[indexes.length - 1][0] + i);
@@ -95,5 +95,10 @@ export class UtilsService {
 		}
 
 		return redIsPresent && yellowIsPresent;
+	}
+
+	isEnglishChar(char: string): boolean {
+		const ascii = char.toUpperCase().charCodeAt(0);
+		return ascii > 64 && ascii < 91;
 	}
 }

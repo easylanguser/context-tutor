@@ -9,7 +9,7 @@ import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 import { NavController, Platform } from '@ionic/angular';
 import { SentenceResetService } from 'src/app/services/http/sentence-reset/sentence-reset.service';
 import { Sentence } from 'src/app/models/sentence';
-import { UtilsService } from 'src/app/services/utils/utils.service';
+import { UtilsService, acceptedCodes } from 'src/app/services/utils/utils.service';
 import { Statistics } from 'src/app/models/statistics';
 
 let lastSelOffsets: Array<number> = [];
@@ -204,17 +204,14 @@ export class SentenceAddingPage implements OnInit {
 		}
 
 		for (const char of sel) {
-			const charAtPos = char.charCodeAt(0);
-			if (!((charAtPos > 64 && charAtPos < 91) || (charAtPos > 96 && charAtPos < 123) || charAtPos === 39)) {
+			if (!(this.utils.isEnglishChar(char) || acceptedCodes.indexOf(char.charCodeAt(0)) > -1)) {
 				return;
 			}
 		}
 
 		for (let i = 0; i < indexesArray.length; i++) {
-			if ((indexesArray[i][0] <= start &&
-				indexesArray[i][0] + indexesArray[i][1] >= start) ||
-				(indexesArray[i][0] <= finish &&
-					indexesArray[i][0] + indexesArray[i][1] >= finish)) {
+			if ((indexesArray[i][0] <= start && indexesArray[i][0] + indexesArray[i][1] >= start) ||
+				(indexesArray[i][0] <= finish && indexesArray[i][0] + indexesArray[i][1] >= finish)) {
 				return;
 			}
 		}

@@ -40,6 +40,9 @@ export class GuessBarComponent implements OnInit {
 	redHighlight = '0px 0px 8px 0px rgba(167, 1, 6, 1)';
 	none = 'none';
 
+	groups = ['QWSD', 'RTFG', 'EAIO'];
+	unknownCharGroup = '!@#&';
+
 	constructor(
 		private util: UtilsService,
 		public lessonsDataService: LessonsDataService,
@@ -109,7 +112,7 @@ export class GuessBarComponent implements OnInit {
 			.getSentenceNumberByIDs(this.guessPage.lessonId, this.guessPage.sentenceId);
 		const firstSentenceId = lessonSentences[0].id
 		const lastSentenceId = lessonSentences[lessonSentences.length - 1].id;
-		
+
 		if (forward) {
 			this.guessPage.sentenceId = (this.guessPage.sentenceId === lastSentenceId)
 				? firstSentenceId
@@ -131,8 +134,7 @@ export class GuessBarComponent implements OnInit {
 		}
 	}
 
-	// Give up and show full sentence
-	giveUpClick() {
+	giveUpClick() { // Give up and show full sentence
 		if (!this.curSentence().solvedStatus) {
 			++this.curSentence().statistics.giveUps; // Statistics
 
@@ -166,11 +168,7 @@ export class GuessBarComponent implements OnInit {
 			++this.curSentence().statistics.hintUsages; // Statistics
 			this.updateChart();
 			this.hintIsClicked = true;
-
-			const event = new KeyboardEvent('evHint', 
-			{
-				key: this.curCorrectChar()
-			});
+			const event = new KeyboardEvent('evHint', { key: this.curCorrectChar() });
 			this.handleKeyboardEvent(event);
 		}
 	}
@@ -195,8 +193,8 @@ export class GuessBarComponent implements OnInit {
 		this.handleKeyboardEvent(event);
 	}
 
-	private randomAlphabetIndex(): number {
-		return Math.floor(Math.random() * this.alphabet.length);
+	private randomAlphabetChar(): string {
+		return this.alphabet.charAt(Math.random() * this.alphabet.length);
 	}
 
 	// Generate 3 random characters from alphabet and random position for correct character
@@ -205,51 +203,90 @@ export class GuessBarComponent implements OnInit {
 			return;
 		}
 
-		const correctCharBoxIndex = Math.floor(Math.random() * 4) + 1;
 		const correctChar = this.curCorrectChar().toUpperCase();
-		const correctCharIndexInAlphabet = this.alphabet.indexOf(correctChar);
-		const vowelsPositions = [0, 4, 8, 14, 20, 24];
-		let firstRand: number,
-			secondRand: number,
-			thirdRand: number,
-			fourthRand: number;
-		const vowelIsGuessed: boolean = vowelsPositions.indexOf(correctCharIndexInAlphabet) !== -1;
+		const charsToSelectFrom = this.randCharsOrGroup(correctChar);
 
 		this.updateFront = !this.updateFront;
-
-		do {
-			firstRand = this.randomAlphabetIndex();
-		} while (firstRand === correctCharIndexInAlphabet ||
-			(vowelIsGuessed ? !vowelsPositions.includes(firstRand) : vowelsPositions.includes(firstRand)));
-
-		do {
-			secondRand = this.randomAlphabetIndex();
-		} while (secondRand === firstRand || secondRand === correctCharIndexInAlphabet ||
-			(vowelIsGuessed ? !vowelsPositions.includes(secondRand) : vowelsPositions.includes(secondRand)));
-
-		do {
-			thirdRand = this.randomAlphabetIndex();
-		} while (thirdRand === firstRand || thirdRand === secondRand || thirdRand === correctCharIndexInAlphabet ||
-			(vowelIsGuessed ? !vowelsPositions.includes(thirdRand) : vowelsPositions.includes(thirdRand)));
-
-		do {
-			fourthRand = this.randomAlphabetIndex();
-		} while (fourthRand === firstRand || fourthRand === secondRand || fourthRand === thirdRand || fourthRand === correctCharIndexInAlphabet ||
-			(vowelIsGuessed ? !vowelsPositions.includes(fourthRand) : vowelsPositions.includes(fourthRand)));
-
+		const srand = Math.floor(Math.random() * 4);
 		if (this.updateFront) {
-			this.firstChar = correctCharBoxIndex === 1 ? correctChar : this.alphabet[firstRand];
-			this.secondChar = correctCharBoxIndex === 2 ? correctChar : this.alphabet[secondRand];
-			this.thirdChar = correctCharBoxIndex === 3 ? correctChar : this.alphabet[thirdRand];
-			this.fourthChar = correctCharBoxIndex === 4 ? correctChar : this.alphabet[fourthRand];
+			this.firstChar = charsToSelectFrom.charAt(0);
+			this.secondChar = charsToSelectFrom.charAt(1);
+			this.thirdChar = charsToSelectFrom.charAt(2);
+			this.fourthChar = charsToSelectFrom.charAt(3);
+			if (this.correctIsNotPresent(this.firstChar, this.secondChar,
+				this.thirdChar, this.fourthChar, correctChar)) {
+				switch(srand) {
+					case 0: this.firstChar = correctChar; break;
+					case 1: this.secondChar = correctChar; break;
+					case 2: this.thirdChar = correctChar; break;
+					case 3: this.fourthChar = correctChar; break;
+				}
+			}
 		} else {
-			this.firstCharBack = correctCharBoxIndex === 1 ? correctChar : this.alphabet[firstRand];
-			this.secondCharBack = correctCharBoxIndex === 2 ? correctChar : this.alphabet[secondRand];
-			this.thirdCharBack = correctCharBoxIndex === 3 ? correctChar : this.alphabet[thirdRand];
-			this.fourthCharBack = correctCharBoxIndex === 4 ? correctChar : this.alphabet[fourthRand];
+			this.firstCharBack = charsToSelectFrom.charAt(0);
+			this.secondCharBack = charsToSelectFrom.charAt(1);
+			this.thirdCharBack = charsToSelectFrom.charAt(2);
+			this.fourthCharBack = charsToSelectFrom.charAt(3);
+			if (this.correctIsNotPresent(this.firstCharBack, this.secondCharBack,
+				this.thirdCharBack, this.fourthCharBack, correctChar)) {
+				switch(srand) {
+					case 0: this.firstCharBack = correctChar; break;
+					case 1: this.secondCharBack = correctChar; break;
+					case 2: this.thirdCharBack = correctChar; break;
+					case 3: this.fourthCharBack = correctChar; break;
+				}
+			}
 		}
 
 		this.animateFlip();
+	}
+
+	correctIsNotPresent(first, second, third, fourth, correct): boolean {
+		return first !== correct && second !== correct && third !== correct && fourth !== correct;
+	}
+
+	randCharsOrGroup(correctChar: string): string {
+		if (!this.util.isEnglishChar(correctChar))
+			return this.unknownCharGroup;
+
+		for (const arr of this.groups) {
+			if (arr.indexOf(correctChar) > -1) {
+				return arr;
+			}
+		}
+
+		const vowelsPositions = [0, 4, 8, 14, 20, 24];
+		const vowelIsGuessed = vowelsPositions.indexOf(this.alphabet.indexOf(correctChar)) !== -1;
+		let firstChar, secondChar, thirdChar, fourthChar;
+
+		do {
+			firstChar = this.randomAlphabetChar();
+		} while ((vowelIsGuessed ?
+			!vowelsPositions.includes(this.alphabet.indexOf(firstChar)) :
+			vowelsPositions.includes(this.alphabet.indexOf(firstChar))));
+
+		do {
+			secondChar = this.randomAlphabetChar();
+		} while (secondChar === firstChar ||
+			(vowelIsGuessed ?
+				!vowelsPositions.includes(this.alphabet.indexOf(secondChar)) :
+				vowelsPositions.includes(this.alphabet.indexOf(secondChar))));
+
+		do {
+			thirdChar = this.randomAlphabetChar();
+		} while (thirdChar === firstChar || thirdChar === secondChar ||
+			(vowelIsGuessed ?
+				!vowelsPositions.includes(this.alphabet.indexOf(thirdChar)) :
+				vowelsPositions.includes(this.alphabet.indexOf(thirdChar))));
+
+		do {
+			fourthChar = this.randomAlphabetChar();
+		} while (fourthChar === firstChar || fourthChar === secondChar || fourthChar === thirdChar ||
+			(vowelIsGuessed ?
+				!vowelsPositions.includes(this.alphabet.indexOf(fourthChar)) :
+				vowelsPositions.includes(this.alphabet.indexOf(fourthChar))));
+
+		return firstChar + secondChar + thirdChar + fourthChar;
 	}
 
 	// Reset characters boxes highlighting and generate random characters
@@ -322,6 +359,20 @@ export class GuessBarComponent implements OnInit {
 			}
 
 			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '<span class=\'red-text\'>*</span>');
+
+			if (!this.util.isEnglishChar(this.curCorrectChar())) {
+				++this.guessPage.curCharsIndexes[this.guessPage.curWordIndex];
+				const status = this.status();
+				if (status === 1) {
+					++this.guessPage.curWordIndex;
+				} else if (status === 2) {
+					this.curSentence().solvedStatus = true;
+					if (!this.guessPage.toastIsShown) {
+						this.guessPage.showToast();
+					}
+					return;
+				}
+			}
 
 			this.refreshCharBoxes();
 		} else {
