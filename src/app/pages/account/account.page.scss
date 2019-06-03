@@ -1,3 +1,15 @@
-ion-item {
+.header-ios.ion-toolbar:last-child {
+    --border-width: 0;
+}
+
+.list-block {
+    height: 40px;
+    border-radius: 20px;
+    margin: 2vh 10vw;
+    padding-left: 10px;
     cursor: pointer;
+    text-align: start;
+    vertical-align: middle;
+    line-height: 40px;    
+    background: #f2f6ff;
 }

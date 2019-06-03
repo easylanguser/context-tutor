@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header mode="ios">
+  <ion-toolbar mode="ios" style="--background: #f2f6ff;">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -9,13 +9,9 @@
 
 <ion-content class="outer-content">
   <div padding-top text-center>
-    <img src="https://www.gravatar.com/avatar?d=mm&s=140" alt="avatar">
-    <!--<h2>{{user.email}}</h2>-->
-
-    <ion-list inset>
-      <ion-item (click)="changePassword()">Change Password</ion-item>
-      <ion-item (click)="deleteAccount()">Delete account</ion-item>
-      <ion-item (click)="logout()">Logout</ion-item>
-    </ion-list>
+    <img src="../../../assets/no_icon_img.png" alt="avatar" style="max-width: 150px">
+    <div class="list-block" (click)="changePassword()">Change password</div>
+    <div class="list-block" (click)="deleteAccount()">Delete account</div>
+    <div class="list-block" (click)="logout()">Logout</div>
   </div>
 </ion-content>
