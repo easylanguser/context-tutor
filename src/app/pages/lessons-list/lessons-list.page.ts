@@ -62,6 +62,18 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				this.getData();
 				updateIsRequired[0] = false;
 			}
+			this.lessonsDataService.lessons.forEach(lsn => {
+				lsn.sentences.forEach(sntcs => {
+					if (sntcs.sentenceShown !== '') {
+						sntcs.solvedStatus = false;
+						sntcs.curWordIndex = 0;
+						for (let i in sntcs.curCharsIndexes) {
+							sntcs.curCharsIndexes[i] = 0;
+						}
+						sntcs.sentenceShown = this.utils.addChar(sntcs.textUnderscored, '<span class=\'red-text\'>*</span>');
+					}
+				});
+			});
 		}
 	}
 
