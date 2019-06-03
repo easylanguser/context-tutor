@@ -36,14 +36,12 @@ input:-webkit-autofill {
     -webkit-animation-fill-mode: both;
 }
 
-$border-width: 4px;
-
 .green {
-    border-bottom: $border-width solid green;
+    border-bottom: 2px solid green;
 }
 
 .yellow {
-    border-bottom: $border-width solid yellow;
+    border-bottom: 2px solid yellow;
 }
 
 .red-text {

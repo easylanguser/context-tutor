@@ -49,9 +49,7 @@
         <ion-item class="sentence-ion-item" no-padding>
           <div (click)="openSentence(sentence.id)">
             <div>
-              <p>
-                {{sentence.textUnderscored}}
-              </p>
+              <p [innerHTML]="sentence.sentenceShown"></p>
             </div>
             <div>
               <div>

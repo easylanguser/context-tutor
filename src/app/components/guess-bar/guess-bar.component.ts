@@ -50,6 +50,10 @@ export class GuessBarComponent implements OnInit {
 
 	ngOnInit() {
 		this.getData();
+		if (this.lessonsDataService.getLessonByID(this.guessPage.lessonId).sentences.length === 1) {
+			document.getElementById('next-sentence-button').style.visibility = 'hidden';
+			document.getElementById('prev-sentence-button').style.visibility = 'hidden';
+		}
 	}
 
 	async getData() {
@@ -100,8 +104,7 @@ export class GuessBarComponent implements OnInit {
 	}
 
 	changeSentence(forward: boolean) {
-		if (this.sentenceTranslateIsPlayed ||
-			this.lessonsDataService.getLessonByID(this.guessPage.lessonId).sentences.length === 1) {
+		if (this.sentenceTranslateIsPlayed) {
 			return;
 		}
 
@@ -145,7 +148,7 @@ export class GuessBarComponent implements OnInit {
 					if (this.guessPage.curCharsIndexes[this.guessPage.curWordIndex] !==
 						this.curSentence().hiddenChars[this.guessPage.curWordIndex].length - 1 ||
 						this.guessPage.curWordIndex !== this.curSentence().hiddenChars.length - 1) {
-						this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '*');
+						this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '●');
 					}
 					++this.guessPage.curCharsIndexes[this.guessPage.curWordIndex];
 				} while (this.guessPage.curCharsIndexes[this.guessPage.curWordIndex] <
@@ -358,7 +361,7 @@ export class GuessBarComponent implements OnInit {
 				return;
 			}
 
-			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '<span class=\'red-text\'>*</span>');
+			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '<span class=\'red-text\'>●</span>');
 
 			if (!this.util.isEnglishChar(this.curCorrectChar())) {
 				++this.guessPage.curCharsIndexes[this.guessPage.curWordIndex];

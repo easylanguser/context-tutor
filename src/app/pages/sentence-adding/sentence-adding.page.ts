@@ -127,7 +127,7 @@ export class SentenceAddingPage implements OnInit {
 						hiddenChars,
 						curCharsIndexes,
 						0,
-						this.utils.addChar(hiddenSentence, '*'),
+						this.utils.addChar(hiddenSentence, '●'),
 						false,
 						new Date().toISOString(),
 						new Statistics(0, 0, 0, 0, 0, 0, 0)));
