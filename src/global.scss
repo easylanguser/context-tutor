@@ -36,16 +36,13 @@ input:-webkit-autofill {
     -webkit-animation-fill-mode: both;
 }
 
-$letter-spacings: 4px;
 $border-width: 4px;
 
 .green {
-    letter-spacing: $letter-spacings;
     border-bottom: $border-width solid green;
 }
 
 .yellow {
-    letter-spacing: $letter-spacings;
     border-bottom: $border-width solid yellow;
 }
 
@@ -80,6 +77,13 @@ $border-width: 4px;
     p {
         margin-top: 0;
     }
+}
+
+ion-title {
+    padding-inline-start: 0;
+    padding-inline-end: 0;
+    -webkit-padding-start: 0;
+    -webkit-padding-end: 0; 
 }
 
 @media (min-width: 992px) {

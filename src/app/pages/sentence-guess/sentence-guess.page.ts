@@ -71,10 +71,10 @@ export class SentenceGuessPage implements OnInit {
 		this.statisticsUpdateService
 			.updateData( {
 				sentenceId: this.curSentence().id,
-				curCharsIndexes: this.curSentence().curCharsIndexes,
-				curWordIndex: this.curSentence().curWordIndex,
-				sentenceShown: this.curSentence().sentenceShown,
-				solvedStatus: this.curSentence().solvedStatus,
+				curCharsIndexes: [],
+				curWordIndex: 0,
+				sentenceShown: "",
+				solvedStatus: false,
 				correctAnswers: this.curSentence().statistics.correctAnswers,
 				giveUps: this.curSentence().statistics.giveUps,
 				hintUsages: this.curSentence().statistics.hintUsages,

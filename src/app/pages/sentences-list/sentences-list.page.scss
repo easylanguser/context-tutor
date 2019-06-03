@@ -130,9 +130,12 @@ ion-toolbar {
 
         >:first-child {
             height: 4vh;
-            width: 4vh;
-            margin-top: 0.7vh;
-            display: inline-block;
+            width: 4vh;        
+            float: right;
+            margin-right: 4vw;
+            @media (min-width: 992px) {
+                margin-right: 2vw;
+            }
         }
     }
 }

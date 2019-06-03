@@ -163,7 +163,12 @@ ion-toolbar {
     >:last-child {
         height: 4vh;
         width: 4vh;
-        margin: 4vh 5vw 0 0;
+        float: right;
+        margin-top: 4vh;
+        margin-right: 4vw;
+        @media (min-width: 992px) {
+            margin-right: 2vw;
+        }
     }
 }
 
