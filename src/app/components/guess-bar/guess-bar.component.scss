@@ -106,9 +106,21 @@ $chars-and-hint-height: 20vw;
     --background: #FFF;
     --color: #000;
     --border-radius: 50%;
-    --padding-top: 8px;
     border-radius: 50%;
     border: 1px solid rgba(100, 100, 100, 0.2);
+
+    >:first-child {
+        margin-top: 12px;
+    }
+
+    >:last-child {
+        position: absolute;
+        margin-top: 16px;
+    }
+
+    >:last-child:first-letter {
+        color: red;
+    }
 }
 
 #give-up-button {
@@ -116,7 +128,6 @@ $chars-and-hint-height: 20vw;
     width: 16vw;
     font-size: 2vh;
     margin-left: 4vw;
-    --padding-top: 8px;
     outline: none;
     background: #FFF;
     --background: #FFF;
@@ -124,6 +135,19 @@ $chars-and-hint-height: 20vw;
     --border-radius: 50%;
     border-radius: 50%;
     border: 1px solid rgba(100, 100, 100, 0.2);
+
+    >:first-child {
+        margin-top: 12px;
+    }
+
+    >:last-child {
+        position: absolute;
+        margin-top: 16px;
+    }
+
+    >:last-child:first-letter {
+        color: red;
+    }
 }
 
 #next-sentence-button {
