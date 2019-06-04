@@ -41,7 +41,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	goBack() {
-		this.navCtrl.pop();
+		this.navCtrl.navigateBack(['lessons-list']);
 	}
 
 	ionViewDidEnter() {
