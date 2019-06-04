@@ -70,6 +70,9 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 						for (let i in sntcs.curCharsIndexes) {
 							sntcs.curCharsIndexes[i] = 0;
 						}
+						if (sntcs.curCharsIndexes.length === 0) {
+							sntcs.curCharsIndexes.push(0);
+						}
 						sntcs.sentenceShown = this.utils.addChar(sntcs.textUnderscored, '<span class=\'red-text\'>●</span>');
 					}
 				});
