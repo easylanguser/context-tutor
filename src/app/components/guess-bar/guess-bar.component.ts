@@ -434,10 +434,16 @@ export class GuessBarComponent implements OnInit {
 		const textShownId = '#sentence-to-show';
 		await anime({
 			targets: [document.querySelector(textShownId)],
-			translateX: forward ? '+=40vw' : '-=40vw',
+			translateX: forward ? '-=40vw' : '+=40vw',
 			opacity: 0,
 			easing: 'easeInOutBack',
 			duration: 500
+		}).finished;
+
+		await anime({
+			targets: [document.querySelector(textShownId)],
+			translateX: forward ? '+=80vw' : '-=80vw',
+			duration: 0
 		}).finished;
 
 		await this.getData();
