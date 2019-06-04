@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { SentencesListPage } from './pages/sentences-list/sentences-list.page';
 import { SentenceGuessPage } from './pages/sentence-guess/sentence-guess.page';
 import { LoginPage } from './pages/login/login.page';
-import { SignUpPage } from './pages/sign-up/sign-up.page';
 import { AccountPage } from './pages/account/account.page';
 import { ForgetPage } from './pages/forget/forget.page';
 import { ChangePage } from './pages/change/change.page';
@@ -19,7 +18,6 @@ const routes: Routes = [
 	{ path: 'sentences-list', component: SentencesListPage, canActivate: [AuthGuardService] },
 	{ path: 'sentence-guess', component: SentenceGuessPage, canActivate: [AuthGuardService]  },
 	{ path: 'login', component: LoginPage },
-	{ path: 'sign-up', component: SignUpPage },
 	{ path: 'account', component: AccountPage },
 	{ path: 'forget', component: ForgetPage },
 	{ path: 'change', component: ChangePage },

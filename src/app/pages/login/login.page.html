@@ -14,13 +14,13 @@
       <ion-label id="email-label">Email</ion-label>
       <ion-input id="email-input" autocomplete="on" formControlName="email" required></ion-input>
 
-      <div *ngIf="submitted && f.email.errors" class="error-label">
-        <div *ngIf="f.email.errors.required">
+      <div *ngIf="submitted && formData.email.errors" class="error-label">
+        <div *ngIf="formData.email.errors.required">
           This field is required
         </div>
       </div>
 
-      <div *ngIf="f.email.errors && f.email.touched && !f.email.errors.required && submitted" class="error-label">
+      <div *ngIf="formData.email.errors && formData.email.touched && !formData.email.errors.required && submitted" class="error-label">
         <div>
           Invalid email
         </div>
@@ -31,13 +31,13 @@
       <ion-label id="password-label" position="floating">Password</ion-label>
       <ion-input id="password-input" autocomplete="on" type="password" formControlName="password" required></ion-input>
 
-      <div *ngIf="submitted && f.password.errors" class="error-label">
-        <div *ngIf="f.password.errors.required">
+      <div *ngIf="submitted && formData.password.errors" class="error-label">
+        <div *ngIf="formData.password.errors.required">
           This field is required
         </div>
       </div>
 
-      <div *ngIf="f.password.errors && f.password.touched && !f.password.errors.required && submitted"
+      <div *ngIf="formData.password.errors && formData.password.touched && !formData.password.errors.required && submitted"
         class="error-label">
         <div>
           Password must be at least 6 characters long
@@ -46,12 +46,9 @@
     </div>
 
     <button id="sign-in-button" type="submit">
-      Sign in
+      Enter
     </button>
   </form>
-  <button id="sign-up-button" (click)="goToSignUp()">
-    Sign up
-  </button>
 </ion-content>
 
 <ion-footer>

@@ -14,7 +14,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { Storage, IonicStorageModule } from '@ionic/storage';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { LoginPageModule } from './pages/login/login.module';
-import { SignUpPageModule } from './pages/sign-up/sign-up.module';
 import { AccountPageModule } from './pages/account/account.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SentencesListPageModule } from './pages/sentences-list/sentences-list.page.module';
@@ -51,7 +50,6 @@ export function jwtOptionsFactory(storage) {
 		SentenceAddingPageModule,
 		EditLessonTitlePageModule,
 		LoginPageModule,
-		SignUpPageModule,
 		BrowserAnimationsModule,
 		AccountPageModule,
 		ForgetPageModule,

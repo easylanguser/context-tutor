@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
-import { NavController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
 
 @Component({
 	selector: 'page-login',
 	templateUrl: 'login.page.html',
-	styleUrls: ['../sign-up/sign-up.page.scss'],
+	styleUrls: ['login.page.scss']
 })
 export class LoginPage implements OnInit {
 	credentialsForm: FormGroup;
@@ -17,9 +17,11 @@ export class LoginPage implements OnInit {
 		private formBuilder: FormBuilder,
 		private authService: AuthService,
 		private navCtrl: NavController,
-		private route: ActivatedRoute) { }
+		private alertCtrl: AlertController) { }
 
-	get f() { return this.credentialsForm.controls; }
+	get formData() {
+		return this.credentialsForm.controls;
+	}
 
 	ngOnInit() {
 		this.credentialsForm = this.formBuilder.group({
@@ -28,42 +30,29 @@ export class LoginPage implements OnInit {
 		});
 	}
 
-	ionViewDidEnter() {
-		const typedEmail = this.route.snapshot.queryParamMap.get('email');
-		const typedPassword = this.route.snapshot.queryParamMap.get('password');
-		if (typedEmail && typedPassword) {
-			this.credentialsForm.setValue({
-				email: typedEmail,
-				password: typedPassword
-			});
-		}
-	}
-
 	onSubmit() {
 		this.submitted = true;
 		if (this.credentialsForm.valid) {
-			this.authService.login(this.credentialsForm.value).subscribe();
-		}
-	}
-
-	register() {
-		this.submitted = true;
-		if (this.credentialsForm.valid) {
-			this.authService.register(this.credentialsForm.value).subscribe(() => {
-				this.authService.login(this.credentialsForm.value).subscribe();
+			this.authService.register(this.credentialsForm.value).subscribe(async res => {
+				if (res['already_signed_up']) {
+					this.authService.login(this.credentialsForm.value).subscribe();
+				} else {
+					const alert = await this.alertCtrl.create({
+						message: 'We have sent an email with a confirmation link to <b>' + this.credentialsForm.value.email + '</b>',
+						header: 'Email confirmation',
+						buttons: [{
+							text: 'OK',
+							handler: () => {
+								this.authService.login(this.credentialsForm.value).subscribe();
+							}
+						}]
+					});
+					await alert.present();
+				}
 			});
 		}
 	}
-
-	goToSignUp() {
-		this.navCtrl.navigateForward(['sign-up'], {
-			queryParams: {
-				email: this.credentialsForm.get('email').value,
-				password: this.credentialsForm.get('password').value
-			}
-		});
-	}
-
+	
 	toForget() {
 		this.navCtrl.navigateForward(['forget']);
 	}
