@@ -48,15 +48,6 @@
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
-
-          <ion-menu-toggle auto-hide="false">
-            <ion-item routerLink="/sign-up">
-              <ion-icon slot="start" name="person-add"></ion-icon>
-              <ion-label>
-                Sign up
-              </ion-label>
-            </ion-item>
-          </ion-menu-toggle>
         </ion-list>
 
         <ion-list>
@@ -75,6 +66,13 @@
           </ion-item>
         </ion-list>
       </ion-content>
+
+      <ion-item (click)="showAbout()" style="width: 100%; position: absolute; bottom: 0; border-top: 1px solid grey; --inner-border-width: 0; cursor: pointer;">
+        <ion-icon slot="start" name="information-circle"></ion-icon>
+        <ion-label>
+          About
+        </ion-label>
+      </ion-item>
     </ion-menu>
 
     <ion-router-outlet main></ion-router-outlet>

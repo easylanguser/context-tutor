@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform } from '@ionic/angular';
+import { Platform, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
@@ -36,7 +36,8 @@ export class AppComponent {
 		private authService: AuthService,
 		private router: Router,
 		private theme: ThemeService,
-		private storageService: StorageService) {
+		private storageService: StorageService,
+		private alertCtrl: AlertController) {
 		this.initializeApp();
 	}
 
@@ -59,7 +60,7 @@ export class AppComponent {
 					this.checkForIntent();
 				}
 			})
-			.then(() => { 
+			.then(() => {
 				if (this.platform.is('mobile')) {
 					if (this.platform.is('android')) {
 						this.statusBar.styleBlackOpaque;
@@ -111,6 +112,17 @@ export class AppComponent {
 				}
 			})
 			.catch(err => console.error('ReceiveContent plugin error: ', err));
+	}
+
+	async showAbout() {
+		let header = 'EasyLang Context Tutor';
+		let message = '0.1.8';
+		const alert = await this.alertCtrl.create({
+			header: header,
+			message: 'Version: ' + message,
+			buttons: ['Close']
+		});
+		await alert.present();
 	}
 }
 
