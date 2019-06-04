@@ -69,7 +69,7 @@ export class UtilsService {
 	addChar(input: string, replacement: string): string {
 		let firstUnderScoreIndex = input.indexOf('●');
 		let length = 1;
-		if (input.charAt(firstUnderScoreIndex - 3) === 't') {
+		if (input.charAt(firstUnderScoreIndex - 3) === 't' && input.charAt(firstUnderScoreIndex - 1) === '>') {
 			firstUnderScoreIndex -= 23;
 			length = 31;
 		}

@@ -59,12 +59,12 @@ export class AppComponent {
 					this.checkForIntent();
 				}
 			})
-			.then(() => {
+			.then(() => { 
 				if (this.platform.is('mobile')) {
 					if (this.platform.is('android')) {
 						this.statusBar.styleBlackOpaque;
 					} else if (this.platform.is('ios')) {
-						this.statusBar.styleDefault;
+						this.statusBar.styleDefault();
 					}
 					this.splashScreen.hide();
 				}
