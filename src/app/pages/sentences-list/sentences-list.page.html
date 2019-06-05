@@ -18,19 +18,15 @@
 
     <div id="segments-div">
       <ion-segment mode="ios">
-
         <ion-segment-button mode="ios" (click)="allClick()" checked="true">
-          All sentences
+          All
         </ion-segment-button>
-
-        <ion-segment-button mode="ios" (click)="redClick()">
-          Wrong
-        </ion-segment-button>
-
         <ion-segment-button mode="ios" (click)="redAndYellowClick()">
-          In progress
+          Almost correct
         </ion-segment-button>
-
+        <ion-segment-button mode="ios" (click)="redClick()">
+          Not correct
+        </ion-segment-button>
       </ion-segment>
     </div>
 
