@@ -2,8 +2,29 @@
   <ion-split-pane>
 
     <ion-menu type="overlay" class="no-selection">
+      <img id="user-avatar" src="assets/img/accounticon.svg" alt="avatar">
+      <ion-content id="menu">
+        <ion-menu-toggle auto-hide="false">
+          <div routerLink="/lessons-list">
+            <p>My lessons</p>
+          </div>
+        </ion-menu-toggle>
+        <ion-menu-toggle auto-hide="false">
+          <div routerLink="/account">
+            <p>Account</p>
+          </div>
+        </ion-menu-toggle>
+        <div>
+          <ion-select placeholder="Theme" interface="popover" [(ngModel)]="themeName" (ionChange)="onChangeTheme($event)">
+            <ion-select-option [selected]="this.themeName === 'dark'" value="dark">Dark</ion-select-option>
+            <ion-select-option [selected]="this.themeName === 'light'" value="light">Light</ion-select-option>
+          </ion-select>
+        </div>
+      </ion-content>
+      <!--
       <ion-content id="menu">
 
+        
         <ion-list *ngIf="loggedIn">
           <ion-list-header>
             Navigate
@@ -66,13 +87,14 @@
           </ion-item>
         </ion-list>
       </ion-content>
-
+      
       <ion-item (click)="showAbout()" style="width: 100%; position: absolute; bottom: 0; border-top: 1px solid grey; --inner-border-width: 0; cursor: pointer;">
         <ion-icon slot="start" name="information-circle"></ion-icon>
         <ion-label>
           About
         </ion-label>
       </ion-item>
+      -->
     </ion-menu>
 
     <ion-router-outlet main></ion-router-outlet>

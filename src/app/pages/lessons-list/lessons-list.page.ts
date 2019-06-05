@@ -73,7 +73,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 						if (sntcs.curCharsIndexes.length === 0) {
 							sntcs.curCharsIndexes.push(0);
 						}
-						sntcs.sentenceShown = this.utils.addChar(sntcs.textUnderscored, '<span class=\'red-text\'>●</span>');
+						sntcs.sentenceShown = this.utils.addChar(sntcs.textUnderscored, '<span class=\'red-text\'>•</span>');
 					}
 				});
 			});
@@ -127,9 +127,9 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 			if (chartData.data[0] + chartData.data[1] + chartData.data[2] > 1) {
 				--chartData.data[0];
-				chartData.backgroundColor[0] = '#a6ed92';
-				chartData.backgroundColor[1] = '#ff9663';
-				chartData.backgroundColor[2] = '#ffe353';
+				chartData.backgroundColor[0] = '#AFF265';
+				chartData.backgroundColor[1] = '#FF9055';
+				chartData.backgroundColor[2] = '#FFE320';
 				this.pieCharts[i].options.cutoutPercentage = 67;
 				this.pieCharts[i].update();
 			}

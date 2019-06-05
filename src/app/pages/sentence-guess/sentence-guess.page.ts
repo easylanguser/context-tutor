@@ -59,9 +59,9 @@ export class SentenceGuessPage implements OnInit {
 			chartData.data[0] = stats.correctAnswers;
 			chartData.data[1] = stats.wrongAnswers;
 			chartData.data[2] = stats.hintUsages + this.curSentence().hiddenWord.length * stats.giveUps;
-			chartData.backgroundColor[0] = '#a6ed92';
-			chartData.backgroundColor[1] = '#ff9663';
-			chartData.backgroundColor[2] = '#ffe353';
+			chartData.backgroundColor[0] = '#AFF265';
+			chartData.backgroundColor[1] = '#FF9055';
+			chartData.backgroundColor[2] = '#FFE320';
 		}
 
 		this.pieChart.update();

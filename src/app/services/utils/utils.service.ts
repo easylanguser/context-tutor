@@ -44,7 +44,7 @@ export class UtilsService {
 		for (let i = 0; i < indexes.length - 1; i++) {
 			for (let j = 0; j < indexes[i][1]; j++) {
 				if (this.isEnglishChar(inputText.charAt(indexes[i][0] + j))) {
-					textWithHiddenCharacters += '●';
+					textWithHiddenCharacters += '•';
 				} else {
 					textWithHiddenCharacters += inputText.charAt(indexes[i][0] + j);
 				}
@@ -55,7 +55,7 @@ export class UtilsService {
 		}
 		for (let i = 0; i < indexes[indexes.length - 1][1]; i++) {
 			if (this.isEnglishChar(inputText.charAt(indexes[indexes.length - 1][0] + i))) {
-				textWithHiddenCharacters += '●';
+				textWithHiddenCharacters += '•';
 			} else {
 				textWithHiddenCharacters += inputText.charAt(indexes[indexes.length - 1][0] + i);
 			}
@@ -67,7 +67,7 @@ export class UtilsService {
 	}
 
 	addChar(input: string, replacement: string): string {
-		let firstUnderScoreIndex = input.indexOf('●');
+		let firstUnderScoreIndex = input.indexOf('•');
 		let length = 1;
 		if (input.charAt(firstUnderScoreIndex - 3) === 't' && input.charAt(firstUnderScoreIndex - 1) === '>') {
 			firstUnderScoreIndex -= 23;

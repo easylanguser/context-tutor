@@ -141,6 +141,8 @@ export class GuessBarComponent implements OnInit {
 		if (!this.curSentence().solvedStatus) {
 			++this.curSentence().statistics.giveUps; // Statistics
 
+			let i = 0;
+
 			do {
 				do {
 					this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown,
@@ -148,19 +150,23 @@ export class GuessBarComponent implements OnInit {
 					if (this.guessPage.curCharsIndexes[this.guessPage.curWordIndex] !==
 						this.curSentence().hiddenChars[this.guessPage.curWordIndex].length - 1 ||
 						this.guessPage.curWordIndex !== this.curSentence().hiddenChars.length - 1) {
-						this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '●');
+						this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '•');
 					}
+					++i;
 					++this.guessPage.curCharsIndexes[this.guessPage.curWordIndex];
-				} while (this.guessPage.curCharsIndexes[this.guessPage.curWordIndex] <
-					this.curSentence().hiddenChars[this.guessPage.curWordIndex].length);
-				++this.guessPage.curWordIndex;
-			} while (this.guessPage.curWordIndex < this.curSentence().hiddenChars.length);
+				} while (this.status() === 0 && i < 3);
+				if (this.status() === 1) {
+					++this.guessPage.curWordIndex;
+				}
+			} while (this.status() === 1 && i < 3);
 
 			this.updateChart();
 			this.resetColors();
+			if (this.status() === 2) {
 			this.curSentence().solvedStatus = true;
-			if (!this.guessPage.toastIsShown) {
-				this.guessPage.showToast();
+				if (!this.guessPage.toastIsShown) {
+					this.guessPage.showToast();
+				}
 			}
 		}
 	}
@@ -361,7 +367,7 @@ export class GuessBarComponent implements OnInit {
 				return;
 			}
 
-			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '<span class=\'red-text\'>●</span>');
+			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '<span class=\'red-text\'>•</span>');
 
 			if (!this.util.isEnglishChar(this.curCorrectChar())) {
 				++this.guessPage.curCharsIndexes[this.guessPage.curWordIndex];

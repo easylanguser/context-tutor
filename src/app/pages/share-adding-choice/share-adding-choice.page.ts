@@ -69,9 +69,9 @@ export class ShareAddingChoicePage implements OnInit {
 
 			if (chartData.data[0] + chartData.data[1] + chartData.data[2] > 1) {
 				--chartData.data[0];
-				chartData.backgroundColor[0] = '#a6ed92';
-				chartData.backgroundColor[1] = '#ff9663';
-				chartData.backgroundColor[2] = '#ffe353';
+				chartData.backgroundColor[0] = '#AFF265';
+				chartData.backgroundColor[1] = '#FF9055';
+				chartData.backgroundColor[2] = '#FFE320';
 				this.pieCharts[i].options.cutoutPercentage = 67;
 				this.pieCharts[i].update();
 			}

@@ -65,12 +65,10 @@ $chars-and-hint-height: 20vw;
 
 .front {
     background: #f2f7ff;
-    padding-top: 8px;
 }
 
 .back {
     position: absolute;
-    padding-top: 8px;
     top: 0;
     left: 0;
     background: #f2f7ff;
@@ -118,8 +116,8 @@ $chars-and-hint-height: 20vw;
         margin-top: 16px;
     }
 
-    >:last-child:first-letter {
-        color: red;
+    >:last-child {
+        color: #FF7575;
     }
 }
 
@@ -146,7 +144,7 @@ $chars-and-hint-height: 20vw;
     }
 
     >:last-child:first-letter {
-        color: red;
+        color: #FF7575;
     }
 }
 
