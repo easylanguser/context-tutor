@@ -73,7 +73,9 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 							sntcs.curCharsIndexes[i] = 0;
 						}
 						if (sntcs.curCharsIndexes.length === 0) {
-							sntcs.curCharsIndexes.push(0);
+							for (let _ in sntcs.hiddenChars) {
+								sntcs.curCharsIndexes.push(0);
+							}
 						}
 						sntcs.sentenceShown = this.utils.addChar(sntcs.textUnderscored, '<span class=\'red-text\'>•</span>');
 					}
