@@ -132,8 +132,25 @@ export class GuessBarComponent implements OnInit {
 		this.animateSwipe(forward);
 		this.updateChart();
 
+		if (this.guessPage.statisticsDeltasArray.findIndex(elem => elem[0] === this.curSentence().id) === -1) {
+			const stats = this.curSentence().statistics;
+			this.guessPage.statisticsDeltasArray.push([
+				this.curSentence().id,
+				stats.wrongAnswers,
+				stats.hintUsages + stats.giveUps,
+				stats.correctAnswers
+			]);
+		}
+
 		if (!this.curSentence().solvedStatus) {
 			++this.curSentence().statistics.sentenceSkips; // Statistics
+		}
+	}
+
+	markAsSolved() {
+		this.curSentence().solvedStatus = true;
+		if (!this.guessPage.toastIsShown) {
+			this.guessPage.showToast();
 		}
 	}
 
@@ -162,10 +179,7 @@ export class GuessBarComponent implements OnInit {
 
 			this.updateChart();
 			if (this.status() === 2) {
-				this.curSentence().solvedStatus = true;
-				if (!this.guessPage.toastIsShown) {
-					this.guessPage.showToast();
-				}
+				this.markAsSolved();
 			} else {
 				this.refreshCharBoxes();
 				this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '<span class=\'red-text\'>•</span>');
@@ -184,24 +198,13 @@ export class GuessBarComponent implements OnInit {
 		}
 	}
 
-	firstCharBoxClick() {
-		const event = new KeyboardEvent('ev1', { key: (this.updateFront ? this.firstChar : this.firstCharBack).toLowerCase() });
-		this.handleKeyboardEvent(event);
-	}
-
-	secondCharBoxClick() {
-		const event = new KeyboardEvent('ev2', { key: (this.updateFront ? this.secondChar : this.secondCharBack).toLowerCase() });
-		this.handleKeyboardEvent(event);
-	}
-
-	thirdCharBoxClick() {
-		const event = new KeyboardEvent('ev3', { key: (this.updateFront ? this.thirdChar : this.thirdCharBack).toLowerCase() });
-		this.handleKeyboardEvent(event);
-	}
-
-	fourthCharBoxClick() {
-		const event = new KeyboardEvent('ev4', { key: (this.updateFront ? this.fourthChar : this.fourthCharBack).toLowerCase() });
-		this.handleKeyboardEvent(event);
+	handleBoxClick(index: number) {
+		if (!this.curSentence().solvedStatus) {
+			const fronts = [this.firstChar, this.secondChar, this.thirdChar, this.fourthChar];
+			const backs = [this.firstCharBack, this.secondCharBack, this.thirdCharBack, this.fourthCharBack];
+			const event = new KeyboardEvent('ev' + index, { key: (this.updateFront ? fronts[index] : backs[index]).toLowerCase() });
+			this.handleKeyboardEvent(event);
+		}
 	}
 
 	private randomAlphabetChar(): string {
@@ -362,10 +365,7 @@ export class GuessBarComponent implements OnInit {
 			if (status === 1) {
 				++this.guessPage.curWordIndex;
 			} else if (status === 2) {
-				this.curSentence().solvedStatus = true;
-				if (!this.guessPage.toastIsShown) {
-					this.guessPage.showToast();
-				}
+				this.markAsSolved();
 				return;
 			}
 
@@ -377,10 +377,7 @@ export class GuessBarComponent implements OnInit {
 				if (status === 1) {
 					++this.guessPage.curWordIndex;
 				} else if (status === 2) {
-					this.curSentence().solvedStatus = true;
-					if (!this.guessPage.toastIsShown) {
-						this.guessPage.showToast();
-					}
+					this.markAsSolved();
 					return;
 				}
 			}

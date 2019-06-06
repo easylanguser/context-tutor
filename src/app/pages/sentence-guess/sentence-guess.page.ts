@@ -26,6 +26,8 @@ export class SentenceGuessPage implements OnInit {
 	curCharsIndexes: number[] = []; // Number of character for each word, that user is currently at
 	sentenceShown: string; // Current displayed sentence
 
+	statisticsDeltasArray: Array<[number, number, number, number]> = []; // Deltas by id for red, yellow, green stats
+
 	constructor(private route: ActivatedRoute,
 		private toastController: ToastController,
 		public lessonsDataService: LessonsDataService,
@@ -39,6 +41,14 @@ export class SentenceGuessPage implements OnInit {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
 		this.pieChart = new Chart(this.pieCanvas.nativeElement, this.utils.getNewChartObject());
 		this.updateChart();
+
+		const stats = this.curSentence().statistics;
+		this.statisticsDeltasArray.push([
+			this.curSentence().id,
+			stats.wrongAnswers,
+			stats.hintUsages + stats.giveUps,
+			stats.correctAnswers
+		]);
 	}
 
 	// Get current Sentence object from service
@@ -48,41 +58,60 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	updateChart() {
-		const chartData = this.pieChart.data.datasets[0];
+		const chart = this.pieChart.data.datasets[0];
+		const chartData = chart.data;
+		const chartColors = chart.backgroundColor;
 		const stats = this.curSentence().statistics;
 
 		if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps === 0) {
-			chartData.data[0] = 1;
-			chartData.data[1] = 0;
-			chartData.data[2] = 0;
+			chartData[0] = 1;
+			chartData[1] = 0;
+			chartData[2] = 0;
 		} else {
-			chartData.data[0] = stats.correctAnswers;
-			chartData.data[1] = stats.wrongAnswers;
-			chartData.data[2] = stats.hintUsages + this.curSentence().hiddenWord.length * stats.giveUps;
-			chartData.backgroundColor[0] = '#AFF265';
-			chartData.backgroundColor[1] = '#FF9055';
-			chartData.backgroundColor[2] = '#FFE320';
+			chartData[0] = stats.correctAnswers;
+			chartData[1] = stats.wrongAnswers;
+			chartData[2] = stats.hintUsages + this.curSentence().hiddenWord.length * stats.giveUps;
+			chartColors[0] = '#AFF265';
+			chartColors[1] = '#FF9055';
+			chartColors[2] = '#FFE320';
 		}
 
 		this.pieChart.update();
 	}
 
 	saveStatistics() {
+		const stats = this.curSentence().statistics;
 		this.statisticsUpdateService
-			.updateData( {
+			.updateData({
 				sentenceId: this.curSentence().id,
 				curCharsIndexes: [],
 				curWordIndex: 0,
 				sentenceShown: "",
 				solvedStatus: false,
-				correctAnswers: this.curSentence().statistics.correctAnswers,
-				giveUps: this.curSentence().statistics.giveUps,
-				hintUsages: this.curSentence().statistics.hintUsages,
-				lessonLeaves: this.curSentence().statistics.lessonLeaves,
-				sentenceSkips: this.curSentence().statistics.sentenceSkips,
-				wordSkips: this.curSentence().statistics.wordSkips,
-				wrongAnswers: this.curSentence().statistics.wrongAnswers
+				correctAnswers: stats.correctAnswers,
+				giveUps: stats.giveUps,
+				hintUsages: stats.hintUsages,
+				lessonLeaves: stats.lessonLeaves,
+				sentenceSkips: stats.sentenceSkips,
+				wordSkips: stats.wordSkips,
+				wrongAnswers: stats.wrongAnswers
 			}).subscribe();
+
+		const index = this.statisticsDeltasArray.findIndex(el => el[0] === this.curSentence().id);
+		if (index > -1) {
+			const arr = this.statisticsDeltasArray[index];
+			arr[0] = this.curSentence().id;
+			arr[1] = stats.wrongAnswers;
+			arr[2] = stats.hintUsages + stats.giveUps;
+			arr[3] = stats.correctAnswers;
+		} else {
+			this.statisticsDeltasArray.push([
+				this.curSentence().id,
+				stats.wrongAnswers,
+				stats.hintUsages + stats.giveUps,
+				stats.correctAnswers
+			]);
+		}
 	}
 
 	goBack() {
@@ -102,14 +131,23 @@ export class SentenceGuessPage implements OnInit {
 
 	async showToast() {
 		this.toastIsShown = true;
-		const toast = await this.toastController.create({
-			message: 'Good work!',
-			position: 'middle',
-			duration: 1000,
-			cssClass: 'toast-black',
-			animated: true
-		});
-		toast.present();
-		setTimeout(() => { this.toastIsShown = false; }, 1500);
+		const stats = this.curSentence().statistics;
+		const savedStats = this.statisticsDeltasArray.find(elem => elem[0] === this.curSentence().id);
+		const greenDelta = stats.correctAnswers - savedStats[3];
+		const yellowDelta = stats.giveUps + stats.hintUsages - savedStats[2];
+		const redDelta = stats.wrongAnswers - savedStats[1];
+		if (greenDelta + yellowDelta + redDelta !== 0) {
+			const toast = await this.toastController.create({
+				message: 'Green: +' + greenDelta + '\nYellow: +' + yellowDelta + '\nRed: +' + redDelta,
+				position: 'middle',
+				duration: 1200,
+				cssClass: 'toast-black',
+				animated: true
+			});
+			toast.present();
+			setTimeout(() => { this.toastIsShown = false; }, 1500);
+		} else {
+			this.toastIsShown = false;
+		}
 	}
 }
