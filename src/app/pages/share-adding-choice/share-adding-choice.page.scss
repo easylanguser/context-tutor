@@ -16,12 +16,16 @@
 }
 
 #search-bar {
-    width: 50vw;
+    width: 70vw;
     --background: #FFF;
     --border-radius: 32px;
     --inner-border-width: 0;
     --highlight-color-focused: none;
     border-radius: 32px;
+
+    @media (min-width: 400px) and (max-width: 992px) {
+        width: 55vw;
+    }
 
     @media (min-width: 992px) {
         width: 30vw;

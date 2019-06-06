@@ -4,6 +4,7 @@ import { Chart } from 'chart.js';
 import { LoadingController, NavController } from '@ionic/angular';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { sharedText } from 'src/app/app.component';
 
 @Component({
 	selector: 'app-share-adding-choice',
@@ -29,7 +30,8 @@ export class ShareAddingChoicePage implements OnInit {
 	}
 
 	goBack() {
-		this.navCtrl.pop();
+		sharedText[0] = undefined;
+		this.navCtrl.navigateBack(['lessons-list']);
 	}
 
 	ngAfterViewInit() {
