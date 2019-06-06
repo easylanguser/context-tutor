@@ -155,8 +155,9 @@ export class LessonsDataService {
 		return [flooredValue, label];
 	}
 
-	async getLessons(): Promise<Lesson[]> {
+	async refreshLessons(): Promise<Lesson[]> {
 		const lsn = await this.lessonsAPI.getData();
+		this.lessons = [];
 		const now = new Date().getTime();
 
 		for (let i in lsn) {
@@ -169,9 +170,8 @@ export class LessonsDataService {
 				lsn[i].created_at,
 				lsn[i].updated_at,
 				period[0] + period[1]);
-			if (this.getLessonByID(lesson.id) === undefined) {
-				this.addLesson(lesson);
-			}
+				
+			this.addLesson(lesson);
 		}
 
 		const promises = [];

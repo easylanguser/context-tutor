@@ -30,9 +30,11 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private utils: UtilsService,
 		private cdRef: ChangeDetectorRef) { }
 
-	ngOnInit() {
+	async ngOnInit() {
 		this.configureTipsFloating();
-		this.getData();
+		const loading = await this.loadingController.create({ message: 'Loading', duration: 8000 });
+		await loading.present();
+		this.getData().then(() => loading.dismiss());
 	}
 
 	configureTipsFloating() {
@@ -194,13 +196,11 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	private async getData() {
-		const loading = await this.loadingController.create({ message: 'Loading', duration: 8000 });
-		await loading.present();
-		await this.lessonsDataService.getLessons().then(() => {
+		await this.lessonsDataService.refreshLessons().then(() => {
 			this.displayedLessons = this.lessonsDataService.lessons;
 			this.displayHints = this.displayedLessons.length === 0;
 			this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);
-		}).then(() => loading.dismiss());
+		});
 	}
 
 	allClick() {
