@@ -158,15 +158,17 @@ export class GuessBarComponent implements OnInit {
 				if (this.status() === 1) {
 					++this.guessPage.curWordIndex;
 				}
-			} while (this.status() === 1 && i < 3);
+			} while (this.status() === 1);
 
 			this.updateChart();
-			this.resetColors();
 			if (this.status() === 2) {
-			this.curSentence().solvedStatus = true;
+				this.curSentence().solvedStatus = true;
 				if (!this.guessPage.toastIsShown) {
 					this.guessPage.showToast();
 				}
+			} else {
+				this.refreshCharBoxes();
+				this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '<span class=\'red-text\'>•</span>');
 			}
 		}
 	}
@@ -224,7 +226,7 @@ export class GuessBarComponent implements OnInit {
 			this.fourthChar = charsToSelectFrom.charAt(3);
 			if (this.correctIsNotPresent(this.firstChar, this.secondChar,
 				this.thirdChar, this.fourthChar, correctChar)) {
-				switch(srand) {
+				switch (srand) {
 					case 0: this.firstChar = correctChar; break;
 					case 1: this.secondChar = correctChar; break;
 					case 2: this.thirdChar = correctChar; break;
@@ -238,7 +240,7 @@ export class GuessBarComponent implements OnInit {
 			this.fourthCharBack = charsToSelectFrom.charAt(3);
 			if (this.correctIsNotPresent(this.firstCharBack, this.secondCharBack,
 				this.thirdCharBack, this.fourthCharBack, correctChar)) {
-				switch(srand) {
+				switch (srand) {
 					case 0: this.firstCharBack = correctChar; break;
 					case 1: this.secondCharBack = correctChar; break;
 					case 2: this.thirdCharBack = correctChar; break;
