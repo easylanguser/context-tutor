@@ -33,7 +33,7 @@
     "chart.js": "^2.8.0",
     "cordova-android": "8.0.0",
     "cordova-browser": "6.0.0",
-    "cordova-ios": "5.0.0",
+    "cordova-ios": "5.0.1",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-ionic-webview": "^2.4.1",
     "cordova-plugin-receive-content": "file:plugins-local/cordova-plugin-receive-content",
@@ -90,8 +90,8 @@
     },
     "platforms": [
       "android",
-      "ios",
-      "browser"
+      "browser",
+      "ios"
     ]
   }
 }

@@ -33,7 +33,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	async ngOnInit() {
 		const loading = await this.loadingController.create({
 			message: 'Loading',
-			duration: 8000
+			backdropDismiss: true
 		});
 		await loading.present();
 		this.getData().then(() => {

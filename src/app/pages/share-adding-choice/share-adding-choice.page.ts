@@ -83,7 +83,10 @@ export class ShareAddingChoicePage implements OnInit {
 	}
 
 	private async getData() {
-		const loading = await this.loadingController.create({ message: 'Loading' });
+		const loading = await this.loadingController.create({
+			message: 'Loading',
+			backdropDismiss: true
+		});
 		await loading.present();
 		await this.lessonsDataService.refreshLessons().then(() => {
 			this.displayedLessons = this.lessonsDataService.lessons;

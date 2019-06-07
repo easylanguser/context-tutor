@@ -14,7 +14,7 @@ import { AuthGuardService } from './services/guard/auth-guard.service';
 
 const routes: Routes = [
 	{ path: '', redirectTo: 'lessons-list', pathMatch: 'full' },
-	{ path: 'lessons-list', loadChildren: './pages/lessons-list/lessons-list.page.module#LessonsListPageModule' },
+	{ path: 'lessons-list', loadChildren: './pages/lessons-list/lessons-list.page.module#LessonsListPageModule', canActivate: [AuthGuardService] },
 	{ path: 'sentences-list', component: SentencesListPage, canActivate: [AuthGuardService] },
 	{ path: 'sentence-guess', component: SentenceGuessPage, canActivate: [AuthGuardService]  },
 	{ path: 'login', component: LoginPage },
