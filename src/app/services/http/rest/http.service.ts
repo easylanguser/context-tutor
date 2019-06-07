@@ -11,7 +11,6 @@ export class HttpService {
 
 	constructor(
 		private authService: AuthService,
-		private helper: JwtHelperService,
 		private http: HttpClient) { }
 
 	doPost(url: string, body?: Object): Observable<any> {

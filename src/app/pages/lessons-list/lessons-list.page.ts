@@ -31,7 +31,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private cdRef: ChangeDetectorRef) { }
 
 	async ngOnInit() {
-		this.configureTipsFloating();
 		const loading = await this.loadingController.create({
 			message: 'Loading',
 			duration: 8000
@@ -41,6 +40,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 			this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);
 			loading.dismiss();
 		});
+		this.configureTipsFloating();
 	}
 
 	configureTipsFloating() {

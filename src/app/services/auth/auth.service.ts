@@ -36,8 +36,8 @@ export class AuthService {
 		});
 	}
 
-	checkToken() {
-		this.storageService.get(TOKEN_KEY).then(token => {
+	checkToken(): Promise<any> {
+		return this.storageService.get(TOKEN_KEY).then(token => {
 			if (token) {
 				parent.postMessage({ token: token }, '*');
 				let decoded = this.helper.decodeToken(token);

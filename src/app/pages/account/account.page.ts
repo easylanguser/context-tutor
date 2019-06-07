@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Storage } from '@ionic/storage';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService, TOKEN_KEY } from '../../services/auth/auth.service';
 import { HttpService } from '../../services/http/rest/http.service';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { UserService } from 'src/app/services/http/user/user-service';
+import { StorageService } from 'src/app/services/storage/storage-service';
 
 @Component({
 	selector: 'app-account',
@@ -13,29 +13,30 @@ import { environment } from 'src/environments/environment';
 	styleUrls: ['./account.page.scss'],
 })
 
-
 export class AccountPage implements OnInit {
 
+	userEmail: string;
 
 	constructor(
-		private storage: Storage,
-		private helper: JwtHelperService,
+		private userService: UserService,
 		private authService: AuthService,
 		private httpService: HttpService,
 		private alertController: AlertController,
-		private router: Router) {
-	}
+		private router: Router) { }
 
 	ngOnInit() {
-		this.getUserInfo()
+		if (this.authService.token) {
+			this.getInfo();
+		} else {
+			this.authService.checkToken().then(() => {
+				this.getInfo();
+			});
+		}
 	}
 
-	getUserInfo() {
-		this.storage.get(TOKEN_KEY).then(token => {
-			if (token) {
-				let decoded = this.helper.decodeToken(token);
-			}
-		});
+	async getInfo(token?: any) {
+		const userInfo = await this.userService.getUserInfo();
+		this.userEmail = userInfo.email;
 	}
 
 	async deleteAccount() {
@@ -84,8 +85,7 @@ export class AccountPage implements OnInit {
 
 	showAlert(res) {
 		const alert = this.alertController.create({
-			message: res.msg,
-			// header: 'User deleting',
+			message: res.msg
 		});
 		alert.then(alert => alert.present());
 	}

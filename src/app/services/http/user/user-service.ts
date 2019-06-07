@@ -1,20 +1,22 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { HttpService } from '../rest/http.service';
 
 @Injectable({
 	providedIn: 'root'
 })
-export class UserService implements OnInit {
+export class UserService {
 
 	url = environment.url;
 
-	constructor(private http: HttpClient) { }
-
-	ngOnInit() { }
+	constructor(private httpService: HttpService) { }
 
 	sendPassResetRequest(email: string): Observable<any> {
-		return this.http.post(`${this.url}/api/user/sendPassword`, email);
+		return this.httpService.doPost(`${this.url}/api/user/sendPassword`, email);
+	}
+
+	getUserInfo(): Promise<any> {
+		return this.httpService.doGet(`${this.url}/api/users/getUserInfo`).toPromise();
 	}
 }
