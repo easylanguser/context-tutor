@@ -20,7 +20,7 @@
 
         >p,
         >ion-select {
-            border-left: 4px solid #00baff;
+            border-left: 3px solid #00baff;
             color: #00baff;
         }
     }
@@ -51,12 +51,16 @@
 }
 
 #user-avatar {
-    width: 17vmin;
+    width: 30vmin;
     margin: 4vh auto 3vh auto;
-}
 
-.ios #menu {
-    --padding-top: 20px;
+    @media (min-width: 650px) and (max-width: 992px) {
+        width: 24vmin;
+    }
+
+    @media (min-width: 992px) {
+        width: 18vmin;
+    }
 }
 
 #about-btn {

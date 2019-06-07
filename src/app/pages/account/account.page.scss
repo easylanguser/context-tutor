@@ -2,8 +2,17 @@
     --border-width: 0;
 }
 
-ion-toolbar ion-title {
-    color: black;
+ion-toolbar {
+    --background: #FFF !important;
+    --border-width: 0 !important;
+
+    ion-title {
+        color: black;
+    }
+
+    ion-buttons {
+        margin-left: 5vw;
+    }
 }
 
 #user-email {
@@ -16,12 +25,26 @@ ion-toolbar ion-title {
 .list-block {
     height: 40px;
     border-radius: 20px;
-    margin: 2vh 10vw;
-    padding-left: 16px;
+    margin: 2vh 20vw;
     cursor: pointer;
-    text-align: start;
+    text-align: center;
     vertical-align: middle;
-    line-height: 40px;    
+    line-height: 40px;
     background: #f2f6ff;
-    color: black;
+    font-weight: bold;
+    color: #00baff;
+}
+
+#logout-button {
+    height: 40px;
+    border-radius: 20px;
+    margin-top: 25vh;
+    margin-left: 35vw;
+    margin-right: 35vw;
+    cursor: pointer;
+    line-height: 35px;
+    border: 2px solid #00baff;
+    background: #FFF;
+    color: #00baff;
+    font-weight: bold;
 }
