@@ -26,81 +26,10 @@
             <ion-select-option [selected]="this.themeName === 'light'" value="light">Light</ion-select-option>
           </ion-select>
         </div>
-      </ion-content>
-      <!--
-      <ion-content id="menu">
-
-        
-        <ion-list *ngIf="loggedIn">
-          <ion-list-header>
-            Navigate
-          </ion-list-header>
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item [routerLink]="p.url">
-              <ion-icon slot="start" [name]="p.icon"></ion-icon>
-              <ion-label>
-                {{p.title}}
-              </ion-label>
-            </ion-item>
-
-          </ion-menu-toggle>
-        </ion-list>
-
-        <ion-list *ngIf="loggedIn">
-          <ion-list-header>
-            Account
-          </ion-list-header>
-
-          <ion-menu-toggle auto-hide="false">
-            <ion-item routerLink="/account">
-              <ion-icon slot="start" name="person"></ion-icon>
-              <ion-label>
-                Account
-              </ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-
-        </ion-list>
-
-        <ion-list *ngIf="!loggedIn">
-          <ion-list-header>
-            Account
-          </ion-list-header>
-
-          <ion-menu-toggle auto-hide="false">
-            <ion-item routerLink="/login">
-              <ion-icon slot="start" name="log-in"></ion-icon>
-              <ion-label>
-                Sign in
-              </ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-        </ion-list>
-
-        <ion-list>
-          <ion-list-header>
-            Theming
-          </ion-list-header>
-          <ion-item>
-            <ion-icon slot="start" name="brush"></ion-icon>
-            <ion-label>
-              <ion-select style="max-width: 100%;" placeholder="Select App Theme" interface="popover"
-                [(ngModel)]="themeName" (ionChange)="onChangeTheme($event)">
-                <ion-select-option [selected]="this.themeName === 'dark'" value="dark">Dark</ion-select-option>
-                <ion-select-option [selected]="this.themeName === 'light'" value="light">Light</ion-select-option>
-              </ion-select>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-content>
-      
-      <ion-item (click)="showAbout()" style="width: 100%; position: absolute; bottom: 0; border-top: 1px solid grey; --inner-border-width: 0; cursor: pointer;">
-        <ion-icon slot="start" name="information-circle"></ion-icon>
-        <ion-label>
+        <ion-button id="about-btn" fill="outline" (click)="showAbout()">
           About
-        </ion-label>
-      </ion-item>
-      -->
+        </ion-button>
+      </ion-content>
     </ion-menu>
 
     <ion-router-outlet main></ion-router-outlet>

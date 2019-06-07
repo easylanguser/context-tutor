@@ -442,7 +442,7 @@ export class GuessBarComponent implements OnInit {
 			translateX: forward ? '-=40vw' : '+=40vw',
 			opacity: 0,
 			easing: 'easeInOutBack',
-			duration: 500
+			duration: 400
 		}).finished;
 
 		await anime({
@@ -458,7 +458,7 @@ export class GuessBarComponent implements OnInit {
 			translateX: forward ? '-=40vw' : '+=40vw',
 			opacity: 1,
 			easing: 'easeInOutBack',
-			duration: 500
+			duration: 400
 		}).finished;
 
 		this.sentenceTranslateIsPlayed = false;
