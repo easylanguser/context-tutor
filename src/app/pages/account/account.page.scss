@@ -47,4 +47,9 @@ ion-toolbar {
     background: #FFF;
     color: #00baff;
     font-weight: bold;
+
+    @media (min-width: 992px) {
+        margin-left: 30vw;
+        margin-right: 30vw;
+    }
 }
