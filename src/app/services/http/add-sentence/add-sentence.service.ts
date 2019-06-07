@@ -12,6 +12,11 @@ export class AddSentenceService {
 	constructor(private httpService: HttpService) { }
 
 	postNewSentence(sentence: any): Promise<any> {
-		return this.httpService.doPost(apiUrl + sentence.lessonId, sentence).toPromise();
+		return this.httpService.doPost(apiUrl + sentence.lessonId, 
+			{
+				text: sentence.text,
+				words: sentence.words
+			}
+		).toPromise();
 	}
 }

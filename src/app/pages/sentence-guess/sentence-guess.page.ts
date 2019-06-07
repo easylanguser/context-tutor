@@ -6,6 +6,7 @@ import { ToastController, NavController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
+import { sortIsRequired } from 'src/app/app.component';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -127,6 +128,7 @@ export class SentenceGuessPage implements OnInit {
 
 	ionViewWillLeave() {
 		this.saveData();
+		sortIsRequired[0] = true;
 	}
 
 	async showToast() {

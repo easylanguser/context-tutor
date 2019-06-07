@@ -12,6 +12,7 @@ export class Sentence {
 		public curWordIndex: number,
 		public sentenceShown: string,
 		public solvedStatus: boolean,
+		public created_at: string,
 		public updated_at: string,
 		public statistics: Statistics) { }
 }

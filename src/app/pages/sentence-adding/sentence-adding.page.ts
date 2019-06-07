@@ -130,6 +130,7 @@ export class SentenceAddingPage implements OnInit {
 						this.utils.addChar(hiddenSentence, '•'),
 						false,
 						new Date().toISOString(),
+						new Date().toISOString(),
 						new Statistics(0, 0, 0, 0, 0, 0, 0)));
 			} else {
 				this.addSentenceService.postNewSentence({
@@ -154,8 +155,10 @@ export class SentenceAddingPage implements OnInit {
 				});
 			});
 		}
+
 		sharedText[0] = undefined;
 		updateIsRequired[0] = true;
+		
 		this.navCtrl.navigateBack(['sentences-list'], {
 			queryParams: {
 				lessonID: this.lessonId

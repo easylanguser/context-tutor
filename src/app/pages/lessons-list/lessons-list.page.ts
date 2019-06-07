@@ -5,7 +5,7 @@ import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.s
 import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
 import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { updateIsRequired } from 'src/app/app.component';
+import { updateIsRequired, sortIsRequired } from 'src/app/app.component';
 
 @Component({
 	selector: 'page-lessons-list',
@@ -32,9 +32,15 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	async ngOnInit() {
 		this.configureTipsFloating();
-		const loading = await this.loadingController.create({ message: 'Loading', duration: 8000 });
+		const loading = await this.loadingController.create({
+			message: 'Loading',
+			duration: 8000
+		});
 		await loading.present();
-		this.getData().then(() => loading.dismiss());
+		this.getData().then(() => {
+			this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);
+			loading.dismiss();
+		});
 	}
 
 	configureTipsFloating() {
@@ -60,9 +66,12 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 			this.firstEnter = false;
 		} else {
 			this.updateCharts();
-			if (updateIsRequired[0]) {
-				this.getData();
+			if (updateIsRequired[0] || sortIsRequired[0]) {
+				this.getData().then(() => {
+					this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);
+				});
 				updateIsRequired[0] = false;
+				sortIsRequired[0] = false;
 			}
 			this.lessonsDataService.lessons.forEach(lsn => {
 				lsn.sentences.forEach(sntcs => {
@@ -201,7 +210,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		await this.lessonsDataService.refreshLessons().then(() => {
 			this.displayedLessons = this.lessonsDataService.lessons;
 			this.displayHints = this.displayedLessons.length === 0;
-			this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);
 		});
 	}
 

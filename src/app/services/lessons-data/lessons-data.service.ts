@@ -102,6 +102,7 @@ export class LessonsDataService {
 					? this.utils.addChar(hiddenSentence, '<span class=\'red-text\'>•</span>')
 					: sntns[i].sentenceShown,
 				sntns[i].solvedStatus,
+				sntns[i].created_at,
 				sntns[i].updated_at,
 				new Statistics(
 					sntns[i].correctAnswers,
@@ -118,7 +119,7 @@ export class LessonsDataService {
 		}
 
 		if (this.getLessonByID(id).sentences.length > 0) {
-			this.getLessonByID(id).sentences.sort(this.sortSentencesByTime);
+			this.getLessonByID(id).sentences.sort(this.sortSentencesByAddingTime);
 		}
 
 		return this.getLessonByID(id).sentences;
@@ -182,10 +183,10 @@ export class LessonsDataService {
 		return Promise.all(promises);
 	}
 
-	sortSentencesByTime(first: Sentence, second: Sentence): number {
-		const firstTime = new Date(first.updated_at);
-		const secondTime = new Date(second.updated_at);
-		if (firstTime < secondTime) {
+	sortSentencesByAddingTime(first: Sentence, second: Sentence): number {
+		const firstTime = new Date(first.created_at);
+		const secondTime = new Date(second.created_at);
+		if (firstTime > secondTime) {
 			return 1;
 		} else if (firstTime === secondTime) {
 			return 0;
@@ -195,11 +196,15 @@ export class LessonsDataService {
 	}
 
 	sortLessonsByTime(first: Lesson, second: Lesson): number {
-		if (first.sentences.length === 0 || second.sentences.length === 0) {
-			return 0;
+		if (first.sentences.length === 0) {
+			return -1;
 		}
-		const firstDate = new Date(first.sentences[0].updated_at);
-		const secondDate = new Date(second.sentences[0].updated_at);
-		return firstDate < secondDate ? 1 : -1;
+		if (second.sentences.length === 0) {
+			return 1;
+		}
+		const firstLatestUpd = new Date(Math.max.apply(null, first.sentences.map(elem => new Date(elem.updated_at))));
+		const secondLatestUpd = new Date(Math.max.apply(null, second.sentences.map(elem => new Date(elem.updated_at))));
+		
+		return firstLatestUpd < secondLatestUpd ? 1 : -1;
 	}
 }
