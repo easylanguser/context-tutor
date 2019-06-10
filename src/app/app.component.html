@@ -5,17 +5,17 @@
       <img id="user-avatar" src="assets/img/account_icon.svg" alt="avatar">
       <ion-content id="menu">
         <ion-menu-toggle *ngIf="!this.loggedIn" auto-hide="false">
-          <div routerLink="/login">
+          <div tabindex="0" id="sign-div" routerLink="/login">
             <p>Sign In / Sign Up</p>
           </div>
         </ion-menu-toggle>
         <ion-menu-toggle *ngIf="this.loggedIn" auto-hide="false">
-          <div routerLink="/lessons-list">
+          <div tabindex="0" id="lessons-div" routerLink="/lessons-list">
             <p>My lessons</p>
           </div>
         </ion-menu-toggle>
         <ion-menu-toggle *ngIf="this.loggedIn" auto-hide="false">
-          <div routerLink="/account">
+          <div tabindex="0" id="account-div" routerLink="/account">
             <p>Account</p>
           </div>
         </ion-menu-toggle>

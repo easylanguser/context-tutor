@@ -30,6 +30,17 @@ export class LoginPage implements OnInit {
 		});
 	}
 
+	ionViewDidEnter() {
+		this.toggleMenu();
+	}
+
+	toggleMenu() {
+		const div = document.getElementById('sign-div');
+		if (div) {
+			div.focus();
+		}
+	}
+
 	onSubmit() {
 		this.submitted = true;
 		if (this.credentialsForm.valid) {

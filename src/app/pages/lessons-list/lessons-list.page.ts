@@ -28,7 +28,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private alertCtrl: AlertController,
 		private lessonDeleteService: LessonDeleteService,
 		private utils: UtilsService,
-		private cdRef: ChangeDetectorRef) { }
+		private cdRef: ChangeDetectorRef) {	}
 
 	async ngOnInit() {
 		const loading = await this.loadingController.create({
@@ -61,7 +61,16 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		});
 	}
 
+	toggleMenu() {
+		const div = document.getElementById('lessons-div');
+		if (div) {
+			div.focus();
+		}
+	}
+
 	ionViewDidEnter() {
+		this.toggleMenu();
+		document.getElementById('lessons-div').focus();
 		if (this.firstEnter) {
 			this.firstEnter = false;
 		} else {

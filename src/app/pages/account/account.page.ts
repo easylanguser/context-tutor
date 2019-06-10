@@ -34,6 +34,17 @@ export class AccountPage implements OnInit {
 		}
 	}
 
+	ionViewDidEnter() {
+		this.toggleMenu();
+	}
+
+	toggleMenu() {
+		const div = document.getElementById('account-div');
+		if (div) {
+			div.focus();
+		}
+	}
+
 	async getInfo(token?: any) {
 		const userInfo = await this.userService.getUserInfo();
 		this.userEmail = userInfo.email;

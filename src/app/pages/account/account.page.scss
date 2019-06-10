@@ -44,9 +44,19 @@ ion-toolbar {
     cursor: pointer;
     line-height: 35px;
     border: 2px solid #00baff;
-    background: #FFF;
+    background: rgba(255, 255, 255, 1);
     color: #00baff;
     font-weight: bold;
+
+    transition: background 0.3s ease;
+    -o-transition: background 0.3s ease;
+    -ms-transition: background 0.3s ease;
+    -moz-transition: background 0.3s ease;
+    -webkit-transition: background 0.3s ease;
+
+    &:hover {
+        background: rgba(0, 186, 255, 0.2);
+    }
 
     @media (min-width: 992px) {
         margin-left: 30vw;

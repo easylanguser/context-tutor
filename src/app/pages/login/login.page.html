@@ -1,7 +1,7 @@
 <ion-header id="header">
   <ion-toolbar mode="ios" id="toolbar">
     <ion-buttons id="menu-button-outer" slot="start">
-      <ion-menu-button id="menu-button-inner">
+      <ion-menu-button id="menu-button-inner" (click)="toggleMenu()">
         <img src="assets/img/menu_icon_white.svg">
       </ion-menu-button>
     </ion-buttons>
@@ -47,7 +47,7 @@
       </div>
     </div>
 
-    <button id="sign-in-button" type="submit">
+    <button id="sign-in-button" class="no-selection" type="submit">
       Sign In / Sign Up
     </button>
   </form>
