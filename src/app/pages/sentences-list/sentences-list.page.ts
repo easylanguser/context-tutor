@@ -46,7 +46,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	ionViewDidEnter() {
 		this.updateCharts();
-		if (updateIsRequired[0]) {
+		if (updateIsRequired[0] || this.displayedSentences.length === 0) {
 			this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {
 				this.getData();
 				updateIsRequired[0] = false;
