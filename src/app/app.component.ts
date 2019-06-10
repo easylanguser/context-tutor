@@ -20,14 +20,6 @@ export let sortIsRequired = [false];
 })
 export class AppComponent {
 
-	appPages = [
-		{
-			title: 'My lessons',
-			url: '/lessons-list',
-			icon: 'information-circle'
-		}
-	];
-
 	loggedIn = false;
 	themeName: string;
 

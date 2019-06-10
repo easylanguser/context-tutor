@@ -28,7 +28,7 @@
     ion-select,
     p {
         height: 52px;
-        border-left: 4px solid transparent;
+        border-left: 3px solid transparent;
         padding-left: 20px;
         font-size: 32px;
 
@@ -37,6 +37,10 @@
         -ms-transition: border-left 0.3s ease, color 0.3s ease;
         -moz-transition: border-left 0.3s ease, color 0.3s ease;
         -webkit-transition: border-left 0.3s ease, color 0.3s ease;
+
+        @media (max-width: 400px) {
+            font-size: 24px;
+        }
     }
 
     ion-select {
