@@ -225,7 +225,10 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	doRefresh(event) {
-		this.getData().then(_ => { event.target.complete(); });
+		this.getData().then(_ => {
+			event.target.complete();
+			(<HTMLIonSegmentElement>document.getElementById('sentences-filter-segment')).value = "all";
+		});
 		setTimeout(() => {
 			event.target.complete();
 		}, 5000);

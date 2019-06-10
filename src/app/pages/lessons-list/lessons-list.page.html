@@ -13,8 +13,8 @@
     </ion-toolbar>
 
     <div id="segments-div">
-      <ion-segment mode="ios">
-        <ion-segment-button mode="ios" (click)="allClick()" checked="true">
+      <ion-segment id="lessons-filter-segment" mode="ios">
+        <ion-segment-button value="all" mode="ios" (click)="allClick()" checked="true">
           All
         </ion-segment-button>
         <ion-segment-button mode="ios" (click)="redAndYellowClick()">

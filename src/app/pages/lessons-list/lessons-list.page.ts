@@ -199,7 +199,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	doRefresh(event) {
 		this.getData().then(() => {
 			event.target.complete();
-			this.updateCharts();
+			(<HTMLIonSegmentElement>document.getElementById('lessons-filter-segment')).value = "all";
 		});
 		setTimeout(() => {
 			event.target.complete();
