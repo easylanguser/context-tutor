@@ -129,7 +129,8 @@ ion-toolbar {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            font-family: "Comfortaa";
+            font-family: "Arial";
+            font-size: 2vh;
             line-height: 6vh;
             max-height: 6vh;
             margin: 0;
@@ -147,7 +148,8 @@ ion-toolbar {
             position: absolute;
             font-size: 3vmin;
             font-weight: bold;
-            color: var(--ion-color-step-850);
+            font-family: "Arial";
+            color: #D3DBE7;
         
             transition: color 0.4s ease-in-out;
             -o-transition: color 0.4s ease-in-out;

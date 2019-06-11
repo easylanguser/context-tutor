@@ -1,6 +1,7 @@
 #sentence-to-show {
     text-align: start;
     font-size: 4vh;
+    font-family: "Arial";
     letter-spacing: 1px;
     padding: 0;
     margin-left: 3vw;
@@ -34,6 +35,16 @@ $chars-and-hint-height: 20vw;
     width: 100vw;
     transition: all .5s;
     padding-left: 14.5vw;
+
+    div {
+        font-family: "Arial";
+    }
+}
+
+#bottom-bar-container {
+    p {
+        font-family: "Arial";
+    }
 }
 
 .char-box {
