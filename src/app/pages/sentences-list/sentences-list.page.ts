@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Scroll } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
 import { SentenceDeleteService } from 'src/app/services/http/sentence-delete/sentence-delete.service';
-import { IonItemSliding, AlertController, NavController, ToastController } from '@ionic/angular';
+import { IonItemSliding, AlertController, NavController, ToastController, IonContent } from '@ionic/angular';
 import * as anime from 'animejs';
+import * as _ from 'lodash';
 import { updateIsRequired } from 'src/app/app.component';
 
 @Component({
@@ -46,6 +47,21 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 			this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
 			this.getData();
 		}
+
+		const content = <HTMLIonContentElement>document.getElementById('sentences-list-scroll');
+		content.scrollEvents = true;
+
+		const fabEdit = document.getElementById('edit-sentence-fab').style;
+		const fabAdd = document.getElementById('add-sentence-fab').style;
+		content.addEventListener('ionScroll', _.throttle((ev: CustomEvent) => {
+			if (ev.detail.velocityY > 0) {
+				fabAdd.marginBottom = '-12vh';
+				fabEdit.marginBottom = '-12vh';
+			} else {
+				fabAdd.marginBottom = '3vh';
+				fabEdit.marginBottom = '3vh';
+			}
+		}, 300));
 	}
 
 	goBack() {
@@ -54,7 +70,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	ionViewDidEnter() {
 		this.updateCharts();
-		if (updateIsRequired[0] || this.displayedSentences.length === 0) {
+		if (updateIsRequired[0] || (this.displayedSentences && this.displayedSentences.length === 0)) {
 			this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {
 				this.getData();
 				updateIsRequired[0] = false;
@@ -153,7 +169,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 			++i;
 		}
-		
+
 		this.cdRef.detectChanges();
 	}
 

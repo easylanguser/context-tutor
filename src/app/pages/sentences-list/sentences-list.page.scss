@@ -161,6 +161,12 @@ ion-item-option {
     margin-right: 3vh;
     margin-bottom: 3vh;
 
+    transition: margin-bottom 0.3s ease-in-out;
+    -o-transition: margin-bottom 0.3s ease-in-out;
+    -ms-transition: margin-bottom 0.3s ease-in-out;
+    -moz-transition: margin-bottom 0.3s ease-in-out;
+    -webkit-transition: margin-bottom 0.3s ease-in-out;
+
     :first-child {
         --background: rgb(69, 184, 255); 
         font-size: 30px;      
@@ -170,6 +176,12 @@ ion-item-option {
 #edit-sentence-fab {
     margin-left: 3vh;
     margin-bottom: 3vh;
+
+    transition: margin-bottom 0.3s ease-in-out;
+    -o-transition: margin-bottom 0.3s ease-in-out;
+    -ms-transition: margin-bottom 0.3s ease-in-out;
+    -moz-transition: margin-bottom 0.3s ease-in-out;
+    -webkit-transition: margin-bottom 0.3s ease-in-out;
 
     :first-child {
         --background: rgb(69, 184, 255); 

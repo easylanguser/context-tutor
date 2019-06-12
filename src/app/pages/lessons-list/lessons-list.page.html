@@ -36,7 +36,7 @@
     Click button &#8680; <br>to add a <b>new lesson</b>
   </span>
 
-  <ion-content *ngIf="!this.displayHints" style="z-index: 0;">
+  <ion-content  id="list-scroll" *ngIf="!this.displayHints" style="z-index: 0;">
 
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">

@@ -6,6 +6,7 @@ import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-de
 import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { updateIsRequired, sortIsRequired } from 'src/app/app.component';
+import * as _ from 'lodash';
 
 @Component({
 	selector: 'page-lessons-list',
@@ -59,6 +60,18 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				}
 			}
 		});
+
+		const content = <HTMLIonContentElement>document.getElementById('list-scroll');
+		content.scrollEvents = true;
+		const fabAdd = document.getElementById('add-lesson-fab').style;
+
+		content.addEventListener('ionScroll', _.throttle((ev: CustomEvent) => {
+			if (ev.detail.velocityY > 0) {
+				fabAdd.marginBottom = '-12vh';
+			} else {
+				fabAdd.marginBottom = '3vh';
+			}
+		}, 300));
 	}
 
 	toggleMenu() {
