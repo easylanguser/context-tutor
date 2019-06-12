@@ -133,8 +133,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	private updateCharts() {
 		if (this.displayedSentences === undefined ||
-			this.displayedSentences.length === 0 ||
-			this.pieCharts.length !== this.displayedSentences.length) {
+			this.displayedSentences.length === 0) {
 			return;
 		}
 		let i = 0;
@@ -243,9 +242,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	private async getData() {
-		const currentLesson = this.lessonsDataService.getLessonByID(this.lessonId);
-		this.lessonTitle = currentLesson.name.toString();
-		this.displayedSentences = currentLesson.sentences;
+		this.lessonTitle = this.lessonsDataService.getLessonByID(this.lessonId).name.toString();
+		this.displayedSentences = await this.lessonsDataService.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20);
 	}
 
 	allClick() {
