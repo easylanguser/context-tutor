@@ -24,13 +24,12 @@
     </div>
 
     <div id="bottom-bar-container">
-      <ion-button text-center id="prev-sentence-button"
-        [ngStyle]="{'box-shadow': this.curSentence().solvedStatus ? greenHighlight : 'none'}"
-        (click)="prevSentenceClick()">
+      <ion-button id="prev-sentence-button" (click)="prevSentenceClick()">
         <ion-icon name="ios-arrow-back"></ion-icon>
       </ion-button>
 
-      <ion-button shape="round" id="hint-button" [ngStyle]="{'box-shadow': hintIsClicked ? yellowHighlight : 'none'}"
+      <ion-button id="hint-button"
+        [ngStyle]="{'box-shadow': hintIsClicked ? yellowHighlight : 'none'}"
         (click)="hintClick()">
         <p>Open</p><p>●</p>
       </ion-button>
@@ -39,9 +38,7 @@
         <p>Open</p><p>●●●</p>
       </ion-button>
 
-      <ion-button text-center id="next-sentence-button"
-        [ngStyle]="{'box-shadow': this.curSentence().solvedStatus ? greenHighlight : 'none'}"
-        (click)="nextSentenceClick()">
+      <ion-button text-center id="next-sentence-button" (click)="nextSentenceClick()">
         <ion-icon name="ios-arrow-forward"></ion-icon>
       </ion-button>
     </div>

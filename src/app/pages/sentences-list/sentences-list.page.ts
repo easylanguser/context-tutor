@@ -19,6 +19,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	displayedSentences: Sentence[];
 	lessonId: number;
+	lessonTitle: string;
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
 	offset: number = 0;
@@ -36,8 +37,15 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		private cdRef: ChangeDetectorRef) { }
 
 	ngOnInit() {
-		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
-		this.getData();
+		if (!this.lessonsDataService.lessons.length) {
+			this.lessonsDataService.refreshLessons().then(() => {
+				this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
+				this.getData();
+			});
+		} else {
+			this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
+			this.getData();
+		}
 	}
 
 	goBack() {
@@ -235,8 +243,9 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	private async getData() {
-		this.displayedSentences = await this.lessonsDataService
-			.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20);
+		const currentLesson = this.lessonsDataService.getLessonByID(this.lessonId);
+		this.lessonTitle = currentLesson.name.toString();
+		this.displayedSentences = currentLesson.sentences;
 	}
 
 	allClick() {

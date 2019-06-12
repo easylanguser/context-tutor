@@ -49,6 +49,16 @@ export class GuessBarComponent implements OnInit {
 		public guessPage: SentenceGuessPage) { }
 
 	ngOnInit() {
+		if (!this.lessonsDataService.lessons.length) {
+			this.lessonsDataService.refreshLessons().then(() => {
+				this.initData();
+			});
+		} else {
+			this.initData();	
+		}
+	}
+
+	private initData() {
 		this.getData();
 		if (this.lessonsDataService.getLessonByID(this.guessPage.lessonId).sentences.length === 1) {
 			document.getElementById('next-sentence-button').style.visibility = 'hidden';
@@ -57,7 +67,6 @@ export class GuessBarComponent implements OnInit {
 	}
 
 	async getData() {
-
 		if (this.curSentence().solvedStatus) { // Display filled sentence, if it has already been solved
 			this.guessPage.sentenceShown = this.curSentence().sentenceShown;
 		} else {
@@ -131,6 +140,7 @@ export class GuessBarComponent implements OnInit {
 
 		this.animateSwipe(forward);
 		this.updateChart();
+		this.guessPage.sentenceNumber = this.lessonsDataService.getSentenceNumberByIDs(this.guessPage.lessonId, this.guessPage.sentenceId) + 1;
 
 		if (this.guessPage.statisticsDeltasArray.findIndex(elem => elem[0] === this.curSentence().id) === -1) {
 			const stats = this.curSentence().statistics;
@@ -423,7 +433,7 @@ export class GuessBarComponent implements OnInit {
 			document.querySelector('#fourth-char-box')],
 			rotateY: '+=180',
 			easing: 'easeInOutSine',
-			duration: 300
+			duration: 200
 		}).finished;
 
 		this.charactersRotationIsPlayed = false;

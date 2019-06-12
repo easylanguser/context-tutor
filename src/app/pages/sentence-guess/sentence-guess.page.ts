@@ -23,6 +23,9 @@ export class SentenceGuessPage implements OnInit {
 	lessonId: number = 0; // Id of current lesson
 	sentenceId: number; // Number of current sentence in lesson
 
+	sentenceNumber: number;
+	sentencesTotal: number;
+
 	curWordIndex: number = 0; // Number of word, that user is currently at
 	curCharsIndexes: number[] = []; // Number of character for each word, that user is currently at
 	sentenceShown: string; // Current displayed sentence
@@ -36,12 +39,25 @@ export class SentenceGuessPage implements OnInit {
 		private statisticsUpdateService: StatisticsUpdateService,
 		private navCtrl: NavController) { }
 
-	// Get number of sentence and id of the lesson from previous page
 	ngOnInit() {
 		this.sentenceId = Number(this.route.snapshot.queryParamMap.get('current'));
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
+		
+		if (!this.lessonsDataService.lessons.length) {
+			this.lessonsDataService.refreshLessons().then(() => {
+				this.getData();
+			});
+		} else {
+			this.getData();
+		}
+	}
+
+	private getData() {
 		this.pieChart = new Chart(this.pieCanvas.nativeElement, this.utils.getNewChartObject());
 		this.updateChart();
+
+		this.sentenceNumber = this.lessonsDataService.getSentenceNumberByIDs(this.lessonId, this.sentenceId) + 1;
+		this.sentencesTotal = this.lessonsDataService.getLessonByID(this.lessonId).sentences.length;
 
 		const stats = this.curSentence().statistics;
 		this.statisticsDeltasArray.push([
@@ -116,7 +132,7 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	goBack() {
-		this.navCtrl.pop();
+		this.navCtrl.navigateBack(['sentences-list'], { queryParams: { lessonID: this.lessonId } });
 	}
 
 	saveData() {

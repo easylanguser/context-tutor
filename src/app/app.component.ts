@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform, AlertController } from '@ionic/angular';
+import { Platform, AlertController, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
@@ -7,6 +7,9 @@ import { AuthService } from './services/auth/auth.service';
 import { BehaviorSubject } from 'rxjs';
 import { ThemeService } from './services/theme/theme.service';
 import { StorageService } from './services/storage/storage-service';
+import { Location } from '@angular/common';
+import { LessonsDataService } from './services/lessons-data/lessons-data.service';
+import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
 
 export const SHARED_TEXT_ID_KEY = "shared_text_id";
 export let sharedText = [];
@@ -31,8 +34,27 @@ export class AppComponent {
 		private router: Router,
 		private theme: ThemeService,
 		private storageService: StorageService,
-		private alertCtrl: AlertController) {
-		this.initializeApp();
+		private alertCtrl: AlertController,
+		private location: Location,
+		private lessonsDataService: LessonsDataService,
+		private navCtrl: NavController) {
+		this.initializeApp(location.path());
+	}
+
+	private getParams(url): NavigationOptions {
+		let index = url.indexOf('?');
+		if (index === -1)
+			return null;
+		let paramsSubstring = url.substr(index + 1);
+		let params = {};
+		while (paramsSubstring.indexOf('&') > -1) {
+			const param = paramsSubstring.substring(0, paramsSubstring.indexOf('&'));
+			params[param.substring(0, param.indexOf('='))] = Number(param.substr(param.indexOf('=') + 1));
+			paramsSubstring = paramsSubstring.substr(paramsSubstring.indexOf('&') + 1);
+		}
+		params[paramsSubstring.substring(0, paramsSubstring.indexOf('='))] = Number(paramsSubstring.substr(paramsSubstring.indexOf('=') + 1));
+
+		return params;
 	}
 
 	onChangeTheme(ev: CustomEvent) {
@@ -47,7 +69,7 @@ export class AppComponent {
 
 	authenticationState = new BehaviorSubject(false);
 
-	initializeApp() {
+	initializeApp(pathToGo: string) {
 		this.platform.ready()
 			.then(() => {
 				if (this.platform.is('android')) {
@@ -78,7 +100,16 @@ export class AppComponent {
 						if (sharedText[0]) {
 							this.router.navigate(['share-adding-choice']);
 						} else {
-							this.router.navigate(['/']);
+							if (pathToGo === '/login') {
+								pathToGo = 'lessons-list';
+							}
+
+							const paramsOfUrl = this.getParams(pathToGo);
+							if (paramsOfUrl) {
+								this.navCtrl.navigateForward([pathToGo.substring(0, pathToGo.indexOf('?'))], { queryParams: paramsOfUrl });
+							} else {
+								this.navCtrl.navigateForward([pathToGo]);
+							}
 						}
 					} else {
 						this.loggedIn = false;
