@@ -38,6 +38,8 @@ $chars-and-hint-height: 20vw;
 
     div {
         font-family: "Arial";
+        text-transform: lowercase;
+        padding-bottom: 2px;
     }
 }
 
@@ -54,7 +56,6 @@ $chars-and-hint-height: 20vw;
     margin: 3vw 0 0 2vw;
     text-align: center;
     font-size: 10vw;
-    font-weight: bold;
     outline: none;
     border-radius: 50%;
     transform-style: preserve-3d;
