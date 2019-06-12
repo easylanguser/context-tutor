@@ -89,14 +89,16 @@ ion-toolbar {
     -moz-box-shadow: 0 1px 3px 0 #a0a0a0;
     box-shadow: 0 1px 3px 0 #a0a0a0;
 
-    transition: box-shadow 0.3s ease-in-out;
-    -o-transition: box-shadow 0.3s ease-in-out;
-    -ms-transition: box-shadow 0.3s ease-in-out;
-    -moz-transition: box-shadow 0.3s ease-in-out;
-    -webkit-transition: box-shadow 0.3s ease-in-out;
-
-    &:hover {
-        box-shadow: 0 1px 3px 0 #a0a0a0, inset 0 0 0 4px #45B8FF;
+    @media (min-width: 992px) {
+        transition: box-shadow 0.3s ease-in-out;
+        -o-transition: box-shadow 0.3s ease-in-out;
+        -ms-transition: box-shadow 0.3s ease-in-out;
+        -moz-transition: box-shadow 0.3s ease-in-out;
+        -webkit-transition: box-shadow 0.3s ease-in-out;
+        
+        &:hover {
+            box-shadow: 0 1px 3px 0 #a0a0a0, inset 0 0 0 4px #45B8FF;
+        }
     }
 
     >:first-child {
@@ -115,12 +117,6 @@ ion-toolbar {
             font-weight: bold;
             font-family: "Arial";
             font-size: 3.4vmin;
-
-            transition: color 0.4s ease-in-out;
-            -o-transition: color 0.4s ease-in-out;
-            -ms-transition: color 0.4s ease-in-out;
-            -moz-transition: color 0.4s ease-in-out;
-            -webkit-transition: color 0.4s ease-in-out;
         }
     }
 
