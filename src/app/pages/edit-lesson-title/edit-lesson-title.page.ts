@@ -30,10 +30,10 @@ export class EditLessonTitlePage implements OnInit {
 		lessonToEdit.name = this.lessonTitle;
 		this.lessonsDataService.editLesson(lessonToEdit);
 		this.lessonNameUpdateService.updateLessonName(String(this.lessonId), this.lessonTitle.replace(/\s+/g, '%20'))
-			.then(() => this.navCtrl.pop());
+			.then(() => this.navCtrl.navigateBack(['lessons-list']));
 	}
 
 	goBack() {
-		this.navCtrl.pop();
+		this.navCtrl.navigateBack(['lessons-list']);
 	}
 }

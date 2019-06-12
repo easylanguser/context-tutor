@@ -3,7 +3,7 @@ ion-toolbar {
     
     ion-buttons {
         color: white;
-        margin-left: 5vw;
+        margin-left: 4%;
 
         ion-menu-button {
             --color: white;
@@ -30,30 +30,36 @@ ion-toolbar {
 }
 
 #segments-div {
-    background: #45B8FF;
+    background: var(--ion-color-primary);
     border-radius: 0 0 20px 20px;
     padding-bottom: 0.4vh;
 
     .sc-ion-segment-ios-h {
         --border-color: #FFF;
         --background-checked: #FFF;
-        color: #45B8FF;
+        color: var(--ion-color-primary);
         --color: #FFF;
         --color-checked: none;
     }
 
     >:first-child {
-        width: 86vw !important;
+        width: 86vw;
         margin-bottom: 1vh;
         margin-left: 7vw;
         border-radius: 20px;
         @media (min-width: 992px) {
-            width: 67vw !important;
+            width: 67vw;
             margin-left: 2.5vw;
         }
 
         ion-segment-button {
             --border-width: 2px;
+            --background: #47d5ff;
+            font-weight: bold;
+            width: 28.66vw;
+            @media (min-width: 992px) {
+                width: 22.33vw;
+            }
         }
 
         >:first-child {

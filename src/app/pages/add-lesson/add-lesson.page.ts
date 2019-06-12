@@ -31,7 +31,7 @@ export class AddLessonPage implements OnInit {
 		private navCtrl: NavController) { }
 
 	goBack() {
-		this.navCtrl.pop();
+		this.navCtrl.navigateBack(['lessons-list']);
 	}
 
 	ngOnInit() {
@@ -113,6 +113,6 @@ export class AddLessonPage implements OnInit {
 			this.addLessonAsText();
 		}
 		updateIsRequired[0] = true;
-		this.navCtrl.pop();
+		this.navCtrl.navigateBack(['lessons-list']);
 	}
 }

@@ -78,7 +78,7 @@ export class SentenceAddingPage implements OnInit {
 	}
 
 	goBack() {
-		this.navCtrl.pop();
+		this.navCtrl.navigateBack(['sentences-list'], { queryParams : { lessonID: this.lessonId } });
 	}
 
 	ionViewDidEnter() {
