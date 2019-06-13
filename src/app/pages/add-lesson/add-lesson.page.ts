@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
 	selector: 'app-add-lesson',
 	templateUrl: './add-lesson.page.html',
-	styleUrls: ['./add-lesson.page.scss'],
+	styleUrls: ['./add-lesson.page.scss']
 })
 export class AddLessonPage implements OnInit {
 

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { NavController, AlertController } from '@ionic/angular';
 
@@ -63,7 +62,7 @@ export class LoginPage implements OnInit {
 			});
 		}
 	}
-	
+
 	toForget() {
 		this.navCtrl.navigateForward(['forget']);
 	}

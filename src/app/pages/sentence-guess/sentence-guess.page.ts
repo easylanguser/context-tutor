@@ -42,7 +42,7 @@ export class SentenceGuessPage implements OnInit {
 	ngOnInit() {
 		this.sentenceId = Number(this.route.snapshot.queryParamMap.get('current'));
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
-		
+
 		if (!this.lessonsDataService.lessons.length) {
 			this.lessonsDataService.refreshLessons().then(() => {
 				this.getData();

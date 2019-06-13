@@ -1,4 +1,4 @@
-import { UtilsService } from '../utils/utils.service';
+import { UtilsService, redCharForHiding } from '../utils/utils.service';
 import { SentencesByLessonService } from '../http/sentences-by-lesson/sentences-by-lesson.service';
 import { Injectable } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
@@ -76,8 +76,8 @@ export class LessonsDataService {
 			const hiddenChars: Array<string[]> = [];
 			const curCharsIndexes: number[] = [];
 
-			sntns[i].words.sort((a,b) => a[0] - b[0]);
-			
+			sntns[i].words.sort((a, b) => a[0] - b[0]);
+
 			for (const j in sntns[i].words) {
 				const chars: string[] = [];
 				for (let k = 0; k < sntns[i].words[j][1]; k++) {
@@ -99,7 +99,7 @@ export class LessonsDataService {
 					: sntns[i].curCharsIndexes,
 				sntns[i].curWordIndex,
 				sntns[i].sentenceShown === ""
-					? this.utils.addChar(hiddenSentence, '<span class=\'red-text\'>•</span>')
+					? this.utils.addChar(hiddenSentence, redCharForHiding)
 					: sntns[i].sentenceShown,
 				sntns[i].solvedStatus,
 				sntns[i].created_at,
@@ -171,7 +171,7 @@ export class LessonsDataService {
 				lsn[i].created_at,
 				lsn[i].updated_at,
 				period[0] + period[1]);
-				
+
 			this.addLesson(lesson);
 		}
 
@@ -204,7 +204,7 @@ export class LessonsDataService {
 		}
 		const firstLatestUpd = new Date(Math.max.apply(null, first.sentences.map(elem => new Date(elem.updated_at))));
 		const secondLatestUpd = new Date(Math.max.apply(null, second.sentences.map(elem => new Date(elem.updated_at))));
-		
+
 		return firstLatestUpd < secondLatestUpd ? 1 : -1;
 	}
 }

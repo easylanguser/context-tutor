@@ -3,6 +3,8 @@ import { Sentence } from 'src/app/models/sentence';
 import { Lesson } from 'src/app/models/lesson';
 
 export const acceptedCodes = [32, 39, 45, 96];
+export const charForHiding: string = '•';
+export const redCharForHiding: string = '<span class=\'red-text\'>•</span>';
 
 @Injectable({
 	providedIn: 'root'
@@ -44,7 +46,7 @@ export class UtilsService {
 		for (let i = 0; i < indexes.length - 1; i++) {
 			for (let j = 0; j < indexes[i][1]; j++) {
 				if (this.isEnglishChar(inputText.charAt(indexes[i][0] + j))) {
-					textWithHiddenCharacters += '•';
+					textWithHiddenCharacters += charForHiding;
 				} else {
 					textWithHiddenCharacters += inputText.charAt(indexes[i][0] + j);
 				}
@@ -55,7 +57,7 @@ export class UtilsService {
 		}
 		for (let i = 0; i < indexes[indexes.length - 1][1]; i++) {
 			if (this.isEnglishChar(inputText.charAt(indexes[indexes.length - 1][0] + i))) {
-				textWithHiddenCharacters += '•';
+				textWithHiddenCharacters += charForHiding;
 			} else {
 				textWithHiddenCharacters += inputText.charAt(indexes[indexes.length - 1][0] + i);
 			}
@@ -67,7 +69,7 @@ export class UtilsService {
 	}
 
 	addChar(input: string, replacement: string): string {
-		let firstUnderScoreIndex = input.indexOf('•');
+		let firstUnderScoreIndex = input.indexOf(charForHiding);
 		let length = 1;
 		if (input.charAt(firstUnderScoreIndex - 3) === 't' && input.charAt(firstUnderScoreIndex - 1) === '>') {
 			firstUnderScoreIndex -= 23;

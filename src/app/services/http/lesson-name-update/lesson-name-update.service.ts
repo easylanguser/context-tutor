@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpService } from '../rest/http.service';
-import { Observable } from 'rxjs';
 
 const apiUrl = environment.url + '/api/lessons/updateLessonName?lessonId=';
 

@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute, Scroll } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
 import { SentenceDeleteService } from 'src/app/services/http/sentence-delete/sentence-delete.service';
-import { IonItemSliding, AlertController, NavController, ToastController, IonContent } from '@ionic/angular';
+import { IonItemSliding, AlertController, NavController, ToastController } from '@ionic/angular';
 import * as anime from 'animejs';
 import * as _ from 'lodash';
 import { updateIsRequired } from 'src/app/app.component';

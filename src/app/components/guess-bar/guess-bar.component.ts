@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Sentence } from 'src/app/models/sentence';
-import { UtilsService } from 'src/app/services/utils/utils.service';
+import { UtilsService, charForHiding, redCharForHiding } from 'src/app/services/utils/utils.service';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { SentenceGuessPage } from 'src/app/pages/sentence-guess/sentence-guess.page';
 import * as anime from 'animejs';
+import { Location } from '@angular/common';
 
 @Component({
 	selector: 'app-guess-bar',
@@ -46,7 +47,8 @@ export class GuessBarComponent implements OnInit {
 	constructor(
 		private util: UtilsService,
 		public lessonsDataService: LessonsDataService,
-		public guessPage: SentenceGuessPage) { }
+		public guessPage: SentenceGuessPage,
+		private location: Location) { }
 
 	ngOnInit() {
 		if (!this.lessonsDataService.lessons.length) {
@@ -54,7 +56,7 @@ export class GuessBarComponent implements OnInit {
 				this.initData();
 			});
 		} else {
-			this.initData();	
+			this.initData();
 		}
 	}
 
@@ -142,6 +144,10 @@ export class GuessBarComponent implements OnInit {
 		this.updateChart();
 		this.guessPage.sentenceNumber = this.lessonsDataService.getSentenceNumberByIDs(this.guessPage.lessonId, this.guessPage.sentenceId) + 1;
 
+		let path = this.location.path();
+		path = path.replace(path.substring(path.indexOf('current'), path.indexOf('&')), 'current=' + this.curSentence().id);
+		this.location.go(path);
+
 		if (this.guessPage.statisticsDeltasArray.findIndex(elem => elem[0] === this.curSentence().id) === -1) {
 			const stats = this.curSentence().statistics;
 			this.guessPage.statisticsDeltasArray.push([
@@ -177,7 +183,7 @@ export class GuessBarComponent implements OnInit {
 					if (this.guessPage.curCharsIndexes[this.guessPage.curWordIndex] !==
 						this.curSentence().hiddenChars[this.guessPage.curWordIndex].length - 1 ||
 						this.guessPage.curWordIndex !== this.curSentence().hiddenChars.length - 1) {
-						this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '•');
+						this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, charForHiding);
 					}
 					++i;
 					++this.guessPage.curCharsIndexes[this.guessPage.curWordIndex];
@@ -192,7 +198,7 @@ export class GuessBarComponent implements OnInit {
 				this.markAsSolved();
 			} else {
 				this.refreshCharBoxes();
-				this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '<span class=\'red-text\'>•</span>');
+				this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, redCharForHiding);
 			}
 		}
 	}
@@ -379,7 +385,7 @@ export class GuessBarComponent implements OnInit {
 				return;
 			}
 
-			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, '<span class=\'red-text\'>•</span>');
+			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, redCharForHiding);
 
 			if (!this.util.isEnglishChar(this.curCorrectChar())) {
 				++this.guessPage.curCharsIndexes[this.guessPage.curWordIndex];

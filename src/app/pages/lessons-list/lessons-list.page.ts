@@ -4,7 +4,7 @@ import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
 import { Chart } from 'chart.js';
-import { UtilsService } from 'src/app/services/utils/utils.service';
+import { UtilsService, redCharForHiding } from 'src/app/services/utils/utils.service';
 import { updateIsRequired, sortIsRequired } from 'src/app/app.component';
 import * as _ from 'lodash';
 
@@ -29,7 +29,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private alertCtrl: AlertController,
 		private lessonDeleteService: LessonDeleteService,
 		private utils: UtilsService,
-		private cdRef: ChangeDetectorRef) {	}
+		private cdRef: ChangeDetectorRef) { }
 
 	async ngOnInit() {
 		const loading = await this.loadingController.create({
@@ -107,7 +107,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 								sntcs.curCharsIndexes.push(0);
 							}
 						}
-						sntcs.sentenceShown = this.utils.addChar(sntcs.textUnderscored, '<span class=\'red-text\'>•</span>');
+						sntcs.sentenceShown = this.utils.addChar(sntcs.textUnderscored, redCharForHiding);
 					}
 				});
 			});
@@ -169,7 +169,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 			}
 			++i;
 		}
-		
+
 		this.cdRef.detectChanges();
 	}
 

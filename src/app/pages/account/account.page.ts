@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService, TOKEN_KEY } from '../../services/auth/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { HttpService } from '../../services/http/rest/http.service';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { UserService } from 'src/app/services/http/user/user-service';
-import { StorageService } from 'src/app/services/storage/storage-service';
 
 @Component({
 	selector: 'app-account',

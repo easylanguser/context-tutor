@@ -9,7 +9,7 @@ import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 import { NavController, Platform } from '@ionic/angular';
 import { SentenceResetService } from 'src/app/services/http/sentence-reset/sentence-reset.service';
 import { Sentence } from 'src/app/models/sentence';
-import { UtilsService, acceptedCodes } from 'src/app/services/utils/utils.service';
+import { UtilsService, acceptedCodes, charForHiding } from 'src/app/services/utils/utils.service';
 import { Statistics } from 'src/app/models/statistics';
 
 let lastSelOffsets: Array<number> = [];
@@ -78,7 +78,7 @@ export class SentenceAddingPage implements OnInit {
 	}
 
 	goBack() {
-		this.navCtrl.navigateBack(['sentences-list'], { queryParams : { lessonID: this.lessonId } });
+		this.navCtrl.navigateBack(['sentences-list'], { queryParams: { lessonID: this.lessonId } });
 	}
 
 	ionViewDidEnter() {
@@ -127,7 +127,7 @@ export class SentenceAddingPage implements OnInit {
 						hiddenChars,
 						curCharsIndexes,
 						0,
-						this.utils.addChar(hiddenSentence, '•'),
+						this.utils.addChar(hiddenSentence, charForHiding),
 						false,
 						new Date().toISOString(),
 						new Date().toISOString(),
@@ -158,7 +158,7 @@ export class SentenceAddingPage implements OnInit {
 
 		sharedText[0] = undefined;
 		updateIsRequired[0] = true;
-		
+
 		this.navCtrl.navigateBack(['sentences-list'], {
 			queryParams: {
 				lessonID: this.lessonId
