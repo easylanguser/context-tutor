@@ -233,10 +233,10 @@ export class SentenceAddingPage implements OnInit {
 		border.id = 'calc(' + topMargin + ' + ' + String(textArea.scrollTop) + 'px)'
 		border.className = 'border';
 		brdrStyle.marginTop = topMargin;
-		brdrStyle.width = String(lastSelCoords[2] + 6) + 'px';
+		brdrStyle.width = String(lastSelCoords[2] + 7) + 'px';
 		brdrStyle.height = String(lastSelCoords[3] + 3) + 'px';
 		brdrStyle.position = 'absolute';
-		brdrStyle.background = 'blue';
+		brdrStyle.background = 'rgba(0, 0, 255, 0.6)';
 		brdrStyle.opacity = '0.4';
 		brdrStyle.borderRadius = '10px';
 		const borders = document.getElementsByClassName('border');
