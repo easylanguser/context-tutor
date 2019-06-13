@@ -73,3 +73,15 @@ ion-toolbar {
         margin-right: 30vw;
     }
 }
+
+#user-avatar {
+    transition: transform 0.3s ease;
+    -o-transition: transform 0.3s ease;
+    -ms-transition: transform 0.3s ease;
+    -moz-transition: transform 0.3s ease;
+    -webkit-transition: transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}

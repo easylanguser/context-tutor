@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Sentence } from 'src/app/models/sentence';
 import { Lesson } from 'src/app/models/lesson';
 
-export const acceptedCodes = [32, 39, 45, 96];
 export const charForHiding: string = '•';
 export const redCharForHiding: string = '<span class=\'red-text\'>•</span>';
 

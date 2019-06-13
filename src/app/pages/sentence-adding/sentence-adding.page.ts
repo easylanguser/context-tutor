@@ -9,7 +9,7 @@ import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 import { NavController, Platform } from '@ionic/angular';
 import { SentenceResetService } from 'src/app/services/http/sentence-reset/sentence-reset.service';
 import { Sentence } from 'src/app/models/sentence';
-import { UtilsService, acceptedCodes, charForHiding } from 'src/app/services/utils/utils.service';
+import { UtilsService, charForHiding } from 'src/app/services/utils/utils.service';
 import { Statistics } from 'src/app/models/statistics';
 
 let lastSelOffsets: Array<number> = [];
@@ -207,7 +207,7 @@ export class SentenceAddingPage implements OnInit {
 		}
 
 		for (const char of sel) {
-			if (!(this.utils.isEnglishChar(char) || acceptedCodes.indexOf(char.charCodeAt(0)) > -1)) {
+			if (!(this.utils.isEnglishChar(char))) {
 				return;
 			}
 		}
