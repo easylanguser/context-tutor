@@ -13,6 +13,13 @@ ion-toolbar {
     ion-title {
         color: white;
         font-size: 2.5vh;
+        
+        @media (min-width: 700px) {
+            padding-inline-start: 200px;
+            -webkit-padding-start: 200px;
+            padding-inline-end: 200px;
+            -webkit-padding-end: 200px;
+        }
     }
 
     @media (min-width: 992px) {
@@ -114,7 +121,7 @@ ion-toolbar {
     box-shadow: 0 1px 3px 0 #a0a0a0;
 
 
-    @media (min-width: 992px) {
+    @media (min-width: 350px) {
         transition: box-shadow 0.3s ease-in-out;
         -o-transition: box-shadow 0.3s ease-in-out;
         -ms-transition: box-shadow 0.3s ease-in-out;

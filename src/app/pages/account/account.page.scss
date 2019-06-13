@@ -33,6 +33,16 @@ ion-toolbar {
     background: #f2f6ff;
     font-weight: bold;
     color: #00baff;
+
+    transition: background 0.3s ease;
+    -o-transition: background 0.3s ease;
+    -ms-transition: background 0.3s ease;
+    -moz-transition: background 0.3s ease;
+    -webkit-transition: background 0.3s ease;
+
+    &:hover {
+        background: #d7dbe4;
+    }
 }
 
 #logout-button {
