@@ -174,31 +174,25 @@ export class GuessBarComponent implements OnInit {
 		if (!this.curSentence().solvedStatus) {
 			++this.curSentence().statistics.giveUps; // Statistics
 
-			let i = 0;
+			const button: HTMLIonButtonElement = <HTMLIonButtonElement>(document.getElementById('give-up-button'));
 
-			do {
-				do {
-					this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown,
-						'<span class=\'yellow\'>' + this.curCorrectChar() + '</span>');
-					if (this.guessPage.curCharsIndexes[this.guessPage.curWordIndex] !==
-						this.curSentence().hiddenChars[this.guessPage.curWordIndex].length - 1 ||
-						this.guessPage.curWordIndex !== this.curSentence().hiddenChars.length - 1) {
-						this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, charForHiding);
-					}
-					++i;
-					++this.guessPage.curCharsIndexes[this.guessPage.curWordIndex];
-				} while (this.status() === 0 && i < 3);
-				if (this.status() === 1) {
-					++this.guessPage.curWordIndex;
-				}
-			} while (this.status() === 1);
+			let event = new KeyboardEvent('evGiveUp', { key: this.curCorrectChar() });
+			this.handleKeyboardEvent(event);
 
-			this.updateChart();
+			button.disabled = true;
+
+			setTimeout(() => {
+				event = new KeyboardEvent('evGiveUp', { key: this.curCorrectChar() });
+				this.handleKeyboardEvent(event);
+				setTimeout(() => {
+					event = new KeyboardEvent('evGiveUp', { key: this.curCorrectChar() });
+					this.handleKeyboardEvent(event);
+					button.disabled = false;
+				}, 300);
+			}, 300);
+
 			if (this.status() === 2) {
 				this.markAsSolved();
-			} else {
-				this.refreshCharBoxes();
-				this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, redCharForHiding);
 			}
 		}
 	}
@@ -365,7 +359,7 @@ export class GuessBarComponent implements OnInit {
 
 		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
 			let spanColor;
-			if (this.hintIsClicked) {
+			if (this.hintIsClicked || event.type === 'evGiveUp') {
 				this.hintIsClicked = false;
 				spanColor = '<span class=\'yellow\'>';
 			} else {
