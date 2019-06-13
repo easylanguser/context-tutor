@@ -51,15 +51,15 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		const content = <HTMLIonContentElement>document.getElementById('sentences-list-scroll');
 		content.scrollEvents = true;
 
-		const fabEdit = document.getElementById('edit-sentence-fab').style;
-		const fabAdd = document.getElementById('add-sentence-fab').style;
+		const fabEdit = document.getElementById('edit-sentence-fab');
+		const fabAdd = document.getElementById('add-sentence-fab');
 		content.addEventListener('ionScroll', _.throttle((ev: CustomEvent) => {
 			if (ev.detail.velocityY > 0) {
-				fabAdd.marginBottom = '-12vh';
-				fabEdit.marginBottom = '-12vh';
+				fabAdd.classList.add('hidden-btn');
+				fabEdit.classList.add('hidden-btn');
 			} else {
-				fabAdd.marginBottom = '3vh';
-				fabEdit.marginBottom = '3vh';
+				fabAdd.classList.remove('hidden-btn');
+				fabEdit.classList.remove('hidden-btn');
 			}
 		}, 300));
 	}

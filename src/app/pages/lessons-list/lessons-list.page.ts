@@ -63,13 +63,12 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 		const content = <HTMLIonContentElement>document.getElementById('list-scroll');
 		content.scrollEvents = true;
-		const fabAdd = document.getElementById('add-lesson-fab').style;
-
+		const fabAdd = document.getElementById('add-lesson-fab');
 		content.addEventListener('ionScroll', _.throttle((ev: CustomEvent) => {
 			if (ev.detail.velocityY > 0) {
-				fabAdd.marginBottom = '-12vh';
+				fabAdd.classList.add('hidden-btn');
 			} else {
-				fabAdd.marginBottom = '3vh';
+				fabAdd.classList.remove('hidden-btn');
 			}
 		}, 300));
 	}

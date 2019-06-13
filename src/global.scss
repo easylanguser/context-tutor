@@ -1,9 +1,7 @@
-// http://ionicframework.com/docs/theming/
 @import '~@ionic/angular/css/core.css';
 @import '~@ionic/angular/css/normalize.css';
 @import '~@ionic/angular/css/structure.css';
 @import '~@ionic/angular/css/typography.css';
-
 @import '~@ionic/angular/css/padding.css';
 @import '~@ionic/angular/css/float-elements.css';
 @import '~@ionic/angular/css/text-alignment.css';
@@ -24,16 +22,16 @@
     }
 }
 
-* {
-    font-family: "Kodchasan";
-    --ion-font-family: "Kodchasan";
-}
-
 input:-webkit-autofill {
     animation-name: autofill;
     animation-fill-mode: both;
     -webkit-animation-name: autofill;
     -webkit-animation-fill-mode: both;
+}
+
+* {
+    font-family: "Kodchasan";
+    --ion-font-family: "Kodchasan";
 }
 
 .green {
@@ -59,6 +57,10 @@ input:-webkit-autofill {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.alert-title.sc-ion-alert-md {
+    color: black;
 }
 
 .alert-wrapper.sc-ion-alert-md {
