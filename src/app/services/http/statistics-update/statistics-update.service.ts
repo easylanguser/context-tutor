@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpService } from '../../http/rest/http.service';
 import { environment } from 'src/environments/environment';
 
-const apiUrl = environment.url + '/api/sentences/updateSentenceStatistics?sentenceId=';
+const apiUrl = environment.url + '/api/statistic/updateSentenceStatistics?sentenceId=';
 
 @Injectable({
 	providedIn: 'root'

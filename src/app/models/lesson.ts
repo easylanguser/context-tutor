@@ -1,7 +1,9 @@
 import { Sentence } from './sentence';
+import { Statistics } from './statistics';
 
 export class Lesson {
 	sentences: Sentence[] = [];
+	statistics: Statistics[] = [];
 
 	constructor(
 		public id: number,
@@ -11,7 +13,11 @@ export class Lesson {
 		public updated_at: string,
 		public displayedDate: string) { }
 
-	addSentence(sentence: Sentence): void {
+	addSentence(sentence: Sentence) {
 		this.sentences.push(sentence);
+	}
+
+	getSentenceById(id: number): Sentence {
+		return this.sentences.find(sentence => sentence.id === id );
 	}
 }

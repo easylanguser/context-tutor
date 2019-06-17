@@ -1,10 +1,11 @@
-import { UtilsService, redCharForHiding } from '../utils/utils.service';
+import { UtilsService } from '../utils/utils.service';
 import { SentencesByLessonService } from '../http/sentences-by-lesson/sentences-by-lesson.service';
 import { Injectable } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsListService } from '../http/lessons-list/lessons-list.service';
 import { Sentence } from 'src/app/models/sentence';
 import { Statistics } from 'src/app/models/statistics';
+import { StatisticByLessonService } from '../http/statistic-by-lesson/statistic-by-lesson.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -16,27 +17,28 @@ export class LessonsDataService {
 	constructor(
 		private lessonsAPI: LessonsListService,
 		private sentencesAPI: SentencesByLessonService,
+		private statisticAPI: StatisticByLessonService,
 		private utils: UtilsService) { }
 
-	addLesson(lesson: Lesson): void {
+	addLesson(lesson: Lesson) {
 		this.lessons.push(lesson);
 	}
 
-	removeLesson(lessonToRemoveId: number): void {
+	removeLesson(lessonToRemoveId: number) {
 		const index = this.lessons.indexOf(this.getLessonByID(lessonToRemoveId));
 		if (index > -1) {
 			this.lessons.splice(index, 1);
 		}
 	}
 
-	removeSentence(lessonId: number, sentenceToRemoveId: number): void {
+	removeSentence(lessonId: number, sentenceToRemoveId: number) {
 		const index = this.getSentenceNumberByIDs(lessonId, sentenceToRemoveId);
 		if (index > -1) {
 			this.getLessonByID(lessonId).sentences.splice(index, 1);
 		}
 	}
 
-	removeAllLessonSentences(lessonId: number): void {
+	removeAllLessonSentences(lessonId: number) {
 		this.getLessonByID(lessonId).sentences = [];
 	}
 
@@ -60,13 +62,18 @@ export class LessonsDataService {
 		return this.getLessonByID(lessonId).sentences.slice(from, to);
 	}
 
-	editLesson(lesson: Lesson): void {
+	editLesson(lesson: Lesson) {
 		this.lessons[this.lessons.indexOf(this.getLessonByID(lesson.id))] = lesson;
 	}
 
-	editSentence(lessonId: number, newSentence: Sentence): void {
+	editSentence(lessonId: number, newSentence: Sentence) {
 		const idx = this.getSentenceNumberByIDs(lessonId, newSentence.id);
 		this.getLessonByID(lessonId).sentences[idx] = newSentence;
+	}
+
+	getStatisticsOfSentence(sentence: Sentence): Statistics {
+		const lessonToSearchIn = this.lessons.find(lesson => lesson.id === sentence.lessonId);
+		return lessonToSearchIn.statistics.find(stat => stat.sentenceId === sentence.id);
 	}
 
 	async getSentencesByLessonId(id: number): Promise<Sentence[]> {
@@ -74,8 +81,7 @@ export class LessonsDataService {
 
 		for (const i in sntns) {
 			const hiddenChars: Array<string[]> = [];
-			const curCharsIndexes: number[] = [];
-
+			
 			sntns[i].words.sort((a, b) => a[0] - b[0]);
 
 			for (const j in sntns[i].words) {
@@ -84,35 +90,17 @@ export class LessonsDataService {
 					chars.push(sntns[i].text.charAt(sntns[i].words[j][0] + k));
 				}
 				hiddenChars.push(chars);
-				curCharsIndexes.push(0);
 			}
 			const hiddenSentence = this.utils.hideChars(sntns[i].text, sntns[i].words);
 			const sentence = new Sentence(
 				sntns[i].id,
-				sntns[i].lessonId,
+				sntns[i].lesson_id,
 				sntns[i].words,
 				sntns[i].text,
 				hiddenSentence,
 				hiddenChars,
-				sntns[i].curCharsIndexes.length === 0
-					? curCharsIndexes
-					: sntns[i].curCharsIndexes,
-				sntns[i].curWordIndex,
-				sntns[i].sentenceShown === ""
-					? this.utils.addChar(hiddenSentence, redCharForHiding)
-					: sntns[i].sentenceShown,
-				sntns[i].solvedStatus,
 				sntns[i].created_at,
-				sntns[i].updated_at,
-				new Statistics(
-					sntns[i].correctAnswers,
-					sntns[i].wrongAnswers,
-					sntns[i].giveUps,
-					sntns[i].wordSkips,
-					sntns[i].sentenceSkips,
-					sntns[i].lessonLeaves,
-					sntns[i].hintUsages)
-			);
+				sntns[i].updated_at);
 			if (!this.getLessonByID(id).sentences.some(sntn => sntn.id === sentence.id)) {
 				this.getLessonByID(id).addSentence(sentence);
 			}
@@ -121,17 +109,45 @@ export class LessonsDataService {
 		if (this.getLessonByID(id).sentences.length > 0) {
 			this.getLessonByID(id).sentences.sort(this.sortSentencesByAddingTime);
 		}
-
+		
 		return this.getLessonByID(id).sentences;
+	}
+
+	async getStatisticByLessonId(id: number): Promise<Statistics[]> {
+		const statistics = await this.statisticAPI.getData(id);
+		const statisticsArray: Statistics[] = [];
+
+		for (const stat of statistics) {
+			statisticsArray.push(new Statistics(
+				stat.id,
+				stat.sentenceId,
+				stat.lessonId,
+				stat.userId,
+				stat.curCharsIndexes,
+				stat.curWordIndex,
+				stat.sentenceShown,
+				stat.solvedStatus,
+				stat.correctAnswers,
+				stat.wrongAnswers,
+				stat.giveUps,
+				stat.wordSkips,
+				stat.sentenceSkips,
+				stat.lessonLeaves,
+				stat.hintUsages,
+				stat.created_at,
+				stat.updated_at));
+		}
+
+		this.getLessonByID(id).statistics = statisticsArray;
+
+		return statisticsArray;
 	}
 
 	calculatePeriod(diff: number): [number, string] {
 		let label: string, flooredValue: number;
 
 		if (diff < 60) {
-			flooredValue = Math.floor(diff);
-			label = ' seconds ago';
-			if (flooredValue === 1) { label = ' second ago'; }
+			label = 'A moment ago';
 		} else if (diff >= 60 && diff < 3600) {
 			flooredValue = Math.floor(diff / 60);
 			label = ' minutes ago';
@@ -177,7 +193,7 @@ export class LessonsDataService {
 
 		const promises = [];
 		for (const newLesson of this.lessons) {
-			promises.push(this.getSentencesByLessonId(newLesson.id));
+			promises.push(this.getStatisticByLessonId(newLesson.id));
 		}
 
 		return Promise.all(promises);

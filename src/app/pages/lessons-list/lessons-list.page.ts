@@ -95,19 +95,20 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				sortIsRequired[0] = false;
 			}
 			this.lessonsDataService.lessons.forEach(lsn => {
-				lsn.sentences.forEach(sntcs => {
-					if (sntcs.sentenceShown !== '') {
-						sntcs.solvedStatus = false;
-						sntcs.curWordIndex = 0;
-						for (let i in sntcs.curCharsIndexes) {
-							sntcs.curCharsIndexes[i] = 0;
+				lsn.sentences.forEach(sentence => {
+					const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
+					if (stat.sentenceShown !== '') {
+						stat.solvedStatus = false;
+						stat.curWordIndex = 0;
+						for (let i in stat.curCharsIndexes) {
+							stat.curCharsIndexes[i] = 0;
 						}
-						if (sntcs.curCharsIndexes.length === 0) {
-							for (let _ in sntcs.hiddenChars) {
-								sntcs.curCharsIndexes.push(0);
+						if (stat.curCharsIndexes.length === 0) {
+							for (let _ in sentence.hiddenChars) {
+								stat.curCharsIndexes.push(0);
 							}
 						}
-						sntcs.sentenceShown = this.utils.addChar(sntcs.textUnderscored, redCharForHiding);
+						stat.sentenceShown = this.utils.addChar(sentence.textUnderscored, redCharForHiding);
 					}
 				});
 			});
@@ -150,12 +151,11 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 			chartData.data[0] = 1;
 			chartData.data[1] = 0;
 			chartData.data[2] = 0;
-			for (const sentence of lesson.sentences) {
-				const stats = sentence.statistics;
+			for (const stats of lesson.statistics) {
 				if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps > 0) {
 					chartData.data[0] += stats.correctAnswers;
 					chartData.data[1] += stats.wrongAnswers;
-					chartData.data[2] += stats.hintUsages + sentence.hiddenWord.length * stats.giveUps;
+					chartData.data[2] += stats.hintUsages + stats.giveUps;
 				}
 			}
 
@@ -239,9 +239,9 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	redClick() {
-		this.displayedLessons = this.lessonsDataService.lessons.filter(lesson =>
+		/* this.displayedLessons = this.lessonsDataService.lessons.filter(lesson =>
 			lesson.sentences.some(snt => snt.statistics.wrongAnswers > 0)
-		);
+		); */
 	}
 
 	redAndYellowClick() {

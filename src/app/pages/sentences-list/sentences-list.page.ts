@@ -69,13 +69,13 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	ionViewDidEnter() {
-		this.updateCharts();
 		if (updateIsRequired[0] || (this.displayedSentences && this.displayedSentences.length === 0)) {
 			this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {
 				this.getData();
 				updateIsRequired[0] = false;
 			});
 		}
+		this.updateCharts();
 	}
 
 	ngAfterViewInit() {
@@ -148,18 +148,17 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	private updateCharts() {
-		if (this.displayedSentences === undefined ||
-			this.displayedSentences.length === 0) {
+		if (this.displayedSentences === undefined || this.displayedSentences.length === 0) {
 			return;
 		}
 		let i = 0;
 		for (const sentence of this.displayedSentences) {
-			const stats = sentence.statistics;
+			const stats = this.lessonsDataService.getStatisticsOfSentence(sentence);
 			if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps !== 0) {
 				const chartData = this.pieCharts[i].data.datasets[0];
 				chartData.data[0] = stats.correctAnswers;
 				chartData.data[1] = stats.wrongAnswers;
-				chartData.data[2] = stats.hintUsages + sentence.hiddenWord.length * stats.giveUps;
+				chartData.data[2] = stats.hintUsages + sentence.words.length * stats.giveUps;
 				chartData.backgroundColor[0] = '#AFF265';
 				chartData.backgroundColor[1] = '#FF9055';
 				chartData.backgroundColor[2] = '#FFE320';
@@ -259,17 +258,17 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	private async getData() {
 		this.lessonTitle = this.lessonsDataService.getLessonByID(this.lessonId).name.toString();
-		this.displayedSentences = await this.lessonsDataService.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20);
+		this.displayedSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
 	}
 
 	allClick() {
-		this.getData();
+		//this.getData();
 	}
 
 	redClick() {
-		this.displayedSentences = this.lessonsDataService
+		/* this.displayedSentences = this.lessonsDataService
 			.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20)
-			.filter(sentence => sentence.statistics.wrongAnswers > 0);
+			.filter(sentence => sentence.statistics.wrongAnswers > 0); */
 	}
 
 	redAndYellowClick() {

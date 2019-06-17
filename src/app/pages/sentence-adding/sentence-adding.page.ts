@@ -125,13 +125,8 @@ export class SentenceAddingPage implements OnInit {
 						textAreaValue,
 						hiddenSentence,
 						hiddenChars,
-						curCharsIndexes,
-						0,
-						this.utils.addChar(hiddenSentence, charForHiding),
-						false,
 						new Date().toISOString(),
-						new Date().toISOString(),
-						new Statistics(0, 0, 0, 0, 0, 0, 0)));
+						new Date().toISOString()));
 			} else {
 				this.addSentenceService.postNewSentence({
 					lessonId: this.lessonId,

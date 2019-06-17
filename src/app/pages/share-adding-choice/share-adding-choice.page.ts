@@ -61,11 +61,11 @@ export class ShareAddingChoicePage implements OnInit {
 			chartData.data[1] = 0;
 			chartData.data[2] = 0;
 			for (const sentence of lesson.sentences) {
-				const stats = sentence.statistics;
+				const stats = this.lessonsDataService.getStatisticsOfSentence(sentence);
 				if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps > 0) {
 					chartData.data[0] += stats.correctAnswers;
 					chartData.data[1] += stats.wrongAnswers;
-					chartData.data[2] += stats.hintUsages + sentence.hiddenWord.length * stats.giveUps;
+					chartData.data[2] += stats.hintUsages + sentence.words.length * stats.giveUps;
 				}
 			}
 

@@ -78,11 +78,11 @@ export class UtilsService {
 	}
 
 	redAndYellowFilterSentence(val: Sentence) {
-		return val.statistics.wrongAnswers > 0 && (val.statistics.hintUsages > 0 || val.statistics.giveUps > 0);
+		//return val.statistics.wrongAnswers > 0 && (val.statistics.hintUsages > 0 || val.statistics.giveUps > 0);
 	}
 
 	redAndYellowFilterLesson(val: Lesson) {
-		let redIsPresent: boolean = false;
+		/* let redIsPresent: boolean = false;
 		let yellowIsPresent: boolean = false;
 
 		for (const sentence of val.sentences) {
@@ -95,7 +95,7 @@ export class UtilsService {
 			}
 		}
 
-		return redIsPresent && yellowIsPresent;
+		return redIsPresent && yellowIsPresent; */
 	}
 
 	isEnglishChar(char: string): boolean {
