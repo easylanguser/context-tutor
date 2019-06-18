@@ -1,4 +1,4 @@
-import { UtilsService } from '../utils/utils.service';
+import { UtilsService, redCharForHiding } from '../utils/utils.service';
 import { SentencesByLessonService } from '../http/sentences-by-lesson/sentences-by-lesson.service';
 import { Injectable } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
@@ -6,6 +6,8 @@ import { LessonsListService } from '../http/lessons-list/lessons-list.service';
 import { Sentence } from 'src/app/models/sentence';
 import { Statistics } from 'src/app/models/statistics';
 import { StatisticByLessonService } from '../http/statistic-by-lesson/statistic-by-lesson.service';
+import { StorageService } from '../storage/storage-service';
+import { USER_ID_KEY } from '../auth/auth.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -18,7 +20,8 @@ export class LessonsDataService {
 		private lessonsAPI: LessonsListService,
 		private sentencesAPI: SentencesByLessonService,
 		private statisticAPI: StatisticByLessonService,
-		private utils: UtilsService) { }
+		private utils: UtilsService,
+		private storageService: StorageService) { }
 
 	addLesson(lesson: Lesson) {
 		this.lessons.push(lesson);
@@ -81,7 +84,7 @@ export class LessonsDataService {
 
 		for (const i in sntns) {
 			const hiddenChars: Array<string[]> = [];
-			
+
 			sntns[i].words.sort((a, b) => a[0] - b[0]);
 
 			for (const j in sntns[i].words) {
@@ -104,12 +107,34 @@ export class LessonsDataService {
 			if (!this.getLessonByID(id).sentences.some(sntn => sntn.id === sentence.id)) {
 				this.getLessonByID(id).addSentence(sentence);
 			}
+
+			let stat = this.getStatisticsOfSentence(sentence);
+			if (!stat) {
+				this.storageService.get(USER_ID_KEY).then(userId => {
+					this.getLessonByID(sentence.lessonId).statistics.push(new Statistics(
+						1, sentence.id, sentence.lessonId,
+						userId, [], 0, '', false, 0, 0, 0, 0, 0, 0, 0,
+						new Date().toISOString(), new Date().toISOString()));
+				}).then(() => {
+					stat = this.getStatisticsOfSentence(sentence);
+					stat.sentenceShown = this.utils.addChar(sentence.textUnderscored, redCharForHiding);
+					for (let i in sentence.hiddenChars) {
+						stat.curCharsIndexes.push(0);
+					}
+				});
+			} else {
+				stat = this.getStatisticsOfSentence(sentence);
+				stat.sentenceShown = this.utils.addChar(sentence.textUnderscored, redCharForHiding);
+				for (let i in sentence.hiddenChars) {
+					stat.curCharsIndexes.push(0);
+				}
+			}
 		}
 
 		if (this.getLessonByID(id).sentences.length > 0) {
 			this.getLessonByID(id).sentences.sort(this.sortSentencesByAddingTime);
 		}
-		
+
 		return this.getLessonByID(id).sentences;
 	}
 
@@ -123,9 +148,7 @@ export class LessonsDataService {
 				stat.sentenceId,
 				stat.lessonId,
 				stat.userId,
-				stat.curCharsIndexes,
-				stat.curWordIndex,
-				stat.sentenceShown,
+				[], 0, '',
 				stat.solvedStatus,
 				stat.correctAnswers,
 				stat.wrongAnswers,
@@ -143,30 +166,31 @@ export class LessonsDataService {
 		return statisticsArray;
 	}
 
-	calculatePeriod(diff: number): [number, string] {
-		let label: string, flooredValue: number;
+	calculatePeriod(diff: number): [string, string] {
+		let label: string, flooredValue: string;
 
 		if (diff < 60) {
+			flooredValue = '';
 			label = 'A moment ago';
 		} else if (diff >= 60 && diff < 3600) {
-			flooredValue = Math.floor(diff / 60);
+			flooredValue = String(Math.floor(diff / 60));
 			label = ' minutes ago';
-			if (flooredValue === 1) { label = ' minute ago'; }
+			if (flooredValue === '1') { label = ' minute ago'; }
 		} else if (diff >= 3600 && diff < 86400) {
-			flooredValue = Math.floor(diff / 3600);
+			flooredValue = String(Math.floor(diff / 3600));
 			label = ' hours ago';
-			if (flooredValue === 1) { label = ' hour ago'; }
+			if (flooredValue === '1') { label = ' hour ago'; }
 		} else if (diff >= 86400 && diff < 1209600) {
-			flooredValue = Math.floor(diff / 86400);
+			flooredValue = String(Math.floor(diff / 86400));
 			label = ' days ago';
-			if (flooredValue === 1) { label = ' day ago'; }
+			if (flooredValue === '1') { label = ' day ago'; }
 		} else if (diff >= 1209600 && diff < 2678400) {
-			flooredValue = Math.floor(diff / 604800);
+			flooredValue = String(Math.floor(diff / 604800));
 			label = ' weeks ago';
 		} else {
-			flooredValue = Math.floor(diff / 2678400);
+			flooredValue = String(Math.floor(diff / 2678400));
 			label = ' months ago';
-			if (flooredValue === 1) { label = ' month ago'; }
+			if (flooredValue === '1') { label = ' month ago'; }
 		}
 
 		return [flooredValue, label];

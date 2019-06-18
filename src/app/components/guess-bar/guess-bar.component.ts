@@ -70,15 +70,15 @@ export class GuessBarComponent implements OnInit {
 	}
 
 	async getData() {
-		if (this.curSentenceStatistics().solvedStatus) { // Display filled sentence, if it has already been solved
-			this.guessPage.sentenceShown = this.curSentenceStatistics().sentenceShown;
+		if (this.curStats().solvedStatus) { // Display filled sentence, if it has already been solved
+			this.guessPage.sentenceShown = this.curStats().sentenceShown;
 		} else {
 			this.hintIsClicked = false;
 
 			// Restore user progress 
-			this.guessPage.curWordIndex = this.curSentenceStatistics().curWordIndex;
-			this.guessPage.curCharsIndexes = this.curSentenceStatistics().curCharsIndexes;
-			this.guessPage.sentenceShown = this.curSentenceStatistics().sentenceShown;
+			this.guessPage.curWordIndex = this.curStats().curWordIndex;
+			this.guessPage.curCharsIndexes = this.curStats().curCharsIndexes;
+			this.guessPage.sentenceShown = this.curStats().sentenceShown;
 
 			this.refreshCharBoxes();
 		}
@@ -88,8 +88,8 @@ export class GuessBarComponent implements OnInit {
 		return this.guessPage.curSentence();
 	}
 
-	curSentenceStatistics(): Statistics {
-		return this.guessPage.curSentenceStatistics();
+	curStats(): Statistics {
+		return this.guessPage.curStats();
 	}
 
 	private updateChart() {
@@ -154,7 +154,7 @@ export class GuessBarComponent implements OnInit {
 		this.location.go(path);
 
 		if (this.guessPage.statisticsDeltasArray.findIndex(elem => elem[0] === this.curSentence().id) === -1) {
-			const stats = this.curSentenceStatistics();
+			const stats = this.curStats();
 			this.guessPage.statisticsDeltasArray.push([
 				this.curSentence().id,
 				stats.wrongAnswers,
@@ -163,21 +163,21 @@ export class GuessBarComponent implements OnInit {
 			]);
 		}
 
-		if (!this.curSentenceStatistics().solvedStatus) {
-			++this.curSentenceStatistics().sentenceSkips; // Statistics
+		if (!this.curStats().solvedStatus) {
+			++this.curStats().sentenceSkips; // Statistics
 		}
 	}
 
 	markAsSolved() {
-		this.curSentenceStatistics().solvedStatus = true;
+		this.curStats().solvedStatus = true;
 		if (!this.guessPage.toastIsShown) {
 			this.guessPage.showToast();
 		}
 	}
 
 	giveUpClick() { // Give up and show full sentence
-		if (!this.curSentenceStatistics().solvedStatus) {
-			++this.curSentenceStatistics().giveUps; // Statistics
+		if (!this.curStats().solvedStatus) {
+			++this.curStats().giveUps; // Statistics
 
 			const button: HTMLIonButtonElement = <HTMLIonButtonElement>(document.getElementById('give-up-button'));
 
@@ -204,8 +204,8 @@ export class GuessBarComponent implements OnInit {
 
 	// Show user one current character
 	hintClick() {
-		if (!this.curSentenceStatistics().solvedStatus) {
-			++this.curSentenceStatistics().hintUsages; // Statistics
+		if (!this.curStats().solvedStatus) {
+			++this.curStats().hintUsages; // Statistics
 			this.updateChart();
 			this.hintIsClicked = true;
 			const event = new KeyboardEvent('evHint', { key: this.curCorrectChar() });
@@ -214,7 +214,7 @@ export class GuessBarComponent implements OnInit {
 	}
 
 	handleBoxClick(index: number) {
-		if (!this.curSentenceStatistics().solvedStatus) {
+		if (!this.curStats().solvedStatus) {
 			const fronts = [this.firstChar, this.secondChar, this.thirdChar, this.fourthChar];
 			const backs = [this.firstCharBack, this.secondCharBack, this.thirdCharBack, this.fourthCharBack];
 			const event = new KeyboardEvent('ev' + index, { key: (this.updateFront ? fronts[index] : backs[index]).toLowerCase() });
@@ -355,7 +355,7 @@ export class GuessBarComponent implements OnInit {
 		if (this.sentenceTranslateIsPlayed || this.charactersRotationIsPlayed) {
 			return;
 		}
-		if (this.curSentenceStatistics().solvedStatus) {
+		if (this.curStats().solvedStatus) {
 			if (!this.guessPage.toastIsShown) {
 				this.guessPage.showToast();
 			}
@@ -368,13 +368,13 @@ export class GuessBarComponent implements OnInit {
 				this.hintIsClicked = false;
 				spanColor = '<span class=\'yellow\'>';
 			} else {
-				++this.curSentenceStatistics().correctAnswers; // Statistics
+				++this.curStats().correctAnswers; // Statistics
 				spanColor = '<span class=\'green\'>';
 			}
 
 			// Fill guessed character
-			this.guessPage.sentenceShown = this.util.addChar(this.curSentenceStatistics().sentenceShown, spanColor + this.curCorrectChar() + '</span>');
-			++this.curSentenceStatistics().curCharsIndexes[this.curSentenceStatistics().curWordIndex];
+			this.guessPage.sentenceShown = this.util.addChar(this.guessPage.sentenceShown, spanColor + this.curCorrectChar() + '</span>');
+			++this.guessPage.curCharsIndexes[this.guessPage.curWordIndex];
 
 			const status = this.status();
 			if (status === 1) {
@@ -399,7 +399,7 @@ export class GuessBarComponent implements OnInit {
 
 			this.refreshCharBoxes();
 		} else {
-			++this.curSentenceStatistics().wrongAnswers; // Statistics
+			++this.curStats().wrongAnswers; // Statistics
 
 			switch (event.key) {
 				case (this.updateFront ? this.firstChar : this.firstCharBack).toLowerCase(): {

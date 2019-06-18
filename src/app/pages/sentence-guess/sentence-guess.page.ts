@@ -60,7 +60,7 @@ export class SentenceGuessPage implements OnInit {
 		this.sentenceNumber = this.lessonsDataService.getSentenceNumberByIDs(this.lessonId, this.sentenceId) + 1;
 		this.sentencesTotal = this.lessonsDataService.getLessonByID(this.lessonId).sentences.length;
 
-		const stats = this.curSentenceStatistics();
+		const stats = this.curStats();
 		this.statisticsDeltasArray.push([
 			this.curSentence().id,
 			stats.wrongAnswers,
@@ -75,7 +75,7 @@ export class SentenceGuessPage implements OnInit {
 		return lessonSentences.find(sentence => sentence.id === this.sentenceId);
 	}
 
-	curSentenceStatistics(): Statistics {
+	curStats(): Statistics {
 		return this.lessonsDataService.getStatisticsOfSentence(this.curSentence());
 	}
 
@@ -83,7 +83,7 @@ export class SentenceGuessPage implements OnInit {
 		const chart = this.pieChart.data.datasets[0];
 		const chartData = chart.data;
 		const chartColors = chart.backgroundColor;
-		const stats = this.curSentenceStatistics();
+		const stats = this.curStats();
 
 		if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps === 0) {
 			chartData[0] = 1;
@@ -92,7 +92,7 @@ export class SentenceGuessPage implements OnInit {
 		} else {
 			chartData[0] = stats.correctAnswers;
 			chartData[1] = stats.wrongAnswers;
-			chartData[2] = stats.hintUsages + this.curSentence().words.length * stats.giveUps;
+			chartData[2] = stats.hintUsages + stats.giveUps;
 			chartColors[0] = '#AFF265';
 			chartColors[1] = '#FF9055';
 			chartColors[2] = '#FFE320';
@@ -102,12 +102,13 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	saveStatistics() {
-		const stats = this.curSentenceStatistics();
+		const stats = this.curStats();
 		this.statisticsUpdateService
 			.updateData({
 				sentenceId: this.curSentence().id,
 				curCharsIndexes: [],
 				curWordIndex: 0,
+				sentenceShown: "",
 				solvedStatus: false,
 				correctAnswers: stats.correctAnswers,
 				giveUps: stats.giveUps,
@@ -140,8 +141,9 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	saveData() {
-		this.curSentenceStatistics().curWordIndex = this.curWordIndex;
-		this.curSentenceStatistics().curCharsIndexes = this.curCharsIndexes;
+		this.curStats().curWordIndex = this.curWordIndex;
+		this.curStats().curCharsIndexes = this.curCharsIndexes;
+		this.curStats().sentenceShown = this.sentenceShown;
 		this.saveStatistics();
 	}
 
@@ -152,7 +154,7 @@ export class SentenceGuessPage implements OnInit {
 
 	async showToast() {
 		this.toastIsShown = true;
-		const stats = this.curSentenceStatistics();
+		const stats = this.curStats();
 		const savedStats = this.statisticsDeltasArray.find(elem => elem[0] === this.curSentence().id);
 		const greenDelta = stats.correctAnswers - savedStats[3];
 		const yellowDelta = stats.giveUps + stats.hintUsages - savedStats[2];

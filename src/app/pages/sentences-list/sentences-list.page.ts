@@ -154,7 +154,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		let i = 0;
 		for (const sentence of this.displayedSentences) {
 			const stats = this.lessonsDataService.getStatisticsOfSentence(sentence);
-			if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps !== 0) {
+			if (stats && stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps !== 0) {
 				const chartData = this.pieCharts[i].data.datasets[0];
 				chartData.data[0] = stats.correctAnswers;
 				chartData.data[1] = stats.wrongAnswers;

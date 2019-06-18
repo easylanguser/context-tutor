@@ -83,36 +83,32 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	ionViewDidEnter() {
 		this.toggleMenu();
 		document.getElementById('lessons-div').focus();
-		if (this.firstEnter) {
-			this.firstEnter = false;
-		} else {
-			this.updateCharts();
-			if (updateIsRequired[0] || sortIsRequired[0]) {
-				this.getData().then(() => {
-					this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);
-				});
-				updateIsRequired[0] = false;
-				sortIsRequired[0] = false;
-			}
-			this.lessonsDataService.lessons.forEach(lsn => {
-				lsn.sentences.forEach(sentence => {
-					const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
-					if (stat.sentenceShown !== '') {
-						stat.solvedStatus = false;
-						stat.curWordIndex = 0;
-						for (let i in stat.curCharsIndexes) {
-							stat.curCharsIndexes[i] = 0;
-						}
-						if (stat.curCharsIndexes.length === 0) {
-							for (let _ in sentence.hiddenChars) {
-								stat.curCharsIndexes.push(0);
-							}
-						}
-						stat.sentenceShown = this.utils.addChar(sentence.textUnderscored, redCharForHiding);
-					}
-				});
+		this.updateCharts();
+		if (updateIsRequired[0] || sortIsRequired[0]) {
+			this.getData().then(() => {
+				this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);
 			});
+			updateIsRequired[0] = false;
+			sortIsRequired[0] = false;
 		}
+		this.lessonsDataService.lessons.forEach(lsn => {
+			lsn.sentences.forEach(sentence => {
+				const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
+				if (stat.sentenceShown !== '') {
+					stat.solvedStatus = false;
+					stat.curWordIndex = 0;
+					for (let i in stat.curCharsIndexes) {
+						stat.curCharsIndexes[i] = 0;
+					}
+					if (stat.curCharsIndexes.length === 0) {
+						for (let _ in sentence.hiddenChars) {
+							stat.curCharsIndexes.push(0);
+						}
+					}
+					stat.sentenceShown = this.utils.addChar(sentence.textUnderscored, redCharForHiding);
+				}
+			});
+		});
 	}
 
 	ionViewWillLeave() {
