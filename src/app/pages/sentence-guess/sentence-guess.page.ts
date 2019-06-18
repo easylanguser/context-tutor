@@ -2,7 +2,7 @@ import { StatisticsUpdateService } from '../../services/http/statistics-update/s
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToastController, NavController } from '@ionic/angular';
+import { ToastController, NavController, AlertController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
@@ -34,7 +34,7 @@ export class SentenceGuessPage implements OnInit {
 	statisticsDeltasArray: Array<[number, number, number, number]> = []; // Deltas by id for red, yellow, green stats
 
 	constructor(private route: ActivatedRoute,
-		private toastController: ToastController,
+		private alertController: AlertController,
 		public lessonsDataService: LessonsDataService,
 		private utils: UtilsService,
 		private statisticsUpdateService: StatisticsUpdateService,
@@ -46,7 +46,9 @@ export class SentenceGuessPage implements OnInit {
 
 		if (!this.lessonsDataService.lessons.length) {
 			this.lessonsDataService.refreshLessons().then(() => {
-				this.getData();
+				this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {
+					this.getData();
+				});
 			});
 		} else {
 			this.getData();
@@ -160,14 +162,23 @@ export class SentenceGuessPage implements OnInit {
 		const yellowDelta = stats.giveUps + stats.hintUsages - savedStats[2];
 		const redDelta = stats.wrongAnswers - savedStats[1];
 		if (greenDelta + yellowDelta + redDelta !== 0) {
-			const toast = await this.toastController.create({
-				message: 'Green: +' + greenDelta + '\nYellow: +' + yellowDelta + '\nRed: +' + redDelta,
-				position: 'middle',
-				duration: 1200,
-				cssClass: 'toast-black',
-				animated: true
+			const alert = await this.alertController.create({
+				message: '<p>Green: +' + greenDelta + '</p><p>Yellow: +' + 
+					yellowDelta + '</p><p>Red: +' + redDelta + '</p>',
+				buttons: [
+					{
+						text: 'Ok',
+						role: 'cancel'
+					},
+					{
+						text: 'Next sentence',
+						handler: () => {
+							document.getElementById('next-sentence-button').click();
+						}
+					}
+				]
 			});
-			toast.present();
+			alert.present();
 			setTimeout(() => { this.toastIsShown = false; }, 1500);
 		} else {
 			this.toastIsShown = false;

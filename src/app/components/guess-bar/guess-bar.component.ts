@@ -54,7 +54,9 @@ export class GuessBarComponent implements OnInit {
 	ngOnInit() {
 		if (!this.lessonsDataService.lessons.length) {
 			this.lessonsDataService.refreshLessons().then(() => {
-				this.initData();
+				this.lessonsDataService.getSentencesByLessonId(this.guessPage.lessonId).then(() => {
+					this.initData();
+				});
 			});
 		} else {
 			this.initData();

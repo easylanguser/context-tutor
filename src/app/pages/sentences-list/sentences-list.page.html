@@ -43,7 +43,7 @@
         <ion-item class="sentence-ion-item" no-padding>
           <div (click)="openSentence(sentence.id)">
             <div>
-              <p [innerHTML]="sentence.textUnderscored"></p>
+              <p [innerHTML]="this.lessonsDataService.getStatisticsOfSentence(sentence).sentenceShown"></p>
             </div>
             <div>
               <div>

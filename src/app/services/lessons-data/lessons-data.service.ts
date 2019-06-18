@@ -108,26 +108,10 @@ export class LessonsDataService {
 				this.getLessonByID(id).addSentence(sentence);
 			}
 
-			let stat = this.getStatisticsOfSentence(sentence);
-			if (!stat) {
-				this.storageService.get(USER_ID_KEY).then(userId => {
-					this.getLessonByID(sentence.lessonId).statistics.push(new Statistics(
-						1, sentence.id, sentence.lessonId,
-						userId, [], 0, '', false, 0, 0, 0, 0, 0, 0, 0,
-						new Date().toISOString(), new Date().toISOString()));
-				}).then(() => {
-					stat = this.getStatisticsOfSentence(sentence);
-					stat.sentenceShown = this.utils.addChar(sentence.textUnderscored, redCharForHiding);
-					for (let i in sentence.hiddenChars) {
-						stat.curCharsIndexes.push(0);
-					}
-				});
-			} else {
-				stat = this.getStatisticsOfSentence(sentence);
-				stat.sentenceShown = this.utils.addChar(sentence.textUnderscored, redCharForHiding);
-				for (let i in sentence.hiddenChars) {
-					stat.curCharsIndexes.push(0);
-				}
+			const stat = this.getStatisticsOfSentence(sentence);
+			stat.sentenceShown = this.utils.addChar(sentence.textUnderscored, redCharForHiding);
+			for (let i in sentence.hiddenChars) {
+				stat.curCharsIndexes.push(0);
 			}
 		}
 
