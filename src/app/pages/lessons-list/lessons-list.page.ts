@@ -235,13 +235,14 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	redClick() {
-		/* this.displayedLessons = this.lessonsDataService.lessons.filter(lesson =>
-			lesson.sentences.some(snt => snt.statistics.wrongAnswers > 0)
-		); */
+		this.displayedLessons = this.lessonsDataService.lessons.filter(lesson =>
+			lesson.statistics.some(stat => stat.wrongAnswers > 0)
+		);
 	}
 
 	redAndYellowClick() {
-		this.displayedLessons = this.lessonsDataService.lessons.filter(this.utils.redAndYellowFilterLesson);
+		this.displayedLessons = this.lessonsDataService.lessons
+			.filter(this.utils.redAndYellowFilterLesson);
 	}
 
 	openLesson(lessonID) {

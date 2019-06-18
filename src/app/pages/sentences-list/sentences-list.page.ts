@@ -262,18 +262,20 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	allClick() {
-		//this.getData();
+		this.getData();
 	}
 
-	redClick() {
-		/* this.displayedSentences = this.lessonsDataService
-			.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20)
-			.filter(sentence => sentence.statistics.wrongAnswers > 0); */
+	async redClick() {
+		const allSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
+		this.displayedSentences = allSentences.filter(sentence => 
+			this.lessonsDataService.getStatisticsOfSentence(sentence).wrongAnswers > 0
+		);
 	}
 
-	redAndYellowClick() {
-		this.displayedSentences = this.lessonsDataService
-			.getRangeOfLessonSentences(this.lessonId, 0, this.offset + 20)
-			.filter(this.utils.redAndYellowFilterSentence);
+	async redAndYellowClick() {
+		const allSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
+		this.displayedSentences = allSentences.filter(sentence => 
+			this.utils.redAndYellowFilterSentence(this.lessonsDataService.getStatisticsOfSentence(sentence))
+		);
 	}
 }

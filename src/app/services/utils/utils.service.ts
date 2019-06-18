@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Sentence } from 'src/app/models/sentence';
 import { Lesson } from 'src/app/models/lesson';
+import { LessonsDataService } from '../lessons-data/lessons-data.service';
+import { Statistics } from 'src/app/models/statistics';
 
 export const charForHiding: string = '•';
 export const redCharForHiding: string = '<span class=\'red-text\'>•</span>';
@@ -77,16 +79,15 @@ export class UtilsService {
 		return input.substr(0, firstUnderScoreIndex) + replacement + input.substr(firstUnderScoreIndex + length);
 	}
 
-	redAndYellowFilterSentence(val: Sentence) {
-		//return val.statistics.wrongAnswers > 0 && (val.statistics.hintUsages > 0 || val.statistics.giveUps > 0);
+	redAndYellowFilterSentence(stat: Statistics) {
+		return stat.wrongAnswers > 0 && (stat.hintUsages > 0 || stat.giveUps > 0);
 	}
 
 	redAndYellowFilterLesson(val: Lesson) {
-		/* let redIsPresent: boolean = false;
+		let redIsPresent: boolean = false;
 		let yellowIsPresent: boolean = false;
 
-		for (const sentence of val.sentences) {
-			const stat = sentence.statistics;
+		for (const stat of val.statistics) {
 			if (stat.wrongAnswers > 0) {
 				redIsPresent = true;
 			}
@@ -95,7 +96,7 @@ export class UtilsService {
 			}
 		}
 
-		return redIsPresent && yellowIsPresent; */
+		return redIsPresent && yellowIsPresent;
 	}
 
 	isEnglishChar(char: string): boolean {
