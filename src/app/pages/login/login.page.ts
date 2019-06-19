@@ -33,6 +33,18 @@ export class LoginPage implements OnInit {
 		this.toggleMenu();
 	}
 
+	togglePasswordVisibility(event: MouseEvent) {
+		const input = document.getElementById('password-input');
+		const button = document.getElementById('lock-icon');	
+		if (event.layerX + 35 > input.getBoundingClientRect().width && input.hasAttribute('type')) {
+			input.removeAttribute('type');
+			button.setAttribute('name', 'lock');
+		} else {
+			input.setAttribute('type', 'password');
+			button.setAttribute('name', 'unlock');
+		}
+	}
+
 	toggleMenu() {
 		const div = document.getElementById('sign-div');
 		if (div) {

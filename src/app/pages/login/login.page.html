@@ -30,8 +30,11 @@
 
       <div style="margin-bottom: 4vh;"></div>
 
-      <ion-label id="password-label" position="floating">Password</ion-label>
-      <ion-input id="password-input" autocomplete="on" type="password" formControlName="password" required></ion-input>
+      <ion-label id="password-label" mode="md" position="floating">Password</ion-label>
+      <ion-input id="password-input" (click)="togglePasswordVisibility($event)" mode="md" autocomplete="on" type="password" formControlName="password" required>
+        <ion-icon id="lock-icon" mode="md" name="unlock"></ion-icon>
+      </ion-input>
+      
 
       <div *ngIf="submitted && formData.password.errors" class="error-label">
         <div *ngIf="formData.password.errors.required">

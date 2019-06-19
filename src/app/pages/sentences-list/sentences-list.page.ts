@@ -54,10 +54,10 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		const fabEdit = document.getElementById('edit-sentence-fab');
 		const fabAdd = document.getElementById('add-sentence-fab');
 		content.addEventListener('ionScroll', _.throttle((ev: CustomEvent) => {
-			if (ev.detail.velocityY > 0) {
+			if (ev.detail.velocityY > 0.1) {
 				fabAdd.classList.add('hidden-btn');
 				fabEdit.classList.add('hidden-btn');
-			} else {
+			} else if (ev.detail.velocityY < -0.1) {
 				fabAdd.classList.remove('hidden-btn');
 				fabEdit.classList.remove('hidden-btn');
 			}
