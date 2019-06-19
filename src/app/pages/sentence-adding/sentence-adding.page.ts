@@ -9,7 +9,7 @@ import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 import { NavController, Platform } from '@ionic/angular';
 import { SentenceResetService } from 'src/app/services/http/sentence-reset/sentence-reset.service';
 import { Sentence } from 'src/app/models/sentence';
-import { UtilsService, charForHiding } from 'src/app/services/utils/utils.service';
+import { UtilsService, redCharForHiding } from 'src/app/services/utils/utils.service';
 import { Statistics } from 'src/app/models/statistics';
 
 let lastSelOffsets: Array<number> = [];
@@ -128,10 +128,15 @@ export class SentenceAddingPage implements OnInit {
 						new Date().toISOString(),
 						new Date().toISOString()));
 			} else {
+				const text = document.getElementById("selectable-sentence-div").innerText;
 				this.addSentenceService.postNewSentence({
 					lessonId: this.lessonId,
 					words: indexesArray,
-					text: document.getElementById("selectable-sentence-div").innerText
+					text: text
+				}).then(newSentence => {
+					this.storageService.get(USER_ID_KEY).then(userId => {
+						this.createNewStatisticRecord(newSentence.id, this.lessonId, userId, indexesArray, text)
+					});
 				});
 			}
 		} else { // Sentence is added to a new lesson
@@ -146,7 +151,10 @@ export class SentenceAddingPage implements OnInit {
 						lessonId: newLessonId,
 						words: indexesArray,
 						text: this.sentence
-					});
+					}).then(newSentence => {
+						this.createNewStatisticRecord(newSentence.id, newLessonId,
+							userId, indexesArray, this.sentence);
+					})
 				});
 			});
 		}
@@ -159,6 +167,20 @@ export class SentenceAddingPage implements OnInit {
 				lessonID: this.lessonId
 			}
 		});
+	}
+
+	createNewStatisticRecord(sentenceId: number, lessonId: number,
+			userId: number, words: [number, number][], text: string) {
+		const sentenceShown = this.utils.addChar(this.utils.hideChars(text, words), redCharForHiding);
+		const charsIndexes = [];
+		for (let i = 0; i < words.length; i++) {
+			charsIndexes.push(0);
+		}
+
+		this.lessonsDataService.getLessonByID(lessonId).statistics.push(new Statistics(
+			sentenceId, sentenceId, lessonId, userId, charsIndexes, 0, sentenceShown,
+			false, 0, 0, 0, 0, 0, 0, 0, new Date().toISOString(), new Date().toISOString()
+		));
 	}
 
 	showSelectionButton() {
@@ -252,5 +274,10 @@ export class SentenceAddingPage implements OnInit {
 				selBtn.style.display = 'block';
 		};
 		document.getElementsByTagName('app-sentence-adding')[0].appendChild(border);
+	}
+
+	ngOnDestroy() {
+		document.removeEventListener('mouseup', this.showSelectionButton);
+		document.removeEventListener('touchstart', this.showSelectionButton);
 	}
 }
