@@ -14,13 +14,13 @@
 
     <div id="segments-div">
       <ion-segment id="lessons-filter-segment" mode="ios">
-        <ion-segment-button value="all" mode="ios" (click)="allClick()" checked="true">
+        <ion-segment-button value="all" mode="ios" (click)="filterClick(1)" checked="true">
           All
         </ion-segment-button>
-        <ion-segment-button mode="ios" (click)="redAndYellowClick()">
+        <ion-segment-button id="center-segment" mode="ios" (click)="filterClick(2)">
           Almost correct
         </ion-segment-button>
-        <ion-segment-button mode="ios" (click)="redClick()">
+        <ion-segment-button mode="ios" (click)="filterClick(3)">
           Not correct
         </ion-segment-button>
       </ion-segment>

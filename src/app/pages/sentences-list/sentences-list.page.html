@@ -16,13 +16,13 @@
 
     <div id="segments-div">
       <ion-segment id="sentences-filter-segment" mode="ios">
-        <ion-segment-button value="all" mode="ios" (click)="allClick()" checked="true">
+        <ion-segment-button value="all" mode="ios" (click)="filterClick(1)" checked="true">
           All
         </ion-segment-button>
-        <ion-segment-button mode="ios" (click)="redAndYellowClick()">
+        <ion-segment-button id="center-segment" mode="ios" (click)="filterClick(2)">
           Almost correct
         </ion-segment-button>
-        <ion-segment-button mode="ios" (click)="redClick()">
+        <ion-segment-button mode="ios" (click)="filterClick(3)">
           Not correct
         </ion-segment-button>
       </ion-segment>
@@ -37,8 +37,8 @@
       </ion-refresher-content>
     </ion-refresher>
 
-    <ion-virtual-scroll id="sentences-list" [items]="displayedSentences" no-padding no-margin>
-      <ion-item-sliding #slidingItem *virtualItem="let sentence;index as i">
+    <ion-list id="sentences-list" no-padding no-margin>
+      <ion-item-sliding #slidingItem *ngFor="let sentence of this.displayedSentences;index as i">
         <ion-item class="sentence-ion-item" no-padding>
           <div (click)="openSentence(sentence.id)">
             <div>
@@ -60,7 +60,7 @@
         </ion-item-options>
 
       </ion-item-sliding>
-    </ion-virtual-scroll>
+    </ion-list>
 
   </ion-content>
 

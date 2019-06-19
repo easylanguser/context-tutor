@@ -5,7 +5,7 @@ import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
 import { SentenceDeleteService } from 'src/app/services/http/sentence-delete/sentence-delete.service';
-import { IonItemSliding, AlertController, NavController, ToastController } from '@ionic/angular';
+import { IonItemSliding, AlertController, NavController, ToastController, LoadingController } from '@ionic/angular';
 import * as anime from 'animejs';
 import * as _ from 'lodash';
 import { updateIsRequired } from 'src/app/app.component';
@@ -34,6 +34,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		private navCtrl: NavController,
 		public lessonsDataService: LessonsDataService,
 		private sentenceDeleteService: SentenceDeleteService,
+		private loadingController: LoadingController,
 		private cdRef: ChangeDetectorRef) { }
 
 	ngOnInit() {
@@ -249,21 +250,26 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		this.displayedSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
 	}
 
-	allClick() {
-		this.getData();
-	}
-
-	async redClick() {
-		const allSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
-		this.displayedSentences = allSentences.filter(sentence => 
-			this.lessonsDataService.getStatisticsOfSentence(sentence).wrongAnswers > 0
-		);
-	}
-
-	async redAndYellowClick() {
-		const allSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
-		this.displayedSentences = allSentences.filter(sentence => 
-			this.utils.redAndYellowFilterSentence(this.lessonsDataService.getStatisticsOfSentence(sentence))
-		);
+	async filterClick(type: number) {
+		const loading = await this.loadingController.create({
+			message: 'Loading',
+			backdropDismiss: true
+		});
+		await loading.present();
+		if (type === 1) {
+			this.getData();
+		} else {
+			const allSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
+			if (type === 2) {
+				this.displayedSentences = allSentences.filter(sentence => 
+					this.lessonsDataService.getStatisticsOfSentence(sentence).wrongAnswers > 0
+				);
+			} else {
+				this.displayedSentences = allSentences.filter(sentence => 
+					this.utils.redAndYellowFilterSentence(this.lessonsDataService.getStatisticsOfSentence(sentence))
+				);
+			}
+		}
+		await loading.dismiss();
 	}
 }

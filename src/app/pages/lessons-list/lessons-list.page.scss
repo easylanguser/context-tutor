@@ -54,13 +54,14 @@ ion-toolbar {
         margin-bottom: 1vh;
         margin-left: 7vw;
         border-radius: 20px;
+        
         @media (min-width: 992px) {
             width: 67vw;
             margin-left: 2.5vw;
         }
 
         ion-segment-button {
-            --border-width: 2px;
+            --border-width: 0;
             --background: #47d5ff;
             font-weight: bold;
             @media (min-width: 992px) {
@@ -75,6 +76,11 @@ ion-toolbar {
         >:last-child {
             border-radius: 0 18px 18px 0;
         }
+    }
+
+    #center-segment {
+        border-right: 2px solid white;
+        border-left: 2px solid white;
     }
 }
 

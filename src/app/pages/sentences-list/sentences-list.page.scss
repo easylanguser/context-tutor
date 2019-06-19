@@ -1,18 +1,18 @@
 ion-toolbar {
-    --background: none;
+    --background: rgb(69, 184, 255);
 
     ion-buttons {
-        color: rgb(69, 184, 255);
+        color: white;
         margin-left: 4%;
 
         ion-button {
             --border-radius: 50%;
-            color: #45b8ff;
+            color: white;
         }
     }
 
     ion-title {
-        color: rgb(69, 184, 255);
+        color: white;
         font-size: 2.5vh;
         
         @media (min-width: 700px) {
@@ -38,11 +38,16 @@ ion-toolbar {
 }
 
 #segments-div {
-    border-bottom: 3px solid #45b8ff;
-    border-radius: 18px;
+    background: var(--ion-color-primary);
+    border-radius: 0 0 20px 20px;
+    padding-bottom: 0.4vh;
 
     .sc-ion-segment-ios-h {
-        --color: #45b8ff;
+        --border-color: #FFF;
+        --background-checked: #FFF;
+        color: var(--ion-color-primary);
+        --color: #FFF;
+        --color-checked: none;
     }
 
     >:first-child {
@@ -50,8 +55,6 @@ ion-toolbar {
         margin-bottom: 1vh;
         margin-left: 7vw;
         border-radius: 20px;
-        --border-color: #45b8ff;
-        --background-checked: #47d5ff;
 
         @media (min-width: 992px) {
             width: 67vw;
@@ -59,8 +62,12 @@ ion-toolbar {
         }
 
         ion-segment-button {
-            --border-width: 2px;
+            --border-width: 0;
+            --background: #47d5ff;
             font-weight: bold;
+            @media (min-width: 992px) {
+                width: 22.33vw;
+            }
         }
 
         >:first-child {
@@ -70,6 +77,11 @@ ion-toolbar {
         >:last-child {
             border-radius: 0 18px 18px 0;
         }
+    }
+
+    #center-segment {
+        border-right: 2px solid white;
+        border-left: 2px solid white;
     }
 }
 

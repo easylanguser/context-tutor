@@ -230,19 +230,25 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		});
 	}
 
-	allClick() {
-		this.displayedLessons = this.lessonsDataService.lessons;
-	}
-
-	redClick() {
-		this.displayedLessons = this.lessonsDataService.lessons.filter(lesson =>
-			lesson.statistics.some(stat => stat.wrongAnswers > 0)
-		);
-	}
-
-	redAndYellowClick() {
-		this.displayedLessons = this.lessonsDataService.lessons
-			.filter(this.utils.redAndYellowFilterLesson);
+	async filterClick(type: number) {
+		const loading = await this.loadingController.create({
+			message: 'Loading',
+			backdropDismiss: true
+		});
+		await loading.present();
+		const allLessons = await this.lessonsDataService.lessons;
+		if (type === 1) {
+			this.displayedLessons = allLessons;
+		} else {
+			if (type === 2) {
+				this.displayedLessons = allLessons.filter(this.utils.redAndYellowFilterLesson);
+			} else {
+				this.displayedLessons = allLessons.filter(lesson =>
+					lesson.statistics.some(stat => stat.wrongAnswers > 0)
+				);
+			}
+		}
+		await loading.dismiss();
 	}
 
 	openLesson(lessonID) {
