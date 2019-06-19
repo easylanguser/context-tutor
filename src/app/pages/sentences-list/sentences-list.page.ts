@@ -25,6 +25,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	pieCharts: Array<Chart> = [];
 	toast: HTMLIonToastElement = null;
 	addButtonIsAnimating: boolean = false;
+	loader: HTMLIonLoadingElement;
 
 	constructor(
 		private toastController: ToastController,
@@ -37,15 +38,21 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		private loadingController: LoadingController,
 		private cdRef: ChangeDetectorRef) { }
 
-	ngOnInit() {
+	async ngOnInit() {
+		const showLoader = this.route.snapshot.queryParamMap.get('showLoader');
+		if (showLoader) {
+			this.loader = await this.loadingController.create({
+				message: 'Loading...<br>Please, wait',
+				backdropDismiss: true
+			});
+			await this.loader.present();
+		}
 		if (!this.lessonsDataService.lessons.length) {
 			this.lessonsDataService.refreshLessons().then(() => {
-				this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
-				this.getData();
+				this.initData(showLoader);
 			});
 		} else {
-			this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
-			this.getData();
+			this.initData(showLoader);
 		}
 
 		const content = <HTMLIonContentElement>document.getElementById('sentences-list-scroll');
@@ -62,6 +69,15 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				fabEdit.classList.remove('hidden-btn');
 			}
 		}, 300));
+	}
+
+	initData(showLoader) {
+		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
+		this.getData().then(() => {
+			if (showLoader) {
+				this.loader.dismiss();
+			}
+		});
 	}
 
 	goBack() {
@@ -251,11 +267,11 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	async filterClick(type: number) {
-		const loading = await this.loadingController.create({
+		this.loader = await this.loadingController.create({
 			message: 'Loading',
 			backdropDismiss: true
 		});
-		await loading.present();
+		await this.loader.present();
 		if (type === 1) {
 			this.getData();
 		} else {
@@ -270,6 +286,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				);
 			}
 		}
-		await loading.dismiss();
+		await this.loader.dismiss();
 	}
 }

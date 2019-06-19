@@ -46,7 +46,7 @@
     <ion-list no-padding no-margin style="padding-top: 2vh; padding-bottom: 110px;">
       <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem>
         <ion-item class="lesson-ion-item" no-padding>
-          <div (click)="openLesson(lesson.id)">
+          <div (click)="openLesson(lesson)">
             <div>
               <p>
                 {{lesson.name}}

@@ -65,7 +65,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		content.scrollEvents = true;
 		const fabAdd = document.getElementById('add-lesson-fab');
 		content.addEventListener('ionScroll', _.throttle((ev: CustomEvent) => {
-		if (ev.detail.velocityY > 0.1) {
+			if (ev.detail.velocityY > 0.1) {
 				fabAdd.classList.add('hidden-btn');
 			} else if (ev.detail.velocityY < -0.1) {
 				fabAdd.classList.remove('hidden-btn');
@@ -251,12 +251,22 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		await loading.dismiss();
 	}
 
-	openLesson(lessonID) {
-		this.navCtrl.navigateForward(
-			['sentences-list'], {
-				queryParams: {
-					lessonID: lessonID
-				}
-			});
+	openLesson(lesson: Lesson) {
+		if (lesson.statistics.length < 20) {
+			this.navCtrl.navigateForward(
+				['sentences-list'], {
+					queryParams: {
+						lessonID: lesson.id
+					}
+				});
+		} else {
+			this.navCtrl.navigateForward(
+				['sentences-list'], {
+					queryParams: {
+						lessonID: lesson.id,
+						showLoader: true
+					}
+				});
+		}
 	}
 }
