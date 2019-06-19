@@ -163,9 +163,11 @@ export class SentenceGuessPage implements OnInit {
 		const redDelta = stats.wrongAnswers - savedStats[1];
 		if (greenDelta + yellowDelta + redDelta !== 0) {
 			const alert = await this.alertController.create({
-				message: '<p>Green: +' + greenDelta + '</p><p>Yellow: +' + 
+				message: '<p>Green: +' + greenDelta + '</p><p>Yellow: +' +
 					yellowDelta + '</p><p>Red: +' + redDelta + '</p>',
-				buttons: [
+				buttons: this.sentencesTotal > 1 
+				?
+				[
 					{
 						text: 'Ok',
 						role: 'cancel'
@@ -175,6 +177,13 @@ export class SentenceGuessPage implements OnInit {
 						handler: () => {
 							document.getElementById('next-sentence-button').click();
 						}
+					}
+				]
+				: 
+				[
+					{
+						text: 'Ok',
+						role: 'cancel'
 					}
 				]
 			});
