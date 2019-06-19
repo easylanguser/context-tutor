@@ -164,10 +164,6 @@ export class GuessBarComponent implements OnInit {
 				stats.correctAnswers
 			]);
 		}
-
-		if (!this.curStats().solvedStatus) {
-			++this.curStats().sentenceSkips; // Statistics
-		}
 	}
 
 	markAsSolved() {

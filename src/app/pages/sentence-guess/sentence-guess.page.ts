@@ -111,13 +111,9 @@ export class SentenceGuessPage implements OnInit {
 				curCharsIndexes: [],
 				curWordIndex: 0,
 				sentenceShown: "",
-				solvedStatus: false,
 				correctAnswers: stats.correctAnswers,
 				giveUps: stats.giveUps,
 				hintUsages: stats.hintUsages,
-				lessonLeaves: stats.lessonLeaves,
-				sentenceSkips: stats.sentenceSkips,
-				wordSkips: stats.wordSkips,
 				wrongAnswers: stats.wrongAnswers
 			}).subscribe();
 

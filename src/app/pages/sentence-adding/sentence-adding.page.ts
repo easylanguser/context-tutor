@@ -179,7 +179,7 @@ export class SentenceAddingPage implements OnInit {
 
 		this.lessonsDataService.getLessonByID(lessonId).statistics.push(new Statistics(
 			sentenceId, sentenceId, lessonId, userId, charsIndexes, 0, sentenceShown,
-			false, 0, 0, 0, 0, 0, 0, 0, new Date().toISOString(), new Date().toISOString()
+			false, 0, 0, 0, 0, new Date().toISOString(), new Date().toISOString()
 		));
 	}
 
