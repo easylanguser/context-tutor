@@ -37,9 +37,8 @@
       </ion-refresher-content>
     </ion-refresher>
 
-    <ion-list id="sentences-list" no-padding no-margin>
-      <ion-item-sliding #slidingItem *ngFor="let sentence of displayedSentences;index as i">
-
+    <ion-virtual-scroll id="sentences-list" [items]="displayedSentences" no-padding no-margin>
+      <ion-item-sliding #slidingItem *virtualItem="let sentence;index as i">
         <ion-item class="sentence-ion-item" no-padding>
           <div (click)="openSentence(sentence.id)">
             <div>
@@ -61,12 +60,7 @@
         </ion-item-options>
 
       </ion-item-sliding>
-    </ion-list>
-
-    <ion-infinite-scroll style="margin-bottom: 10vh;" threshold="100px" (ionInfinite)="loadData($event)">
-      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more lessons...">
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+    </ion-virtual-scroll>
 
   </ion-content>
 

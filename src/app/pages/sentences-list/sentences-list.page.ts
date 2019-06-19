@@ -23,7 +23,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	lessonTitle: string;
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
-	offset: number = 0;
 	toast: HTMLIonToastElement = null;
 	addButtonIsAnimating: boolean = false;
 
@@ -70,7 +69,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	ionViewDidEnter() {
 		if (updateIsRequired[0] || (this.displayedSentences && this.displayedSentences.length === 0)) {
-			this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {
+			this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {	
 				this.getData();
 				updateIsRequired[0] = false;
 			});
@@ -96,17 +95,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, this.utils.getNewChartObject()));
 		}
 		this.updateCharts();
-	}
-
-	loadData(event) {
-		this.offset += 20;
-		setTimeout(() => {
-			this.getData().then(() => event.target.complete());
-			if (this.displayedSentences.length === this.lessonsDataService.getLessonByID(this.lessonId).sentences.length) {
-				event.target.disabled = true;
-				document.getElementById("sentences-list").style.paddingBottom = "15vh";
-			}
-		}, 200);
 	}
 
 	async deleteItem(slidingItem: IonItemSliding, lessonID: number, sentenceID: number) {

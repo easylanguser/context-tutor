@@ -74,7 +74,11 @@ ion-toolbar {
 }
 
 #sentences-list {
-    padding-top: 2vh;
+    margin-top: 2vh;
+    margin-bottom: 15vh;
+    @media (min-width: 992px) {
+        margin-bottom: 9vh;
+    }
 }
 
 .sentence-ion-item {
