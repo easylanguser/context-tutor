@@ -174,6 +174,7 @@ export class SentenceGuessPage implements OnInit {
 				span.innerText = this.curSentence().textUnderscored.substring(previousIndex);
 				this.sentenceContent.appendChild(span);
 			}
+			document.getElementById('box-1').innerHTML = redCharForHiding;
 		}
 
 		this.refreshCharBoxes();
