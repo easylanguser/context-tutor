@@ -326,7 +326,7 @@ export class SentenceGuessPage implements OnInit {
 		const id = this.curSentence().id;
 		const indexOfExisting = this.savedTemplates.findIndex(elem => elem[0] === id);
 		this.sentenceContent.childNodes.forEach(node => elements.push(<HTMLElement>(node)));
-		
+
 		if (indexOfExisting === -1) {
 			this.savedTemplates.push([id, elements]);
 		} else {
@@ -355,7 +355,6 @@ export class SentenceGuessPage implements OnInit {
 		this.curCharsIndexes = [];
 
 		this.animateSwipe(forward);
-		this.updateChart();
 		this.sentenceNumber = this.lessonsDataService.getSentenceNumberByIDs(this.lessonId, this.sentenceId) + 1;
 
 		let path = this.location.path();
