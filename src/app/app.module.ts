@@ -20,7 +20,6 @@ import { SentencesListPageModule } from './pages/sentences-list/sentences-list.p
 import { SentenceGuessPageModule } from './pages/sentence-guess/sentence-guess.module';
 import { ForgetPageModule } from './pages/forget/forget.module';
 import { ChangePageModule } from './pages/change/change.module';
-import { GuessBarComponent } from './components/guess-bar/guess-bar.component';
 import { environment } from 'src/environments/environment';
 import { AddLessonPageModule } from './pages/add-lesson/add-lesson.module';
 import { TOKEN_KEY } from './services/auth/auth.service';
@@ -39,7 +38,7 @@ export function jwtOptionsFactory(storage) {
 
 @NgModule({
 	declarations: [AppComponent],
-	entryComponents: [GuessBarComponent],
+	entryComponents: [],
 	imports: [BrowserModule, IonicModule.forRoot(),
 		AppRoutingModule,
 		HttpClientModule,

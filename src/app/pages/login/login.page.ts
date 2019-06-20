@@ -34,14 +34,15 @@ export class LoginPage implements OnInit {
 	}
 
 	togglePasswordVisibility(event: MouseEvent) {
+		event.preventDefault();
 		const input = document.getElementById('password-input');
 		const button = document.getElementById('lock-icon');	
 		if (event.layerX + 35 > input.getBoundingClientRect().width && input.hasAttribute('type')) {
 			input.removeAttribute('type');
-			button.setAttribute('name', 'lock');
+			button.setAttribute('name', 'eye-off');
 		} else {
 			input.setAttribute('type', 'password');
-			button.setAttribute('name', 'unlock');
+			button.setAttribute('name', 'eye');
 		}
 	}
 

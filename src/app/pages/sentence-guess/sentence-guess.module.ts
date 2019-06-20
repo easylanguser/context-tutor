@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { SentenceGuessPage } from './sentence-guess.page';
-import { GuessBarComponent } from 'src/app/components/guess-bar/guess-bar.component';
 
 const routes: Routes = [
 	{
@@ -21,6 +20,6 @@ const routes: Routes = [
 		RouterModule.forChild(routes)
 	],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
-	declarations: [SentenceGuessPage, GuessBarComponent]
+	declarations: [SentenceGuessPage]
 })
 export class SentenceGuessPageModule { }

@@ -1,18 +1,23 @@
 import { StatisticsUpdateService } from '../../services/http/statistics-update/statistics-update.service';
-import { UtilsService } from 'src/app/services/utils/utils.service';
+import { UtilsService, redCharForHiding } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToastController, NavController, AlertController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
 import { sortIsRequired } from 'src/app/app.component';
 import { Statistics } from 'src/app/models/statistics';
+import * as anime from 'animejs';
+import { Location } from '@angular/common';
 
 @Component({
 	selector: 'app-sentence-guess',
 	templateUrl: './sentence-guess.page.html',
-	styleUrls: ['./sentence-guess.page.scss']
+	styleUrls: ['./sentence-guess.page.scss'],
+	host: {
+		'(document:keypress)': 'handleKeyboardEvent($event)'
+	}
 })
 
 export class SentenceGuessPage implements OnInit {
@@ -33,12 +38,39 @@ export class SentenceGuessPage implements OnInit {
 
 	statisticsDeltasArray: Array<[number, number, number, number]> = []; // Deltas by id for red, yellow, green stats
 
+	alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+	updateFront: boolean = false;
+
+	// Single animation at a time flags
+	sentenceTranslateIsPlayed: boolean = false;
+	charactersRotationIsPlayed: boolean = false;
+
+	firstChar: string;
+	secondChar: string;
+	thirdChar: string;
+	fourthChar: string;
+
+	firstCharBack: string;
+	secondCharBack: string;
+	thirdCharBack: string;
+	fourthCharBack: string;
+
+	// Highlights colors
+	yellowHighlight = '0 0 5px 1px #E0E306';
+	redHighlight = '0px 0px 8px 0px rgba(167, 1, 6, 1)';
+
+	groups = ['QWSD', 'RTFG', 'EAIO'];
+	unknownCharGroup = '!@#&';
+
 	constructor(private route: ActivatedRoute,
 		private alertController: AlertController,
 		public lessonsDataService: LessonsDataService,
 		private utils: UtilsService,
 		private statisticsUpdateService: StatisticsUpdateService,
-		private navCtrl: NavController) { }
+		private location: Location,
+		private navCtrl: NavController,
+		private util: UtilsService) { }
 
 	ngOnInit() {
 		this.sentenceId = Number(this.route.snapshot.queryParamMap.get('current'));
@@ -69,6 +101,22 @@ export class SentenceGuessPage implements OnInit {
 			stats.hintUsages + stats.giveUps,
 			stats.correctAnswers
 		]);
+
+		if (this.curStats().solvedStatus) { // Display filled sentence, if it has already been solved
+			this.sentenceShown = this.curStats().sentenceShown;
+		} else {
+			// Restore user progress 
+			this.curWordIndex = this.curStats().curWordIndex;
+			this.curCharsIndexes = this.curStats().curCharsIndexes;
+			this.sentenceShown = this.curStats().sentenceShown;
+
+			this.refreshCharBoxes();
+		}
+
+		if (this.lessonsDataService.getLessonByID(this.lessonId).sentences.length === 1) {
+			document.getElementById('next-sentence-button').style.visibility = 'hidden';
+			document.getElementById('prev-sentence-button').style.visibility = 'hidden';
+		}
 	}
 
 	// Get current Sentence object from service
@@ -108,9 +156,6 @@ export class SentenceGuessPage implements OnInit {
 		this.statisticsUpdateService
 			.updateData({
 				sentenceId: this.curSentence().id,
-				curCharsIndexes: [],
-				curWordIndex: 0,
-				sentenceShown: "",
 				correctAnswers: stats.correctAnswers,
 				giveUps: stats.giveUps,
 				hintUsages: stats.hintUsages,
@@ -161,32 +206,405 @@ export class SentenceGuessPage implements OnInit {
 			const alert = await this.alertController.create({
 				message: '<p>Green: +' + greenDelta + '</p><p>Yellow: +' +
 					yellowDelta + '</p><p>Red: +' + redDelta + '</p>',
-				buttons: this.sentencesTotal > 1 
-				?
-				[
-					{
-						text: 'Ok',
-						role: 'cancel'
-					},
-					{
-						text: 'Next sentence',
-						handler: () => {
-							document.getElementById('next-sentence-button').click();
+				buttons: this.sentencesTotal > 1
+					?
+					[
+						{
+							text: 'Ok',
+							role: 'cancel'
+						},
+						{
+							text: 'Next sentence',
+							handler: () => {
+								document.getElementById('next-sentence-button').click();
+							}
 						}
-					}
-				]
-				: 
-				[
-					{
-						text: 'Ok',
-						role: 'cancel'
-					}
-				]
+					]
+					:
+					[
+						{
+							text: 'Ok',
+							role: 'cancel'
+						}
+					]
 			});
 			alert.present();
 			setTimeout(() => { this.toastIsShown = false; }, 1500);
 		} else {
 			this.toastIsShown = false;
 		}
+	}
+
+	// Get current character to be filled
+	private curCorrectChar(): string {
+		return this.curSentence().hiddenChars[this.curWordIndex][this.curCharsIndexes[this.curWordIndex]];
+	}
+
+	// Remove characters boxes highlighting
+	private resetColors() {
+		const boxesIDs = ['char-box-1', 'char-box-2', 'char-box-3', 'char-box-4'];
+		for (const id of boxesIDs) {
+			document.getElementById(id).style.boxShadow = 'none';
+		}
+	}
+
+	// Go to following sentence of the lesson
+	nextSentenceClick() {
+		this.changeSentence(true);
+	}
+
+	// Go to the previous sentence of the lesson
+	prevSentenceClick() {
+		this.changeSentence(false);
+	}
+
+	changeSentence(forward: boolean) {
+		if (this.sentenceTranslateIsPlayed) {
+			return;
+		}
+
+		this.saveData();
+
+		const lessonSentences = this.lessonsDataService.getLessonByID(this.lessonId).sentences;
+		const currentLessonIndex = this.lessonsDataService
+			.getSentenceNumberByIDs(this.lessonId, this.sentenceId);
+		const firstSentenceId = lessonSentences[0].id
+		const lastSentenceId = lessonSentences[lessonSentences.length - 1].id;
+
+		if (forward) {
+			this.sentenceId = (this.sentenceId === lastSentenceId)
+				? firstSentenceId
+				: lessonSentences[currentLessonIndex + 1].id;
+		} else {
+			this.sentenceId = (this.sentenceId === firstSentenceId)
+				? lastSentenceId
+				: lessonSentences[currentLessonIndex - 1].id;
+		}
+
+		this.curWordIndex = 0;
+		this.curCharsIndexes = [];
+
+		this.animateSwipe(forward);
+		this.updateChart();
+		this.sentenceNumber = this.lessonsDataService.getSentenceNumberByIDs(this.lessonId, this.sentenceId) + 1;
+
+		let path = this.location.path();
+		path = path.replace(path.substring(path.indexOf('current'), path.indexOf('&')), 'current=' + this.curSentence().id);
+		this.location.go(path);
+
+		if (this.statisticsDeltasArray.findIndex(elem => elem[0] === this.curSentence().id) === -1) {
+			const stats = this.curStats();
+			this.statisticsDeltasArray.push([
+				this.curSentence().id,
+				stats.wrongAnswers,
+				stats.hintUsages + stats.giveUps,
+				stats.correctAnswers
+			]);
+		}
+	}
+
+	markAsSolved() {
+		this.curStats().solvedStatus = true;
+		if (!this.toastIsShown) {
+			this.showToast();
+		}
+	}
+
+	giveUpClick() { // Give up and show full sentence
+		if (!this.curStats().solvedStatus) {
+			++this.curStats().giveUps; // Statistics
+
+			const button: HTMLIonButtonElement = <HTMLIonButtonElement>(document.getElementById('give-up-button'));
+
+			let event = new KeyboardEvent('evGiveUp', { key: this.curCorrectChar() });
+			this.handleKeyboardEvent(event);
+
+			button.disabled = true;
+
+			setTimeout(() => {
+				event = new KeyboardEvent('evGiveUp', { key: this.curCorrectChar() });
+				this.handleKeyboardEvent(event);
+				setTimeout(() => {
+					event = new KeyboardEvent('evGiveUp', { key: this.curCorrectChar() });
+					this.handleKeyboardEvent(event);
+					button.disabled = false;
+				}, 300);
+			}, 300);
+
+			if (this.status() === 2) {
+				this.markAsSolved();
+			}
+		}
+	}
+
+	// Show user one current character
+	hintClick() {
+		if (!this.curStats().solvedStatus) {
+			++this.curStats().hintUsages; // Statistics
+			this.updateChart();
+			const event = new KeyboardEvent('evHint', { key: this.curCorrectChar() });
+			this.handleKeyboardEvent(event);
+		}
+	}
+
+	handleBoxClick(index: number) {
+		if (!this.curStats().solvedStatus) {
+			const fronts = [this.firstChar, this.secondChar, this.thirdChar, this.fourthChar];
+			const backs = [this.firstCharBack, this.secondCharBack, this.thirdCharBack, this.fourthCharBack];
+			const event = new KeyboardEvent('ev' + index, { key: (this.updateFront ? fronts[index] : backs[index]).toLowerCase() });
+			this.handleKeyboardEvent(event);
+		}
+	}
+
+	private randomAlphabetChar(): string {
+		return this.alphabet.charAt(Math.random() * this.alphabet.length);
+	}
+
+	// Generate 3 random characters from alphabet and random position for correct character
+	private generateRandomCharacters() {
+		if (this.charactersRotationIsPlayed) {
+			return;
+		}
+
+		const correctChar = this.curCorrectChar().toUpperCase();
+		const charsToSelectFrom = this.randCharsOrGroup(correctChar);
+
+		this.updateFront = !this.updateFront;
+		const srand = Math.floor(Math.random() * 4);
+		if (this.updateFront) {
+			this.firstChar = charsToSelectFrom.charAt(0);
+			this.secondChar = charsToSelectFrom.charAt(1);
+			this.thirdChar = charsToSelectFrom.charAt(2);
+			this.fourthChar = charsToSelectFrom.charAt(3);
+			if (this.correctIsNotPresent(this.firstChar, this.secondChar,
+				this.thirdChar, this.fourthChar, correctChar)) {
+				switch (srand) {
+					case 0: this.firstChar = correctChar; break;
+					case 1: this.secondChar = correctChar; break;
+					case 2: this.thirdChar = correctChar; break;
+					case 3: this.fourthChar = correctChar; break;
+				}
+			}
+		} else {
+			this.firstCharBack = charsToSelectFrom.charAt(0);
+			this.secondCharBack = charsToSelectFrom.charAt(1);
+			this.thirdCharBack = charsToSelectFrom.charAt(2);
+			this.fourthCharBack = charsToSelectFrom.charAt(3);
+			if (this.correctIsNotPresent(this.firstCharBack, this.secondCharBack,
+				this.thirdCharBack, this.fourthCharBack, correctChar)) {
+				switch (srand) {
+					case 0: this.firstCharBack = correctChar; break;
+					case 1: this.secondCharBack = correctChar; break;
+					case 2: this.thirdCharBack = correctChar; break;
+					case 3: this.fourthCharBack = correctChar; break;
+				}
+			}
+		}
+
+		this.animateFlip();
+	}
+
+	correctIsNotPresent(first, second, third, fourth, correct): boolean {
+		return first !== correct && second !== correct && third !== correct && fourth !== correct;
+	}
+
+	randCharsOrGroup(correctChar: string): string {
+		if (!this.util.isEnglishChar(correctChar))
+			return this.unknownCharGroup;
+
+		for (const arr of this.groups) {
+			if (arr.indexOf(correctChar) > -1) {
+				return arr;
+			}
+		}
+
+		const vowelsPositions = [0, 4, 8, 14, 20, 24];
+		const vowelIsGuessed = vowelsPositions.indexOf(this.alphabet.indexOf(correctChar)) !== -1;
+		let firstChar, secondChar, thirdChar, fourthChar;
+
+		do {
+			firstChar = this.randomAlphabetChar();
+		} while ((vowelIsGuessed ?
+			!vowelsPositions.includes(this.alphabet.indexOf(firstChar)) :
+			vowelsPositions.includes(this.alphabet.indexOf(firstChar))));
+
+		do {
+			secondChar = this.randomAlphabetChar();
+		} while (secondChar === firstChar ||
+			(vowelIsGuessed ?
+				!vowelsPositions.includes(this.alphabet.indexOf(secondChar)) :
+				vowelsPositions.includes(this.alphabet.indexOf(secondChar))));
+
+		do {
+			thirdChar = this.randomAlphabetChar();
+		} while (thirdChar === firstChar || thirdChar === secondChar ||
+			(vowelIsGuessed ?
+				!vowelsPositions.includes(this.alphabet.indexOf(thirdChar)) :
+				vowelsPositions.includes(this.alphabet.indexOf(thirdChar))));
+
+		do {
+			fourthChar = this.randomAlphabetChar();
+		} while (fourthChar === firstChar || fourthChar === secondChar || fourthChar === thirdChar ||
+			(vowelIsGuessed ?
+				!vowelsPositions.includes(this.alphabet.indexOf(fourthChar)) :
+				vowelsPositions.includes(this.alphabet.indexOf(fourthChar))));
+
+		return firstChar + secondChar + thirdChar + fourthChar;
+	}
+
+	// Reset characters boxes highlighting and generate random characters
+	refreshCharBoxes() {
+		this.resetColors();
+		this.generateRandomCharacters();
+	}
+
+	private highlightClickedCharBox(charBoxNumber: number, color: string) {
+		document.getElementById('char-box-' + charBoxNumber).style.boxShadow = color;
+	}
+
+	/*
+	*	0 - current word is not guessed
+	*	1 - current word is guessed, current sentence is not guessed
+	*	2 - current word is guessed, current sentence is guessed
+	*/
+	private status(): number {
+		if (this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length) {
+			if (this.curWordIndex === this.curSentence().hiddenChars.length - 1) {
+				return 2;
+			} else {
+				return 1;
+			}
+		}
+		return 0;
+	}
+
+	// Handle keyboard event from desktop and clicks on char boxes from mobiles and desktop
+	handleKeyboardEvent(event: KeyboardEvent) {
+		if (this.sentenceTranslateIsPlayed || this.charactersRotationIsPlayed) {
+			return;
+		}
+		if (this.curStats().solvedStatus) {
+			if (!this.toastIsShown) {
+				this.showToast();
+			}
+			return;
+		}
+
+		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
+			let spanColor;
+			if (event.type === 'evGiveUp' || event.type === 'evHint') {
+				spanColor = '<span class=\'yellow\'>';
+			} else {
+				++this.curStats().correctAnswers; // Statistics
+				spanColor = '<span class=\'green\'>';
+			}
+
+			// Fill guessed character
+			this.sentenceShown = this.util.addChar(this.sentenceShown, spanColor + this.curCorrectChar() + '</span>');
+			++this.curCharsIndexes[this.curWordIndex];
+
+			const status = this.status();
+			if (status === 1) {
+				++this.curWordIndex;
+			} else if (status === 2) {
+				this.markAsSolved();
+				return;
+			}
+
+			this.sentenceShown = this.util.addChar(this.sentenceShown, redCharForHiding);
+
+			if (!this.util.isEnglishChar(this.curCorrectChar())) {
+				++this.curCharsIndexes[this.curWordIndex];
+				const status = this.status();
+				if (status === 1) {
+					++this.curWordIndex;
+				} else if (status === 2) {
+					this.markAsSolved();
+					return;
+				}
+			}
+
+			this.refreshCharBoxes();
+		} else {
+			++this.curStats().wrongAnswers; // Statistics
+
+			let indexOfCharBox: number;
+			switch (event.key) {
+				case (this.updateFront ? this.firstChar : this.firstCharBack).toLowerCase(): {
+					indexOfCharBox = 1;
+					break;
+				}
+				case (this.updateFront ? this.secondChar : this.secondCharBack).toLowerCase(): {
+					indexOfCharBox = 2;
+					break;
+				}
+				case (this.updateFront ? this.thirdChar : this.thirdCharBack).toLowerCase(): {
+					indexOfCharBox = 3;
+					break;
+				}
+				case (this.updateFront ? this.fourthChar : this.fourthCharBack).toLowerCase(): {
+					indexOfCharBox = 4;
+					break;
+				}
+			}
+			this.highlightClickedCharBox(indexOfCharBox, this.redHighlight);
+		}
+
+		this.updateChart();
+	}
+
+	async animateFlip() {
+		if (this.charactersRotationIsPlayed) {
+			return;
+		}
+
+		this.charactersRotationIsPlayed = true;
+
+		await anime({
+			targets: [document.querySelector('#char-box-1'),
+			document.querySelector('#char-box-2'),
+			document.querySelector('#char-box-3'),
+			document.querySelector('#char-box-4')],
+			rotateY: '+=180',
+			easing: 'easeInOutSine',
+			duration: 200
+		}).finished;
+
+		this.charactersRotationIsPlayed = false;
+	}
+
+	async animateSwipe(forward: boolean) {
+		if (this.sentenceTranslateIsPlayed) {
+			return;
+		}
+
+		this.sentenceTranslateIsPlayed = true;
+
+		const textShownId = '#sentence-to-show';
+		await anime({
+			targets: [document.querySelector(textShownId)],
+			translateX: forward ? '-=40vw' : '+=40vw',
+			opacity: 0,
+			easing: 'easeInOutBack',
+			duration: 400
+		}).finished;
+
+		await anime({
+			targets: [document.querySelector(textShownId)],
+			translateX: forward ? '+=80vw' : '-=80vw',
+			duration: 0
+		}).finished;
+
+		await this.getData();
+
+		await anime({
+			targets: [document.querySelector(textShownId)],
+			translateX: forward ? '-=40vw' : '+=40vw',
+			opacity: 1,
+			easing: 'easeInOutBack',
+			duration: 400
+		}).finished;
+
+		this.sentenceTranslateIsPlayed = false;
 	}
 }

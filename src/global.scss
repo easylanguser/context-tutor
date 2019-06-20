@@ -84,6 +84,15 @@ input:-webkit-autofill {
     color: black;
 }
 
+.alert-input-group.sc-ion-alert-md, .alert-message.sc-ion-alert-md,
+.alert-input-group.sc-ion-alert-ios, .alert-message.sc-ion-alert-ios {
+    padding-bottom: 0;
+}
+
+.alert-head.sc-ion-alert-ios {
+    padding-top: 0;
+}
+
 @media (min-width: 992px) {
     ion-toast {
         width: 67vw;
