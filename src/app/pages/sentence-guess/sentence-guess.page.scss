@@ -17,6 +17,11 @@
     }
 }
 
+#sentence-content {
+    --padding-top: 40px;
+    --padding-start: 40px;
+}
+
 #canvas-div {
     height: 33px;
     width: 33px;
@@ -31,24 +36,6 @@
 
 .header-md:after {
     background-image: none;
-}
-
-#sentence-to-show {
-    text-align: start;
-    font-size: 4vh;
-    font-family: "Arial";
-    letter-spacing: 1px;
-    padding: 0;
-    margin-left: 3vw;
-    margin-right: 3vw;
-    min-height: 30vh;
-    max-height: 60vh;
-    overflow-y: auto;
-    word-wrap: break-word;
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
 }
 
 #footer {
@@ -237,10 +224,6 @@ $chars-and-hint-height: 20vw;
 }
 
 @media (min-width: 992px) {
-    #sentence-to-show {
-        font-size: 5vh;
-    }
-
     #footer {
         height: 10vw;
         width: 72vw;

@@ -1,5 +1,5 @@
 import { StatisticsUpdateService } from '../../services/http/statistics-update/statistics-update.service';
-import { UtilsService, redCharForHiding } from 'src/app/services/utils/utils.service';
+import { UtilsService, redCharForHiding, charForHiding } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController } from '@ionic/angular';
@@ -34,7 +34,6 @@ export class SentenceGuessPage implements OnInit {
 
 	curWordIndex: number = 0; // Number of word, that user is currently at
 	curCharsIndexes: number[] = []; // Number of character for each word, that user is currently at
-	sentenceShown: string; // Current displayed sentence
 
 	statisticsDeltasArray: Array<[number, number, number, number]> = []; // Deltas by id for red, yellow, green stats
 
@@ -56,6 +55,9 @@ export class SentenceGuessPage implements OnInit {
 	thirdCharBack: string;
 	fourthCharBack: string;
 
+	sentenceContent: HTMLElement;
+	savedTemplates: Array<[number, HTMLElement[]]> = [];
+
 	// Highlights colors
 	yellowHighlight = '0 0 5px 1px #E0E306';
 	redHighlight = '0px 0px 8px 0px rgba(167, 1, 6, 1)';
@@ -76,6 +78,8 @@ export class SentenceGuessPage implements OnInit {
 		this.sentenceId = Number(this.route.snapshot.queryParamMap.get('current'));
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
 
+		this.sentenceContent = document.getElementById('sentence-content');
+
 		if (!this.lessonsDataService.lessons.length) {
 			this.lessonsDataService.refreshLessons().then(() => {
 				this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {
@@ -85,6 +89,18 @@ export class SentenceGuessPage implements OnInit {
 		} else {
 			this.getData();
 		}
+	}
+
+	private createSpan(isHidden: boolean, indexOfHidden?: number): HTMLElement {
+		const span = document.createElement('span');
+		span.className = isHidden ? 'hidden' : 'visible';
+		if (isHidden) {
+			span.id = 'box-' + String(indexOfHidden);
+		}
+		span.style.fontSize = '4vh';
+		span.style.fontFamily = "Arial";
+		span.style.userSelect = 'text';
+		return span;
 	}
 
 	private getData() {
@@ -102,21 +118,65 @@ export class SentenceGuessPage implements OnInit {
 			stats.correctAnswers
 		]);
 
+		while (this.sentenceContent.firstChild) {
+			this.sentenceContent.removeChild(this.sentenceContent.firstChild);
+		}
+
 		if (this.curStats().solvedStatus) { // Display filled sentence, if it has already been solved
-			this.sentenceShown = this.curStats().sentenceShown;
+			const span = this.createSpan(false);
+			span.innerText = this.curSentence().text;
+			this.sentenceContent.appendChild(span);
 		} else {
 			// Restore user progress 
 			this.curWordIndex = this.curStats().curWordIndex;
 			this.curCharsIndexes = this.curStats().curCharsIndexes;
-			this.sentenceShown = this.curStats().sentenceShown;
 
-			this.refreshCharBoxes();
+			this.restoreSentence();
 		}
 
 		if (this.lessonsDataService.getLessonByID(this.lessonId).sentences.length === 1) {
 			document.getElementById('next-sentence-button').style.visibility = 'hidden';
 			document.getElementById('prev-sentence-button').style.visibility = 'hidden';
 		}
+	}
+
+	restoreSentence() {
+		const templates = this.savedTemplates.find(elem => elem[0] === this.curSentence().id);
+		if (templates) {
+			for (let template of templates[1]) {
+				this.sentenceContent.appendChild(template);
+			}
+		} else {
+			const underscored = this.curSentence().textUnderscored;
+			let previousIndex = 0;
+			let span;
+			let index = 1;
+			for (let i = 0; i < underscored.length; i++) {
+				if (underscored.charAt(i) === charForHiding) {
+					span = this.createSpan(false);
+					span.innerText = this.curSentence().textUnderscored.substring(previousIndex, i);
+					this.sentenceContent.appendChild(span);
+
+					previousIndex = i;
+
+					do {
+						++i;
+						span = this.createSpan(true, index++);
+						span.innerText = this.curSentence().textUnderscored.substring(previousIndex, i);
+						this.sentenceContent.appendChild(span);
+						previousIndex = i;
+					} while (underscored.charAt(i) === charForHiding && i < underscored.length);
+				}
+			}
+
+			if (this.curSentence().textUnderscored.charAt(previousIndex) !== charForHiding) {
+				span = this.createSpan(false);
+				span.innerText = this.curSentence().textUnderscored.substring(previousIndex);
+				this.sentenceContent.appendChild(span);
+			}
+		}
+
+		this.refreshCharBoxes();
 	}
 
 	// Get current Sentence object from service
@@ -186,7 +246,6 @@ export class SentenceGuessPage implements OnInit {
 	saveData() {
 		this.curStats().curWordIndex = this.curWordIndex;
 		this.curStats().curCharsIndexes = this.curCharsIndexes;
-		this.curStats().sentenceShown = this.sentenceShown;
 		this.saveStatistics();
 	}
 
@@ -261,6 +320,17 @@ export class SentenceGuessPage implements OnInit {
 	changeSentence(forward: boolean) {
 		if (this.sentenceTranslateIsPlayed) {
 			return;
+		}
+
+		const elements = [];
+		const id = this.curSentence().id;
+		const indexOfExisting = this.savedTemplates.findIndex(elem => elem[0] === id);
+		this.sentenceContent.childNodes.forEach(node => elements.push(<HTMLElement>(node)));
+		
+		if (indexOfExisting === -1) {
+			this.savedTemplates.push([id, elements]);
+		} else {
+			this.savedTemplates[indexOfExisting] = [id, elements];
 		}
 
 		this.saveData();
@@ -478,6 +548,10 @@ export class SentenceGuessPage implements OnInit {
 		return 0;
 	}
 
+	private currentIndex(): number {
+		return this.curCharsIndexes.reduce((a, b) => a + b) + 1;
+	}
+
 	// Handle keyboard event from desktop and clicks on char boxes from mobiles and desktop
 	handleKeyboardEvent(event: KeyboardEvent) {
 		if (this.sentenceTranslateIsPlayed || this.charactersRotationIsPlayed) {
@@ -499,8 +573,9 @@ export class SentenceGuessPage implements OnInit {
 				spanColor = '<span class=\'green\'>';
 			}
 
+			document.getElementById('box-' + this.currentIndex()).innerHTML = spanColor + this.curCorrectChar() + '</span>';
+
 			// Fill guessed character
-			this.sentenceShown = this.util.addChar(this.sentenceShown, spanColor + this.curCorrectChar() + '</span>');
 			++this.curCharsIndexes[this.curWordIndex];
 
 			const status = this.status();
@@ -511,7 +586,7 @@ export class SentenceGuessPage implements OnInit {
 				return;
 			}
 
-			this.sentenceShown = this.util.addChar(this.sentenceShown, redCharForHiding);
+			document.getElementById('box-' + this.currentIndex()).innerHTML = redCharForHiding;
 
 			if (!this.util.isEnglishChar(this.curCorrectChar())) {
 				++this.curCharsIndexes[this.curWordIndex];
@@ -580,7 +655,7 @@ export class SentenceGuessPage implements OnInit {
 
 		this.sentenceTranslateIsPlayed = true;
 
-		const textShownId = '#sentence-to-show';
+		const textShownId = '#sentence-content';
 		await anime({
 			targets: [document.querySelector(textShownId)],
 			translateX: forward ? '-=40vw' : '+=40vw',
