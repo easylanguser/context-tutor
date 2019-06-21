@@ -49,6 +49,11 @@ input:-webkit-autofill {
     color: #FF7575;
 }
 
+.blue-text {
+    font-family: "Arial";
+    color: var(--ion-color-primary);
+}
+
 .no-selection,
 .sc-ion-select-popover-h ion-label.sc-ion-select-popover {
     -webkit-touch-callout: none;

@@ -9,7 +9,7 @@ import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 import { NavController, Platform } from '@ionic/angular';
 import { SentenceResetService } from 'src/app/services/http/sentence-reset/sentence-reset.service';
 import { Sentence } from 'src/app/models/sentence';
-import { UtilsService, redCharForHiding } from 'src/app/services/utils/utils.service';
+import { UtilsService, redCharForHiding, charForHiding, blueCharForHiding } from 'src/app/services/utils/utils.service';
 import { Statistics } from 'src/app/models/statistics';
 
 let lastSelOffsets: Array<number> = [];
@@ -106,7 +106,8 @@ export class SentenceAddingPage implements OnInit {
 			if (this.sentenceToEditId) { // Existing sentence is being edited
 				this.sentenceResetService.updateData(this.sentenceToEditId, indexesArray);
 
-				const hiddenSentence = this.utils.hideChars(textAreaValue, indexesArray);
+				const hiddenSentence = this.utils.hideChars(textAreaValue, indexesArray, charForHiding);
+				const sentencesListSentence = this.utils.hideChars(textAreaValue, indexesArray, blueCharForHiding);
 				const hiddenChars: Array<string[]> = [];
 				const curCharsIndexes: number[] = [];
 				for (const j in indexesArray) {
@@ -125,6 +126,7 @@ export class SentenceAddingPage implements OnInit {
 						textAreaValue,
 						hiddenSentence,
 						hiddenChars,
+						sentencesListSentence,
 						new Date().toISOString(),
 						new Date().toISOString()));
 			} else {
@@ -171,7 +173,7 @@ export class SentenceAddingPage implements OnInit {
 
 	createNewStatisticRecord(sentenceId: number, lessonId: number,
 			userId: number, words: [number, number][], text: string) {
-		const sentenceShown = this.utils.addChar(this.utils.hideChars(text, words), redCharForHiding);
+		const sentenceShown = this.utils.addChar(this.utils.hideChars(text, words, charForHiding), redCharForHiding);
 		const charsIndexes = [];
 		for (let i = 0; i < words.length; i++) {
 			charsIndexes.push(0);

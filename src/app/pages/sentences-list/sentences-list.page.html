@@ -3,15 +3,12 @@
   <ion-header>
 
     <ion-toolbar mode="ios">
-
       <ion-buttons slot="start" (click)="goBack()">
         <ion-button>
           <ion-icon name="arrow-back"></ion-icon>
         </ion-button>
       </ion-buttons>
-
       <ion-title>{{lessonTitle}}</ion-title>
-
     </ion-toolbar>
 
     <div id="segments-div">
@@ -42,7 +39,7 @@
         <ion-item class="sentence-ion-item" no-padding>
           <div (click)="openSentence(sentence.id)">
             <div>
-              <p [innerHTML]="this.lessonsDataService.getStatisticsOfSentence(sentence).sentenceShown"></p>
+              <p [innerHTML]="sentence.sentencesListSentence"></p>
             </div>
             <div>
               <div>

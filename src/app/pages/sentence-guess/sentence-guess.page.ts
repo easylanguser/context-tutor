@@ -1,5 +1,5 @@
 import { StatisticsUpdateService } from '../../services/http/statistics-update/statistics-update.service';
-import { UtilsService, redCharForHiding, charForHiding } from 'src/app/services/utils/utils.service';
+import { UtilsService, redCharForHiding, charForHiding, blueCharForHiding } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController } from '@ionic/angular';
@@ -10,6 +10,7 @@ import { sortIsRequired } from 'src/app/app.component';
 import { Statistics } from 'src/app/models/statistics';
 import * as anime from 'animejs';
 import { Location } from '@angular/common';
+import { HttpService } from 'src/app/services/http/rest/http.service';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -25,7 +26,7 @@ export class SentenceGuessPage implements OnInit {
 	@ViewChild('pieCanvas') pieCanvas;
 	pieChart: any;
 
-	toastIsShown: boolean; // Single toast flag
+	alertIsShown: boolean; // Single toast flag
 	lessonId: number = 0; // Id of current lesson
 	sentenceId: number; // Number of current sentence in lesson
 
@@ -89,6 +90,7 @@ export class SentenceGuessPage implements OnInit {
 		} else {
 			this.getData();
 		}
+		});
 	}
 
 	private createSpan(isHidden: boolean, indexOfHidden?: number): HTMLElement {
@@ -148,9 +150,7 @@ export class SentenceGuessPage implements OnInit {
 			}
 		} else {
 			const underscored = this.curSentence().textUnderscored;
-			let previousIndex = 0;
-			let span;
-			let index = 1;
+			let previousIndex = 0, index = 1, span;
 			for (let i = 0; i < underscored.length; i++) {
 				if (underscored.charAt(i) === charForHiding) {
 					span = this.createSpan(false);
@@ -162,7 +162,7 @@ export class SentenceGuessPage implements OnInit {
 					do {
 						++i;
 						span = this.createSpan(true, index++);
-						span.innerText = this.curSentence().textUnderscored.substring(previousIndex, i);
+						span.innerHTML = blueCharForHiding;
 						this.sentenceContent.appendChild(span);
 						previousIndex = i;
 					} while (underscored.charAt(i) === charForHiding && i < underscored.length);
@@ -255,8 +255,8 @@ export class SentenceGuessPage implements OnInit {
 		sortIsRequired[0] = true;
 	}
 
-	async showToast() {
-		this.toastIsShown = true;
+	async showAlert() {
+		this.alertIsShown = true;
 		const stats = this.curStats();
 		const savedStats = this.statisticsDeltasArray.find(elem => elem[0] === this.curSentence().id);
 		const greenDelta = stats.correctAnswers - savedStats[3];
@@ -289,9 +289,9 @@ export class SentenceGuessPage implements OnInit {
 					]
 			});
 			alert.present();
-			setTimeout(() => { this.toastIsShown = false; }, 1500);
+			setTimeout(() => { this.alertIsShown = false; }, 1500);
 		} else {
-			this.toastIsShown = false;
+			this.alertIsShown = false;
 		}
 	}
 
@@ -375,8 +375,8 @@ export class SentenceGuessPage implements OnInit {
 
 	markAsSolved() {
 		this.curStats().solvedStatus = true;
-		if (!this.toastIsShown) {
-			this.showToast();
+		if (!this.alertIsShown) {
+			this.showAlert();
 		}
 	}
 
@@ -558,8 +558,8 @@ export class SentenceGuessPage implements OnInit {
 			return;
 		}
 		if (this.curStats().solvedStatus) {
-			if (!this.toastIsShown) {
-				this.showToast();
+			if (!this.alertIsShown) {
+				this.showAlert();
 			}
 			return;
 		}

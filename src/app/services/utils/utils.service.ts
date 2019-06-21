@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Sentence } from 'src/app/models/sentence';
 import { Lesson } from 'src/app/models/lesson';
-import { LessonsDataService } from '../lessons-data/lessons-data.service';
 import { Statistics } from 'src/app/models/statistics';
 
 export const charForHiding: string = '•';
 export const redCharForHiding: string = '<span class=\'red-text\'>•</span>';
+export const blueCharForHiding: string = '<span class=\'blue-text\'>•</span>';
 
 @Injectable({
 	providedIn: 'root'

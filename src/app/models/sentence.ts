@@ -8,6 +8,7 @@ export class Sentence {
 		public text: string,
 		public textUnderscored: string,
 		public hiddenChars: Array<string[]>,
+		public sentencesListSentence: string,
 		public created_at: string,
 		public updated_at: string) { }
 }
