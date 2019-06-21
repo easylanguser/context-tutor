@@ -83,7 +83,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	ionViewDidEnter() {
 		this.toggleMenu();
 		document.getElementById('lessons-div').focus();
-		this.updateCharts();
 		if (updateIsRequired[0] || sortIsRequired[0]) {
 			this.getData().then(() => {
 				this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);
@@ -94,18 +93,15 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		this.lessonsDataService.lessons.forEach(lsn => {
 			lsn.sentences.forEach(sentence => {
 				const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
-				if (stat.sentenceShown !== '') {
-					stat.solvedStatus = false;
-					stat.curWordIndex = 0;
-					for (let i in stat.curCharsIndexes) {
-						stat.curCharsIndexes[i] = 0;
+				stat.solvedStatus = false;
+				stat.curWordIndex = 0;
+				for (let i in stat.curCharsIndexes) {
+					stat.curCharsIndexes[i] = 0;
+				}
+				if (stat.curCharsIndexes.length === 0) {
+					for (let _ in sentence.hiddenChars) {
+						stat.curCharsIndexes.push(0);
 					}
-					if (stat.curCharsIndexes.length === 0) {
-						for (let _ in sentence.hiddenChars) {
-							stat.curCharsIndexes.push(0);
-						}
-					}
-					stat.sentenceShown = this.utils.addChar(sentence.textUnderscored, redCharForHiding);
 				}
 			});
 		});

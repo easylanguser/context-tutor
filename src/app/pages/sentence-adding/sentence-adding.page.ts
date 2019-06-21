@@ -173,14 +173,13 @@ export class SentenceAddingPage implements OnInit {
 
 	createNewStatisticRecord(sentenceId: number, lessonId: number,
 			userId: number, words: [number, number][], text: string) {
-		const sentenceShown = this.utils.addChar(this.utils.hideChars(text, words, charForHiding), redCharForHiding);
 		const charsIndexes = [];
 		for (let i = 0; i < words.length; i++) {
 			charsIndexes.push(0);
 		}
 
 		this.lessonsDataService.getLessonByID(lessonId).statistics.push(new Statistics(
-			sentenceId, sentenceId, lessonId, userId, charsIndexes, 0, sentenceShown,
+			sentenceId, sentenceId, lessonId, userId, charsIndexes, 0,
 			false, 0, 0, 0, 0, new Date().toISOString(), new Date().toISOString()
 		));
 	}

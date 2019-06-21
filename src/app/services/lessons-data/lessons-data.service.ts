@@ -111,8 +111,7 @@ export class LessonsDataService {
 			}
 
 			const stat = this.getStatisticsOfSentence(sentence);
-			stat.sentenceShown = this.utils.addChar(sentence.textUnderscored, redCharForHiding);
-			for (let i in sentence.hiddenChars) {
+			for (let _ in sentence.hiddenChars) {
 				stat.curCharsIndexes.push(0);
 			}
 		}
@@ -134,7 +133,7 @@ export class LessonsDataService {
 				stat.sentenceId,
 				stat.lessonId,
 				stat.userId,
-				[], 0, '',
+				[], 0,
 				false,
 				stat.correctAnswers,
 				stat.wrongAnswers,
