@@ -1,41 +1,47 @@
-[
-    {
+{
+    "english": {
         "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         "groups": [
             "QWSD",
             "RTFG",
-            "EAIO",
-            "TYHG",
-            "UJKL",
-            "PMNB",
-            "VCXZ"
+            "EAIO"
         ]
     },
-    {
+    "russian": {
         "alphabet": "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",
         "groups": [
-            "АБВГ",
-            "ДЕЁЖ",
-            "ЗИЙК",
-            "ЛМНО",
-            "ПРСТ",
-            "УФХЦ",
-            "ЧШЩЦ",
-            "ЭЮЯИ",
-            "ЫЬЪЙ"
+            "ОАИЯ",
+            "ТЦДШ",
+            "ЬЪАЯ",
+            "ИЫЭЮ"
         ]
     },
-    {
+    "german": {
         "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞ",
         "groups": [
             "QWSD",
             "RTFG",
             "EAIO",
-            "TYHG",
-            "UJKL",
-            "PMNB",
-            "VCXZ",
-            "ÄÖÜẞ"
+            "ÄÖÜA",
+            "ẞSBC"
+        ]
+    },
+    "spanish": {
+        "alphabet": "ABCDEFGHIJKLMNÑOPQRSTUVWXYZÄÖÜŽŸÀÁÂÃÇÈÉÊËÌÍÎÏÑÒÓÔÕÙÚÛÝ",
+        "groups": [
+            "QWSD",
+            "RTFG",
+            "EAIO",
+            "ÄÖÜA"
+        ]
+    },
+    "french": {
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜŽŸÀÁÂÃÇÈÉÊËÌÍÎÏÑÒÓÔÕÙÚÛÝ",
+        "groups": [
+            "QWSD",
+            "RTFG",
+            "EAIO",
+            "ÄÖÜA"
         ]
     }
-]
+}

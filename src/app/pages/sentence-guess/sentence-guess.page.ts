@@ -82,8 +82,8 @@ export class SentenceGuessPage implements OnInit {
 		this.sentenceContent = document.getElementById('sentence-content');
 
 		this.httpService.doGet('./assets/chars-accordance.json').toPromise().then(alphabetAndGroups => {
-			this.alphabet = alphabetAndGroups[0].alphabet;
-			this.groups = alphabetAndGroups[0].groups;
+			this.alphabet = alphabetAndGroups.english.alphabet;
+			this.groups = alphabetAndGroups.english.groups;
 		}).then(() => {
 			if (!this.lessonsDataService.lessons.length) {
 				this.lessonsDataService.refreshLessons().then(() => {
