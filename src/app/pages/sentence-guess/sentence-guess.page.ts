@@ -90,7 +90,6 @@ export class SentenceGuessPage implements OnInit {
 		} else {
 			this.getData();
 		}
-		});
 	}
 
 	private createSpan(isHidden: boolean, indexOfHidden?: number): HTMLElement {
