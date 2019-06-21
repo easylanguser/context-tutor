@@ -71,6 +71,17 @@ $chars-and-hint-height: 20vw;
     }
 
     ion-button {
+        height: 16vw;
+        width: 16vw;
+        --box-shadow: none;
+        border: 1px solid rgba(100, 100, 100, 0.3);
+        --border-radius: 50%;
+        border-radius: 50%;
+        outline: none;
+        background: #FFF;
+        --background: #FFF;
+        --color: #000;
+
         &:hover {
             --background-hover: var(--ion-color-primary);
         }
@@ -102,10 +113,10 @@ $chars-and-hint-height: 20vw;
     align-items: center;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    border: 1px solid rgba(100, 100, 100, 0.2);
+    border: 1px solid rgba(100, 100, 100, 0.3);
 
     &:hover {
-        background: var(--ion-color-primary);   
+        background: var(--ion-color-primary);
     }
 
     @media (min-width: 992px) {
@@ -127,16 +138,7 @@ $chars-and-hint-height: 20vw;
 }
 
 #prev-sentence-button {
-    height: 16vw;
-    width: 16vw;
     margin-left: 11vw;
-    outline: none;
-    background: #FFF;
-    --background: #FFF;
-    --color: #000;
-    --border-radius: 50%;
-    border-radius: 50%;
-    border: 1px solid rgba(100, 100, 100, 0.2);
 
     ion-icon {
         font-size: 7vh;
@@ -144,18 +146,9 @@ $chars-and-hint-height: 20vw;
 }
 
 #hint-button {
-    height: 16vw;
-    width: 16vw;
     display: inline-block;
     font-size: 2vh;
     margin-left: 4vw;
-    outline: none;
-    background: #FFF;
-    --background: #FFF;
-    --color: #000;
-    --border-radius: 50%;
-    border-radius: 50%;
-    border: 1px solid rgba(100, 100, 100, 0.2);
 
     >:first-child {
         margin-top: 4px;
@@ -176,17 +169,8 @@ $chars-and-hint-height: 20vw;
 }
 
 #give-up-button {
-    height: 16vw;
-    width: 16vw;
     font-size: 2vh;
     margin-left: 4vw;
-    outline: none;
-    background: #FFF;
-    --background: #FFF;
-    --color: #000;
-    --border-radius: 50%;
-    border-radius: 50%;
-    border: 1px solid rgba(100, 100, 100, 0.2);
 
     >:first-child {
         margin-top: 4px;
@@ -207,16 +191,7 @@ $chars-and-hint-height: 20vw;
 }
 
 #next-sentence-button {
-    height: 16vw;
-    width: 16vw;
     margin-left: 4vw;
-    outline: none;
-    background: #FFF;
-    --background: #FFF;
-    --color: #000;
-    --border-radius: 50%;
-    border-radius: 50%;
-    border: 1px solid rgba(100, 100, 100, 0.2);
 
     ion-icon {
         font-size: 7vh;
@@ -224,6 +199,13 @@ $chars-and-hint-height: 20vw;
 }
 
 @media (min-width: 992px) {
+    #bottom-bar-container {
+        ion-button {
+            height: 7vw;
+            width: 7vw;
+        }
+    }
+
     #footer {
         height: 10vw;
         width: 72vw;
@@ -243,30 +225,20 @@ $chars-and-hint-height: 20vw;
     }
 
     #hint-button {
-        height: 7vw;
-        width: 7vw;
         font-size: 2vh;
         margin-left: 1vw;
     }
 
     #give-up-button {
-        height: 7vw;
-        width: 7vw;
         font-size: 2vh;
         margin-left: 1vw;
     }
 
     #prev-sentence-button {
-        height: 7vw;
-        width: 7vw;
-        font-size: 2vh;
         margin-left: 0;
     }
 
     #next-sentence-button {
-        height: 7vw;
-        width: 7vw;
-        font-size: 2vh;
         margin-left: 1vw;
     }
 
@@ -296,14 +268,6 @@ $chars-and-hint-height: 20vw;
     }
 
     #give-up-button {
-        font-size: 2vh;
-    }
-
-    #prev-sentence-button {
-        font-size: 2vh;
-    }
-
-    #next-sentence-button {
         font-size: 2vh;
     }
 }
