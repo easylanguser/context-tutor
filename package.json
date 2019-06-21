@@ -35,6 +35,7 @@
     "cordova-browser": "6.0.0",
     "cordova-ios": "5.0.1",
     "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-ionic-keyboard": "2.1.3",
     "cordova-plugin-ionic-webview": "^2.5.0",
     "cordova-plugin-receive-content": "file:plugins-local/cordova-plugin-receive-content",
     "cordova-plugin-splashscreen": "^5.0.2",
@@ -86,7 +87,8 @@
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
       "cordova-sqlite-storage": {},
-      "cordova-plugin-receive-content": {}
+      "cordova-plugin-receive-content": {},
+      "cordova-plugin-ionic-keyboard": {}
     },
     "platforms": [
       "android",
