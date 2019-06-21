@@ -1,0 +1,41 @@
+[
+    {
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "groups": [
+            "QWSD",
+            "RTFG",
+            "EAIO",
+            "TYHG",
+            "UJKL",
+            "PMNB",
+            "VCXZ"
+        ]
+    },
+    {
+        "alphabet": "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",
+        "groups": [
+            "АБВГ",
+            "ДЕЁЖ",
+            "ЗИЙК",
+            "ЛМНО",
+            "ПРСТ",
+            "УФХЦ",
+            "ЧШЩЦ",
+            "ЭЮЯИ",
+            "ЫЬЪЙ"
+        ]
+    },
+    {
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞ",
+        "groups": [
+            "QWSD",
+            "RTFG",
+            "EAIO",
+            "TYHG",
+            "UJKL",
+            "PMNB",
+            "VCXZ",
+            "ÄÖÜẞ"
+        ]
+    }
+]

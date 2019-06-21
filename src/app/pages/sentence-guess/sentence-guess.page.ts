@@ -38,7 +38,8 @@ export class SentenceGuessPage implements OnInit {
 
 	statisticsDeltasArray: Array<[number, number, number, number]> = []; // Deltas by id for red, yellow, green stats
 
-	alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	alphabet: string;
+	groups: string[];
 
 	updateFront: boolean = false;
 
@@ -63,8 +64,7 @@ export class SentenceGuessPage implements OnInit {
 	yellowHighlight = '0 0 5px 1px #E0E306';
 	redHighlight = '0px 0px 8px 0px rgba(167, 1, 6, 1)';
 
-	groups = ['QWSD', 'RTFG', 'EAIO'];
-	unknownCharGroup = '!@#&';
+	alert: HTMLIonAlertElement;
 
 	constructor(private route: ActivatedRoute,
 		private alertController: AlertController,
@@ -73,7 +73,7 @@ export class SentenceGuessPage implements OnInit {
 		private statisticsUpdateService: StatisticsUpdateService,
 		private location: Location,
 		private navCtrl: NavController,
-		private util: UtilsService) { }
+		private httpService: HttpService) { }
 
 	ngOnInit() {
 		this.sentenceId = Number(this.route.snapshot.queryParamMap.get('current'));
@@ -81,15 +81,19 @@ export class SentenceGuessPage implements OnInit {
 
 		this.sentenceContent = document.getElementById('sentence-content');
 
-		if (!this.lessonsDataService.lessons.length) {
-			this.lessonsDataService.refreshLessons().then(() => {
-				this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {
-					this.getData();
+		this.httpService.doGet('./assets/chars-accordance.json').toPromise().then(alphabetAndGroups => {
+			this.alphabet = alphabetAndGroups[0].alphabet;
+			this.groups = alphabetAndGroups[0].groups;
+		}).then(() => {
+			if (!this.lessonsDataService.lessons.length) {
+				this.lessonsDataService.refreshLessons().then(() => {
+					this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {
+						this.getData();
+					});
 				});
-			});
-		} else {
-			this.getData();
-		}
+			} else {
+				this.getData();
+			}
 		});
 	}
 
@@ -479,45 +483,27 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	randCharsOrGroup(correctChar: string): string {
-		if (!this.util.isEnglishChar(correctChar))
-			return this.unknownCharGroup;
-
 		for (const arr of this.groups) {
 			if (arr.indexOf(correctChar) > -1) {
 				return arr;
 			}
 		}
 
-		const vowelsPositions = [0, 4, 8, 14, 20, 24];
-		const vowelIsGuessed = vowelsPositions.indexOf(this.alphabet.indexOf(correctChar)) !== -1;
 		let firstChar, secondChar, thirdChar, fourthChar;
 
-		do {
-			firstChar = this.randomAlphabetChar();
-		} while ((vowelIsGuessed ?
-			!vowelsPositions.includes(this.alphabet.indexOf(firstChar)) :
-			vowelsPositions.includes(this.alphabet.indexOf(firstChar))));
+		firstChar = this.randomAlphabetChar();
 
 		do {
 			secondChar = this.randomAlphabetChar();
-		} while (secondChar === firstChar ||
-			(vowelIsGuessed ?
-				!vowelsPositions.includes(this.alphabet.indexOf(secondChar)) :
-				vowelsPositions.includes(this.alphabet.indexOf(secondChar))));
+		} while (secondChar === firstChar);
 
 		do {
 			thirdChar = this.randomAlphabetChar();
-		} while (thirdChar === firstChar || thirdChar === secondChar ||
-			(vowelIsGuessed ?
-				!vowelsPositions.includes(this.alphabet.indexOf(thirdChar)) :
-				vowelsPositions.includes(this.alphabet.indexOf(thirdChar))));
+		} while (thirdChar === firstChar || thirdChar === secondChar);
 
 		do {
 			fourthChar = this.randomAlphabetChar();
-		} while (fourthChar === firstChar || fourthChar === secondChar || fourthChar === thirdChar ||
-			(vowelIsGuessed ?
-				!vowelsPositions.includes(this.alphabet.indexOf(fourthChar)) :
-				vowelsPositions.includes(this.alphabet.indexOf(fourthChar))));
+		} while (fourthChar === firstChar || fourthChar === secondChar || fourthChar === thirdChar);
 
 		return firstChar + secondChar + thirdChar + fourthChar;
 	}
@@ -587,17 +573,6 @@ export class SentenceGuessPage implements OnInit {
 			}
 
 			document.getElementById('box-' + this.currentIndex()).innerHTML = redCharForHiding;
-
-			if (!this.util.isEnglishChar(this.curCorrectChar())) {
-				++this.curCharsIndexes[this.curWordIndex];
-				const status = this.status();
-				if (status === 1) {
-					++this.curWordIndex;
-				} else if (status === 2) {
-					this.markAsSolved();
-					return;
-				}
-			}
 
 			this.refreshCharBoxes();
 		} else {
