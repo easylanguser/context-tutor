@@ -41,12 +41,12 @@ export class UtilsService {
 		});
 	}
 
-	hideChars(inputText: string, indexes: Array<[number, number]>): string {
+	hideChars(inputText: string, indexes: Array<[number, number]>, hiddenChar): string {
 		let textWithHiddenCharacters = inputText.substr(0, indexes[0][0]);
 		for (let i = 0; i < indexes.length - 1; i++) {
 			for (let j = 0; j < indexes[i][1]; j++) {
 				if (this.isEnglishChar(inputText.charAt(indexes[i][0] + j))) {
-					textWithHiddenCharacters += charForHiding;
+					textWithHiddenCharacters += hiddenChar;
 				} else {
 					textWithHiddenCharacters += inputText.charAt(indexes[i][0] + j);
 				}
@@ -57,7 +57,7 @@ export class UtilsService {
 		}
 		for (let i = 0; i < indexes[indexes.length - 1][1]; i++) {
 			if (this.isEnglishChar(inputText.charAt(indexes[indexes.length - 1][0] + i))) {
-				textWithHiddenCharacters += charForHiding;
+				textWithHiddenCharacters += hiddenChar;
 			} else {
 				textWithHiddenCharacters += inputText.charAt(indexes[indexes.length - 1][0] + i);
 			}
