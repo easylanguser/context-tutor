@@ -4,7 +4,7 @@ import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
 import { Chart } from 'chart.js';
-import { UtilsService, redCharForHiding } from 'src/app/services/utils/utils.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 import { updateIsRequired, sortIsRequired } from 'src/app/app.component';
 import * as _ from 'lodash';
 
@@ -73,15 +73,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		}, 300));
 	}
 
-	toggleMenu() {
-		const div = document.getElementById('lessons-div');
-		if (div) {
-			div.focus();
-		}
-	}
-
 	ionViewDidEnter() {
-		this.toggleMenu();
 		document.getElementById('lessons-div').focus();
 		if (updateIsRequired[0] || sortIsRequired[0]) {
 			this.getData().then(() => {

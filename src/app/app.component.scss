@@ -19,7 +19,7 @@
         -webkit-transition: background 0.3s ease;
     }
 
-    div:hover, div:focus, div:active {
+    div:hover {
         background: white;
 
         >p,
@@ -79,5 +79,14 @@
     @media (min-width: 992px) {
         width: 8vw;
         margin-left: 10vw;
+    }
+}
+
+.active {
+    background: white;
+
+    >p {
+        border-left: 2px solid #00baff !important;
+        color: #00baff !important;
     }
 }

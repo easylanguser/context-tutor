@@ -29,10 +29,6 @@ export class LoginPage implements OnInit {
 		});
 	}
 
-	ionViewDidEnter() {
-		this.toggleMenu();
-	}
-
 	togglePasswordVisibility(event: MouseEvent) {
 		event.preventDefault();
 		const input = document.getElementById('password-input');
@@ -43,13 +39,6 @@ export class LoginPage implements OnInit {
 		} else {
 			input.setAttribute('type', 'password');
 			button.setAttribute('name', 'eye');
-		}
-	}
-
-	toggleMenu() {
-		const div = document.getElementById('sign-div');
-		if (div) {
-			div.focus();
 		}
 	}
 
