@@ -74,7 +74,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	ionViewDidEnter() {
-		document.getElementById('lessons-div').focus();
 		if (updateIsRequired[0] || sortIsRequired[0]) {
 			this.getData().then(() => {
 				this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);

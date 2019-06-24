@@ -35,22 +35,24 @@ input:-webkit-autofill {
 }
 
 .green {
-    font-family: "Arial";
     border-bottom: 2px solid green;
 }
 
 .yellow {
-    font-family: "Arial";
     border-bottom: 2px solid yellow;
 }
 
+.yellow, .green {
+	font-size: 4vh;
+	font-family: "Arial";
+	user-select: text;
+}
+
 .red-text {
-    font-family: "Arial";
     color: #FF7575;
 }
 
 .blue-text {
-    font-family: "Arial";
     color: var(--ion-color-primary);
 }
 

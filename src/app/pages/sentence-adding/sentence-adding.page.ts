@@ -9,7 +9,7 @@ import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 import { NavController, Platform } from '@ionic/angular';
 import { SentenceResetService } from 'src/app/services/http/sentence-reset/sentence-reset.service';
 import { Sentence } from 'src/app/models/sentence';
-import { UtilsService, redCharForHiding, charForHiding, blueCharForHiding } from 'src/app/services/utils/utils.service';
+import { UtilsService, charForHiding, blueCharForHiding } from 'src/app/services/utils/utils.service';
 import { Statistics } from 'src/app/models/statistics';
 
 let lastSelOffsets: Array<number> = [];

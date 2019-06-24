@@ -43,7 +43,7 @@
       </div>
 
       <div id="bottom-bar-container">
-        <ion-button id="prev-sentence-button" (click)="prevSentenceClick()">
+        <ion-button id="prev-sentence-button" (click)="changeSentence(false)">
           <ion-icon name="ios-arrow-back"></ion-icon>
         </ion-button>
 
@@ -57,7 +57,7 @@
           <p>●●●</p>
         </ion-button>
 
-        <ion-button text-center id="next-sentence-button" (click)="nextSentenceClick()">
+        <ion-button text-center id="next-sentence-button" (click)="changeSentence(true)">
           <ion-icon name="ios-arrow-forward"></ion-icon>
         </ion-button>
       </div>

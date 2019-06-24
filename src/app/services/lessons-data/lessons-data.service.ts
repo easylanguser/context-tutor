@@ -1,4 +1,4 @@
-import { UtilsService, redCharForHiding, charForHiding, blueCharForHiding } from '../utils/utils.service';
+import { UtilsService, charForHiding, blueCharForHiding } from '../utils/utils.service';
 import { SentencesByLessonService } from '../http/sentences-by-lesson/sentences-by-lesson.service';
 import { Injectable } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
@@ -7,7 +7,6 @@ import { Sentence } from 'src/app/models/sentence';
 import { Statistics } from 'src/app/models/statistics';
 import { StatisticByLessonService } from '../http/statistic-by-lesson/statistic-by-lesson.service';
 import { StorageService } from '../storage/storage-service';
-import { USER_ID_KEY } from '../auth/auth.service';
 
 @Injectable({
 	providedIn: 'root'

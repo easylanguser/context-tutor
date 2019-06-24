@@ -1,5 +1,5 @@
 import { StatisticsUpdateService } from '../../services/http/statistics-update/statistics-update.service';
-import { UtilsService, redCharForHiding, charForHiding, blueCharForHiding } from 'src/app/services/utils/utils.service';
+import { UtilsService, redCharForHiding, charForHiding } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController } from '@ionic/angular';
@@ -10,7 +10,6 @@ import { sortIsRequired } from 'src/app/app.component';
 import { Statistics } from 'src/app/models/statistics';
 import * as anime from 'animejs';
 import { Location } from '@angular/common';
-import { HttpService } from 'src/app/services/http/rest/http.service';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -161,7 +160,8 @@ export class SentenceGuessPage implements OnInit {
 					do {
 						++i;
 						span = this.createSpan(true, index++);
-						span.innerHTML = blueCharForHiding;
+						span.classList.add('blue-text');
+						span.innerText = charForHiding;
 						this.sentenceContent.appendChild(span);
 						previousIndex = i;
 					} while (underscored.charAt(i) === charForHiding && i < underscored.length);
@@ -173,7 +173,10 @@ export class SentenceGuessPage implements OnInit {
 				span.innerText = this.curSentence().textUnderscored.substring(previousIndex);
 				this.sentenceContent.appendChild(span);
 			}
-			document.getElementById('box-1').innerHTML = redCharForHiding;
+			const firstBox = document.getElementById('box-1');
+			firstBox.classList.remove('blue-text');
+			firstBox.classList.add('red-text');
+			firstBox.innerText = charForHiding;
 		}
 
 		this.refreshCharBoxes();
@@ -305,16 +308,6 @@ export class SentenceGuessPage implements OnInit {
 		for (const id of boxesIDs) {
 			document.getElementById(id).style.boxShadow = 'none';
 		}
-	}
-
-	// Go to following sentence of the lesson
-	nextSentenceClick() {
-		this.changeSentence(true);
-	}
-
-	// Go to the previous sentence of the lesson
-	prevSentenceClick() {
-		this.changeSentence(false);
 	}
 
 	changeSentence(forward: boolean) {
@@ -564,15 +557,17 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
-			let spanColor;
+			const newBox = document.createElement('span');
+			newBox.innerText = this.curCorrectChar();
 			if (event.type === 'evGiveUp' || event.type === 'evHint') {
-				spanColor = '<span class=\'yellow\'>';
+				newBox.className = 'yellow';
 			} else {
 				++this.curStats().correctAnswers; // Statistics
-				spanColor = '<span class=\'green\'>';
+				newBox.className = 'green';
 			}
 
-			document.getElementById('box-' + this.currentIndex()).innerHTML = spanColor + this.curCorrectChar() + '</span>';
+			const box = document.getElementById('box-' + this.currentIndex());
+			box.parentNode.replaceChild(newBox, box);
 
 			// Fill guessed character
 			++this.curCharsIndexes[this.curWordIndex];
@@ -585,7 +580,10 @@ export class SentenceGuessPage implements OnInit {
 				return;
 			}
 
-			document.getElementById('box-' + this.currentIndex()).innerHTML = redCharForHiding;
+			const redBox = document.getElementById('box-' + this.currentIndex());
+			redBox.classList.remove('blue-text');
+			redBox.classList.add('red-text');
+			redBox.innerText = charForHiding;
 
 			if (!this.util.isEnglishChar(this.curCorrectChar())) {
 				++this.curCharsIndexes[this.curWordIndex];
