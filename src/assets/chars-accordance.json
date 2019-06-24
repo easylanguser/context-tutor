@@ -27,7 +27,7 @@
         ]
     },
     "spanish": {
-        "alphabet": "ABCDEFGHIJKLMNÑOPQRSTUVWXYZÄÖÜŽŸÀÁÂÃÇÈÉÊËÌÍÎÏÑÒÓÔÕÙÚÛÝ",
+        "alphabet": "ABCDEFGHIJKLMNÑOPQRSTUVWXYZÀÄÁÈËÉÌÏÍÒÖÓÙÜÚỲŸÝ",
         "groups": [
             "QWSD",
             "RTFG",
@@ -36,7 +36,7 @@
         ]
     },
     "french": {
-        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜŽŸÀÁÂÃÇÈÉÊËÌÍÎÏÑÒÓÔÕÙÚÛÝ",
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZÂÁÀÇÊÉÈËÏÎÔŒÜÛÚÙ",
         "groups": [
             "QWSD",
             "RTFG",
