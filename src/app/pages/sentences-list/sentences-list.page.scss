@@ -29,6 +29,10 @@ ion-toolbar {
     }
 }
 
+.md ion-toolbar {
+    padding: 6px 0 !important;
+}
+
 .header-md:after {
     background-image: none;
 }
