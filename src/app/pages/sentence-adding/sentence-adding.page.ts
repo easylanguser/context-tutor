@@ -122,6 +122,7 @@ export class SentenceAddingPage implements OnInit {
 					new Sentence(
 						Number(this.sentenceToEditId),
 						this.lessonId,
+						'portuguese',
 						indexesArray,
 						textAreaValue,
 						hiddenSentence,

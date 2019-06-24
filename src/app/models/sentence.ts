@@ -1,9 +1,8 @@
-import { Statistics } from './statistics';
-
 export class Sentence {
 	constructor(
 		public id: number,
 		public lessonId: number,
+		public language: string,
 		public words: Array<[number, number]>,
 		public text: string,
 		public textUnderscored: string,

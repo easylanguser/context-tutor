@@ -43,5 +43,14 @@
             "EAIO",
             "ÄÖÜA"
         ]
+    },
+    "portuguese": {
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZÃÂÁÀÄÇÈÉÊÌÍÒÓÕÔÙÚ",
+        "groups": [
+            "QWSD",
+            "RTFG",
+            "EAIO",
+            "ÄÖÜA"
+        ]
     }
 }

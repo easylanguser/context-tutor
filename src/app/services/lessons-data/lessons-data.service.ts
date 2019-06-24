@@ -7,7 +7,6 @@ import { Sentence } from 'src/app/models/sentence';
 import { Statistics } from 'src/app/models/statistics';
 import { StatisticByLessonService } from '../http/statistic-by-lesson/statistic-by-lesson.service';
 import { StorageService } from '../storage/storage-service';
-import { USER_ID_KEY } from '../auth/auth.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -99,6 +98,7 @@ export class LessonsDataService {
 			const sentence = new Sentence(
 				sntns[i].id,
 				sntns[i].lesson_id,
+				'portuguese',
 				sntns[i].words,
 				sntns[i].text,
 				hiddenSentence,

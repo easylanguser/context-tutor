@@ -81,20 +81,15 @@ export class SentenceGuessPage implements OnInit {
 
 		this.sentenceContent = document.getElementById('sentence-content');
 
-		this.httpService.doGet('./assets/chars-accordance.json').toPromise().then(alphabetAndGroups => {
-			this.alphabet = alphabetAndGroups.english.alphabet;
-			this.groups = alphabetAndGroups.english.groups;
-		}).then(() => {
-			if (!this.lessonsDataService.lessons.length) {
-				this.lessonsDataService.refreshLessons().then(() => {
-					this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {
-						this.getData();
-					});
+		if (!this.lessonsDataService.lessons.length) {
+			this.lessonsDataService.refreshLessons().then(() => {
+				this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {
+					this.getData();
 				});
-			} else {
-				this.getData();
-			}
-		});
+			});
+		} else {
+			this.getData();
+		}
 	}
 
 	private createSpan(isHidden: boolean, indexOfHidden?: number): HTMLElement {
@@ -109,10 +104,16 @@ export class SentenceGuessPage implements OnInit {
 		return span;
 	}
 
-	private getData() {
+	private async getData() {
 		this.pieChart = new Chart(this.pieCanvas.nativeElement, this.utils.getNewChartObject());
 		this.updateChart();
 
+		if (!this.alphabet || !this.groups) {
+			await this.httpService.doGet('./assets/chars-accordance.json').toPromise().then(alphabetAndGroups => {
+				this.alphabet = alphabetAndGroups[this.curSentence().language].alphabet;
+				this.groups = alphabetAndGroups[this.curSentence().language].groups;
+			});
+		}
 		this.sentenceNumber = this.lessonsDataService.getSentenceNumberByIDs(this.lessonId, this.sentenceId) + 1;
 		this.sentencesTotal = this.lessonsDataService.getLessonByID(this.lessonId).sentences.length;
 
@@ -186,8 +187,8 @@ export class SentenceGuessPage implements OnInit {
 
 	// Get current Sentence object from service
 	curSentence(): Sentence {
-		const lessonSentences = this.lessonsDataService.getLessonByID(this.lessonId).sentences;
-		return lessonSentences.find(sentence => sentence.id === this.sentenceId);
+		return this.lessonsDataService.getLessonByID(this.lessonId).sentences
+			.find(sentence => sentence.id === this.sentenceId);
 	}
 
 	curStats(): Statistics {
