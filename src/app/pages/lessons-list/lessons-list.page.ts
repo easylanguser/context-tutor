@@ -5,7 +5,7 @@ import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.s
 import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
 import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { updateIsRequired, sortIsRequired } from 'src/app/app.component';
+import { updateIsRequired } from 'src/app/app.component';
 import * as _ from 'lodash';
 
 @Component({
@@ -74,12 +74,12 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	ionViewDidEnter() {
-		if (updateIsRequired[0] || sortIsRequired[0]) {
+		this.updateCharts();
+		if (updateIsRequired[0]) {
 			this.getData().then(() => {
 				this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);
 			});
 			updateIsRequired[0] = false;
-			sortIsRequired[0] = false;
 		}
 		this.lessonsDataService.lessons.forEach(lsn => {
 			lsn.sentences.forEach(sentence => {

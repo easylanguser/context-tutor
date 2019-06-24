@@ -14,7 +14,6 @@ import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller'
 export const SHARED_TEXT_ID_KEY = "shared_text_id";
 export let sharedText = [];
 export let updateIsRequired = [false];
-export let sortIsRequired = [false];
 
 @Component({
 	selector: 'app-root',

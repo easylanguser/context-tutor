@@ -6,7 +6,6 @@ import { NavController, AlertController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
-import { sortIsRequired } from 'src/app/app.component';
 import { Statistics } from 'src/app/models/statistics';
 import * as anime from 'animejs';
 import { Location } from '@angular/common';
@@ -254,7 +253,6 @@ export class SentenceGuessPage implements OnInit {
 
 	ionViewWillLeave() {
 		this.saveData();
-		sortIsRequired[0] = true;
 	}
 
 	async showAlert() {

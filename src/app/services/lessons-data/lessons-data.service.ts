@@ -217,14 +217,14 @@ export class LessonsDataService {
 	}
 
 	sortLessonsByTime(first: Lesson, second: Lesson): number {
-		if (first.sentences.length === 0) {
+		if (first.statistics.length === 0) {
 			return -1;
 		}
-		if (second.sentences.length === 0) {
+		if (second.statistics.length === 0) {
 			return 1;
 		}
-		const firstLatestUpd = new Date(Math.max.apply(null, first.sentences.map(elem => new Date(elem.updated_at))));
-		const secondLatestUpd = new Date(Math.max.apply(null, second.sentences.map(elem => new Date(elem.updated_at))));
+		const firstLatestUpd = new Date(Math.max.apply(null, first.statistics.map(elem => new Date(elem.updated_at))));
+		const secondLatestUpd = new Date(Math.max.apply(null, second.statistics.map(elem => new Date(elem.updated_at))));
 
 		return firstLatestUpd < secondLatestUpd ? 1 : -1;
 	}
