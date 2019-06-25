@@ -11,7 +11,8 @@
 
   <ion-content class="outer-content">
     <div padding-top text-center>
-      <img id="user-avatar" src="assets/img/account_icon.svg" alt="avatar" style="max-width: 150px">
+      <img id="user-avatar" class="avatar" (click)="openChooser()" src="assets/img/account_icon.svg" alt="avatar">
+      <input id="file-input" type="file" name="name" style="display: none;" />
       <div id="user-email">{{userEmail}}</div>
       <div class="list-block" (click)="changePassword()">Change password</div>
       <div class="list-block" (click)="deleteAccount()">Delete account</div>

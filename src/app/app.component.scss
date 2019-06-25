@@ -60,6 +60,7 @@
 #user-avatar {
     width: 30vmin;
     margin: 4vh auto 3vh auto;
+    border-radius: 50%;
 
     @media (min-width: 650px) and (max-width: 992px) {
         width: 24vmin;

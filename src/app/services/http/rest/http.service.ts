@@ -38,6 +38,11 @@ export class HttpService {
 		return this.http.get(url, headers);
 	}
 
+	doGetImage(url: string): Observable<Blob> {
+		const headers = this.addHeaders();
+		return this.http.get(url, { ...headers, responseType: "blob" });
+	}
+
 	doDelete(url: string) {
 		const headers = this.addHeaders();
 		return this.http.delete(url, headers).toPromise();

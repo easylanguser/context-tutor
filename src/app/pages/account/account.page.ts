@@ -5,6 +5,15 @@ import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { UserService } from 'src/app/services/http/user/user-service';
+import { GetUserAvatarService } from 'src/app/services/http/get-user-avatar/get-user-avatar.service';
+import { StorageService } from 'src/app/services/storage/storage-service';
+import { UploadAvatarService } from 'src/app/services/http/upload-avatar/upload-avatar.service';
+
+interface HTMLInputEvent extends Event {
+    target: HTMLInputElement & EventTarget;
+}
+
+export const USER_AVATAR_KEY = 'user-avatar';
 
 @Component({
 	selector: 'app-account',
@@ -15,15 +24,20 @@ import { UserService } from 'src/app/services/http/user/user-service';
 export class AccountPage implements OnInit {
 
 	userEmail: string;
+	avatars: HTMLCollectionOf<HTMLImageElement>;
 
 	constructor(
 		private userService: UserService,
 		private authService: AuthService,
 		private httpService: HttpService,
 		private alertController: AlertController,
-		private router: Router) { }
+		private router: Router,
+		private storage: StorageService,
+		private uploadAvatarService: UploadAvatarService) { }
 
 	ngOnInit() {
+		this.avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
+
 		if (this.authService.token) {
 			this.getInfo();
 		} else {
@@ -31,11 +45,33 @@ export class AccountPage implements OnInit {
 				this.getInfo();
 			});
 		}
+
+		document.getElementById('file-input').onchange = (event: HTMLInputEvent) => {
+			this.uploadAvatarService.postNewAvatar(event.target.files);
+			var reader = new FileReader();
+			reader.readAsDataURL(event.target.files[0]);
+			reader.onloadend = () => {
+				const image = String(reader.result);
+				this.storage.set(USER_AVATAR_KEY, image);
+				this.avatars[0].src = image;
+				this.avatars[1].src = image;
+			}
+		}
+	}
+
+	openChooser() {
+		document.getElementById('file-input').click();
 	}
 
 	async getInfo(token?: any) {
 		const userInfo = await this.userService.getUserInfo();
 		this.userEmail = userInfo.email;
+
+		this.storage.get(USER_AVATAR_KEY).then(image => {
+			if (image) {
+				this.avatars[1].src = image;
+			}
+		})
 	}
 
 	async deleteAccount() {

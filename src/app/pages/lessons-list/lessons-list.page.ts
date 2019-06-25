@@ -7,6 +7,9 @@ import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { updateIsRequired } from 'src/app/app.component';
 import * as _ from 'lodash';
+import { USER_AVATAR_KEY } from '../account/account.page';
+import { StorageService } from 'src/app/services/storage/storage-service';
+import { GetUserAvatarService } from 'src/app/services/http/get-user-avatar/get-user-avatar.service';
 
 @Component({
 	selector: 'page-lessons-list',
@@ -28,6 +31,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private lessonsDataService: LessonsDataService,
 		private alertCtrl: AlertController,
 		private lessonDeleteService: LessonDeleteService,
+		private storage: StorageService,
+		private getAvatarService: GetUserAvatarService,
 		private utils: UtilsService,
 		private cdRef: ChangeDetectorRef) { }
 
@@ -42,6 +47,29 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 			loading.dismiss();
 		});
 		this.configureTipsFloating();
+		this.loadAvatar();
+	}
+
+	private loadAvatar() {
+		this.storage.get(USER_AVATAR_KEY).then(image => {
+			const avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
+			if (image) {
+				avatars[0].src = image;
+			} else {
+				this.getAvatarService.getAvatar().then(blob => {
+					if (blob.size === 19) {
+						return;
+					}
+					var reader = new FileReader();
+					reader.readAsDataURL(blob);
+					reader.onloadend = () => {
+						const image = String(reader.result);
+						this.storage.set(USER_AVATAR_KEY, image);
+						avatars[0].src = image;
+					}
+				});
+			}
+		});
 	}
 
 	configureTipsFloating() {

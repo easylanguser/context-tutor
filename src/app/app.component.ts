@@ -8,8 +8,9 @@ import { BehaviorSubject } from 'rxjs';
 import { ThemeService } from './services/theme/theme.service';
 import { StorageService } from './services/storage/storage-service';
 import { Location } from '@angular/common';
-import { LessonsDataService } from './services/lessons-data/lessons-data.service';
 import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
+import { GetUserAvatarService } from './services/http/get-user-avatar/get-user-avatar.service';
+import { USER_AVATAR_KEY } from './pages/account/account.page';
 
 export const SHARED_TEXT_ID_KEY = "shared_text_id";
 export let sharedText = [];
@@ -35,7 +36,8 @@ export class AppComponent {
 		private storageService: StorageService,
 		private alertCtrl: AlertController,
 		private location: Location,
-		private lessonsDataService: LessonsDataService,
+		private storage: StorageService,
+		private getAvatarService: GetUserAvatarService,
 		private navCtrl: NavController) {
 		this.initializeApp(location.path());
 	}
