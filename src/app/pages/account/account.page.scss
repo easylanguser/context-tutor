@@ -81,8 +81,9 @@ ion-toolbar {
     -moz-transition: transform 0.3s ease;
     -webkit-transition: transform 0.3s ease;
 
+    height: 150px;
+    width: 150px;
     cursor: pointer;
-    max-width: 150px;
     border-radius: 50%;
 
     &:hover {

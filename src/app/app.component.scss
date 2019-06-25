@@ -58,15 +58,18 @@
 }
 
 #user-avatar {
+    height: 30vmin;
     width: 30vmin;
     margin: 4vh auto 3vh auto;
     border-radius: 50%;
 
     @media (min-width: 650px) and (max-width: 992px) {
+        height: 24vmin;
         width: 24vmin;
     }
 
     @media (min-width: 992px) {
+        height: 18vmin;
         width: 18vmin;
     }
 }
