@@ -3,7 +3,7 @@
 
     <ion-menu type="overlay" class="no-selection">
       <img id="user-avatar" class="avatar" src="assets/img/account_icon.svg" alt="avatar">
-      <ion-content id="menu">
+      <ion-content id="menu" scrollY="false">
         <ion-menu-toggle *ngIf="!this.loggedIn" auto-hide="false">
           <div tabindex="0" routerLink="/login" routerLinkActive="active">
             <p>Sign In / Sign Up</p>
