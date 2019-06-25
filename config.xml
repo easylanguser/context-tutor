@@ -48,6 +48,9 @@
         <config-file mode="add" parent="ITSAppUsesNonExemptEncryption" target="*-Info.plist">
             <false />
         </config-file>
+        <config-file mode="merge" parent="NSCameraUsageDescription" target="*-Info.plist">
+            <string>EasyLang needs permission to use your camera</string>
+        </config-file>
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
         <icon height="40" src="resources/ios/icon/icon-40.png" width="40" />
