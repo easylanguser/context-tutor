@@ -20,7 +20,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	displayedLessons: Lesson[] = [];
 	@ViewChildren('chartsid') pieCanvases: any;
-	@ViewChild('fab') fabBtn: IonFab;
+	@ViewChild('fab', { static: false }) fabBtn: IonFab;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
 	displayHints: boolean = false;

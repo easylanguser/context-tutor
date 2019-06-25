@@ -21,7 +21,7 @@ import { Location } from '@angular/common';
 
 export class SentenceGuessPage implements OnInit {
 
-	@ViewChild('pieCanvas') pieCanvas;
+	@ViewChild('pieCanvas', { static: false }) pieCanvas;
 	pieChart: any;
 
 	alertIsShown: boolean; // Single toast flag
