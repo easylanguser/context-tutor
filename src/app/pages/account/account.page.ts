@@ -5,7 +5,6 @@ import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { UserService } from 'src/app/services/http/user/user-service';
-import { GetUserAvatarService } from 'src/app/services/http/get-user-avatar/get-user-avatar.service';
 import { StorageService } from 'src/app/services/storage/storage-service';
 import { UploadAvatarService } from 'src/app/services/http/upload-avatar/upload-avatar.service';
 
@@ -14,6 +13,7 @@ interface HTMLInputEvent extends Event {
 }
 
 export const USER_AVATAR_KEY = 'user-avatar';
+export const USER_EMAIL_KEY = 'user-email';
 
 @Component({
 	selector: 'app-account',
@@ -23,8 +23,8 @@ export const USER_AVATAR_KEY = 'user-avatar';
 
 export class AccountPage implements OnInit {
 
-	userEmail: string;
 	avatars: HTMLCollectionOf<HTMLImageElement>;
+	userEmail: string;
 
 	constructor(
 		private userService: UserService,
@@ -64,8 +64,15 @@ export class AccountPage implements OnInit {
 	}
 
 	async getInfo(token?: any) {
-		const userInfo = await this.userService.getUserInfo();
-		this.userEmail = userInfo.email;
+		this.storage.get(USER_EMAIL_KEY).then(async email => {
+			if (email) {
+				this.userEmail = email;
+			} else {
+				const userInfo = await this.userService.getUserInfo();
+				this.userEmail = userInfo.email;
+				this.storage.set(USER_EMAIL_KEY, userInfo.email);
+			}
+		});
 
 		this.storage.get(USER_AVATAR_KEY).then(image => {
 			if (image) {
