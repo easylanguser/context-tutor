@@ -60,6 +60,8 @@
 #user-avatar {
     height: 30vmin;
     width: 30vmin;
+    object-fit: cover;
+    object-position: center;
     margin: 4vh auto 3vh auto;
     border-radius: 50%;
 
