@@ -6,6 +6,8 @@ export const charForHiding: string = '•';
 export const redCharForHiding: string = '<span class=\'red-text\'>•</span>';
 export const blueCharForHiding: string = '<span class=\'blue-text\'>•</span>';
 
+export const chartsColors: [string, string, string] = [ '#AFF265', '#FF9055', '#FFE320' ]; // Green, Red, Yellow
+
 @Injectable({
 	providedIn: 'root'
 })

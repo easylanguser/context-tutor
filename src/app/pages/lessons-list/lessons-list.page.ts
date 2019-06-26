@@ -4,7 +4,7 @@ import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
 import { Chart } from 'chart.js';
-import { UtilsService } from 'src/app/services/utils/utils.service';
+import { UtilsService, chartsColors } from 'src/app/services/utils/utils.service';
 import { updateIsRequired } from 'src/app/app.component';
 import * as _ from 'lodash';
 
@@ -147,9 +147,9 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 			if (chartData[0] + chartData[1] + chartData[2] > 1) {
 				--chartData[0];
-				chart.backgroundColor[0] = '#AFF265';
-				chart.backgroundColor[1] = '#FF9055';
-				chart.backgroundColor[2] = '#FFE320';
+				chart.backgroundColor[0] = chartsColors[0];
+				chart.backgroundColor[1] = chartsColors[1];
+				chart.backgroundColor[2] = chartsColors[2];
 				this.pieCharts[i].options.cutoutPercentage = 60;
 				this.pieCharts[i].update();
 			}

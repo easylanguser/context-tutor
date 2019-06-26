@@ -3,7 +3,7 @@ import { Lesson } from 'src/app/models/lesson';
 import { Chart } from 'chart.js';
 import { LoadingController, NavController } from '@ionic/angular';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
-import { UtilsService } from 'src/app/services/utils/utils.service';
+import { UtilsService, chartsColors } from 'src/app/services/utils/utils.service';
 import { sharedText } from 'src/app/app.component';
 
 @Component({
@@ -71,9 +71,9 @@ export class ShareAddingChoicePage implements OnInit {
 
 			if (chartData.data[0] + chartData.data[1] + chartData.data[2] > 1) {
 				--chartData.data[0];
-				chartData.backgroundColor[0] = '#AFF265';
-				chartData.backgroundColor[1] = '#FF9055';
-				chartData.backgroundColor[2] = '#FFE320';
+				chartData.backgroundColor[0] = chartsColors[0];
+				chartData.backgroundColor[1] = chartsColors[1];
+				chartData.backgroundColor[2] = chartsColors[2];
 				this.pieCharts[i].options.cutoutPercentage = 60;
 				this.pieCharts[i].update();
 			}

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UtilsService } from '../../services/utils/utils.service';
+import { UtilsService, chartsColors } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
@@ -166,9 +166,9 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				chart.data[1] = stats.wrongAnswers;
 				chart.data[2] = stats.hintUsages + sentence.words.length * stats.giveUps;
 
-				chart.backgroundColor[0] = '#AFF265';
-				chart.backgroundColor[1] = '#FF9055';
-				chart.backgroundColor[2] = '#FFE320';
+				chart.backgroundColor[0] = chartsColors[0];
+				chart.backgroundColor[1] = chartsColors[1];
+				chart.backgroundColor[2] = chartsColors[2];
 
 				this.pieCharts[i].options.cutoutPercentage = 60;
 				this.pieCharts[i].update();

@@ -1,5 +1,5 @@
 import { StatisticsUpdateService } from '../../services/http/statistics-update/statistics-update.service';
-import { UtilsService, charForHiding } from 'src/app/services/utils/utils.service';
+import { UtilsService, charForHiding, chartsColors } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController } from '@ionic/angular';
@@ -201,9 +201,9 @@ export class SentenceGuessPage implements OnInit {
 			chartData[0] = stats.correctAnswers;
 			chartData[1] = stats.wrongAnswers;
 			chartData[2] = stats.hintUsages + stats.giveUps;
-			chartColors[0] = '#AFF265';
-			chartColors[1] = '#FF9055';
-			chartColors[2] = '#FFE320';
+			chartColors[0] = chartsColors[0];
+			chartColors[1] = chartsColors[1];
+			chartColors[2] = chartsColors[2];
 		}
 
 		this.pieChart.update();
