@@ -111,6 +111,7 @@ export class AppComponent {
 							} else {
 								this.navCtrl.navigateForward([pathToGo]);
 							}
+							this.loadAvatar();
 						}
 					} else {
 						this.loggedIn = false;
@@ -118,6 +119,28 @@ export class AppComponent {
 					}
 				});
 			});
+	}
+
+	private loadAvatar() {
+		this.storage.get(USER_AVATAR_KEY).then(image => {
+			const avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
+			if (image) {
+				avatars[0].src = image;
+			} else {
+				this.getAvatarService.getAvatar().then(blob => {
+					if (blob.size === 19) {
+						return;
+					}
+					var reader = new FileReader();
+					reader.readAsDataURL(blob);
+					reader.onloadend = () => {
+						const image = String(reader.result);
+						this.storage.set(USER_AVATAR_KEY, image);
+						avatars[0].src = image;
+					}
+				});
+			}
+		});
 	}
 
 	logout() {
