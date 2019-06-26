@@ -36,7 +36,6 @@ export class AppComponent {
 		private storageService: StorageService,
 		private alertCtrl: AlertController,
 		private location: Location,
-		private storage: StorageService,
 		private getAvatarService: GetUserAvatarService,
 		private navCtrl: NavController) {
 		this.initializeApp(location.path());
@@ -105,13 +104,14 @@ export class AppComponent {
 								pathToGo = 'lessons-list';
 							}
 
+							this.loadAvatar();
+							
 							const paramsOfUrl = this.getParams(pathToGo);
 							if (paramsOfUrl) {
 								this.navCtrl.navigateForward([pathToGo.substring(0, pathToGo.indexOf('?'))], { queryParams: paramsOfUrl });
 							} else {
 								this.navCtrl.navigateForward([pathToGo]);
 							}
-							this.loadAvatar();
 						}
 					} else {
 						this.loggedIn = false;
@@ -122,7 +122,7 @@ export class AppComponent {
 	}
 
 	private loadAvatar() {
-		this.storage.get(USER_AVATAR_KEY).then(image => {
+		this.storageService.get(USER_AVATAR_KEY).then(image => {
 			const avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
 			if (image) {
 				avatars[0].src = image;
@@ -135,7 +135,7 @@ export class AppComponent {
 					reader.readAsDataURL(blob);
 					reader.onloadend = () => {
 						const image = String(reader.result);
-						this.storage.set(USER_AVATAR_KEY, image);
+						this.storageService.set(USER_AVATAR_KEY, image);
 						avatars[0].src = image;
 					}
 				});
