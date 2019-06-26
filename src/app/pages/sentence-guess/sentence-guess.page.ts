@@ -1,5 +1,5 @@
 import { StatisticsUpdateService } from '../../services/http/statistics-update/statistics-update.service';
-import { UtilsService, redCharForHiding, charForHiding } from 'src/app/services/utils/utils.service';
+import { UtilsService, charForHiding } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController } from '@ionic/angular';
@@ -73,21 +73,17 @@ export class SentenceGuessPage implements OnInit {
 		private navCtrl: NavController,
 		private util: UtilsService) { }
 
-	ngOnInit() {
+	async ngOnInit() {
 		this.sentenceId = Number(this.route.snapshot.queryParamMap.get('current'));
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
 
 		this.sentenceContent = document.getElementById('sentence-content');
 
 		if (!this.lessonsDataService.lessons.length) {
-			this.lessonsDataService.refreshLessons().then(() => {
-				this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {
-					this.getData();
-				});
-			});
-		} else {
-			this.getData();
+			await this.lessonsDataService.refreshLessons();
+			await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
 		}
+		this.getData();
 	}
 
 	private createSpan(isHidden: boolean, indexOfHidden?: number): HTMLElement {
@@ -318,17 +314,14 @@ export class SentenceGuessPage implements OnInit {
 		const indexOfExisting = this.savedTemplates.findIndex(elem => elem[0] === id);
 		this.sentenceContent.childNodes.forEach(node => elements.push(<HTMLElement>(node)));
 
-		if (indexOfExisting === -1) {
-			this.savedTemplates.push([id, elements]);
-		} else {
+		indexOfExisting === -1 ?
+			this.savedTemplates.push([id, elements]) :
 			this.savedTemplates[indexOfExisting] = [id, elements];
-		}
 
 		this.saveData();
 
 		const lessonSentences = this.lessonsDataService.getLessonByID(this.lessonId).sentences;
-		const currentLessonIndex = this.lessonsDataService
-			.getSentenceNumberByIDs(this.lessonId, this.sentenceId);
+		const currentLessonIndex = this.lessonsDataService.getSentenceNumberByIDs(this.lessonId, this.sentenceId);
 		const firstSentenceId = lessonSentences[0].id
 		const lastSentenceId = lessonSentences[lessonSentences.length - 1].id;
 
@@ -348,8 +341,10 @@ export class SentenceGuessPage implements OnInit {
 		this.animateSwipe(forward);
 		this.sentenceNumber = this.lessonsDataService.getSentenceNumberByIDs(this.lessonId, this.sentenceId) + 1;
 
+		// Change url parameter displaying current sentence
 		let path = this.location.path();
-		path = path.replace(path.substring(path.indexOf('current'), path.indexOf('&')), 'current=' + this.curSentence().id);
+		path = path.replace(path.substring(path.indexOf('current'),
+			path.indexOf('&')), 'current=' + this.curSentence().id);
 		this.location.go(path);
 
 		if (this.statisticsDeltasArray.findIndex(elem => elem[0] === this.curSentence().id) === -1) {
@@ -376,16 +371,16 @@ export class SentenceGuessPage implements OnInit {
 
 			const button: HTMLIonButtonElement = <HTMLIonButtonElement>(document.getElementById('give-up-button'));
 
-			let event = new KeyboardEvent('evGiveUp', { key: this.curCorrectChar() });
+			let event = this.correctCharEvent();
 			this.handleKeyboardEvent(event);
 
 			button.disabled = true;
 
 			setTimeout(() => {
-				event = new KeyboardEvent('evGiveUp', { key: this.curCorrectChar() });
+				event = this.correctCharEvent();
 				this.handleKeyboardEvent(event);
 				setTimeout(() => {
-					event = new KeyboardEvent('evGiveUp', { key: this.curCorrectChar() });
+					event = this.correctCharEvent();
 					this.handleKeyboardEvent(event);
 					button.disabled = false;
 				}, 300);
@@ -402,7 +397,7 @@ export class SentenceGuessPage implements OnInit {
 		if (!this.curStats().solvedStatus) {
 			++this.curStats().hintUsages; // Statistics
 			this.updateChart();
-			const event = new KeyboardEvent('evHint', { key: this.curCorrectChar() });
+			const event = this.correctCharEvent();
 			this.handleKeyboardEvent(event);
 		}
 	}
@@ -414,6 +409,10 @@ export class SentenceGuessPage implements OnInit {
 			const event = new KeyboardEvent('ev' + index, { key: (this.updateFront ? fronts[index] : backs[index]).toLowerCase() });
 			this.handleKeyboardEvent(event);
 		}
+	}
+
+	private correctCharEvent(): KeyboardEvent {
+		return new KeyboardEvent('evHint', { key: this.curCorrectChar() });
 	}
 
 	private randomAlphabetChar(): string {
@@ -518,10 +517,6 @@ export class SentenceGuessPage implements OnInit {
 		this.generateRandomCharacters();
 	}
 
-	private highlightClickedCharBox(charBoxNumber: number, color: string) {
-		document.getElementById('char-box-' + charBoxNumber).style.boxShadow = color;
-	}
-
 	/*
 	*	0 - current word is not guessed
 	*	1 - current word is guessed, current sentence is not guessed
@@ -617,7 +612,7 @@ export class SentenceGuessPage implements OnInit {
 					break;
 				}
 			}
-			this.highlightClickedCharBox(indexOfCharBox, this.redHighlight);
+			document.getElementById('char-box-' + indexOfCharBox).style.boxShadow = this.redHighlight;
 		}
 
 		this.updateChart();

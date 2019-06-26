@@ -7,9 +7,6 @@ import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { updateIsRequired } from 'src/app/app.component';
 import * as _ from 'lodash';
-import { USER_AVATAR_KEY } from '../account/account.page';
-import { StorageService } from 'src/app/services/storage/storage-service';
-import { GetUserAvatarService } from 'src/app/services/http/get-user-avatar/get-user-avatar.service';
 
 @Component({
 	selector: 'page-lessons-list',
@@ -31,8 +28,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private lessonsDataService: LessonsDataService,
 		private alertCtrl: AlertController,
 		private lessonDeleteService: LessonDeleteService,
-		private storage: StorageService,
-		private getAvatarService: GetUserAvatarService,
 		private utils: UtilsService,
 		private cdRef: ChangeDetectorRef) { }
 
@@ -42,14 +37,14 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 			backdropDismiss: true
 		});
 		await loading.present();
-		this.getData().then(() => {
-			this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);
-			loading.dismiss();
-		});
-		this.configureTipsFloating();
+
+		await this.getData();
+		this.addTipsAndFabsHandler();
+
+		loading.dismiss();
 	}
 
-	configureTipsFloating() {
+	private addTipsAndFabsHandler() {
 		const fab: HTMLElement = <HTMLElement>(document.getElementById("add-lesson-fab").firstChild);
 		fab.addEventListener('click', () => {
 			if (!this.lessonsDataService.lessons.length) {
@@ -82,10 +77,13 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		this.updateCharts();
 		if (updateIsRequired[0]) {
 			this.getData().then(() => {
-				this.displayedLessons.sort(this.lessonsDataService.sortLessonsByTime);
+				updateIsRequired[0] = false;
 			});
-			updateIsRequired[0] = false;
 		}
+		this.resetLocalStatistic();
+	}
+
+	private resetLocalStatistic() {
 		this.lessonsDataService.lessons.forEach(lsn => {
 			lsn.sentences.forEach(sentence => {
 				const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
@@ -135,23 +133,23 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	private updateCharts() {
 		let i = 0;
 		for (const lesson of this.displayedLessons) {
-			const chartData = this.pieCharts[i].data.datasets[0];
-			chartData.data[0] = 1;
-			chartData.data[1] = 0;
-			chartData.data[2] = 0;
+			const chart = this.pieCharts[i].data.datasets[0], chartData = chart.data;
+			chartData[0] = 1;
+			chartData[1] = 0;
+			chartData[2] = 0;
 			for (const stats of lesson.statistics) {
 				if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps > 0) {
-					chartData.data[0] += stats.correctAnswers;
-					chartData.data[1] += stats.wrongAnswers;
-					chartData.data[2] += stats.hintUsages + stats.giveUps;
+					chartData[0] += stats.correctAnswers;
+					chartData[1] += stats.wrongAnswers;
+					chartData[2] += stats.hintUsages + stats.giveUps;
 				}
 			}
 
-			if (chartData.data[0] + chartData.data[1] + chartData.data[2] > 1) {
-				--chartData.data[0];
-				chartData.backgroundColor[0] = '#AFF265';
-				chartData.backgroundColor[1] = '#FF9055';
-				chartData.backgroundColor[2] = '#FFE320';
+			if (chartData[0] + chartData[1] + chartData[2] > 1) {
+				--chartData[0];
+				chart.backgroundColor[0] = '#AFF265';
+				chart.backgroundColor[1] = '#FF9055';
+				chart.backgroundColor[2] = '#FFE320';
 				this.pieCharts[i].options.cutoutPercentage = 60;
 				this.pieCharts[i].update();
 			}
@@ -178,7 +176,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 						slidingItem.close();
 
 						this.lessonDeleteService.delete(lessonID);
-						this.lessonsDataService.removeAllLessonSentences(lessonID);
 						this.lessonsDataService.removeLesson(lessonID);
 
 						let i = 0;
@@ -217,7 +214,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	private async getData() {
 		await this.lessonsDataService.refreshLessons().then(() => {
-			this.displayedLessons = this.lessonsDataService.lessons;
+			this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
 			this.displayHints = this.displayedLessons.length === 0;
 		});
 	}
@@ -244,21 +241,12 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	openLesson(lesson: Lesson) {
-		if (lesson.statistics.length < 20) {
-			this.navCtrl.navigateForward(
-				['sentences-list'], {
-					queryParams: {
-						lessonID: lesson.id
-					}
-				});
-		} else {
-			this.navCtrl.navigateForward(
-				['sentences-list'], {
-					queryParams: {
-						lessonID: lesson.id,
-						showLoader: true
-					}
-				});
-		}
+		this.navCtrl.navigateForward(
+			['sentences-list'], {
+				queryParams: {
+					lessonID: lesson.id,
+					showLoader: lesson.statistics.length > 20
+				}
+			});
 	}
 }

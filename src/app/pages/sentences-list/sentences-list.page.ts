@@ -40,26 +40,29 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	async ngOnInit() {
 		const showLoader = this.route.snapshot.queryParamMap.get('showLoader');
-		if (showLoader) {
+		if (showLoader === 'true') {
 			this.loader = await this.loadingController.create({
 				message: 'Loading...<br>Please, wait',
 				backdropDismiss: true
 			});
 			await this.loader.present();
 		}
-		if (!this.lessonsDataService.lessons.length) {
-			this.lessonsDataService.refreshLessons().then(() => {
-				this.initData(showLoader);
-			});
-		} else {
-			this.initData(showLoader);
-		}
 
+		if (!this.lessonsDataService.lessons.length) {
+			await this.lessonsDataService.refreshLessons();
+		}
+		this.initData(showLoader);
+
+		this.addFabHandler();
+	}
+
+	private addFabHandler() {
 		const content = <HTMLIonContentElement>document.getElementById('sentences-list-scroll');
 		content.scrollEvents = true;
 
 		const fabEdit = document.getElementById('edit-sentence-fab');
 		const fabAdd = document.getElementById('add-sentence-fab');
+
 		content.addEventListener('ionScroll', _.throttle((ev: CustomEvent) => {
 			if (ev.detail.velocityY > 0.1) {
 				fabAdd.classList.add('hidden-btn');
@@ -71,25 +74,23 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		}, 300));
 	}
 
-	initData(showLoader) {
+	async initData(showLoader) {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
-		this.getData().then(() => {
-			if (showLoader) {
-				this.loader.dismiss();
-			}
-		});
+		await this.getData();
+		if (showLoader === 'true') {
+			this.loader.dismiss();
+		}
 	}
 
 	goBack() {
 		this.navCtrl.navigateBack(['lessons-list']);
 	}
 
-	ionViewDidEnter() {
+	async ionViewDidEnter() {
 		if (updateIsRequired[0] || (this.displayedSentences && this.displayedSentences.length === 0)) {
-			this.lessonsDataService.getSentencesByLessonId(this.lessonId).then(() => {	
-				this.getData();
-				updateIsRequired[0] = false;
-			});
+			await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
+			this.getData();
+			updateIsRequired[0] = false;
 		}
 		this.updateCharts();
 	}
@@ -160,13 +161,15 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		for (const sentence of this.displayedSentences) {
 			const stats = this.lessonsDataService.getStatisticsOfSentence(sentence);
 			if (stats && stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps !== 0) {
-				const chartData = this.pieCharts[i].data.datasets[0];
-				chartData.data[0] = stats.correctAnswers;
-				chartData.data[1] = stats.wrongAnswers;
-				chartData.data[2] = stats.hintUsages + sentence.words.length * stats.giveUps;
-				chartData.backgroundColor[0] = '#AFF265';
-				chartData.backgroundColor[1] = '#FF9055';
-				chartData.backgroundColor[2] = '#FFE320';
+				const chart = this.pieCharts[i].data.datasets[0];
+				chart.data[0] = stats.correctAnswers;
+				chart.data[1] = stats.wrongAnswers;
+				chart.data[2] = stats.hintUsages + sentence.words.length * stats.giveUps;
+
+				chart.backgroundColor[0] = '#AFF265';
+				chart.backgroundColor[1] = '#FF9055';
+				chart.backgroundColor[2] = '#FFE320';
+
 				this.pieCharts[i].options.cutoutPercentage = 60;
 				this.pieCharts[i].update();
 			}
@@ -212,7 +215,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				position: 'top'
 			});
 
-			this.toast.present().then(() => this.addButtonIsAnimating = false);
+			await this.toast.present();
+			this.addButtonIsAnimating = false;
 		} else {
 			anime({
 				targets: ['#edit-sentence-icon'],
@@ -277,11 +281,11 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		} else {
 			const allSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
 			if (type === 2) {
-				this.displayedSentences = allSentences.filter(sentence => 
+				this.displayedSentences = allSentences.filter(sentence =>
 					this.lessonsDataService.getStatisticsOfSentence(sentence).wrongAnswers > 0
 				);
 			} else {
-				this.displayedSentences = allSentences.filter(sentence => 
+				this.displayedSentences = allSentences.filter(sentence =>
 					this.utils.redAndYellowFilterSentence(this.lessonsDataService.getStatisticsOfSentence(sentence))
 				);
 			}

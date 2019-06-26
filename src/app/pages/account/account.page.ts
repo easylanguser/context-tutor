@@ -9,7 +9,7 @@ import { StorageService } from 'src/app/services/storage/storage-service';
 import { UploadAvatarService } from 'src/app/services/http/upload-avatar/upload-avatar.service';
 
 interface HTMLInputEvent extends Event {
-    target: HTMLInputElement & EventTarget;
+	target: HTMLInputElement & EventTarget;
 }
 
 export const USER_AVATAR_KEY = 'user-avatar';
@@ -38,14 +38,18 @@ export class AccountPage implements OnInit {
 	ngOnInit() {
 		this.avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
 
-		if (this.authService.token) {
-			this.getInfo();
-		} else {
-			this.authService.checkToken().then(() => {
-				this.getInfo();
-			});
-		}
+		this.checkTokenAndGetInfo();
+		this.addAvatarClickHandler();
+	}
 
+	private async checkTokenAndGetInfo() {
+		if (!this.authService.token) {
+			await this.authService.checkToken()
+		}
+		this.getInfo();
+	}
+
+	private addAvatarClickHandler() {
 		document.getElementById('file-input').onchange = (event: HTMLInputEvent) => {
 			this.uploadAvatarService.postNewAvatar(event.target.files);
 			var reader = new FileReader();
@@ -63,22 +67,20 @@ export class AccountPage implements OnInit {
 		document.getElementById('file-input').click();
 	}
 
-	async getInfo(token?: any) {
-		this.storage.get(USER_EMAIL_KEY).then(async email => {
-			if (email) {
-				this.userEmail = email;
-			} else {
-				const userInfo = await this.userService.getUserInfo();
-				this.userEmail = userInfo.email;
-				this.storage.set(USER_EMAIL_KEY, userInfo.email);
-			}
-		});
+	async getInfo() {
+		const email = await this.storage.get(USER_EMAIL_KEY);
+		if (email) {
+			this.userEmail = email;
+		} else {
+			const userInfo = await this.userService.getUserInfo();
+			this.userEmail = userInfo.email;
+			this.storage.set(USER_EMAIL_KEY, userInfo.email);
+		}
 
-		this.storage.get(USER_AVATAR_KEY).then(image => {
-			if (image) {
-				this.avatars[1].src = image;
-			}
-		})
+		const avatar = await this.storage.get(USER_AVATAR_KEY);
+		if (avatar) {
+			this.avatars[1].src = avatar;
+		}
 	}
 
 	async deleteAccount() {
@@ -97,7 +99,7 @@ export class AccountPage implements OnInit {
 					handler: (data) => {
 						alert.dismiss(true);
 						this.httpService.doPost(environment.url + '/api/user/deleteAccount', data)
-							.subscribe(res => {
+							.subscribe(() => {
 								return this.authService.logout();
 							}, err => {
 								this.showAlert(err.error)
