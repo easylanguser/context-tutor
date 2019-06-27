@@ -5,7 +5,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { tap, catchError } from 'rxjs/operators';
 import { BehaviorSubject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { StorageService } from '../storage/storage-service';
+import { Storage } from '@ionic/storage';
 
 export const TOKEN_KEY = 'access_token';
 export const USER_ID_KEY = 'user_id';
@@ -28,7 +28,7 @@ export class AuthService {
 	constructor(
 		private http: HttpClient,
 		private helper: JwtHelperService,
-		private storageService: StorageService,
+		private storage: Storage,
 		private plt: Platform,
 		private alertController: AlertController) {
 		this.plt.ready().then(() => {
@@ -37,7 +37,7 @@ export class AuthService {
 	}
 
 	checkToken(): Promise<any> {
-		return this.storageService.get(TOKEN_KEY).then(token => {
+		return this.storage.get(TOKEN_KEY).then(token => {
 			if (token) {
 				parent.postMessage({ token: token }, '*');
 				let isExpired = this.helper.isTokenExpired(token);
@@ -46,8 +46,8 @@ export class AuthService {
 					this.token = token;
 					this.authenticationState.next(true);
 				} else {
-					this.storageService.remove(TOKEN_KEY);
-					this.storageService.remove(USER_ID_KEY);
+					this.storage.remove(TOKEN_KEY);
+					this.storage.remove(USER_ID_KEY);
 				}
 			}
 		});
@@ -66,11 +66,11 @@ export class AuthService {
 		return this.http.post(`${this.url}/api/auth/login`, credentials)
 			.pipe(
 				tap((res: AuthData) => {
-					this.storageService.set(TOKEN_KEY, res.token);
+					this.storage.set(TOKEN_KEY, res.token);
 					this.token = res.token;
 					parent.postMessage({ token: this.token }, '*');
 
-					this.storageService.set(USER_ID_KEY, res.id);
+					this.storage.set(USER_ID_KEY, res.id);
 					this.authenticationState.next(true);
 				}),
 				catchError(e =>
@@ -80,13 +80,14 @@ export class AuthService {
 	}
 
 	logout() {
-		this.storageService.remove(USER_ID_KEY).then(() => {
-			this.storageService.remove(TOKEN_KEY).then(() => {
+		this.storage.remove(USER_ID_KEY).then(() => {
+			this.storage.remove(TOKEN_KEY).then(() => {
 				this.authenticationState.next(false);
 				this.token = null;
 				parent.postMessage({ userLoggedOut: true }, '*');
 
-				this.storageService.remove('user-avatar');
+				this.storage.remove('user-avatar');
+				this.storage.remove('user-email');
 				(<HTMLImageElement>document.getElementById('user-avatar')).src = 'assets/img/account_icon.svg';
 			});
 		});

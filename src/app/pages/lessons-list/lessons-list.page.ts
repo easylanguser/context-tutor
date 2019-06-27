@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef, View
 import { LoadingController, IonItemSliding, AlertController, NavController, IonFab } from '@ionic/angular';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
-import { LessonDeleteService } from '../../services/http/lesson-delete/lesson-delete.service';
 import { Chart } from 'chart.js';
 import { UtilsService, chartsColors } from 'src/app/services/utils/utils.service';
 import { updateIsRequired } from 'src/app/app.component';
 import * as _ from 'lodash';
+import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
 
 @Component({
 	selector: 'page-lessons-list',
@@ -27,7 +27,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private navCtrl: NavController,
 		private lessonsDataService: LessonsDataService,
 		private alertCtrl: AlertController,
-		private lessonDeleteService: LessonDeleteService,
+		private lessonHttpService: LessonHttpService,
 		private utils: UtilsService,
 		private cdRef: ChangeDetectorRef) { }
 
@@ -175,7 +175,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 					handler: () => {
 						slidingItem.close();
 
-						this.lessonDeleteService.delete(lessonID);
+						this.lessonHttpService.deleteLesson(lessonID);
 						this.lessonsDataService.removeLesson(lessonID);
 
 						let i = 0;

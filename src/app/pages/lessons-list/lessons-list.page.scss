@@ -129,7 +129,7 @@ ion-toolbar {
         -webkit-transition: box-shadow 0.3s ease;
         
         &:hover {
-            box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.07), inset 0 0 0 3px var(--ion-color-primary);
+            box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.07), inset 0 0 0 2px var(--ion-color-primary);
         }
     }
 

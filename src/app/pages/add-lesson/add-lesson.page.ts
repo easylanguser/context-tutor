@@ -1,11 +1,10 @@
-import { AddLessonFileService } from './../../services/http/add-lesson-file/add-lesson-file.service';
 import { Component, OnInit } from '@angular/core';
-import { StorageService } from 'src/app/services/storage/storage-service';
-import { AddLessonService } from 'src/app/services/http/add-lesson/add-lesson.service';
 import { ToastController, NavController } from '@ionic/angular';
 import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 import { sharedText, updateIsRequired } from 'src/app/app.component';
 import { ActivatedRoute } from '@angular/router';
+import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
+import { Storage } from '@ionic/storage';
 
 @Component({
 	selector: 'app-add-lesson',
@@ -24,10 +23,9 @@ export class AddLessonPage implements OnInit {
 
 	constructor(
 		private activeRoute: ActivatedRoute,
-		private storageService: StorageService,
-		private addLessonService: AddLessonService,
+		private storage: Storage,
+		private lessonHttpService: LessonHttpService,
 		private toastController: ToastController,
-		private addLessonFileService: AddLessonFileService,
 		private navCtrl: NavController) { }
 
 	goBack() {
@@ -54,9 +52,9 @@ export class AddLessonPage implements OnInit {
 	}
 
 	addLessonAsFile(fileInput: HTMLInputElement) {
-		this.storageService.get(USER_ID_KEY)
+		this.storage.get(USER_ID_KEY)
 			.then(userId => {
-				this.addLessonFileService.postNewLessonFile(fileInput.files, userId);
+				this.lessonHttpService.postNewLessonFile(fileInput.files, userId);
 			})
 			.then(async () => {
 				const toast = await this.toastController.create({
@@ -71,9 +69,9 @@ export class AddLessonPage implements OnInit {
 	}
 
 	addLessonAsText() {
-		this.storageService.get(USER_ID_KEY)
+		this.storage.get(USER_ID_KEY)
 			.then(userId => {
-				this.addLessonService.postNewLesson({
+				this.lessonHttpService.postNewLesson({
 					userId: userId,
 					name: this.lessonName,
 					url: this.lessonUrl

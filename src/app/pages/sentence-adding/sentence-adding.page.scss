@@ -59,10 +59,8 @@ ion-icon {
     overflow-y: scroll;
     font-size: 3vh;
     margin-left: 5%;
-    -o-user-select: text;
-    -moz-user-select: text;
-    -webkit-user-select: text;
     user-select: text;
+    -webkit-user-select: text;
 }
 
 #btns-div {

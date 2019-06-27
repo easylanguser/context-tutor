@@ -1,4 +1,3 @@
-import { StatisticsUpdateService } from '../../services/http/statistics-update/statistics-update.service';
 import { UtilsService, charForHiding, chartsColors } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -9,6 +8,7 @@ import { Chart } from 'chart.js';
 import { Statistics } from 'src/app/models/statistics';
 import * as anime from 'animejs';
 import { Location } from '@angular/common';
+import { StatisticHttpService } from 'src/app/services/http/statistics/statistic-http.service';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -68,7 +68,7 @@ export class SentenceGuessPage implements OnInit {
 		private alertController: AlertController,
 		public lessonsDataService: LessonsDataService,
 		private utils: UtilsService,
-		private statisticsUpdateService: StatisticsUpdateService,
+		private statisticHttpService: StatisticHttpService,
 		private location: Location,
 		private navCtrl: NavController,
 		private util: UtilsService) { }
@@ -228,14 +228,14 @@ export class SentenceGuessPage implements OnInit {
 
 	saveStatistics() {
 		const stats = this.curStats();
-		this.statisticsUpdateService
-			.updateData({
+		this.statisticHttpService
+			.updateStatisticsOfSentence({
 				sentenceId: this.curSentence().id,
 				correctAnswers: stats.correctAnswers,
 				giveUps: stats.giveUps,
 				hintUsages: stats.hintUsages,
 				wrongAnswers: stats.wrongAnswers
-			}).subscribe();
+			});
 
 		const index = this.statisticsDeltasArray.findIndex(el => el[0] === this.curSentence().id);
 		if (index > -1) {

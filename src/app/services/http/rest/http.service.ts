@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
@@ -50,7 +49,12 @@ export class HttpService {
 
 	addHeaders() {
 		const token = this.authService.token;
-		const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+		const headers = new HttpHeaders(
+			{
+				'Content-Type': 'application/json',
+				'Authorization': token
+			}
+		);
 		return { headers: headers };
 	}
 }

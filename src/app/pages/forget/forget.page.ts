@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../../services/http/user/user-service';
 import { AlertController } from '@ionic/angular';
+import { UserHttpService } from 'src/app/services/http/users/user-http.service';
 
 @Component({
 	selector: 'app-forget',
@@ -14,7 +14,7 @@ export class ForgetPage implements OnInit {
 	credentialsForm: FormGroup;
 	submitted: boolean;
 
-	constructor(private formBuilder: FormBuilder, private UserService: UserService,
+	constructor(private formBuilder: FormBuilder, private userHttpService: UserHttpService,
 		private router: Router, private alertController: AlertController) { }
 
 	get f() { return this.credentialsForm.controls; }
@@ -28,7 +28,7 @@ export class ForgetPage implements OnInit {
 	onSubmit() {
 		this.submitted = true;
 		if (this.credentialsForm.valid) {
-			this.UserService.sendPassResetRequest(this.credentialsForm.value).subscribe(res => {
+			this.userHttpService.sendPassResetRequest(this.credentialsForm.value).then(res => {
 				this.showAlert(res);
 			})
 		}

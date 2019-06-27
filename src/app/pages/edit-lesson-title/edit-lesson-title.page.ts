@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { NavController } from '@ionic/angular';
-import { LessonNameUpdateService } from 'src/app/services/http/lesson-name-update/lesson-name-update.service';
+import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
 
 @Component({
 	selector: 'app-edit-lesson-title',
@@ -15,7 +15,7 @@ export class EditLessonTitlePage implements OnInit {
 	lessonId: number;
 
 	constructor(
-		private lessonNameUpdateService: LessonNameUpdateService,
+		private lessonHttpService: LessonHttpService,
 		private navCtrl: NavController,
 		private route: ActivatedRoute,
 		private lessonsDataService: LessonsDataService) { }
@@ -29,7 +29,7 @@ export class EditLessonTitlePage implements OnInit {
 		const lessonToEdit = this.lessonsDataService.getLessonByID(this.lessonId);
 		lessonToEdit.name = this.lessonTitle;
 		this.lessonsDataService.editLesson(lessonToEdit);
-		this.lessonNameUpdateService.updateLessonName(String(this.lessonId), this.lessonTitle.replace(/\s+/g, '%20'))
+		this.lessonHttpService.updateLessonName(String(this.lessonId), this.lessonTitle.replace(/\s+/g, '%20'))
 			.then(() => this.navCtrl.navigateBack(['lessons-list']));
 	}
 

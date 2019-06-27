@@ -6,11 +6,11 @@ import { Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
 import { BehaviorSubject } from 'rxjs';
 import { ThemeService } from './services/theme/theme.service';
-import { StorageService } from './services/storage/storage-service';
 import { Location } from '@angular/common';
 import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
-import { GetUserAvatarService } from './services/http/get-user-avatar/get-user-avatar.service';
 import { USER_AVATAR_KEY } from './pages/account/account.page';
+import { UserHttpService } from './services/http/users/user-http.service';
+import { Storage } from '@ionic/storage';
 
 export const SHARED_TEXT_ID_KEY = "shared_text_id";
 export let sharedText = [];
@@ -33,10 +33,10 @@ export class AppComponent {
 		private authService: AuthService,
 		private router: Router,
 		private theme: ThemeService,
-		private storageService: StorageService,
+		private storage: Storage,
 		private alertCtrl: AlertController,
 		private location: Location,
-		private getAvatarService: GetUserAvatarService,
+		private userHttpService: UserHttpService,
 		private navCtrl: NavController) {
 		this.initializeApp(location.path());
 	}
@@ -86,7 +86,7 @@ export class AppComponent {
 					this.splashScreen.hide();
 				}
 
-				this.storageService.get("theme").then(themeName => {
+				this.storage.get("theme").then(themeName => {
 					const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} });
 					themeName === "dark" ?
 						customEvent.detail.value = "dark" :
@@ -105,7 +105,7 @@ export class AppComponent {
 							}
 
 							this.loadAvatar();
-							
+
 							const paramsOfUrl = this.getParams(pathToGo);
 							if (paramsOfUrl) {
 								this.navCtrl.navigateForward([pathToGo.substring(0, pathToGo.indexOf('?'))], { queryParams: paramsOfUrl });
@@ -122,12 +122,12 @@ export class AppComponent {
 	}
 
 	private loadAvatar() {
-		this.storageService.get(USER_AVATAR_KEY).then(image => {
+		this.storage.get(USER_AVATAR_KEY).then(image => {
 			const avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
 			if (image) {
 				avatars[0].src = image;
 			} else {
-				this.getAvatarService.getAvatar().then(blob => {
+				this.userHttpService.getAvatar().then(blob => {
 					if (blob.size === 19) {
 						return;
 					}
@@ -135,7 +135,7 @@ export class AppComponent {
 					reader.readAsDataURL(blob);
 					reader.onloadend = () => {
 						const image = String(reader.result);
-						this.storageService.set(USER_AVATAR_KEY, image);
+						this.storage.set(USER_AVATAR_KEY, image);
 						avatars[0].src = image;
 					}
 				});

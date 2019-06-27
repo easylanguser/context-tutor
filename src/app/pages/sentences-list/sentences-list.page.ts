@@ -4,11 +4,11 @@ import { UtilsService, chartsColors } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
-import { SentenceDeleteService } from 'src/app/services/http/sentence-delete/sentence-delete.service';
 import { IonItemSliding, AlertController, NavController, ToastController, LoadingController } from '@ionic/angular';
 import * as anime from 'animejs';
 import * as _ from 'lodash';
 import { updateIsRequired } from 'src/app/app.component';
+import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -34,7 +34,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		private route: ActivatedRoute,
 		private navCtrl: NavController,
 		public lessonsDataService: LessonsDataService,
-		private sentenceDeleteService: SentenceDeleteService,
+		private sentenceHttpService: SentenceHttpService,
 		private loadingController: LoadingController,
 		private cdRef: ChangeDetectorRef) { }
 
@@ -131,7 +131,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 					handler: () => {
 						slidingItem.close();
 
-						this.sentenceDeleteService.delete(sentenceID);
+						this.sentenceHttpService.deleteSentence(sentenceID);
 						this.lessonsDataService.removeSentence(lessonID, sentenceID)
 
 						let i = 0;

@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { HttpService } from '../../services/http/rest/http.service';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { UserService } from 'src/app/services/http/user/user-service';
-import { StorageService } from 'src/app/services/storage/storage-service';
-import { UploadAvatarService } from 'src/app/services/http/upload-avatar/upload-avatar.service';
+import { UserHttpService } from 'src/app/services/http/users/user-http.service';
+import { Storage } from '@ionic/storage';
 
 interface HTMLInputEvent extends Event {
 	target: HTMLInputElement & EventTarget;
@@ -21,21 +20,20 @@ export const USER_EMAIL_KEY = 'user-email';
 	styleUrls: ['./account.page.scss'],
 })
 
-export class AccountPage implements OnInit {
+export class AccountPage {
 
 	avatars: HTMLCollectionOf<HTMLImageElement>;
 	userEmail: string;
 
 	constructor(
-		private userService: UserService,
+		private userHttpService: UserHttpService,
 		private authService: AuthService,
 		private httpService: HttpService,
 		private alertController: AlertController,
 		private router: Router,
-		private storage: StorageService,
-		private uploadAvatarService: UploadAvatarService) { }
+		private storage: Storage) { }
 
-	ngOnInit() {
+	ionViewDidEnter() {
 		this.avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
 
 		this.checkTokenAndGetInfo();
@@ -51,7 +49,7 @@ export class AccountPage implements OnInit {
 
 	private addAvatarClickHandler() {
 		document.getElementById('file-input').onchange = (event: HTMLInputEvent) => {
-			this.uploadAvatarService.postNewAvatar(event.target.files);
+			this.userHttpService.postNewAvatar(event.target.files);
 			var reader = new FileReader();
 			reader.readAsDataURL(event.target.files[0]);
 			reader.onloadend = () => {
@@ -72,7 +70,7 @@ export class AccountPage implements OnInit {
 		if (email) {
 			this.userEmail = email;
 		} else {
-			const userInfo = await this.userService.getUserInfo();
+			const userInfo = await this.userHttpService.getUserInfo();
 			this.userEmail = userInfo.email;
 			this.storage.set(USER_EMAIL_KEY, userInfo.email);
 		}

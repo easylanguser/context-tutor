@@ -15,8 +15,10 @@ export class ChangePage implements OnInit {
 	credentialsForm: FormGroup;
 	submitted: boolean;
 
-	constructor(private formBuilder: FormBuilder,
-		private router: Router, private httpService: HttpService, private alertController: AlertController) {
+	constructor(
+		private formBuilder: FormBuilder,
+		private httpService: HttpService,
+		private alertController: AlertController) {
 	}
 
 	get f() {

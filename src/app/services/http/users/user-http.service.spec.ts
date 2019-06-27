@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GetUserAvatarService } from './get-user-avatar.service';
+import { UserHttpService } from './user-http.service';
 
-describe('GetUserAvatarService', () => {
+describe('UserHttpService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: GetUserAvatarService = TestBed.get(GetUserAvatarService);
+    const service: UserHttpService = TestBed.get(UserHttpService);
     expect(service).toBeTruthy();
   });
 });

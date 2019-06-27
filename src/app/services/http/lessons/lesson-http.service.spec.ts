@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UploadAvatarService } from './upload-avatar.service'
+import { LessonHttpService } from './lesson-http.service';
 
-describe('UploadAvatarServiceService', () => {
+describe('LessonHttpService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: UploadAvatarService = TestBed.get(UploadAvatarService);
+    const service: LessonHttpService = TestBed.get(LessonHttpService);
     expect(service).toBeTruthy();
   });
 });

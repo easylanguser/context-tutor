@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SentenceResetService } from './sentence-reset.service';
+import { StatisticHttpService } from './statistic-http.service';
 
-describe('SentenceResetService', () => {
+describe('StatisticHttpService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: SentenceResetService = TestBed.get(SentenceResetService);
+    const service: StatisticHttpService = TestBed.get(StatisticHttpService);
     expect(service).toBeTruthy();
   });
 });

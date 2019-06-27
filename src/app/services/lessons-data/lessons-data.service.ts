@@ -1,12 +1,11 @@
 import { UtilsService, charForHiding, blueCharForHiding } from '../utils/utils.service';
-import { SentencesByLessonService } from '../http/sentences-by-lesson/sentences-by-lesson.service';
 import { Injectable } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
-import { LessonsListService } from '../http/lessons-list/lessons-list.service';
 import { Sentence } from 'src/app/models/sentence';
 import { Statistics } from 'src/app/models/statistics';
-import { StatisticByLessonService } from '../http/statistic-by-lesson/statistic-by-lesson.service';
-import { StorageService } from '../storage/storage-service';
+import { LessonHttpService } from '../http/lessons/lesson-http.service';
+import { SentenceHttpService } from '../http/sentences/sentence-http.service';
+import { StatisticHttpService } from '../http/statistics/statistic-http.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -16,11 +15,10 @@ export class LessonsDataService {
 	lessons: Lesson[] = [];
 
 	constructor(
-		private lessonsAPI: LessonsListService,
-		private sentencesAPI: SentencesByLessonService,
-		private statisticAPI: StatisticByLessonService,
-		private utils: UtilsService,
-		private storageService: StorageService) { }
+		private lessonHttpService: LessonHttpService,
+		private sentenceHttpService: SentenceHttpService,
+		private statisticHttpService: StatisticHttpService,
+		private utils: UtilsService) { }
 
 	addLesson(lesson: Lesson) {
 		this.lessons.push(lesson);
@@ -79,7 +77,7 @@ export class LessonsDataService {
 	}
 
 	async getSentencesByLessonId(id: number): Promise<Sentence[]> {
-		const sntns = await this.sentencesAPI.getData(id);
+		const sntns = await this.sentenceHttpService.getLessonSentences(id);
 
 		for (const i in sntns) {
 			const hiddenChars: Array<string[]> = [];
@@ -123,7 +121,7 @@ export class LessonsDataService {
 	}
 
 	async getStatisticByLessonId(id: number): Promise<Statistics[]> {
-		const statistics = await this.statisticAPI.getData(id);
+		const statistics = await this.statisticHttpService.getStatisticsOfLesson(id);
 		const statisticsArray: Statistics[] = [];
 
 		for (const stat of statistics) {
@@ -178,7 +176,7 @@ export class LessonsDataService {
 	}
 
 	async refreshLessons(): Promise<Lesson[]> {
-		const lsn = await this.lessonsAPI.getData();
+		const lsn = await this.lessonHttpService.getLessons();
 		this.lessons = [];
 		const now = new Date().getTime();
 

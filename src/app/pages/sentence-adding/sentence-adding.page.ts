@@ -2,15 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { sharedText, updateIsRequired } from 'src/app/app.component';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
-import { AddSentenceService } from 'src/app/services/http/add-sentence/add-sentence.service';
-import { AddLessonService } from 'src/app/services/http/add-lesson/add-lesson.service';
-import { StorageService } from 'src/app/services/storage/storage-service';
 import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 import { NavController, Platform } from '@ionic/angular';
-import { SentenceResetService } from 'src/app/services/http/sentence-reset/sentence-reset.service';
 import { Sentence } from 'src/app/models/sentence';
 import { UtilsService, charForHiding, blueCharForHiding } from 'src/app/services/utils/utils.service';
 import { Statistics } from 'src/app/models/statistics';
+import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
+import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
+import { Storage } from '@ionic/storage';
 
 let lastSelOffsets: Array<number> = [];
 let lastSelCoords: Array<number> = [];
@@ -32,12 +31,11 @@ export class SentenceAddingPage implements OnInit {
 	constructor(
 		private platform: Platform,
 		private navCtrl: NavController,
-		private storageService: StorageService,
-		private addSentenceService: AddSentenceService,
-		private addLessonService: AddLessonService,
+		private storage: Storage,
+		private sentenceHttpService: SentenceHttpService,
+		private lessonHttpService: LessonHttpService,
 		private route: ActivatedRoute,
 		private lessonsDataService: LessonsDataService,
-		private sentenceResetService: SentenceResetService,
 		private utils: UtilsService) {
 		platform.ready().then(() => {
 			if (platform.is('android') || platform.is('ios')) {
@@ -104,7 +102,7 @@ export class SentenceAddingPage implements OnInit {
 		const textAreaValue = document.getElementById("selectable-sentence-div").innerText;
 		if (this.lessonId) { // Sentence is added to an existing lesson
 			if (this.sentenceToEditId) { // Existing sentence is being edited
-				this.sentenceResetService.updateData(this.sentenceToEditId, indexesArray);
+				this.sentenceHttpService.updateSentenceWords(this.sentenceToEditId, indexesArray);
 
 				const hiddenSentence = this.utils.hideChars(textAreaValue, indexesArray, charForHiding);
 				const sentencesListSentence = this.utils.hideChars(textAreaValue, indexesArray, blueCharForHiding);
@@ -131,25 +129,25 @@ export class SentenceAddingPage implements OnInit {
 						new Date().toISOString()));
 			} else {
 				const text = document.getElementById("selectable-sentence-div").innerText;
-				this.addSentenceService.postNewSentence({
+				this.sentenceHttpService.postNewSentence({
 					lessonId: this.lessonId,
 					words: indexesArray,
 					text: text
 				}).then(newSentence => {
-					this.storageService.get(USER_ID_KEY).then(userId => {
+					this.storage.get(USER_ID_KEY).then(userId => {
 						this.createNewStatisticRecord(newSentence.id, this.lessonId, userId, indexesArray, text)
 					});
 				});
 			}
 		} else { // Sentence is added to a new lesson
-			this.storageService.get(USER_ID_KEY).then(userId => {
-				this.addLessonService.postNewLesson({
+			this.storage.get(USER_ID_KEY).then(userId => {
+				this.lessonHttpService.postNewLesson({
 					userId: userId,
 					name: this.title,
 					url: 'someurl@url.com'
 				}).then(res => {
 					const newLessonId = res.id;
-					this.addSentenceService.postNewSentence({
+					this.sentenceHttpService.postNewSentence({
 						lessonId: newLessonId,
 						words: indexesArray,
 						text: this.sentence
