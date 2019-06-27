@@ -50,14 +50,14 @@
     }
 }
 
-$chars-and-hint-height: 20vw;
-
 #chars {
     display: inline-block;
-    height: $chars-and-hint-height;
+    height: 20vw;
     width: 100vw;
-    transition: all .5s;
     padding-left: 14.5vw;
+
+    transition: opacity .3s;
+    -webkit-transition: opacity .3s;
 
     div {
         font-family: "Arial";
@@ -151,6 +151,9 @@ $chars-and-hint-height: 20vw;
     font-size: 2vh;
     margin-left: 4vw;
 
+    transition: opacity .3s;
+    -webkit-transition: opacity .3s;
+
     >:first-child {
         margin-top: 4px;
     }
@@ -172,6 +175,9 @@ $chars-and-hint-height: 20vw;
 #give-up-button {
     font-size: 2vh;
     margin-left: 4vw;
+
+    transition: opacity .3s;
+    -webkit-transition: opacity .3s;
 
     >:first-child {
         margin-top: 4px;

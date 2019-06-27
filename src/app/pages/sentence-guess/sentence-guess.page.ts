@@ -121,17 +121,34 @@ export class SentenceGuessPage implements OnInit {
 			const span = this.createSpan(false);
 			span.innerText = this.curSentence().text;
 			this.sentenceContent.appendChild(span);
+			this.toggleControlsVisibility(false);
 		} else {
 			// Restore user progress 
 			this.curWordIndex = this.curStats().curWordIndex;
 			this.curCharsIndexes = this.curStats().curCharsIndexes;
-
+			this.toggleControlsVisibility(true);
 			this.restoreSentence();
 		}
 
 		if (this.lessonsDataService.getLessonByID(this.lessonId).sentences.length === 1) {
 			document.getElementById('next-sentence-button').style.visibility = 'hidden';
 			document.getElementById('prev-sentence-button').style.visibility = 'hidden';
+		}
+	}
+
+	toggleControlsVisibility(show: boolean) {
+		const charsBlock = document.getElementById('chars').style;
+		const hintButton = document.getElementById('hint-button').style;
+		const giveUpButton = document.getElementById('give-up-button').style;
+		const bottomBarContainer = document.getElementById('bottom-bar-container').style;
+		if (show) {
+			charsBlock.opacity = '1';
+			hintButton.opacity = '1';
+			giveUpButton.opacity = '1';
+		} else {
+			charsBlock.opacity = '0';
+			hintButton.opacity = '0';
+			giveUpButton.opacity = '0';
 		}
 	}
 
@@ -360,6 +377,7 @@ export class SentenceGuessPage implements OnInit {
 
 	markAsSolved() {
 		this.curStats().solvedStatus = true;
+		this.toggleControlsVisibility(false);
 		if (!this.alertIsShown) {
 			this.showAlert();
 		}

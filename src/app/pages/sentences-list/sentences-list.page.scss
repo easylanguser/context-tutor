@@ -118,9 +118,6 @@ ion-toolbar {
 
     @media (min-width: 350px) {
         transition: box-shadow 0.3s ease;
-        -o-transition: box-shadow 0.3s ease;
-        -ms-transition: box-shadow 0.3s ease;
-        -moz-transition: box-shadow 0.3s ease;
         -webkit-transition: box-shadow 0.3s ease;
         
         &:hover {
@@ -186,9 +183,6 @@ ion-item-option {
     margin-bottom: 3vh;
 
     transition: transform 0.3s ease-in-out;
-    -o-transition: transform 0.3s ease-in-out;
-    -ms-transition: transform 0.3s ease-in-out;
-    -moz-transition: transform 0.3s ease-in-out;
     -webkit-transition: transform 0.3s ease-in-out;
 
     :first-child {
@@ -206,9 +200,6 @@ ion-item-option {
     margin-bottom: 3vh;
 
     transition: transform 0.3s ease-in-out;
-    -o-transition: transform 0.3s ease-in-out;
-    -ms-transition: transform 0.3s ease-in-out;
-    -moz-transition: transform 0.3s ease-in-out;
     -webkit-transition: transform 0.3s ease-in-out;
 
     :first-child {

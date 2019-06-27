@@ -5,9 +5,6 @@
 ion-icon {
     cursor: pointer;
     transition: color 0.3s ease-in-out;
-    -o-transition: color 0.3s ease-in-out;
-    -ms-transition: color 0.3s ease-in-out;
-    -moz-transition: color 0.3s ease-in-out;
     -webkit-transition: color 0.3s ease-in-out;
 }
 
@@ -89,9 +86,6 @@ ion-icon {
     outline: none;
     
     transition: margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
-    -o-transition:  margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
-    -ms-transition: margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
-    -moz-transition: margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
     -webkit-transition: margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
 }
 
