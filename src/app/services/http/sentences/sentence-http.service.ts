@@ -24,9 +24,10 @@ export class SentenceHttpService {
 		this.httpService.doDelete(apiUrl + 'delete?id=' + sentenceId);
 	}
 
-	updateSentenceWords(sentenceId: string, words: Array<[number, number]>): Promise<any> {
+	updateSentenceWords(sentenceId: string, words: Array<[number, number]>, text: string): Promise<any> {
 		return this.httpService.doPut(apiUrl + 'resetSentenceAndUpdateWords?sentenceId=' + sentenceId,
 			{
+				text: text,
 				words: words
 			}
 		).toPromise();

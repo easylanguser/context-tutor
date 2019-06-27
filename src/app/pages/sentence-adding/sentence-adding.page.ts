@@ -102,7 +102,7 @@ export class SentenceAddingPage implements OnInit {
 		const textAreaValue = document.getElementById("selectable-sentence-div").innerText;
 		if (this.lessonId) { // Sentence is added to an existing lesson
 			if (this.sentenceToEditId) { // Existing sentence is being edited
-				this.sentenceHttpService.updateSentenceWords(this.sentenceToEditId, indexesArray);
+				this.sentenceHttpService.updateSentenceWords(this.sentenceToEditId, indexesArray, textAreaValue);
 
 				const hiddenSentence = this.utils.hideChars(textAreaValue, indexesArray, charForHiding);
 				const sentencesListSentence = this.utils.hideChars(textAreaValue, indexesArray, blueCharForHiding);
