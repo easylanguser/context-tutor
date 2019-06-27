@@ -45,12 +45,10 @@
     bottom: 0;
     height: 40vmin;
 
-    transition: 0.25s background;
-    -webkit-transition: 0.25s background;
+    transition: 0.4s background;
+    -webkit-transition: 0.4s background; 
 
     ion-toolbar {
-        transition: --background 0.25s;
-        -webkit-transition: --background 0.25s;
         height: 40vmin;
     }
 }
@@ -64,9 +62,6 @@
     justify-content: center;
     height: 20vw;
     width: 100vw;
-
-    transition: opacity 0.25s;
-    -webkit-transition: opacity 0.25s;
 
     div {
         font-family: "Arial";
@@ -162,9 +157,6 @@
     display: inline-block;
     font-size: 2vh;
 
-    transition: opacity 0.25s;
-    -webkit-transition: opacity 0.25s;
-
     >:first-child {
         margin-top: 4px;
     }
@@ -185,9 +177,6 @@
 
 #give-up-button {
     font-size: 2vh;
-
-    transition: opacity 0.25s;
-    -webkit-transition: opacity 0.25s;
 
     >:first-child {
         margin-top: 4px;
