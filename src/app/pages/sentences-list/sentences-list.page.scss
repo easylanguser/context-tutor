@@ -14,7 +14,7 @@ ion-toolbar {
     ion-title {
         color: white;
         font-size: 2.5vh;
-        
+
         @media (min-width: 700px) {
             padding-inline-start: 200px;
             -webkit-padding-start: 200px;
@@ -69,6 +69,7 @@ ion-toolbar {
             --border-width: 0;
             --background: #47d5ff;
             font-weight: bold;
+
             @media (min-width: 992px) {
                 width: 22.33vw;
             }
@@ -92,6 +93,7 @@ ion-toolbar {
 #sentences-list {
     margin-top: 2vh;
     margin-bottom: 15vh;
+
     @media (min-width: 992px) {
         margin-bottom: 9vh;
     }
@@ -116,13 +118,11 @@ ion-toolbar {
     -moz-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.07);
     box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.07);
 
-    @media (min-width: 350px) {
-        transition: box-shadow 0.3s ease;
-        -webkit-transition: box-shadow 0.3s ease;
-        
-        &:hover {
-            box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.07), inset 0 0 0 2px var(--ion-color-primary);
-        }
+    transition: box-shadow 0.3s ease;
+    -webkit-transition: box-shadow 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.07), inset 0 0 0 2px var(--ion-color-primary);
     }
 
     >:first-child {
@@ -152,9 +152,10 @@ ion-toolbar {
 
         >:first-child {
             height: 4vh;
-            width: 4vh;        
+            width: 4vh;
             float: right;
             margin-right: 6vw;
+
             @media (min-width: 992px) {
                 margin-right: 4vw;
             }
@@ -186,8 +187,8 @@ ion-item-option {
     -webkit-transition: transform 0.3s ease-in-out;
 
     :first-child {
-        --background: rgb(69, 184, 255); 
-        font-size: 30px;      
+        --background: rgb(69, 184, 255);
+        font-size: 30px;
     }
 }
 
@@ -203,7 +204,7 @@ ion-item-option {
     -webkit-transition: transform 0.3s ease-in-out;
 
     :first-child {
-        --background: rgb(69, 184, 255); 
-        font-size: 30px;      
+        --background: rgb(69, 184, 255);
+        font-size: 30px;
     }
 }
