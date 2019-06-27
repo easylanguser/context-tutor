@@ -140,15 +140,17 @@ export class SentenceGuessPage implements OnInit {
 		const charsBlock = document.getElementById('chars').style;
 		const hintButton = document.getElementById('hint-button').style;
 		const giveUpButton = document.getElementById('give-up-button').style;
-		const bottomBarContainer = document.getElementById('bottom-bar-container').style;
+		const footer = document.getElementById('footer').style;
 		if (show) {
 			charsBlock.opacity = '1';
 			hintButton.opacity = '1';
 			giveUpButton.opacity = '1';
+			footer.background = '#FFF';
 		} else {
 			charsBlock.opacity = '0';
 			hintButton.opacity = '0';
 			giveUpButton.opacity = '0';
+			footer.background = 'none';
 		}
 	}
 
