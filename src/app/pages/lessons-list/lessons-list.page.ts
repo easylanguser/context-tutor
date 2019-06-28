@@ -7,6 +7,9 @@ import { UtilsService, chartsColors } from 'src/app/services/utils/utils.service
 import { updateIsRequired } from 'src/app/app.component';
 import * as _ from 'lodash';
 import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
+const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
 
 @Component({
 	selector: 'page-lessons-list',
@@ -29,6 +32,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private alertCtrl: AlertController,
 		private lessonHttpService: LessonHttpService,
 		private utils: UtilsService,
+		private browser: InAppBrowser,
 		private cdRef: ChangeDetectorRef) { }
 
 	async ngOnInit() {
@@ -128,6 +132,16 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, this.utils.getNewChartObject()));
 		}
 		this.updateCharts();
+	}
+
+	async openLink(slidingItem: IonItemSliding, lessonUrl: string) {
+		if (lessonUrl.match(urlRegex)) {
+			slidingItem.close().then(() => {
+				this.browser.create(lessonUrl);
+			});
+		} else {
+			this.utils.showToast('Lesson URL is not valid');
+		}
 	}
 
 	private updateCharts() {
