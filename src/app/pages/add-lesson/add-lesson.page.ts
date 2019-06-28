@@ -75,7 +75,7 @@ export class AddLessonPage implements OnInit {
 
 		nameInput.display = showFileInput ? 'none' : 'flex';
 		createLessonButton.display = showFileInput ? 'none' : 'flex';
-		importButton.innerText = showFileInput ? 'Upload file' : 'Import another file';
+		importButton.innerText = showFileInput ? 'Upload file' : 'Import file';
 		fileInput.display = showFileInput ? 'inline' : 'none';
 
 		const fileInputAnimatingPromise = anime({
