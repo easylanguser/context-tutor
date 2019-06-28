@@ -6,6 +6,13 @@
     --border-width: 0;
 }
 
+ion-title {
+    padding-inline-start: 0;
+    padding-inline-end: 0;
+    -webkit-padding-start: 0;
+    -webkit-padding-end: 0; 
+}
+
 ion-toolbar {
     --background: none;
 
@@ -43,33 +50,39 @@ ion-toolbar {
 }
 
 #lesson-name-input {
+    max-width: 1000px;
+    width: 70vw;
     text-align: center;
     border: 1px solid grey;
     border-radius: 10px;
     margin-top: 30vh;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #save-lesson-button {
-    margin-left: calc(50vw - 20vmin - 16px);
-    margin-top: 4vh;
-    @media (min-width: 992px) {
-        margin-left: calc(36vw - 20vmin - 16px);
-    }
+    width: 50vw;
+    margin: 3vh auto;
 
     ion-button {
-        width: 40vmin;
+        width: 50vw;
+    }
+
+    @media (min-width: 992px) {
+        width: 25vw;
+
+        ion-button {
+            width: 25vw;
+        }
     }
 }
 
 #go-to-file-import-button {
-    margin-left: calc(50vw - 20vmin - 16px);
-    margin-top: 4vh;
-    @media (min-width: 992px) {
-        margin-left: calc(36vw - 20vmin - 16px);
-    }
+    width: 50vw;
+    margin: 3vh auto;
 
     ion-button {
-        width: 40vmin;
+        width: 50vw;
         background: #FFF;
         color: #747474;
         font-weight: bold;
@@ -77,39 +90,12 @@ ion-toolbar {
         border: 1px solid grey;
         border-radius: 2px;
     }
-}
 
-#sentence-text-textarea {
-    margin-top: 4vh;
-    text-align: center;
-    border: 1px solid grey;
-    border-radius: 10px;
-}
-
-$buttons-margin: calc(50vw - 40vmin - 16px);
-
-#save-sentence-button {
-    margin-left: $buttons-margin;
-    margin-top: 4vh;
     @media (min-width: 992px) {
-        display: inline-block;
-        margin-left: 6vw;
-    }
-}
+        width: 25vw;
 
-#save-words-button {
-    margin-left: $buttons-margin;
-    margin-top: 2vh;
-    @media (min-width: 992px) {
-        display: inline-block;
-        margin-left: 2vw;
-    }
-}
-
-#save-words-button ion-button,
-#save-sentence-button ion-button {
-    width: 80vmin;
-    @media (min-width: 992px) {
-        width: 28vw;
+        ion-button {
+            width: 25vw;
+        }
     }
 }
