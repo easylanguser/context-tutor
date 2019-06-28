@@ -24,7 +24,7 @@ export class SentenceGuessPage implements OnInit {
 	@ViewChild('pieCanvas', { static: false }) pieCanvas;
 	pieChart: any;
 
-	alertIsShown: boolean; // Single toast flag
+	alertIsShown: boolean; // Single alert flag
 	lessonId: number = 0; // Id of current lesson
 	sentenceId: number; // Number of current sentence in lesson
 

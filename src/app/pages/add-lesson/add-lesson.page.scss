@@ -25,6 +25,8 @@ ion-toolbar {
 }
 
 #file-input {
+    display: none;
+    opacity: 0;
     width: calc(100vw - 32px);
     background-color: var(--ion-color-step-50);
     margin-top: 20vh;
@@ -40,20 +42,11 @@ ion-toolbar {
     }
 }
 
-$inputs-border: 1px solid grey;
-
 #lesson-name-input {
     text-align: center;
-    border: $inputs-border;
+    border: 1px solid grey;
     border-radius: 10px;
     margin-top: 30vh;
-}
-
-#lesson-url-input {
-    text-align: center;
-    margin-top: 2vh;
-    border: $inputs-border;
-    border-radius: 10px;
 }
 
 #save-lesson-button {
@@ -68,10 +61,28 @@ $inputs-border: 1px solid grey;
     }
 }
 
+#go-to-file-import-button {
+    margin-left: calc(50vw - 20vmin - 16px);
+    margin-top: 4vh;
+    @media (min-width: 992px) {
+        margin-left: calc(36vw - 20vmin - 16px);
+    }
+
+    ion-button {
+        width: 40vmin;
+        background: #FFF;
+        color: #747474;
+        font-weight: bold;
+        font-size: 13px;
+        border: 1px solid grey;
+        border-radius: 2px;
+    }
+}
+
 #sentence-text-textarea {
     margin-top: 4vh;
     text-align: center;
-    border: $inputs-border;
+    border: 1px solid grey;
     border-radius: 10px;
 }
 

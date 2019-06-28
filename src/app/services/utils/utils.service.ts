@@ -1,19 +1,33 @@
 import { Injectable } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
 import { Statistics } from 'src/app/models/statistics';
+import { ToastController } from '@ionic/angular';
 
 export const charForHiding: string = '•';
 export const redCharForHiding: string = '<span class=\'red-text\'>•</span>';
 export const blueCharForHiding: string = '<span class=\'blue-text\'>•</span>';
 
-export const chartsColors: [string, string, string] = [ '#AFF265', '#FF9055', '#FFE320' ]; // Green, Red, Yellow
+export const chartsColors: [string, string, string] = ['#AFF265', '#FF9055', '#FFE320']; // Green, Red, Yellow
 
 @Injectable({
 	providedIn: 'root'
 })
 export class UtilsService {
 
-	constructor() { }
+	toast: HTMLIonToastElement;
+
+	constructor(private toastController: ToastController) { }
+
+	public async showToast(message: string) {
+		if (!this.toast) {
+			this.toast = await this.toastController.create({
+				message: message,
+				duration: 1500
+			});
+			this.toast.present();
+			setTimeout(() => { this.toast = null }, 2000);
+		}
+	}
 
 	public getNewChartObject(): Object {
 		return new Object({

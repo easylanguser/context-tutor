@@ -76,18 +76,10 @@
     </ion-list>
   </ion-content>
 
-  <ion-fab #fab id="add-lesson-fab" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab id="add-lesson-fab" (click)="addLessonFile()" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-    <ion-fab-list side="start">
-      <ion-fab-button (click)="addLessonText()">
-        <ion-icon name="md-paper"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button (click)="addLessonFile()">
-        <ion-icon name="folder-open"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
   </ion-fab>
 
 </ion-content>

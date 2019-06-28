@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { LoadingController, IonItemSliding, AlertController, NavController, IonFab } from '@ionic/angular';
+import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { LoadingController, IonItemSliding, AlertController, NavController } from '@ionic/angular';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
@@ -20,7 +20,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	displayedLessons: Lesson[] = [];
 	@ViewChildren('chartsid') pieCanvases: any;
-	@ViewChild('fab', { static: false }) fabBtn: IonFab;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
 	displayHints: boolean = false;
@@ -43,28 +42,13 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		await loading.present();
 
 		await this.getData();
-		this.addTipsAndFabsHandler();
+
+		this.addFabsHandler();
 
 		loading.dismiss();
 	}
 
-	private addTipsAndFabsHandler() {
-		const fab: HTMLElement = <HTMLElement>(document.getElementById("add-lesson-fab").firstChild);
-		fab.addEventListener('click', () => {
-			if (!this.lessonsDataService.lessons.length) {
-				const tip = document.getElementById('tip-add-lesson');
-				if (fab.classList.contains('fab-button-close-active')) {
-					tip.style.bottom = 'calc(3vh + 20px)';
-					tip.style.right = 'calc(3vh + 50px)';
-					tip.innerHTML = "Click button \u21e8 <br>to add a <b>new lesson</b>";
-				} else {
-					tip.style.bottom = 'calc(3vh + 80px)';
-					tip.style.right = 'calc(3vh + 5px)';
-					tip.innerHTML = "Choose <b>file</b> or add <b>manually</b><br> \u21e9 \u21e9";
-				}
-			}
-		});
-
+	private addFabsHandler() {
 		const content = <HTMLIonContentElement>document.getElementById('list-scroll');
 		content.scrollEvents = true;
 		const fabAdd = document.getElementById('add-lesson-fab');
@@ -105,12 +89,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		});
 	}
 
-	ionViewWillLeave() {
-		const fab: HTMLElement = <HTMLElement>(document.getElementById("add-lesson-fab").firstChild);
-		fab.dispatchEvent(new Event('click'));
-		this.fabBtn.close();
-	}
-
 	ngAfterViewInit() {
 		this.pieCanvases.changes.subscribe(() => {
 			this.syncCharts();
@@ -120,10 +98,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	addLessonFile() {
 		this.navCtrl.navigateForward(['add-lesson']);
-	}
-
-	addLessonText() {
-		this.navCtrl.navigateForward(['add-lesson'], { queryParams: { hideFileInput: true } });
 	}
 
 	private syncCharts() {
@@ -229,7 +203,9 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	private async getData() {
 		await this.lessonsDataService.refreshLessons().then(() => {
 			this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
-			this.displayHints = this.displayedLessons.length === 0;
+			if (this.displayedLessons.length === 0) {
+				this.displayHints = true;
+			}
 		});
 	}
 

@@ -15,10 +15,11 @@ export class LessonHttpService {
 		return this.httpService.doPost(apiUrl + 'addLessons?userId=' + lesson.userId, lesson).toPromise();
 	}
 
-	postNewLessonFile(lesson: FileList, userId: number): Promise<any> {
+	postNewLessonFile(lesson: FileList, lessonName: string, userId: number): Promise<any> {
 		const formData = new FormData();
 		formData.append('lesson', lesson[0]);
-		return this.httpService.doPostForm(apiUrl + 'v1/addLessons?userId=' + userId, formData).toPromise();
+		return this.httpService.doPostForm(apiUrl + 'addLessonFile?userId=' +
+			userId + '&lessonFileName=' + lessonName, formData).toPromise();
 	}
 
 	deleteLesson(lessonId: number) {

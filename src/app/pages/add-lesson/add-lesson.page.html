@@ -23,12 +23,13 @@
     <ion-input id="lesson-name-input" (keyup)="onKeyLessonName($event)"
       [ngStyle]="{ 'border-color': lessonNameInputIsValidated ? '#808080' : '#F00' }" 
       [(ngModel)]="lessonName" placeholder="Enter lesson name"></ion-input>
-    <ion-input id="lesson-url-input" (keyup)="onKeyLessonUrl($event)"
-      [ngStyle]="{ 'border-color': lessonUrlInputIsValidated ? '#808080' : '#F00' }"
-      [(ngModel)]="lessonUrl" placeholder="Enter lesson url"></ion-input>
 
-    <ion-buttons (click)="addNewLesson()" id="save-lesson-button">
-      <ion-button color="primary" fill="outline">Save lesson</ion-button>
+    <ion-buttons id="save-lesson-button">
+      <ion-button (click)="addNewLesson()"  color="primary" fill="outline">Create lesson</ion-button>
+    </ion-buttons>
+
+    <ion-buttons id="go-to-file-import-button">
+      <ion-button id='go-to-file-import-inner-button' (click)="goToFileImport()">Import file</ion-button>
     </ion-buttons>
 
   </ion-content>
