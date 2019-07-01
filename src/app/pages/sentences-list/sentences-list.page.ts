@@ -26,7 +26,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	pieCharts: Array<Chart> = [];
 	toast: HTMLIonToastElement = null;
 	addButtonIsAnimating: boolean = false;
-	loader: HTMLIonLoadingElement;
 
 	constructor(
 		private toastController: ToastController,
@@ -36,17 +35,12 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		private navCtrl: NavController,
 		public lessonsDataService: LessonsDataService,
 		private sentenceHttpService: SentenceHttpService,
-		private loadingController: LoadingController,
 		private cdRef: ChangeDetectorRef) { }
 
 	async ngOnInit() {
 		const showLoader = this.route.snapshot.queryParamMap.get('showLoader');
 		if (showLoader === 'true') {
-			this.loader = await this.loadingController.create({
-				message: 'Loading...<br>Please, wait',
-				backdropDismiss: true
-			});
-			await this.loader.present();
+			await this.utils.createAndShowLoader('Loading...<br>Please, wait');
 		}
 
 		if (!this.lessonsDataService.lessons.length) {
@@ -79,7 +73,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
 		await this.getData();
 		if (showLoader === 'true') {
-			this.loader.dismiss();
+			await this.utils.dismissLoader();
 		}
 	}
 
@@ -275,11 +269,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	async filterClick(type: number) {
 		await this.sentencesList.closeSlidingItems();
-		this.loader = await this.loadingController.create({
-			message: 'Loading',
-			backdropDismiss: true
-		});
-		await this.loader.present();
+		await this.utils.createAndShowLoader('Loading');
+
 		if (type === 1) {
 			this.getData();
 		} else {
@@ -294,6 +285,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				);
 			}
 		}
-		await this.loader.dismiss();
+		await this.utils.dismissLoader();
 	}
 }

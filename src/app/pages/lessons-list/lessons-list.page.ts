@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { LoadingController, IonItemSliding, AlertController, NavController, IonList } from '@ionic/angular';
+import { IonItemSliding, AlertController, NavController, IonList } from '@ionic/angular';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
@@ -26,7 +26,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	displayHints: boolean = false;
 
 	constructor(
-		private loadingController: LoadingController,
 		private navCtrl: NavController,
 		private lessonsDataService: LessonsDataService,
 		private alertCtrl: AlertController,
@@ -36,17 +35,13 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private cdRef: ChangeDetectorRef) { }
 
 	async ngOnInit() {
-		const loading = await this.loadingController.create({
-			message: 'Loading',
-			backdropDismiss: true
-		});
-		await loading.present();
+		await this.utils.createAndShowLoader('Loading');
 
 		await this.getData();
 
 		this.addFabsHandler();
 
-		loading.dismiss();
+		await this.utils.dismissLoader();
 	}
 
 	private addFabsHandler() {
@@ -216,11 +211,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	async filterClick(type: number) {
 		await this.lessonsList.closeSlidingItems();
-		const loading = await this.loadingController.create({
-			message: 'Loading',
-			backdropDismiss: true
-		});
-		await loading.present();
+		await this.utils.createAndShowLoader('Loading');
+
 		const allLessons = await this.lessonsDataService.lessons;
 		if (type === 1) {
 			this.displayedLessons = allLessons;
@@ -233,7 +225,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				);
 			}
 		}
-		await loading.dismiss();
+		await this.utils.dismissLoader();
 	}
 
 	openLesson(lesson: Lesson) {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
 import { Statistics } from 'src/app/models/statistics';
-import { ToastController } from '@ionic/angular';
+import { ToastController, LoadingController } from '@ionic/angular';
 
 export const charForHiding: string = '•';
 export const redCharForHiding: string = '<span class=\'red-text\'>•</span>';
@@ -15,8 +15,11 @@ export const chartsColors: [string, string, string] = ['#AFF265', '#FF9055', '#F
 export class UtilsService {
 
 	toast: HTMLIonToastElement;
+	loader: HTMLIonLoadingElement;
 
-	constructor(private toastController: ToastController) { }
+	constructor(
+		private toastController: ToastController,
+		private loadingController: LoadingController) { }
 
 	public async showToast(message: string) {
 		if (!this.toast) {
@@ -26,6 +29,23 @@ export class UtilsService {
 			});
 			this.toast.present();
 			setTimeout(() => { this.toast = null }, 2000);
+		}
+	}
+
+	public async createAndShowLoader(message: string): Promise<void> {
+		if (!this.loader) {
+			this.loader = await this.loadingController.create({
+				message: message,
+				backdropDismiss: true
+			});
+			return this.loader.present();
+		}
+	}
+
+	public async dismissLoader(): Promise<void> {
+		if (this.loader) {
+			await this.loader.dismiss();
+			this.loader = null;
 		}
 	}
 

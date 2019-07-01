@@ -2,8 +2,19 @@
     padding-top: 2vh;
     --background: none;
 
+    ion-button {
+        --border-radius: 50%;
+    }
+
     ion-icon {
         color: #45b8ff;
+        margin-right: 0;
+        margin-inline-end: 0;
+        -webkit-margin-end: 0;
+    }
+
+    ion-input {
+        text-align: center;
     }
 }
 
@@ -25,10 +36,12 @@
 
     @media (min-width: 400px) and (max-width: 992px) {
         width: 55vw;
+        margin-left: 2vw;
     }
 
     @media (min-width: 992px) {
         width: 30vw;
+        margin-left: 4vw;
     }
 
     ion-icon {
@@ -71,23 +84,18 @@
     display: table;
     table-layout: fixed;
 
-    -webkit-box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
-    -moz-box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
-    box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
+    -webkit-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.07);
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.07);
 
-    transition: color 0.4s ease-in-out;
-    -webkit-transition: color 0.4s ease-in-out;
+    transition: box-shadow 0.3s ease;
+    -webkit-transition: box-shadow 0.3s ease;
 
     &:hover {
-        >:first-child {
-            p, span {
-                color: rgb(69, 184, 255);
-            }
-        }
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.07), inset 0 0 0 2px var(--ion-color-primary);
     }
 
     >:first-child {
-        width: 80%;
+        width: 100%;
         overflow: hidden;
         display: table-cell;
         vertical-align: top;
@@ -97,6 +105,8 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            font-family: "Arial";
+            font-size: 2vh;
             line-height: 6vh;
             max-height: 6vh;
             margin: 0;
@@ -111,21 +121,13 @@
             position: absolute;
             font-size: 3vmin;
             font-weight: bold;
-            color: var(--ion-color-step-850);
-
-            transition: color 0.4s ease-in-out;
-            -webkit-transition: color 0.4s ease-in-out;
+            font-family: "Arial";
+            color: #D3DBE7;
 
             @media (min-width: 650px) {
                 font-size: 1.5vmin;
             }
         }
-    }
-
-    >:last-child {
-        height: 4vh;
-        width: 4vh;
-        margin: 4vh 5vw 0 0;
     }
 }
 
