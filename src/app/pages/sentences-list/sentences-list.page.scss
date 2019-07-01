@@ -113,6 +113,7 @@ ion-toolbar {
     cursor: pointer;
     table-layout: fixed;
     vertical-align: middle;
+    z-index: 100;
 
     -webkit-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.07);
     -moz-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.07);
@@ -168,11 +169,9 @@ ion-toolbar {
     text-align: center;
     border-radius: 25px;
     margin: 0.5vh 3vw 0.5vh 0;
-}
-
-ion-item-option {
     max-width: 160px;
     font-weight: bold;
+    z-index: 100;
 }
 
 .item-options-ios.item-options-end {

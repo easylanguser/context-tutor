@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { LoadingController, IonItemSliding, AlertController, NavController } from '@ionic/angular';
+import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { LoadingController, IonItemSliding, AlertController, NavController, IonList } from '@ionic/angular';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
@@ -20,6 +20,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	displayedLessons: Lesson[] = [];
 	@ViewChildren('chartsid') pieCanvases: any;
+	@ViewChild('lessonsList', { static: false }) lessonsList: IonList;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
 	displayHints: boolean = false;
@@ -94,6 +95,10 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 			this.syncCharts();
 			this.cdRef.detectChanges();
 		});
+	}
+
+	async ionViewWillLeave() {
+		await this.lessonsList.closeSlidingItems();
 	}
 
 	addLessonFile() {
@@ -210,6 +215,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	async filterClick(type: number) {
+		await this.lessonsList.closeSlidingItems();
 		const loading = await this.loadingController.create({
 			message: 'Loading',
 			backdropDismiss: true

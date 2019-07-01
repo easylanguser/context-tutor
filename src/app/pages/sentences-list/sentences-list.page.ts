@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UtilsService, chartsColors } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
-import { IonItemSliding, AlertController, NavController, ToastController, LoadingController } from '@ionic/angular';
+import { IonItemSliding, AlertController, NavController, ToastController, LoadingController, IonList } from '@ionic/angular';
 import * as anime from 'animejs';
 import * as _ from 'lodash';
 import { updateIsRequired } from 'src/app/app.component';
@@ -22,6 +22,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	lessonId: number;
 	lessonTitle: string;
 	@ViewChildren('chartsid') pieCanvases: any;
+	@ViewChild('sentencesList', { static: false }) sentencesList: IonList;
 	pieCharts: Array<Chart> = [];
 	toast: HTMLIonToastElement = null;
 	addButtonIsAnimating: boolean = false;
@@ -101,9 +102,11 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		});
 	}
 
-	ionViewWillLeave() {
+	async ionViewWillLeave() {
+		await this.sentencesList.closeSlidingItems();
 		if (this.toast) {
-			this.toast.dismiss().then(() => this.toast = null);
+			await this.toast.dismiss();
+			this.toast = null;
 		}
 	}
 
@@ -271,6 +274,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	async filterClick(type: number) {
+		await this.sentencesList.closeSlidingItems();
 		this.loader = await this.loadingController.create({
 			message: 'Loading',
 			backdropDismiss: true

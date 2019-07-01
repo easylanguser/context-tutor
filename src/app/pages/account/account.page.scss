@@ -3,7 +3,7 @@
 }
 
 ion-toolbar {
-    --background: #FFF !important;
+    --background: var(--background) !important;
     --border-width: 0 !important;
 
     ion-title {
@@ -20,21 +20,27 @@ ion-toolbar {
     line-height: 40px;
     margin-top: 2vh;
     text-align: center;
-    color: black;
+    color: var(--ion-color-step-950);
+}
+
+#outer-content {
+    background: var(--background);
 }
 
 .list-block {
     height: 40px;
     border-radius: 20px;
+    --border-radius: 20px;
     margin: 2vh 20vw;
     cursor: pointer;
     text-align: center;
     vertical-align: middle;
     line-height: 40px;
-    background: #f2f6ff;
+    --background: #FFF;
     font-weight: bold;
     color: #00baff;
 
+    --transition: background 0.3s ease;
     transition: background 0.3s ease;
     -webkit-transition: background 0.3s ease;
 
@@ -44,24 +50,9 @@ ion-toolbar {
 }
 
 #logout-button {
-    height: 40px;
-    border-radius: 20px;
-    margin-top: 20vh;
-    margin-left: 35vw;
-    margin-right: 35vw;
-    cursor: pointer;
+    margin: 20vh 35vw 0 35vw;
     line-height: 35px;
-    border: 2px solid #00baff;
-    background: rgba(255, 255, 255, 1);
-    color: #00baff;
-    font-weight: bold;
-
-    transition: background 0.3s ease;
-    -webkit-transition: background 0.3s ease;
-
-    &:hover {
-        background: rgba(0, 186, 255, 0.2);
-    }
+    --ripple-color: red;
 
     @media (min-width: 992px) {
         margin-left: 30vw;
@@ -79,6 +70,7 @@ ion-toolbar {
     border-radius: 50%;
     object-fit: cover;
     object-position: center;
+    background: #FFF;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
 
     &:hover {

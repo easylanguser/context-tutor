@@ -28,7 +28,7 @@ export class ThemeService {
 			--ion-background-color-rgb: 0,0,0; \
 			--ion-text-color: #FFF; \
 			--ion-text-color-rgb: 255,255,255; \
-			--ion-color-step-50: #0d0d0d; \
+			--ion-color-step-50: #000000; \
 			--ion-color-step-100: #191919; \
 			--ion-color-step-150: #262626; \
 			--ion-color-step-200: ;#333333; \
@@ -46,7 +46,7 @@ export class ThemeService {
 			--ion-color-step-800: #cccccc; \
 			--ion-color-step-850: #d9d9d9; \
 			--ion-color-step-900: #e6e6e6; \
-			--ion-color-step-950: #f2f2f2;`;
+			--ion-color-step-950: #ffffff;`;
 	}
 
 	getLightTheme() {
@@ -73,6 +73,6 @@ export class ThemeService {
 			--ion-color-step-800: #333333; \
 			--ion-color-step-850: #262626; \
 			--ion-color-step-900: #191919; \
-			--ion-color-step-950: #0d0d0d;`;
+			--ion-color-step-950: #000000;`;
 	}
 }

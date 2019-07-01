@@ -22,10 +22,13 @@
     }
 }
 
+ion-header {
+    margin-bottom: 12vh;
+}
+
 #info-div {
-    height: 4vh;
+    height: 12vh;
     width: 90vw;
-    margin-top: 10vh;
     margin-left: 5vw;
     font-size: 4vh;
     font-weight: bold;
