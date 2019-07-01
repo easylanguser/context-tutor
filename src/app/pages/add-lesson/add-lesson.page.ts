@@ -25,7 +25,7 @@ export class AddLessonPage implements OnInit {
 		private storage: Storage,
 		private lessonHttpService: LessonHttpService,
 		private utils: UtilsService,
-		private navCtrl: NavController) { }
+		private navController: NavController) { }
 
 	ngOnInit() {
 		this.fileInput = <HTMLInputElement>document.getElementById('file-input');
@@ -36,7 +36,7 @@ export class AddLessonPage implements OnInit {
 		if (this.fileImportIsOpened) {
 			this.showHideInputs(false);
 		} else {
-			this.navCtrl.navigateBack(['lessons-list']);
+			this.navController.navigateBack(['lessons-list']);
 		}
 	}
 
@@ -101,7 +101,7 @@ export class AddLessonPage implements OnInit {
 			this.utils.showToast('New lesson was added');
 			this.fileInput.value = "";
 			updateIsRequired[0] = true;
-			this.navCtrl.navigateBack(['lessons-list']);
+			this.navController.navigateBack(['lessons-list']);
 		}
 	}
 }

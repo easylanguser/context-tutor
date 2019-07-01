@@ -30,7 +30,7 @@ export class SentenceAddingPage implements OnInit {
 
 	constructor(
 		private platform: Platform,
-		private navCtrl: NavController,
+		private navController: NavController,
 		private storage: Storage,
 		private sentenceHttpService: SentenceHttpService,
 		private lessonHttpService: LessonHttpService,
@@ -76,7 +76,7 @@ export class SentenceAddingPage implements OnInit {
 	}
 
 	goBack() {
-		this.navCtrl.navigateBack(['sentences-list'], { queryParams: { lessonID: this.lessonId } });
+		this.navController.navigateBack(['sentences-list'], { queryParams: { lessonID: this.lessonId } });
 	}
 
 	ionViewDidEnter() {
@@ -90,7 +90,7 @@ export class SentenceAddingPage implements OnInit {
 	}
 
 	editTitle() {
-		this.navCtrl.navigateForward(['edit-lesson-title'], { queryParams: { lessonId: this.lessonId } });
+		this.navController.navigateForward(['edit-lesson-title'], { queryParams: { lessonId: this.lessonId } });
 	}
 
 	submitSelections() {
@@ -162,7 +162,7 @@ export class SentenceAddingPage implements OnInit {
 		sharedText[0] = undefined;
 		updateIsRequired[0] = true;
 
-		this.navCtrl.navigateBack(['sentences-list'], {
+		this.navController.navigateBack(['sentences-list'], {
 			queryParams: {
 				lessonID: this.lessonId
 			}

@@ -34,10 +34,10 @@ export class AppComponent {
 		private router: Router,
 		private theme: ThemeService,
 		private storage: Storage,
-		private alertCtrl: AlertController,
+		private alertController: AlertController,
 		private location: Location,
 		private userHttpService: UserHttpService,
-		private navCtrl: NavController) {
+		private navController: NavController) {
 		this.initializeApp(location.path());
 	}
 
@@ -108,9 +108,9 @@ export class AppComponent {
 
 							const paramsOfUrl = this.getParams(pathToGo);
 							if (paramsOfUrl) {
-								this.navCtrl.navigateForward([pathToGo.substring(0, pathToGo.indexOf('?'))], { queryParams: paramsOfUrl });
+								this.navController.navigateForward([pathToGo.substring(0, pathToGo.indexOf('?'))], { queryParams: paramsOfUrl });
 							} else {
-								this.navCtrl.navigateForward([pathToGo]);
+								this.navController.navigateForward([pathToGo]);
 							}
 						}
 					} else {
@@ -166,7 +166,7 @@ export class AppComponent {
 	async showAbout() {
 		let header = 'EasyLang Context Tutor';
 		let message = '0.1.16';
-		const alert = await this.alertCtrl.create({
+		const alert = await this.alertController.create({
 			header: header,
 			message: 'Version: ' + message,
 			buttons: ['Close']

@@ -29,10 +29,10 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	constructor(
 		private toastController: ToastController,
-		private alertCtrl: AlertController,
+		private alertController: AlertController,
 		private utils: UtilsService,
 		private route: ActivatedRoute,
-		private navCtrl: NavController,
+		private navController: NavController,
 		public lessonsDataService: LessonsDataService,
 		private sentenceHttpService: SentenceHttpService,
 		private cdRef: ChangeDetectorRef) { }
@@ -78,7 +78,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	goBack() {
-		this.navCtrl.navigateBack(['lessons-list']);
+		this.navController.navigateBack(['lessons-list']);
 	}
 
 	async ionViewDidEnter() {
@@ -113,7 +113,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	async deleteItem(slidingItem: IonItemSliding, lessonID: number, sentenceID: number) {
-		const alert = await this.alertCtrl.create({
+		const alert = await this.alertController.create({
 			message: 'Are you sure you want to delete this sentence?',
 			buttons: [
 				{
@@ -185,7 +185,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				duration: 0
 			});
 		}
-		this.navCtrl.navigateForward(['sentence-adding'], {
+		this.navController.navigateForward(['sentence-adding'], {
 			queryParams: {
 				lessonId: this.lessonId
 			}
@@ -231,14 +231,14 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	openSentence(sentenceId: number) {
 		if (!this.toast) {
-			this.navCtrl.navigateForward(['sentence-guess'], {
+			this.navController.navigateForward(['sentence-guess'], {
 				queryParams: {
 					current: sentenceId,
 					lesson: this.lessonId
 				}
 			});
 		} else {
-			this.navCtrl.navigateForward(['sentence-adding'], {
+			this.navController.navigateForward(['sentence-adding'], {
 				queryParams: {
 					toEdit: sentenceId,
 					lessonId: this.lessonId

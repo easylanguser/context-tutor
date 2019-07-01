@@ -17,7 +17,7 @@ export class ShareAddingChoicePage implements OnInit {
 	searchValue: string;
 
 	constructor(
-		private navCtrl: NavController,
+		private navController: NavController,
 		private utils: UtilsService,
 		private lessonsDataService: LessonsDataService) { }
 
@@ -27,7 +27,7 @@ export class ShareAddingChoicePage implements OnInit {
 
 	goBack() {
 		sharedText[0] = undefined;
-		this.navCtrl.navigateBack(['lessons-list']);
+		this.navController.navigateBack(['lessons-list']);
 	}
 
 	filterLessons(event: CustomEvent) {
@@ -45,10 +45,10 @@ export class ShareAddingChoicePage implements OnInit {
 	}
 
 	addToExistingLesson(lessonId: number) {
-		this.navCtrl.navigateForward(['sentence-adding'], { queryParams: { lessonId: lessonId } });
+		this.navController.navigateForward(['sentence-adding'], { queryParams: { lessonId: lessonId } });
 	}
 
 	createNewLesson() {
-		this.navCtrl.navigateForward(['sentence-adding']);
+		this.navController.navigateForward(['sentence-adding']);
 	}
 }

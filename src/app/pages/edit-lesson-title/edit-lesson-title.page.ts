@@ -16,7 +16,7 @@ export class EditLessonTitlePage implements OnInit {
 
 	constructor(
 		private lessonHttpService: LessonHttpService,
-		private navCtrl: NavController,
+		private navController: NavController,
 		private route: ActivatedRoute,
 		private lessonsDataService: LessonsDataService) { }
 
@@ -30,10 +30,10 @@ export class EditLessonTitlePage implements OnInit {
 		lessonToEdit.name = this.lessonTitle;
 		this.lessonsDataService.editLesson(lessonToEdit);
 		this.lessonHttpService.updateLessonName(String(this.lessonId), this.lessonTitle.replace(/\s+/g, '%20'))
-			.then(() => this.navCtrl.navigateBack(['lessons-list']));
+			.then(() => this.navController.navigateBack(['lessons-list']));
 	}
 
 	goBack() {
-		this.navCtrl.navigateBack(['lessons-list']);
+		this.navController.navigateBack(['lessons-list']);
 	}
 }

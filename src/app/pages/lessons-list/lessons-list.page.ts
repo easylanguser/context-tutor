@@ -26,9 +26,9 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	displayHints: boolean = false;
 
 	constructor(
-		private navCtrl: NavController,
+		private navController: NavController,
 		private lessonsDataService: LessonsDataService,
-		private alertCtrl: AlertController,
+		private alertController: AlertController,
 		private lessonHttpService: LessonHttpService,
 		private utils: UtilsService,
 		private browser: InAppBrowser,
@@ -36,11 +36,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	async ngOnInit() {
 		await this.utils.createAndShowLoader('Loading');
-
 		await this.getData();
-
 		this.addFabsHandler();
-
 		await this.utils.dismissLoader();
 	}
 
@@ -97,7 +94,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	addLessonFile() {
-		this.navCtrl.navigateForward(['add-lesson']);
+		this.navController.navigateForward(['add-lesson']);
 	}
 
 	private syncCharts() {
@@ -148,7 +145,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	async deleteItem(slidingItem: IonItemSliding, lessonID: number) {
-		const alert = await this.alertCtrl.create({
+		const alert = await this.alertController.create({
 			message: 'Are you sure you want to delete this lesson?',
 			buttons: [
 				{
@@ -187,7 +184,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	async editItem(slidingItem: IonItemSliding, lessonId: number) {
 		slidingItem.close();
-		this.navCtrl.navigateForward(['edit-lesson-title'], { queryParams: { lessonId: lessonId } });
+		this.navController.navigateForward(['edit-lesson-title'], { queryParams: { lessonId: lessonId } });
 	}
 
 	doRefresh(event) {
@@ -229,7 +226,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	openLesson(lesson: Lesson) {
-		this.navCtrl.navigateForward(
+		this.navController.navigateForward(
 			['sentences-list'], {
 				queryParams: {
 					lessonID: lesson.id,

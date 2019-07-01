@@ -15,8 +15,8 @@ export class LoginPage implements OnInit {
 	constructor(
 		private formBuilder: FormBuilder,
 		private authService: AuthService,
-		private navCtrl: NavController,
-		private alertCtrl: AlertController) { }
+		private navController: NavController,
+		private alertController: AlertController) { }
 
 	get formData() {
 		return this.credentialsForm.controls;
@@ -49,7 +49,7 @@ export class LoginPage implements OnInit {
 				if (res['already_signed_up']) {
 					this.authService.login(this.credentialsForm.value).subscribe();
 				} else {
-					const alert = await this.alertCtrl.create({
+					const alert = await this.alertController.create({
 						message: 'We have sent an email with a confirmation link to <b>' + this.credentialsForm.value.email + '</b>',
 						header: 'Email confirmation',
 						buttons: [{
@@ -66,6 +66,6 @@ export class LoginPage implements OnInit {
 	}
 
 	toForget() {
-		this.navCtrl.navigateForward(['forget']);
+		this.navController.navigateForward(['forget']);
 	}
 }

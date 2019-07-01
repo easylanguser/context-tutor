@@ -70,7 +70,7 @@ export class SentenceGuessPage implements OnInit {
 		private utils: UtilsService,
 		private statisticHttpService: StatisticHttpService,
 		private location: Location,
-		private navCtrl: NavController,
+		private navController: NavController,
 		private util: UtilsService) { }
 
 	async ngOnInit() {
@@ -237,7 +237,7 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	goBack() {
-		this.navCtrl.navigateBack(['sentences-list'], { queryParams: { lessonID: this.lessonId } });
+		this.navController.navigateBack(['sentences-list'], { queryParams: { lessonID: this.lessonId } });
 	}
 
 	saveData() {
