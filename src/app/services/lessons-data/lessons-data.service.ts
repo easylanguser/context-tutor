@@ -120,27 +120,27 @@ export class LessonsDataService {
 		return this.getLessonByID(id).sentences;
 	}
 
-	async getStatisticByLessonId(id: number): Promise<Statistics[]> {
-		const statistics = await this.statisticHttpService.getStatisticsOfLesson(id);
+	async getStatisticByUser(): Promise<Statistics[]> {
+		const statistics = await this.statisticHttpService.getStatisticsOfUser();
 		const statisticsArray: Statistics[] = [];
 
 		for (const stat of statistics) {
-			statisticsArray.push(new Statistics(
-				stat.id,
-				stat.sentenceId,
-				stat.lessonId,
-				stat.userId,
-				[], 0,
-				false,
-				stat.correctAnswers,
-				stat.wrongAnswers,
-				stat.giveUps,
-				stat.hintUsages,
-				stat.created_at,
-				stat.updated_at));
+			this.getLessonByID(stat.lessonId).statistics.push(
+				(new Statistics(
+					stat.id,
+					stat.sentenceId,
+					stat.lessonId,
+					stat.userId,
+					[], 0,
+					false,
+					stat.correctAnswers,
+					stat.wrongAnswers,
+					stat.giveUps,
+					stat.hintUsages,
+					stat.created_at,
+					stat.updated_at)
+			));
 		}
-
-		this.getLessonByID(id).statistics = statisticsArray;
 
 		return statisticsArray;
 	}
@@ -175,7 +175,7 @@ export class LessonsDataService {
 		return [flooredValue, label];
 	}
 
-	async refreshLessons(): Promise<Lesson[]> {
+	async refreshLessons(): Promise<void> {
 		const lsn = await this.lessonHttpService.getLessons();
 		this.lessons = [];
 		const now = new Date().getTime();
@@ -194,12 +194,7 @@ export class LessonsDataService {
 			this.addLesson(lesson);
 		}
 
-		const promises = [];
-		for (const newLesson of this.lessons) {
-			promises.push(this.getStatisticByLessonId(newLesson.id));
-		}
-
-		return Promise.all(promises);
+		await this.getStatisticByUser();
 	}
 
 	sortSentencesByAddingTime(first: Sentence, second: Sentence): number {

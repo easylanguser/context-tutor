@@ -15,6 +15,10 @@ export class StatisticHttpService {
 		return this.httpService.doGet(apiUrl + 'getStatisticByLessonId?lessonId=' + lessonId).toPromise();
 	}
 
+	getStatisticsOfUser(): Promise<any> {
+		return this.httpService.doGet(apiUrl + 'getStatisticByUser').toPromise();
+	}
+
 	updateStatisticsOfSentence(newStatistics: any): Promise<any> {
 		return this.httpService.doPut(apiUrl + 'updateStatistics?sentenceId=' +
 			newStatistics.sentenceId, newStatistics).toPromise();
