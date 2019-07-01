@@ -8,6 +8,7 @@
 
 #toolbar {
     --background: none;
+    padding: 0.5vh 0;
 
     ion-buttons {
         margin-left: 4%;
@@ -20,51 +21,40 @@
             }
         }
     }
+
+    ion-title {
+        font-size: 2.5vh;
+        color: var(--ion-color-primary);
+    }
 }
 
 ion-header {
     margin-bottom: 12vh;
 }
 
-#info-div {
-    height: 12vh;
-    width: 90vw;
-    margin-left: 5vw;
-    font-size: 4vh;
-    font-weight: bold;
-    text-align: center;
-
-    @media (min-width: 992px) {
-        width: 60vw;
-        margin-left: 6vw;
-    }
-}
-
 #edit-text-area {
-    width: 80vw;
-    min-width: 80vw;
-    max-width: 80vw;
+    width: 90vw;
+    min-width: 90vw;
+    max-width: 90vw;
     height: 30vh;
     min-height: 10vh;
     max-height: 50vh;
     font-size: 5vh;
-    line-height: 5vh;
-    margin-top: 4vh;
-    margin-bottom: 4vh;
+    line-height: 6vh;
+    margin: 4vh 5vw 4vh 5vw;
     padding: 1vh;
     outline: none;
     border: 1px solid;
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
-    margin-left: 10vw;
     color: black;
 
     @media (min-width: 992px) {
-        width: 50vw;
-        min-width: 50vw;
-        max-width: 50vw;
-        margin-left: 11vw;
+        width: 60vw;
+        min-width: 60vw;
+        max-width: 60vw;
+        margin-left: 6vw;
     }
 }
 

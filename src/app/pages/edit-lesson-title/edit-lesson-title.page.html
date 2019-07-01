@@ -4,17 +4,14 @@
         <ion-toolbar id="toolbar" mode="ios">
             <ion-buttons slot="start" (click)="goBack()">
                 <ion-button>
-                    <ion-icon name="arrow-back">
-                        Edit lesson title
-                    </ion-icon>
+                    <ion-icon name="arrow-back"></ion-icon>
                 </ion-button>
             </ion-buttons>
+            <ion-title class="no-selection">
+                Edit lesson title
+            </ion-title>
         </ion-toolbar>
     </ion-header>
-
-    <div id="info-div" class="no-selection">
-        You can edit your title
-    </div>
 
     <div style="margin-bottom: 4vh">
         <textarea id="edit-text-area" [(ngModel)]="lessonTitle"></textarea>
