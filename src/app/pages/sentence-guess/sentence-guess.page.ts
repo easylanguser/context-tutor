@@ -88,7 +88,7 @@ export class SentenceGuessPage implements OnInit {
 
 		setTimeout(() => {
 		this.lightHelps();
-		}, 1000);
+		}, 300);
 	}
 
 	lightHelps() {
