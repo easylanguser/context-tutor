@@ -4,12 +4,8 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
-import { BehaviorSubject } from 'rxjs';
 import { ThemeService } from './services/theme/theme.service';
 import { Location } from '@angular/common';
-import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
-import { USER_AVATAR_KEY } from './pages/account/account.page';
-import { UserHttpService } from './services/http/users/user-http.service';
 import { Storage } from '@ionic/storage';
 
 export const SHARED_TEXT_ID_KEY = "shared_text_id";
@@ -36,7 +32,6 @@ export class AppComponent {
 		private storage: Storage,
 		private alertController: AlertController,
 		private location: Location,
-		private userHttpService: UserHttpService,
 		private navController: NavController) { }
 
 	onChangeTheme(ev: CustomEvent) {
@@ -51,11 +46,6 @@ export class AppComponent {
 
 	initializeApp() {
 		this.platform.ready()
-			.then(() => {
-				if (this.platform.is('android')) {
-					this.checkForIntent();
-				}
-			})
 			.then(() => {
 				if (this.platform.is('mobile')) {
 					if (this.platform.is('android')) {
@@ -76,28 +66,6 @@ export class AppComponent {
 
 				this.navController.navigateForward(['']);
 			});
-	}
-
-	private loadAvatar() {
-		this.storage.get(USER_AVATAR_KEY).then(image => {
-			const avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
-			if (image) {
-				avatars[0].src = image;
-			} else {
-				this.userHttpService.getAvatar().then(blob => {
-					if (blob.size === 19) {
-						return;
-					}
-					var reader = new FileReader();
-					reader.readAsDataURL(blob);
-					reader.onloadend = () => {
-						const image = String(reader.result);
-						this.storage.set(USER_AVATAR_KEY, image);
-						avatars[0].src = image;
-					}
-				});
-			}
-		});
 	}
 
 	async showAbout() {
