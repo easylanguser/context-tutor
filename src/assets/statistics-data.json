@@ -1,0 +1,41 @@
+[
+    {
+        "id": 1,
+        "userId": 1,
+        "lessonId": 1,
+        "sentenceId": 1,
+        "timeSpent": 0,
+        "correctAnswers": 0,
+        "giveUps": 0,
+        "hintUsages": 0,
+        "wrongAnswers": 0,
+        "createdAt": "2019-06-21T13:53:05.429Z",
+        "updatedAt": "2019-06-21T13:56:02.604Z"
+    },
+    {
+        "id": 2,
+        "userId": 1,
+        "lessonId": 1,
+        "sentenceId": 2,
+        "timeSpent": 0,
+        "correctAnswers": 0,
+        "giveUps": 0,
+        "hintUsages": 0,
+        "wrongAnswers": 0,
+        "createdAt": "2019-06-24T14:27:46.571Z",
+        "updatedAt": "2019-06-26T12:22:54.013Z"
+    },
+    {
+        "id": 3,
+        "userId": 1,
+        "lessonId": 1,
+        "sentenceId": 3,
+        "timeSpent": 0,
+        "correctAnswers": 0,
+        "giveUps": 0,
+        "hintUsages": 0,
+        "wrongAnswers": 0,
+        "createdAt": "2019-07-01T09:41:58.288Z",
+        "updatedAt": "2019-07-01T09:41:58.288Z"
+    }
+]

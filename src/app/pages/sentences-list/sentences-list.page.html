@@ -30,10 +30,10 @@
 
   <ion-content id="sentences-list-scroll" style="z-index: 0;">
 
-    <ion-refresher (ionRefresh)="doRefresh($event)">
-      <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">
-      </ion-refresher-content>
-    </ion-refresher>
+    <div id="tutorial-div">
+      Choose any sentence to start guessing words
+      <ion-icon style="color: var(--ion-color-primary); font-size: 4vh;" name="arrow-down"></ion-icon>
+    </div>
 
     <ion-list id="sentences-list" #sentencesList no-padding no-margin>
       <ion-item-sliding #slidingItem *ngFor="let sentence of this.displayedSentences;index as i">
@@ -49,29 +49,8 @@
             </div>
           </div>
         </ion-item>
-
-        <ion-item-options side="end">
-          <ion-item-option class="delete-sliding-option" color="danger"
-            (click)="deleteItem(slidingItem, sentence.lessonId, sentence.id)">
-            Delete
-          </ion-item-option>
-        </ion-item-options>
-
       </ion-item-sliding>
     </ion-list>
 
   </ion-content>
-
-  <ion-fab id="add-sentence-fab" vertical="bottom" horizontal="end">
-    <ion-fab-button (click)="addSentenceToLesson()">
-      <ion-icon name="ios-add-circle"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
-  <ion-fab id="edit-sentence-fab" vertical="bottom" horizontal="start">
-    <ion-fab-button (click)="editSentence()">
-      <ion-icon id="edit-sentence-icon" name="md-create"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
 </ion-content>

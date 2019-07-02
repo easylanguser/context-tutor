@@ -3,9 +3,7 @@ import { Injectable } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
 import { Sentence } from 'src/app/models/sentence';
 import { Statistics } from 'src/app/models/statistics';
-import { LessonHttpService } from '../http/lessons/lesson-http.service';
-import { SentenceHttpService } from '../http/sentences/sentence-http.service';
-import { StatisticHttpService } from '../http/statistics/statistic-http.service';
+import { HttpService } from '../http/rest/http.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -15,9 +13,7 @@ export class LessonsDataService {
 	lessons: Lesson[] = [];
 
 	constructor(
-		private lessonHttpService: LessonHttpService,
-		private sentenceHttpService: SentenceHttpService,
-		private statisticHttpService: StatisticHttpService,
+		private http: HttpService, 
 		private utils: UtilsService) { }
 
 	addLesson(lesson: Lesson) {
@@ -77,7 +73,7 @@ export class LessonsDataService {
 	}
 
 	async getSentencesByLessonId(id: number): Promise<Sentence[]> {
-		const sntns = await this.sentenceHttpService.getLessonSentences(id);
+		const sntns = await this.http.doGet('../assets/sentences-data.json').toPromise();
 
 		for (const i in sntns) {
 			const hiddenChars: Array<string[]> = [];
@@ -121,24 +117,24 @@ export class LessonsDataService {
 	}
 
 	async getStatisticByUser(): Promise<Statistics[]> {
-		const statistics = await this.statisticHttpService.getStatisticsOfUser();
+		const statistic = await this.http.doGet('../assets/statistics-data.json').toPromise();
 		const statisticsArray: Statistics[] = [];
 
-		for (const stat of statistics) {
-			this.getLessonByID(stat.lessonId).statistics.push(
+		for (const i in statistic) {
+			this.getLessonByID(statistic[i]['lessonId']).statistics.push(
 				(new Statistics(
-					stat.id,
-					stat.sentenceId,
-					stat.lessonId,
-					stat.userId,
+					statistic[i].id,
+					statistic[i].sentenceId,
+					statistic[i].lessonId,
+					statistic[i].userId,
 					[], 0,
 					false,
-					stat.correctAnswers,
-					stat.wrongAnswers,
-					stat.giveUps,
-					stat.hintUsages,
-					stat.created_at,
-					stat.updated_at)
+					statistic[i].correctAnswers,
+					statistic[i].wrongAnswers,
+					statistic[i].giveUps,
+					statistic[i].hintUsages,
+					statistic[i].created_at,
+					statistic[i].updated_at)
 			));
 		}
 
@@ -176,7 +172,7 @@ export class LessonsDataService {
 	}
 
 	async refreshLessons(): Promise<void> {
-		const lsn = await this.lessonHttpService.getLessons();
+		const lsn = await this.http.doGet('../assets/lessons-data.json').toPromise();
 		this.lessons = [];
 		const now = new Date().getTime();
 

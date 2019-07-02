@@ -90,8 +90,40 @@ ion-toolbar {
     }
 }
 
+#tutorial-div {
+    position: absolute;
+    margin-left: 10vw;
+    top: 2vh;
+    width: 80vw;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    font-size: 2vh;
+
+    animation: Bounce 1.5s ease-in-out infinite;
+    -webkit-animation: Bounce 1.5s ease-in-out infinite;
+    animation-delay: 1s;
+
+    @media (min-width: 992px) {
+        width: 60vw;
+        margin-left: 6vw;
+    }
+}
+
+@-webkit-keyframes Bounce {
+    0% { -webkit-transform: translateY(0); }
+    50% { -webkit-transform: translateY(1.5vh); }
+    100% { -webkit-transform: translateY(0); }
+}
+
+@keyframes Bounce {
+    0% { -webkit-transform: translateY(0); }
+    50% { -webkit-transform: translateY(1.5vh); }
+    100% { -webkit-transform: translateY(0); }
+}
+
 #sentences-list {
-    margin-top: 2vh;
+    margin-top: 10vh;
     margin-bottom: 15vh;
 
     @media (min-width: 992px) {

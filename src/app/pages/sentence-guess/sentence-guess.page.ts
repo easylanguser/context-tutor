@@ -8,7 +8,7 @@ import { Chart } from 'chart.js';
 import { Statistics } from 'src/app/models/statistics';
 import * as anime from 'animejs';
 import { Location } from '@angular/common';
-import { StatisticHttpService } from 'src/app/services/http/statistics/statistic-http.service';
+import { types } from 'util';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -64,11 +64,12 @@ export class SentenceGuessPage implements OnInit {
 	groups = ['QWSD', 'RTFG', 'EAIO'];
 	unknownCharGroup = '!@#&';
 
+	hintsAreShown: boolean = false;
+
 	constructor(private route: ActivatedRoute,
 		private alertController: AlertController,
 		public lessonsDataService: LessonsDataService,
 		private utils: UtilsService,
-		private statisticHttpService: StatisticHttpService,
 		private location: Location,
 		private navController: NavController,
 		private util: UtilsService) { }
@@ -84,6 +85,49 @@ export class SentenceGuessPage implements OnInit {
 			await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
 		}
 		this.getData();
+
+		setTimeout(() => {
+		this.lightHelps();
+		}, 1000);
+	}
+
+	lightHelps() {
+		const charsHelp = document.getElementById('chars-help');
+		const chars = [ document.getElementById('char-box-1'), document.getElementById('char-box-2'),
+			document.getElementById('char-box-3'), document.getElementById('char-box-4') ];
+		const hintsHelp = document.getElementById('hints-help');
+		const hints = [ document.getElementById('prev-sentence-button'), document.getElementById('hint-button'),
+			document.getElementById('give-up-button'), document.getElementById('next-sentence-button') ];
+
+		charsHelp.style.color = 'green';
+		chars.forEach(char => {
+			char.style.boxShadow = '0 0 4px 4px green';
+		});
+		
+		setTimeout(() => {
+			charsHelp.style.color = 'black';
+			chars.forEach(char => {
+				char.style.boxShadow = 'none';
+			});
+		}, 1000);
+
+		setTimeout(() => {
+			hintsHelp.style.color = 'yellow';
+			hints.forEach(char => {
+				char.style.boxShadow = '0 0 4px 4px yellow';
+			});
+		}, 2000);
+		
+		setTimeout(() => {
+			hintsHelp.style.color = 'black';
+			hints.forEach(char => {
+				char.style.boxShadow = 'none';
+			});
+			setTimeout(() => {
+				charsHelp.style.opacity = '0';
+				hintsHelp.style.opacity = '0';
+			}, 1000);
+		}, 3000);
 	}
 
 	private createSpan(isHidden: boolean, indexOfHidden?: number): HTMLElement {
@@ -210,14 +254,14 @@ export class SentenceGuessPage implements OnInit {
 
 	saveStatistics() {
 		const stats = this.curStats();
-		this.statisticHttpService
+		/* this.statisticHttpService
 			.updateStatisticsOfSentence({
 				sentenceId: this.curSentence().id,
 				correctAnswers: stats.correctAnswers,
 				giveUps: stats.giveUps,
 				hintUsages: stats.hintUsages,
 				wrongAnswers: stats.wrongAnswers
-			});
+			}); */
 
 		const index = this.statisticsDeltasArray.findIndex(el => el[0] === this.curSentence().id);
 		if (index > -1) {

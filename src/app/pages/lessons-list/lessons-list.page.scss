@@ -85,26 +85,6 @@ ion-toolbar {
     }
 }
 
-#no-lessons-info {
-    color: gray;
-    font-size: 4vh;
-    text-align: center;
-    margin-top: 10vh;
-}
-
-#tip-add-lesson {
-    position: absolute;
-    z-index: 102;
-    width: 240px;
-    bottom: calc(3vh + 20px);
-    right: calc(3vh + 50px);
-    text-align: center;
-    color: var(--ion-color-primary);
-
-    transition: right 200ms ease-out, bottom 200ms ease-out;
-    -webkit-transition: right 200ms ease-out, bottom 200ms ease-out;
-}
-
 .lesson-ion-item {
     --inner-padding-end: 0px !important;
     --inner-border-width: 0px !important;
@@ -177,6 +157,38 @@ ion-toolbar {
     }
 }
 
+#tutorial-div {
+    position: absolute;
+    margin-left: 15vw;
+    top: 30vh;
+    width: 70vw;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    font-size: 2vh;
+
+    animation: Bounce 1.5s ease-in-out infinite;
+    -webkit-animation: Bounce 1.5s ease-in-out infinite;
+    animation-delay: 1s;
+
+    @media (min-width: 992px) {
+        width: 60vw;
+        margin-left: 6vw;
+    }
+}
+
+@-webkit-keyframes Bounce {
+    0% { -webkit-transform: translateY(0); }
+    50% { -webkit-transform: translateY(-1.5vh); }
+    100% { -webkit-transform: translateY(0); }
+}
+
+@keyframes Bounce {
+    0% { -webkit-transform: translateY(0); }
+    50% { -webkit-transform: translateY(-1.5vh); }
+    100% { -webkit-transform: translateY(0); }
+}
+
 ion-item-option {
     height: 12vh;
     width: 25vw;
@@ -188,34 +200,8 @@ ion-item-option {
     font-weight: bold;
 }
 
-#delete-sliding-item {
-    margin-right: 3vw;
-}
-
 .item-options-ios.item-options-end {
     border-bottom-width: 0;
-}
-
-#add-lesson-fab {
-    margin-right: 3vh;
-    margin-bottom: 3vh;
-
-    transition: transform 0.3s ease-in-out;
-    -webkit-transition: transform 0.3s ease-in-out;
-
-    :first-child {
-        --background: rgb(69, 184, 255);
-    }
-
-    :last-child {
-        :first-child {
-            --background: rgb(221, 221, 221);
-        }
-
-        :last-child {
-            --background: rgb(211, 152, 26);
-        }
-    }
 }
 
 .hidden-btn {

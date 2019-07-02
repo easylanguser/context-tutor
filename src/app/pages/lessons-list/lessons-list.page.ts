@@ -6,7 +6,6 @@ import { Chart } from 'chart.js';
 import { UtilsService, chartsColors } from 'src/app/services/utils/utils.service';
 import { updateIsRequired } from 'src/app/app.component';
 import * as _ from 'lodash';
-import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
@@ -23,13 +22,10 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	@ViewChild('lessonsList', { static: false }) lessonsList: IonList;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
-	displayHints: boolean = false;
 
 	constructor(
 		private navController: NavController,
 		private lessonsDataService: LessonsDataService,
-		private alertController: AlertController,
-		private lessonHttpService: LessonHttpService,
 		private utils: UtilsService,
 		private browser: InAppBrowser,
 		private cdRef: ChangeDetectorRef) { }
@@ -37,21 +33,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	async ngOnInit() {
 		await this.utils.createAndShowLoader('Loading');
 		await this.getData();
-		this.addFabsHandler();
 		await this.utils.dismissLoader();
-	}
-
-	private addFabsHandler() {
-		const content = <HTMLIonContentElement>document.getElementById('list-scroll');
-		content.scrollEvents = true;
-		const fabAdd = document.getElementById('add-lesson-fab');
-		content.addEventListener('ionScroll', _.throttle((ev: CustomEvent) => {
-			if (ev.detail.velocityY > 0.1) {
-				fabAdd.classList.add('hidden-btn');
-			} else if (ev.detail.velocityY < -0.1) {
-				fabAdd.classList.remove('hidden-btn');
-			}
-		}, 300));
 	}
 
 	ionViewDidEnter() {
@@ -91,10 +73,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	async ionViewWillLeave() {
 		await this.lessonsList.closeSlidingItems();
-	}
-
-	addLessonFile() {
-		this.navController.navigateForward(['add-lesson']);
 	}
 
 	private syncCharts() {
@@ -144,66 +122,9 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		this.cdRef.detectChanges();
 	}
 
-	async deleteItem(slidingItem: IonItemSliding, lessonID: number) {
-		const alert = await this.alertController.create({
-			message: 'Are you sure you want to delete this lesson?',
-			buttons: [
-				{
-					text: 'Cancel',
-					role: 'cancel',
-					handler: () => {
-						slidingItem.close();
-					}
-				},
-				{
-					text: 'Delete',
-					handler: () => {
-						slidingItem.close();
-
-						this.lessonHttpService.deleteLesson(lessonID);
-						this.lessonsDataService.removeLesson(lessonID);
-
-						let i = 0;
-						for (i; i < this.displayedLessons.length; i++) {
-							if (this.displayedLessons[i].id === lessonID) {
-								break;
-							}
-						}
-
-						if (i !== this.displayedLessons.length) {
-							this.displayedLessons.splice(i, 1);
-							this.pieCharts[i].destroy();
-							this.pieCharts.splice(i, 1);
-						}
-					}
-				}
-			]
-		});
-		await alert.present();
-	}
-
-	async editItem(slidingItem: IonItemSliding, lessonId: number) {
-		slidingItem.close();
-		this.navController.navigateForward(['edit-lesson-title'], { queryParams: { lessonId: lessonId } });
-	}
-
-	doRefresh(event) {
-		this.getData().then(() => {
-			event.target.complete();
-			(<HTMLIonSegmentElement>document.getElementById('lessons-filter-segment')).value = "all";
-		});
-		setTimeout(() => {
-			event.target.complete();
-		}, 5000);
-	}
-
 	private async getData() {
-		await this.lessonsDataService.refreshLessons().then(() => {
-			this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
-			if (this.displayedLessons.length === 0) {
-				this.displayHints = true;
-			}
-		});
+		await this.lessonsDataService.refreshLessons();
+		this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
 	}
 
 	async filterClick(type: number) {

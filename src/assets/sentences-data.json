@@ -1,0 +1,59 @@
+[
+    {
+        "id": 1,
+        "lesson_id": 1,
+        "text": "Another one",
+        "words": [
+            [
+                8,
+                3
+            ]
+        ],
+        "selectors": [],
+        "selectors_words": [],
+        "created_at": "2019-07-01T07:57:19.248Z",
+        "updated_at": "2019-07-01T07:57:19.248Z"
+    },
+    {
+        "id": 2,
+        "lesson_id": 1,
+        "text": "Let me start off with general statement -- almost all countries in this world take tremendous advantage of the US, Trump told Fox Business by phone, repeating a common refrain of his 2016 campaign.",
+        "words": [
+            [
+                31,
+                9
+            ],
+            [
+                44,
+                6
+            ],
+            [
+                68,
+                4
+            ],
+            [
+                73,
+                5
+            ]
+        ],
+        "selectors": [],
+        "selectors_words": [],
+        "created_at": "2019-06-27T09:50:05.639Z",
+        "updated_at": "2019-06-27T09:50:31.168Z"
+    },
+    {
+        "id": 3,
+        "lesson_id": 1,
+        "text": "hello one two three",
+        "words": [
+            [
+                10,
+                3
+            ]
+        ],
+        "selectors": [],
+        "selectors_words": [],
+        "created_at": "2019-07-01T13:56:30.383Z",
+        "updated_at": "2019-07-01T13:56:30.383Z"
+    }
+]

@@ -70,6 +70,29 @@
     }
 }
 
+#hints-div {
+    position: absolute;
+    bottom: 40vmin;
+    font-size: 3vh;
+
+    ion-icon {
+        transition: color 1s ease-in-out, opacity .5s ease-in-out;
+        -webkit-transition: color 1s ease-in-out, opacity .5s ease-in-out;
+    }
+
+    >:first-child {
+        margin-left: 16.5vw;
+    }
+
+    >:last-child {
+        margin-left: 33.5vw;
+    }
+
+    @media (min-width: 992px) {
+        bottom: 10vw;
+    }
+}
+
 #bottom-bar-container {
     width: 100%;
     height: calc(40vmin - 20vw);
@@ -93,9 +116,13 @@
         background: #FFF;
         --background: #FFF;
         --color: #000;
+        --background-hover: none;
+
+        transition: background 0.2s ease-in-out, box-shadow 1s ease-in-out;
+        -webkit-transition: background 0.2s ease-in-out, box-shadow 1s ease-in-out;
 
         &:hover {
-            --background-hover: var(--ion-color-primary);
+            background: var(--ion-color-primary);
         }
     }
 }
@@ -113,6 +140,9 @@
     -webkit-transform-style: preserve-3d;
     color: black;
     cursor: pointer;
+
+    transition: box-shadow 1s ease-in-out;
+    -webkit-transition: box-shadow 1s ease-in-out;
 }
 
 .front,
@@ -126,6 +156,8 @@
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     border: 1px solid rgba(100, 100, 100, 0.3);
+
+    transition: background 0.2s ease-in-out;
 
     &:hover {
         background: var(--ion-color-primary);

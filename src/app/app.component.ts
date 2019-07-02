@@ -37,25 +37,7 @@ export class AppComponent {
 		private alertController: AlertController,
 		private location: Location,
 		private userHttpService: UserHttpService,
-		private navController: NavController) {
-		this.initializeApp(location.path());
-	}
-
-	private getParams(url): NavigationOptions {
-		let index = url.indexOf('?');
-		if (index === -1)
-			return null;
-		let paramsSubstring = url.substr(index + 1);
-		let params = {};
-		while (paramsSubstring.indexOf('&') > -1) {
-			const param = paramsSubstring.substring(0, paramsSubstring.indexOf('&'));
-			params[param.substring(0, param.indexOf('='))] = Number(param.substr(param.indexOf('=') + 1));
-			paramsSubstring = paramsSubstring.substr(paramsSubstring.indexOf('&') + 1);
-		}
-		params[paramsSubstring.substring(0, paramsSubstring.indexOf('='))] = Number(paramsSubstring.substr(paramsSubstring.indexOf('=') + 1));
-
-		return params;
-	}
+		private navController: NavController) { }
 
 	onChangeTheme(ev: CustomEvent) {
 		if (ev.detail.value === 'dark') {
@@ -67,9 +49,7 @@ export class AppComponent {
 		}
 	}
 
-	authenticationState = new BehaviorSubject(false);
-
-	initializeApp(pathToGo: string) {
+	initializeApp() {
 		this.platform.ready()
 			.then(() => {
 				if (this.platform.is('android')) {
@@ -94,30 +74,7 @@ export class AppComponent {
 					this.onChangeTheme(customEvent);
 				});
 
-				this.authService.authenticationState.subscribe(state => {
-					if (state) {
-						this.loggedIn = true;
-						if (sharedText[0]) {
-							this.router.navigate(['share-adding-choice']);
-						} else {
-							if (pathToGo === '/login') {
-								pathToGo = 'lessons-list';
-							}
-
-							this.loadAvatar();
-
-							const paramsOfUrl = this.getParams(pathToGo);
-							if (paramsOfUrl) {
-								this.navController.navigateForward([pathToGo.substring(0, pathToGo.indexOf('?'))], { queryParams: paramsOfUrl });
-							} else {
-								this.navController.navigateForward([pathToGo]);
-							}
-						}
-					} else {
-						this.loggedIn = false;
-						this.router.navigate(['login']);
-					}
-				});
+				this.navController.navigateForward(['']);
 			});
 	}
 
@@ -143,36 +100,13 @@ export class AppComponent {
 		});
 	}
 
-	logout() {
-		this.authService.logout();
-		this.loggedIn = false;
-	}
-
-	private checkForIntent() {
-		if (!(window.receiveContent)) {
-			return Promise.resolve();
-		}
-
-		return window.receiveContent.receiveText()
-			.then((text: string) => {
-				if (text) {
-					text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
-					sharedText.push(text);
-				}
-			})
-			.catch(err => console.error('ReceiveContent plugin error: ', err));
-	}
-
 	async showAbout() {
-		let header = 'EasyLang Context Tutor';
-		let message = '0.1.16';
+		let header = 'EasyLang Context Tutor Demo';
 		const alert = await this.alertController.create({
 			header: header,
-			message: 'Version: ' + message,
+			message: 'See more in <a href="http://easy4learn.com/tutor">full version<a>',
 			buttons: ['Close']
 		});
 		await alert.present();
 	}
 }
-
-declare var window: any;

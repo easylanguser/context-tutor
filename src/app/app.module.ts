@@ -27,6 +27,7 @@ import { TOKEN_KEY } from './services/auth/auth.service';
 import { ShareAddingChoicePageModule } from './pages/share-adding-choice/share-adding-choice.module';
 import { SentenceAddingPageModule } from './pages/sentence-adding/sentence-adding.module';
 import { EditLessonTitlePageModule } from './pages/edit-lesson-title/edit-lesson-title.module';
+import { LessonsListPageModule } from './pages/lessons-list/lessons-list.page.module';
 
 export function jwtOptionsFactory(storage) {
 	return {
@@ -43,6 +44,7 @@ export function jwtOptionsFactory(storage) {
 	imports: [BrowserModule, IonicModule.forRoot(),
 		AppRoutingModule,
 		HttpClientModule,
+		LessonsListPageModule,
 		SentencesListPageModule,
 		SentenceGuessPageModule,
 		AddLessonPageModule,
