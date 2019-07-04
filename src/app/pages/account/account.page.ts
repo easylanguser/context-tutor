@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ErrorHandler } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { HttpService } from '../../services/http/rest/http.service';
 import { AlertController } from '@ionic/angular';
@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { UserHttpService } from 'src/app/services/http/users/user-http.service';
 import { Storage } from '@ionic/storage';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 interface HTMLInputEvent extends Event {
 	target: HTMLInputElement & EventTarget;
@@ -30,12 +31,12 @@ export class AccountPage {
 		private authService: AuthService,
 		private httpService: HttpService,
 		private alertController: AlertController,
+		private utils: UtilsService,
 		private router: Router,
 		private storage: Storage) { }
 
 	ionViewDidEnter() {
 		this.avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
-
 		this.checkTokenAndGetInfo();
 		this.addAvatarClickHandler();
 	}
@@ -49,15 +50,25 @@ export class AccountPage {
 
 	private addAvatarClickHandler() {
 		document.getElementById('file-input').onchange = (event: HTMLInputEvent) => {
-			this.userHttpService.postNewAvatar(event.target.files);
-			var reader = new FileReader();
-			reader.readAsDataURL(event.target.files[0]);
-			reader.onloadend = () => {
-				const image = String(reader.result);
-				this.storage.set(USER_AVATAR_KEY, image);
-				this.avatars[0].src = image;
-				this.avatars[1].src = image;
-			}
+			this.utils.createAndShowLoader('Avatar is being updated, please wait...');
+			this.userHttpService.postNewAvatar(event.target.files)
+				.then(_ => {
+					var reader = new FileReader();
+					reader.readAsDataURL(event.target.files[0]);
+					reader.onloadend = () => {
+						const image = String(reader.result);
+						this.storage.set(USER_AVATAR_KEY, image);
+						this.avatars[0].src = image;
+						this.avatars[1].src = image;
+						this.utils.dismissLoader();
+					}
+				})
+				.catch(error => {
+					this.utils.showToast((error.status === 0 || error.status === 413) ?
+						'Please choose picture of smaller size(< 4 Mb).' :
+						error.error.msg);
+					this.utils.dismissLoader();
+				});
 		}
 	}
 
