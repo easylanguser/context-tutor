@@ -26,6 +26,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	pieCharts: Array<Chart> = [];
 	toast: HTMLIonToastElement = null;
 	addButtonIsAnimating: boolean = false;
+	contentIsScrolled: boolean = false;
 
 	constructor(
 		private toastController: ToastController,
@@ -55,18 +56,13 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		const content = <HTMLIonContentElement>document.getElementById('sentences-list-scroll');
 		content.scrollEvents = true;
 
-		const fabEdit = document.getElementById('edit-sentence-fab');
-		const fabAdd = document.getElementById('add-sentence-fab');
-
 		content.addEventListener('ionScroll', _.throttle((ev: CustomEvent) => {
 			if (ev.detail.velocityY > 0.1) {
-				fabAdd.classList.add('hidden-btn');
-				fabEdit.classList.add('hidden-btn');
+				this.contentIsScrolled = true;
 			} else if (ev.detail.velocityY < -0.1) {
-				fabAdd.classList.remove('hidden-btn');
-				fabEdit.classList.remove('hidden-btn');
+				this.contentIsScrolled = false;
 			}
-		}, 300));
+		}, 250));
 	}
 
 	async initData(showLoader) {

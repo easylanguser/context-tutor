@@ -76,7 +76,7 @@
     </ion-list>
   </ion-content>
 
-  <ion-fab id="add-lesson-fab" (click)="addLessonFile()" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab id="add-lesson-fab" [ngClass]="{'hidden-btn': contentIsScrolled}" (click)="addLessonFile()" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

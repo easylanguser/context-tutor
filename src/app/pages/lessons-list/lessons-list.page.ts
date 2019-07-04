@@ -24,6 +24,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
 	displayHints: boolean = false;
+	contentIsScrolled: boolean = false;
 
 	constructor(
 		private navController: NavController,
@@ -44,14 +45,13 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	private addFabsHandler() {
 		const content = <HTMLIonContentElement>document.getElementById('list-scroll');
 		content.scrollEvents = true;
-		const fabAdd = document.getElementById('add-lesson-fab');
 		content.addEventListener('ionScroll', _.throttle((ev: CustomEvent) => {
 			if (ev.detail.velocityY > 0.1) {
-				fabAdd.classList.add('hidden-btn');
+				this.contentIsScrolled = true;
 			} else if (ev.detail.velocityY < -0.1) {
-				fabAdd.classList.remove('hidden-btn');
+				this.contentIsScrolled = false;
 			}
-		}, 300));
+		}, 250));
 	}
 
 	ionViewDidEnter() {
