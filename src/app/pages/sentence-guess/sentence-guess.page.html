@@ -41,7 +41,7 @@
     </div>
 
     <div id="bottom-bar-container">
-      <ion-button id="prev-sentence-button" (click)="changeSentence(false)">
+      <ion-button id="prev-sentence-button" [ngClass]="{'hidden': sentencesTotal === 1}" (click)="changeSentence(false)">
         <ion-icon name="ios-arrow-back"></ion-icon>
       </ion-button>
 
@@ -55,7 +55,7 @@
         <p>●●●</p>
       </ion-button>
 
-      <ion-button text-center id="next-sentence-button" (click)="changeSentence(true)">
+      <ion-button text-center id="next-sentence-button" [ngClass]="{'hidden': sentencesTotal === 1}" (click)="changeSentence(true)">
         <ion-icon name="ios-arrow-forward"></ion-icon>
       </ion-button>
     </div>

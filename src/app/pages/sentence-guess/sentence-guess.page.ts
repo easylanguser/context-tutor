@@ -127,11 +127,6 @@ export class SentenceGuessPage implements OnInit {
 			this.curCharsIndexes = this.curStats().curCharsIndexes;
 			this.restoreSentence();
 		}
-
-		if (this.lessonsDataService.getLessonByID(this.lessonId).sentences.length === 1) {
-			document.getElementById('next-sentence-button').style.visibility = 'hidden';
-			document.getElementById('prev-sentence-button').style.visibility = 'hidden';
-		}
 	}
 
 	restoreSentence() {
@@ -293,14 +288,6 @@ export class SentenceGuessPage implements OnInit {
 	// Get current character to be filled
 	private curCorrectChar(): string {
 		return this.curSentence().hiddenChars[this.curWordIndex][this.curCharsIndexes[this.curWordIndex]];
-	}
-
-	// Remove characters boxes highlighting
-	private resetColors() {
-		const boxesIDs = ['char-box-1', 'char-box-2', 'char-box-3', 'char-box-4'];
-		for (const id of boxesIDs) {
-			document.getElementById(id).style.boxShadow = 'none';
-		}
 	}
 
 	changeSentence(forward: boolean) {
@@ -512,7 +499,10 @@ export class SentenceGuessPage implements OnInit {
 
 	// Reset characters boxes highlighting and generate random characters
 	refreshCharBoxes() {
-		this.resetColors();
+		const boxesIDs = ['char-box-1', 'char-box-2', 'char-box-3', 'char-box-4'];
+		for (const id of boxesIDs) {
+			document.getElementById(id).style.boxShadow = 'none';
+		}
 		this.generateRandomCharacters();
 	}
 
