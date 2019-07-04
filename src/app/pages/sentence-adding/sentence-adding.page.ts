@@ -93,7 +93,7 @@ export class SentenceAddingPage implements OnInit {
 		this.navController.navigateForward(['edit-lesson-title'], { queryParams: { lessonId: this.lessonId } });
 	}
 
-	submitSelections() {
+	async submitSelections() {
 		if (indexesArray.length === 0)
 			return;
 
@@ -129,33 +129,28 @@ export class SentenceAddingPage implements OnInit {
 						new Date().toISOString()));
 			} else {
 				const text = document.getElementById("selectable-sentence-div").innerText;
-				this.sentenceHttpService.postNewSentence({
+				const newSentence = await this.sentenceHttpService.postNewSentence({
 					lessonId: this.lessonId,
 					words: indexesArray,
 					text: text
-				}).then(newSentence => {
-					this.storage.get(USER_ID_KEY).then(userId => {
-						this.createNewStatisticRecord(newSentence.id, this.lessonId, userId, indexesArray, text)
-					});
 				});
+				const userId = await this.storage.get(USER_ID_KEY);
+				this.createNewStatisticRecord(newSentence.id, this.lessonId, userId, indexesArray, text)
 			}
 		} else { // Sentence is added to a new lesson
-			this.storage.get(USER_ID_KEY).then(userId => {
-				this.lessonHttpService.postNewLesson({
+			this.storage.get(USER_ID_KEY).then(async userId => {
+				const res = await this.lessonHttpService.postNewLesson({
 					userId: userId,
 					name: this.title,
 					url: 'someurl@url.com'
-				}).then(res => {
-					const newLessonId = res.id;
-					this.sentenceHttpService.postNewSentence({
+				});
+				const newLessonId = res.id;
+				const newSentence = await this.sentenceHttpService.postNewSentence({
 						lessonId: newLessonId,
 						words: indexesArray,
 						text: this.sentence
-					}).then(newSentence => {
-						this.createNewStatisticRecord(newSentence.id, newLessonId,
-							userId, indexesArray, this.sentence);
-					})
 				});
+				this.createNewStatisticRecord(newSentence.id, newLessonId, userId, indexesArray, this.sentence);
 			});
 		}
 

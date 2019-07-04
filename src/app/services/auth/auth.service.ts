@@ -79,18 +79,16 @@ export class AuthService {
 			);
 	}
 
-	logout() {
-		this.storage.remove(USER_ID_KEY).then(() => {
-			this.storage.remove(TOKEN_KEY).then(() => {
-				this.authenticationState.next(false);
-				this.token = null;
-				parent.postMessage({ userLoggedOut: true }, '*');
+	async logout() {
+		await this.storage.remove(USER_ID_KEY);
+		await this.storage.remove(TOKEN_KEY);
+		this.token = null;
+		parent.postMessage({ userLoggedOut: true }, '*');
 
-				this.storage.remove('user-avatar');
-				this.storage.remove('user-email');
-				(<HTMLImageElement>document.getElementById('user-avatar')).src = 'assets/img/account_icon.svg';
-			});
-		});
+		this.storage.remove('user-avatar');
+		this.storage.remove('user-email');
+		(<HTMLImageElement>document.getElementById('user-avatar')).src = 'assets/img/account_icon.svg';
+		this.authenticationState.next(false);
 	}
 
 	isAuthenticated() {

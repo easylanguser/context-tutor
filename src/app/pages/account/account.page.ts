@@ -108,8 +108,8 @@ export class AccountPage {
 					handler: (data) => {
 						alert.dismiss(true);
 						this.httpService.doPost(environment.url + '/api/user/deleteAccount', data)
-							.subscribe(() => {
-								return this.authService.logout();
+							.subscribe(async () => {
+								return await this.authService.logout();
 							}, err => {
 								this.showAlert(err.error)
 							})
@@ -130,7 +130,6 @@ export class AccountPage {
 	changePassword() {
 		this.router.navigate(['change']);
 	}
-
 
 	logout() {
 		this.authService.logout();

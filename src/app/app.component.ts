@@ -69,83 +69,79 @@ export class AppComponent {
 
 	authenticationState = new BehaviorSubject(false);
 
-	initializeApp(pathToGo: string) {
-		this.platform.ready()
-			.then(() => {
-				if (this.platform.is('android')) {
-					this.checkForIntent();
-				}
-			})
-			.then(() => {
-				if (this.platform.is('mobile')) {
-					if (this.platform.is('android')) {
-						this.statusBar.styleBlackOpaque;
-					} else if (this.platform.is('ios')) {
-						this.statusBar.styleDefault();
+	async initializeApp(pathToGo: string) {
+		await this.platform.ready();
+		if (this.platform.is('android')) {
+			this.checkForIntent();
+		}
+		if (this.platform.is('mobile')) {
+			if (this.platform.is('android')) {
+				this.statusBar.styleBlackOpaque;
+			} else if (this.platform.is('ios')) {
+				this.statusBar.styleDefault();
+			}
+			this.splashScreen.hide();
+		}
+
+		const themeName = await this.storage.get("theme");
+		const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} });
+		themeName === "dark" ?
+			customEvent.detail.value = "dark" :
+			customEvent.detail.value = "light";
+		this.onChangeTheme(customEvent);
+		
+		this.authService.authenticationState.subscribe(async state => {
+			if (state) {
+				this.loggedIn = true;
+				if (sharedText[0]) {
+					this.router.navigate(['share-adding-choice']);
+				} else {
+					if (pathToGo === '/login') {
+						pathToGo = 'lessons-list';
 					}
-					this.splashScreen.hide();
-				}
 
-				this.storage.get("theme").then(themeName => {
-					const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} });
-					themeName === "dark" ?
-						customEvent.detail.value = "dark" :
-						customEvent.detail.value = "light";
-					this.onChangeTheme(customEvent);
-				});
+					await this.loadAvatar();
 
-				this.authService.authenticationState.subscribe(state => {
-					if (state) {
-						this.loggedIn = true;
-						if (sharedText[0]) {
-							this.router.navigate(['share-adding-choice']);
-						} else {
-							if (pathToGo === '/login') {
-								pathToGo = 'lessons-list';
-							}
-
-							this.loadAvatar();
-
-							const paramsOfUrl = this.getParams(pathToGo);
-							if (paramsOfUrl) {
-								this.navController.navigateForward([pathToGo.substring(0, pathToGo.indexOf('?'))], { queryParams: paramsOfUrl });
-							} else {
-								this.navController.navigateForward([pathToGo]);
-							}
-						}
+					const paramsOfUrl = this.getParams(pathToGo);
+					if (paramsOfUrl) {
+						this.navController.navigateForward(
+							[pathToGo.substring(0, pathToGo.indexOf('?'))],
+							{ queryParams: paramsOfUrl });
 					} else {
-						this.loggedIn = false;
-						this.router.navigate(['login']);
+						this.navController.navigateForward([pathToGo]);
 					}
-				});
-			});
-	}
-
-	private loadAvatar() {
-		this.storage.get(USER_AVATAR_KEY).then(image => {
-			const avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
-			if (image) {
-				avatars[0].src = image;
+				}
 			} else {
-				this.userHttpService.getAvatar().then(blob => {
-					if (blob.size === 19) {
-						return;
-					}
-					var reader = new FileReader();
-					reader.readAsDataURL(blob);
-					reader.onloadend = () => {
-						const image = String(reader.result);
-						this.storage.set(USER_AVATAR_KEY, image);
-						avatars[0].src = image;
-					}
-				});
+				this.loggedIn = false;
+				this.router.navigate(['login']);
 			}
 		});
 	}
 
+	private async loadAvatar() {
+		const image = await this.storage.get(USER_AVATAR_KEY);
+		const avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
+		if (image) {
+			avatars[0].src = image;
+		} else {
+			const blob = await this.userHttpService.getAvatar();
+			if (blob.size === 19) {
+				return;
+			}
+			var reader = new FileReader();
+			reader.readAsDataURL(blob);
+			reader.onloadend = () => {
+				const image = String(reader.result);
+				this.storage.set(USER_AVATAR_KEY, image);
+				avatars[0].src = image;
+			}
+		}
+	}
+
 	logout() {
-		this.authService.logout();
-		this.loggedIn = false;
+		this.authService.logout().then(() => {
+			this.loggedIn = false;
+		});
 	}
 
 	private checkForIntent() {
