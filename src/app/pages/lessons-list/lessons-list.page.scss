@@ -85,13 +85,6 @@ ion-toolbar {
     }
 }
 
-#no-lessons-info {
-    color: gray;
-    font-size: 4vh;
-    text-align: center;
-    margin-top: 10vh;
-}
-
 #tip-add-lesson {
     position: absolute;
     z-index: 102;
@@ -100,9 +93,6 @@ ion-toolbar {
     right: calc(3vh + 50px);
     text-align: center;
     color: var(--ion-color-primary);
-
-    transition: right 200ms ease-out, bottom 200ms ease-out;
-    -webkit-transition: right 200ms ease-out, bottom 200ms ease-out;
 }
 
 .lesson-ion-item {
@@ -175,6 +165,10 @@ ion-toolbar {
             margin-right: 4vw;
         }
     }
+}
+
+.dashed {
+    border: 2px dashed;
 }
 
 ion-item-option {

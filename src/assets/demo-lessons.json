@@ -1,0 +1,79 @@
+[
+    {
+        "id": 1,
+        "name": "John Lennon - Imagine (Lyrics)",
+        "url": "https://www.azlyrics.com/lyrics/johnlennon/imagine.html",
+        "sentences": [
+            {
+                "id": 1,
+                "text": "Imagine there's no heaven, it's easy if you try, no hell below us, above us only sky, imagine all the people living for today",
+                "words": [
+                    [
+                        44,
+                        3
+                    ],
+                    [
+                        81,
+                        3
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Elon Musk quotes",
+        "url": "https://www.inc.com/peter-economy/11-elon-musk-quotes-that-will-push-you-to-achieve-impossible.html",
+        "sentences": [
+            {
+                "id": 3,
+                "text": "There have to be reasons that you get up in the morning and you want to live. Why do you want to live? What's the point? What inspires you? What do you love about the future? If the future does not include being out there among the stars and being a multi-planet species, I find that incredibly depressing.",
+                "words": [
+                    [
+                        97,
+                        4
+                    ],
+                    [
+                        263,
+                        7
+                    ],
+                    [
+                        284,
+                        10
+                    ]
+                ]
+            },
+            {
+                "id": 4,
+                "text": "I could either watch it happen or be a part of it.",
+                "words": [
+                    [
+                        39,
+                        4
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Whiplash (2014) subtitles",
+        "url": "https://www.imdb.com/title/tt2582802/",
+        "sentences": [
+            {
+                "id": 5,
+                "text": "People wonder why jazz is dying. I tell you, man, and every Starbucks \"jazz\" album just proves my point, really. There are no two words in the English language more harmful than \"good job\".",
+                "words": [
+                    [
+                        88,
+                        6
+                    ],
+                    [
+                        179,
+                        4
+                    ]
+                ]
+            }
+        ]
+    }
+]

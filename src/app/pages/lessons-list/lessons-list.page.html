@@ -28,15 +28,11 @@
 
   </ion-header>
 
-  <div *ngIf="this.displayHints" id="no-lessons-info" class="no-selection">
-    No lessons added
-  </div>
-
-  <span *ngIf="this.displayHints" id="tip-add-lesson" class="no-selection">
-    Click button &#8680; <br>to add a <b>new lesson</b>
+  <span *ngIf="this.globals.isDemo" id="tip-add-lesson" class="no-selection">
+    Click button &#8680; <br>to add your own <b> lesson</b>
   </span>
 
-  <ion-content id="list-scroll" *ngIf="!this.displayHints" style="z-index: 0;">
+  <ion-content id="list-scroll" style="z-index: 0;">
 
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">
@@ -46,7 +42,7 @@
     <ion-list no-padding no-margin style="padding-top: 2vh; padding-bottom: 110px;" #lessonsList>
       <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem>
         <ion-item class="lesson-ion-item" no-padding>
-          <div (click)="openLesson(lesson)">
+          <div (click)="openLesson(lesson)" [ngClass]="{'dashed': this.globals.isDemo}">
             <div>
               <p>
                 {{lesson.name}}
@@ -65,10 +61,10 @@
           <ion-item-option color="secondary" (click)="openLink(slidingItem, lesson.url)">
             Open link
           </ion-item-option>
-          <ion-item-option color="warning" (click)="editItem(slidingItem, lesson.id)">
+          <ion-item-option *ngIf="!this.globals.isDemo" color="warning" (click)="editItem(slidingItem, lesson.id)">
             Edit
           </ion-item-option>
-          <ion-item-option id="delete-sliding-item" color="danger" (click)="deleteItem(slidingItem, lesson.id)">
+          <ion-item-option *ngIf="!this.globals.isDemo" id="delete-sliding-item" color="danger" (click)="deleteItem(slidingItem, lesson.id)">
             Delete
           </ion-item-option>
         </ion-item-options>

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
-import { LoadingController, NavController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
-import { sharedText } from 'src/app/app.component';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { Globals } from 'src/app/services/globals/globals';
 
 @Component({
 	selector: 'app-share-adding-choice',
@@ -19,6 +19,7 @@ export class ShareAddingChoicePage implements OnInit {
 	constructor(
 		private navController: NavController,
 		private utils: UtilsService,
+		private globals: Globals,
 		private lessonsDataService: LessonsDataService) { }
 
 	ngOnInit() {
@@ -26,7 +27,7 @@ export class ShareAddingChoicePage implements OnInit {
 	}
 
 	goBack() {
-		sharedText[0] = undefined;
+		this.globals.sharedText[0] = undefined;
 		this.navController.navigateBack(['lessons-list']);
 	}
 

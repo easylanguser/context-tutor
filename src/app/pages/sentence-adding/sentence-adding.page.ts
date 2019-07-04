@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { sharedText, updateIsRequired } from 'src/app/app.component';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
-import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
 import { NavController, Platform } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
-import { UtilsService, charForHiding, blueCharForHiding } from 'src/app/services/utils/utils.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Statistics } from 'src/app/models/statistics';
 import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
 import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
 import { Storage } from '@ionic/storage';
+import { Globals } from 'src/app/services/globals/globals';
 
 let lastSelOffsets: Array<number> = [];
 let lastSelCoords: Array<number> = [];
@@ -36,7 +35,8 @@ export class SentenceAddingPage implements OnInit {
 		private lessonHttpService: LessonHttpService,
 		private route: ActivatedRoute,
 		private lessonsDataService: LessonsDataService,
-		private utils: UtilsService) {
+		private utils: UtilsService,
+		private globals: Globals) {
 		platform.ready().then(() => {
 			if (platform.is('android') || platform.is('ios')) {
 				selectionDelay = 700;
@@ -60,7 +60,7 @@ export class SentenceAddingPage implements OnInit {
 		indexesArray = [];
 		this.sentence = this.sentenceToEditId ?
 			this.lessonsDataService.getSentenceByIDs(this.lessonId, Number(this.sentenceToEditId)).text :
-			sharedText[0];
+			this.globals.sharedText[0];
 
 		this.updateTitle();
 
@@ -86,7 +86,8 @@ export class SentenceAddingPage implements OnInit {
 	updateTitle() {
 		this.lessonId ?
 			this.title = this.lessonsDataService.getLessonByID(this.lessonId).name :
-			this.title = new Date().toJSON().slice(0, 10).replace(/-/g, '/') + ' ' + sharedText[0].substr(0, 10);
+			this.title = new Date().toJSON().slice(0, 10).replace(/-/g, '/') +
+				' ' + this.globals.sharedText[0].substr(0, 10);
 	}
 
 	editTitle() {
@@ -104,8 +105,8 @@ export class SentenceAddingPage implements OnInit {
 			if (this.sentenceToEditId) { // Existing sentence is being edited
 				this.sentenceHttpService.updateSentenceWords(this.sentenceToEditId, indexesArray, textAreaValue);
 
-				const hiddenSentence = this.utils.hideChars(textAreaValue, indexesArray, charForHiding);
-				const sentencesListSentence = this.utils.hideChars(textAreaValue, indexesArray, blueCharForHiding);
+				const hiddenSentence = this.utils.hideChars(textAreaValue, indexesArray, this.globals.charForHiding);
+				const sentencesListSentence = this.utils.hideChars(textAreaValue, indexesArray, this.globals.blueCharForHiding);
 				const hiddenChars: Array<string[]> = [];
 				const curCharsIndexes: number[] = [];
 				for (const j in indexesArray) {
@@ -134,11 +135,11 @@ export class SentenceAddingPage implements OnInit {
 					words: indexesArray,
 					text: text
 				});
-				const userId = await this.storage.get(USER_ID_KEY);
+				const userId = await this.storage.get(this.globals.USER_ID_KEY);
 				this.createNewStatisticRecord(newSentence.id, this.lessonId, userId, indexesArray, text)
 			}
 		} else { // Sentence is added to a new lesson
-			this.storage.get(USER_ID_KEY).then(async userId => {
+			this.storage.get(this.globals.USER_ID_KEY).then(async userId => {
 				const res = await this.lessonHttpService.postNewLesson({
 					userId: userId,
 					name: this.title,
@@ -154,8 +155,8 @@ export class SentenceAddingPage implements OnInit {
 			});
 		}
 
-		sharedText[0] = undefined;
-		updateIsRequired[0] = true;
+		this.globals.sharedText[0] = undefined;
+		this.globals.updateIsRequired[0] = true;
 
 		this.navController.navigateBack(['sentences-list'], {
 			queryParams: {
@@ -166,13 +167,9 @@ export class SentenceAddingPage implements OnInit {
 
 	createNewStatisticRecord(sentenceId: number, lessonId: number,
 			userId: number, words: [number, number][], text: string) {
-		const charsIndexes = [];
-		for (let i = 0; i < words.length; i++) {
-			charsIndexes.push(0);
-		}
 
 		this.lessonsDataService.getLessonByID(lessonId).statistics.push(new Statistics(
-			sentenceId, sentenceId, lessonId, userId, charsIndexes, 0,
+			sentenceId, sentenceId, lessonId, userId, new Array(words.length).fill(0), 0,
 			false, 0, 0, 0, 0, new Date().toISOString(), new Date().toISOString()
 		));
 	}

@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UtilsService, chartsColors } from '../../services/utils/utils.service';
+import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
 import { IonItemSliding, AlertController, NavController, ToastController, LoadingController, IonList } from '@ionic/angular';
 import * as anime from 'animejs';
 import * as _ from 'lodash';
-import { updateIsRequired } from 'src/app/app.component';
 import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
+import { Globals } from 'src/app/services/globals/globals';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -32,6 +32,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		private toastController: ToastController,
 		private alertController: AlertController,
 		private utils: UtilsService,
+		private globals: Globals,
 		private route: ActivatedRoute,
 		private navController: NavController,
 		public lessonsDataService: LessonsDataService,
@@ -78,10 +79,10 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	async ionViewDidEnter() {
-		if (updateIsRequired[0] || (this.displayedSentences && this.displayedSentences.length === 0)) {
+		if (this.globals.updateIsRequired[0] || (this.displayedSentences && this.displayedSentences.length === 0)) {
 			await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
 			this.getData();
-			updateIsRequired[0] = false;
+			this.globals.updateIsRequired[0] = false;
 		}
 		this.updateCharts();
 	}
@@ -159,9 +160,9 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				chart.data[1] = stats.wrongAnswers;
 				chart.data[2] = stats.hintUsages + sentence.words.length * stats.giveUps;
 
-				chart.backgroundColor[0] = chartsColors[0];
-				chart.backgroundColor[1] = chartsColors[1];
-				chart.backgroundColor[2] = chartsColors[2];
+				chart.backgroundColor[0] = this.globals.chartsColors[0];
+				chart.backgroundColor[1] = this.globals.chartsColors[1];
+				chart.backgroundColor[2] = this.globals.chartsColors[2];
 
 				this.pieCharts[i].options.cutoutPercentage = 60;
 				this.pieCharts[i].update();

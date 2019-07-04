@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { USER_ID_KEY } from 'src/app/services/auth/auth.service';
-import { sharedText, updateIsRequired } from 'src/app/app.component';
 import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
 import { Storage } from '@ionic/storage';
 import * as anime from 'animejs';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { Globals } from 'src/app/services/globals/globals';
+import { Lesson } from 'src/app/models/lesson';
 
 @Component({
 	selector: 'app-add-lesson',
@@ -25,11 +25,12 @@ export class AddLessonPage implements OnInit {
 		private storage: Storage,
 		private lessonHttpService: LessonHttpService,
 		private utils: UtilsService,
+		private globals: Globals,
 		private navController: NavController) { }
 
 	ngOnInit() {
 		this.fileInput = <HTMLInputElement>document.getElementById('file-input');
-		sharedText[0] = undefined;
+		this.globals.sharedText[0] = undefined;
 	}
 
 	goBack() {
@@ -45,7 +46,7 @@ export class AddLessonPage implements OnInit {
 			if (this.fileInput.files && this.fileInput.files.length > 0) {
 				await this.showHideInputs(false);
 			} else {
-				this.utils.showToast('No file was choosen');
+				this.utils.showToast('No file was chosen');
 			}
 		} else {
 			await this.showHideInputs(true);
@@ -95,12 +96,21 @@ export class AddLessonPage implements OnInit {
 	}
 
 	async addNewLesson() {
-		if (this.lessonName && this.fileInput.files && this.fileInput.files.length > 0) {
-			const userId = await this.storage.get(USER_ID_KEY)
-			await this.lessonHttpService.postNewLessonFile(this.fileInput.files, this.lessonName, userId);
+		if (this.lessonName) {
+			const userId = await this.storage.get(this.globals.USER_ID_KEY);
+			if (this.fileInput.files && this.fileInput.files.length > 0) {
+				await this.lessonHttpService.postNewLessonFile(this.fileInput.files, this.lessonName, userId);
+			} else {
+				await this.lessonHttpService.postNewLesson({
+					userId: userId,
+					name: this.lessonName,
+					url: 'http://easy4learn.com/tutor'
+				});
+			}
+			this.globals.isDemo = false;
 			this.utils.showToast('New lesson was added');
 			this.fileInput.value = "";
-			updateIsRequired[0] = true;
+			this.globals.updateIsRequired[0] = true;
 			this.navController.navigateBack(['lessons-list']);
 		}
 	}

@@ -1,4 +1,4 @@
-import { UtilsService, charForHiding, blueCharForHiding } from '../utils/utils.service';
+import { UtilsService } from '../utils/utils.service';
 import { Injectable } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
 import { Sentence } from 'src/app/models/sentence';
@@ -6,11 +6,14 @@ import { Statistics } from 'src/app/models/statistics';
 import { LessonHttpService } from '../http/lessons/lesson-http.service';
 import { SentenceHttpService } from '../http/sentences/sentence-http.service';
 import { StatisticHttpService } from '../http/statistics/statistic-http.service';
+import { HttpClient } from '@angular/common/http';
+import { Storage } from '@ionic/storage';
+import { Globals } from '../globals/globals';
 
 interface ILesson {
-    id: number;
-    name: string;
-    url: string;
+	id: number;
+	name: string;
+	url: string;
 	created_at: string;
 	updated_at: string;
 }
@@ -40,6 +43,19 @@ interface IStatistic {
 	updatedAt: string;
 }
 
+interface IDemoSentence {
+	id: number;
+	text: string;
+	words: [number, number][];
+}
+
+interface IDemoLesson {
+	id: number;
+	name: string;
+	url: string;
+	sentences: IDemoSentence[];
+}
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -51,7 +67,10 @@ export class LessonsDataService {
 		private lessonHttpService: LessonHttpService,
 		private sentenceHttpService: SentenceHttpService,
 		private statisticHttpService: StatisticHttpService,
-		private utils: UtilsService) { }
+		private utils: UtilsService,
+		private globals: Globals,
+		private http: HttpClient,
+		private storage: Storage) { }
 
 	addLesson(lesson: Lesson) {
 		this.lessons.push(lesson);
@@ -124,8 +143,8 @@ export class LessonsDataService {
 				}
 				hiddenChars.push(chars);
 			}
-			const hiddenSentence = this.utils.hideChars(apiSentence.text, apiSentence.words, charForHiding);
-			const sentencesListSentence = this.utils.hideChars(apiSentence.text, apiSentence.words, blueCharForHiding);
+			const hiddenSentence = this.utils.hideChars(apiSentence.text, apiSentence.words, this.globals.charForHiding);
+			const sentencesListSentence = this.utils.hideChars(apiSentence.text, apiSentence.words, this.globals.blueCharForHiding);
 			const sentence = new Sentence(
 				apiSentence.id,
 				apiSentence.lesson_id,
@@ -172,32 +191,84 @@ export class LessonsDataService {
 					apiStatistic.hintUsages,
 					apiStatistic.createdAt,
 					apiStatistic.updatedAt)
-			));
+				));
 		}
 
 		return statisticsArray;
 	}
 
 	async refreshLessons(): Promise<void> {
-		const apiLessons: ILesson[] = await this.lessonHttpService.getLessons();
 		this.lessons = [];
-		const now = new Date().getTime();
+		if (this.globals.isDemo) {
+			this.http.get('../assets/demo-lessons.json').subscribe(async (lessons: IDemoLesson[]) => {
+				const userId = await this.storage.get(this.globals.USER_ID_KEY);
 
-		for (let apiLesson of apiLessons) {
-			const diff = (now - new Date(apiLesson.created_at).getTime()) / 1000;
-			const period = this.utils.calculatePeriod(diff);
-			const lesson = new Lesson(
-				apiLesson.id,
-				apiLesson.name,
-				apiLesson.url,
-				apiLesson.created_at,
-				apiLesson.updated_at,
-				period[0] + period[1]);
+				for (const lsn of lessons) {
+					const lesson = new Lesson(lsn.id, lsn.name, lsn.url, '', '', 'Demo lesson');
+					for (const sntc of lsn.sentences) {
+						const hiddenChars: Array<string[]> = [];
+						sntc.words.sort((a, b) => a[0] - b[0]);
+						for (const i in sntc.words) {
+							const chars: string[] = [];
+							for (let j = 0; j < sntc.words[i][1]; j++) {
+								chars.push(sntc.text.charAt(sntc.words[i][0] + j));
+							}
+							hiddenChars.push(chars);
+						}
+						const hiddenSentence = this.utils.hideChars(sntc.text, sntc.words, this.globals.charForHiding);
+						const sentencesListSntc = this.utils.hideChars(sntc.text, sntc.words, this.globals.blueCharForHiding);
+						lesson.sentences.push(new Sentence(
+							sntc.id,
+							lesson.id,
+							sntc.words,
+							sntc.text,
+							hiddenSentence,
+							hiddenChars,
+							sentencesListSntc,
+							'', ''));
+						let storageStat: string = await this.storage.get('sentence-' + sntc.id);
+						if (!storageStat) {
+							await this.storage.set('sentence-' + sntc.id, '0|0|0|0');
+							storageStat = '0|0|0|0';
+						}
+						const statStringArray = storageStat.split('|');
+						lesson.statistics.push(new Statistics(
+							sntc.id,
+							sntc.id,
+							lsn.id,
+							userId,
+							new Array(sntc.words.length).fill(0),
+							0,
+							false,
+							Number(statStringArray[0]),
+							Number(statStringArray[1]),
+							Number(statStringArray[2]),
+							Number(statStringArray[3]),
+							'', ''));
+					}
+					this.addLesson(lesson);
+				} 
+			});
+		} else {
+			const lessons: ILesson[] = await this.lessonHttpService.getLessons();
+			const now = new Date().getTime();
 
-			this.addLesson(lesson);
+			for (const lsn of lessons) {
+				const diff = (now - new Date(lsn.created_at).getTime()) / 1000;
+				const period = this.utils.calculatePeriod(diff);
+				const lesson = new Lesson(
+					lsn.id,
+					lsn.name,
+					lsn.url,
+					lsn.created_at,
+					lsn.updated_at,
+					period[0] + period[1]);
+
+				this.addLesson(lesson);
+			}
+
+			await this.getStatisticByUser();
 		}
-
-		await this.getStatisticByUser();
 	}
 
 	sortSentencesByAddingTime(first: Sentence, second: Sentence): number {

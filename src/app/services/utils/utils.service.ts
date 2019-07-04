@@ -2,12 +2,7 @@ import { Injectable } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
 import { Statistics } from 'src/app/models/statistics';
 import { ToastController, LoadingController } from '@ionic/angular';
-
-export const charForHiding: string = '•';
-export const redCharForHiding: string = '<span class=\'red-text\'>•</span>';
-export const blueCharForHiding: string = '<span class=\'blue-text\'>•</span>';
-
-export const chartsColors: [string, string, string] = ['#AFF265', '#FF9055', '#FFE320']; // Green, Red, Yellow
+import { Globals } from '../globals/globals';
 
 @Injectable({
 	providedIn: 'root'
@@ -19,7 +14,8 @@ export class UtilsService {
 
 	constructor(
 		private toastController: ToastController,
-		private loadingController: LoadingController) { }
+		private loadingController: LoadingController,
+		private globals: Globals) { }
 
 	public async showToast(message: string) {
 		if (!this.toast) {
@@ -135,7 +131,7 @@ export class UtilsService {
 	}
 
 	addChar(input: string, replacement: string): string {
-		let firstUnderScoreIndex = input.indexOf(charForHiding);
+		let firstUnderScoreIndex = input.indexOf(this.globals.charForHiding);
 		let length = 1;
 		if (input.charAt(firstUnderScoreIndex - 3) === 't' && input.charAt(firstUnderScoreIndex - 1) === '>') {
 			firstUnderScoreIndex -= 23;

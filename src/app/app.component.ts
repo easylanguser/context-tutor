@@ -8,13 +8,9 @@ import { BehaviorSubject } from 'rxjs';
 import { ThemeService } from './services/theme/theme.service';
 import { Location } from '@angular/common';
 import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
-import { USER_AVATAR_KEY } from './pages/account/account.page';
 import { UserHttpService } from './services/http/users/user-http.service';
 import { Storage } from '@ionic/storage';
-
-export const SHARED_TEXT_ID_KEY = "shared_text_id";
-export let sharedText = [];
-export let updateIsRequired = [false];
+import { Globals } from './services/globals/globals';
 
 @Component({
 	selector: 'app-root',
@@ -36,6 +32,7 @@ export class AppComponent {
 		private storage: Storage,
 		private alertController: AlertController,
 		private location: Location,
+		private globals: Globals,
 		private userHttpService: UserHttpService,
 		private navController: NavController) {
 		this.initializeApp(location.path());
@@ -93,7 +90,7 @@ export class AppComponent {
 		this.authService.authenticationState.subscribe(async state => {
 			if (state) {
 				this.loggedIn = true;
-				if (sharedText[0]) {
+				if (this.globals.sharedText[0]) {
 					this.router.navigate(['share-adding-choice']);
 				} else {
 					if (pathToGo === '/login') {
@@ -119,7 +116,7 @@ export class AppComponent {
 	}
 
 	private async loadAvatar() {
-		const image = await this.storage.get(USER_AVATAR_KEY);
+		const image = await this.storage.get(this.globals.USER_AVATAR_KEY);
 		const avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
 		if (image) {
 			avatars[0].src = image;
@@ -132,7 +129,7 @@ export class AppComponent {
 			reader.readAsDataURL(blob);
 			reader.onloadend = () => {
 				const image = String(reader.result);
-				this.storage.set(USER_AVATAR_KEY, image);
+				this.storage.set(this.globals.USER_AVATAR_KEY, image);
 				avatars[0].src = image;
 			}
 		}
@@ -153,7 +150,7 @@ export class AppComponent {
 			.then((text: string) => {
 				if (text) {
 					text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
-					sharedText.push(text);
+					this.globals.sharedText.push(text);
 				}
 			})
 			.catch(err => console.error('ReceiveContent plugin error: ', err));

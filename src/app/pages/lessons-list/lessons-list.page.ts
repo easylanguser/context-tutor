@@ -3,11 +3,11 @@ import { IonItemSliding, AlertController, NavController, IonList } from '@ionic/
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
-import { UtilsService, chartsColors } from 'src/app/services/utils/utils.service';
-import { updateIsRequired } from 'src/app/app.component';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 import * as _ from 'lodash';
 import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Globals } from 'src/app/services/globals/globals';
 
 const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
 
@@ -23,7 +23,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	@ViewChild('lessonsList', { static: false }) lessonsList: IonList;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
-	displayHints: boolean = false;
+	
 	contentIsScrolled: boolean = false;
 
 	constructor(
@@ -32,6 +32,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private alertController: AlertController,
 		private lessonHttpService: LessonHttpService,
 		private utils: UtilsService,
+		private globals: Globals,
 		private browser: InAppBrowser,
 		private cdRef: ChangeDetectorRef) { }
 
@@ -56,9 +57,9 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	ionViewDidEnter() {
 		this.updateCharts();
-		if (updateIsRequired[0]) {
+		if (this.globals.updateIsRequired[0]) {
 			this.getData().then(() => {
-				updateIsRequired[0] = false;
+				this.globals.updateIsRequired[0] = false;
 			});
 		}
 		this.resetLocalStatistic();
@@ -132,9 +133,9 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 			if (chartData[0] + chartData[1] + chartData[2] > 1) {
 				--chartData[0];
-				chart.backgroundColor[0] = chartsColors[0];
-				chart.backgroundColor[1] = chartsColors[1];
-				chart.backgroundColor[2] = chartsColors[2];
+				chart.backgroundColor[0] = this.globals.chartsColors[0];
+				chart.backgroundColor[1] = this.globals.chartsColors[1];
+				chart.backgroundColor[2] = this.globals.chartsColors[2];
 				this.pieCharts[i].options.cutoutPercentage = 60;
 				this.pieCharts[i].update();
 			}
@@ -188,7 +189,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	doRefresh(event) {
-		this.getData().then(() => {
+		this.lessonsDataService.refreshLessons().then(() => {
 			event.target.complete();
 			(<HTMLIonSegmentElement>document.getElementById('lessons-filter-segment')).value = "all";
 		});
@@ -198,12 +199,14 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	private async getData() {
-		await this.lessonsDataService.refreshLessons().then(() => {
+		await this.lessonsDataService.refreshLessons();
+		this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
+		if (this.displayedLessons.length === 0) {
+			this.globals.isDemo = true;
+			await this.lessonsDataService.refreshLessons();
 			this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
-			if (this.displayedLessons.length === 0) {
-				this.displayHints = true;
-			}
-		});
+			this.cdRef.detectChanges();
+		}
 	}
 
 	async filterClick(type: number) {

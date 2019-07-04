@@ -1,4 +1,4 @@
-import { UtilsService, charForHiding, chartsColors } from 'src/app/services/utils/utils.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController } from '@ionic/angular';
@@ -9,6 +9,7 @@ import { Statistics } from 'src/app/models/statistics';
 import * as anime from 'animejs';
 import { Location } from '@angular/common';
 import { StatisticHttpService } from 'src/app/services/http/statistics/statistic-http.service';
+import { Globals } from 'src/app/services/globals/globals';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -71,7 +72,7 @@ export class SentenceGuessPage implements OnInit {
 		private statisticHttpService: StatisticHttpService,
 		private location: Location,
 		private navController: NavController,
-		private util: UtilsService) { }
+		private globals: Globals) { }
 
 	async ngOnInit() {
 		this.sentenceId = Number(this.route.snapshot.queryParamMap.get('current'));
@@ -139,7 +140,7 @@ export class SentenceGuessPage implements OnInit {
 			const underscored = this.curSentence().textUnderscored;
 			let previousIndex = 0, index = 1, span;
 			for (let i = 0; i < underscored.length; i++) {
-				if (underscored.charAt(i) === charForHiding) {
+				if (underscored.charAt(i) === this.globals.charForHiding) {
 					span = this.createSpan(false);
 					span.innerText = this.curSentence().textUnderscored.substring(previousIndex, i);
 					this.sentenceContent.appendChild(span);
@@ -150,14 +151,14 @@ export class SentenceGuessPage implements OnInit {
 						++i;
 						span = this.createSpan(true, index++);
 						span.classList.add('blue-text');
-						span.innerText = charForHiding;
+						span.innerText = this.globals.charForHiding;
 						this.sentenceContent.appendChild(span);
 						previousIndex = i;
-					} while (underscored.charAt(i) === charForHiding && i < underscored.length);
+					} while (underscored.charAt(i) === this.globals.charForHiding && i < underscored.length);
 				}
 			}
 
-			if (this.curSentence().textUnderscored.charAt(previousIndex) !== charForHiding) {
+			if (this.curSentence().textUnderscored.charAt(previousIndex) !== this.globals.charForHiding) {
 				span = this.createSpan(false);
 				span.innerText = this.curSentence().textUnderscored.substring(previousIndex);
 				this.sentenceContent.appendChild(span);
@@ -165,7 +166,7 @@ export class SentenceGuessPage implements OnInit {
 			const firstBox = document.getElementById('box-1');
 			firstBox.classList.remove('blue-text');
 			firstBox.classList.add('red-text');
-			firstBox.innerText = charForHiding;
+			firstBox.innerText = this.globals.charForHiding;
 		}
 
 		this.refreshCharBoxes();
@@ -195,9 +196,9 @@ export class SentenceGuessPage implements OnInit {
 			chartData[0] = stats.correctAnswers;
 			chartData[1] = stats.wrongAnswers;
 			chartData[2] = stats.hintUsages + stats.giveUps;
-			chartColors[0] = chartsColors[0];
-			chartColors[1] = chartsColors[1];
-			chartColors[2] = chartsColors[2];
+			chartColors[0] = this.globals.chartsColors[0];
+			chartColors[1] = this.globals.chartsColors[1];
+			chartColors[2] = this.globals.chartsColors[2];
 		}
 
 		this.pieChart.update();
@@ -205,14 +206,16 @@ export class SentenceGuessPage implements OnInit {
 
 	saveStatistics() {
 		const stats = this.curStats();
-		this.statisticHttpService
-			.updateStatisticsOfSentence({
-				sentenceId: this.curSentence().id,
-				correctAnswers: stats.correctAnswers,
-				giveUps: stats.giveUps,
-				hintUsages: stats.hintUsages,
-				wrongAnswers: stats.wrongAnswers
-			});
+		if (!this.globals.isDemo) {
+			this.statisticHttpService
+				.updateStatisticsOfSentence({
+					sentenceId: this.curSentence().id,
+					correctAnswers: stats.correctAnswers,
+					giveUps: stats.giveUps,
+					hintUsages: stats.hintUsages,
+					wrongAnswers: stats.wrongAnswers
+				});
+		}
 
 		const index = this.statisticsDeltasArray.findIndex(el => el[0] === this.curSentence().id);
 		if (index > -1) {
@@ -454,7 +457,7 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	randCharsOrGroup(correctChar: string): string {
-		if (!this.util.isEnglishChar(correctChar))
+		if (!this.utils.isEnglishChar(correctChar))
 			return this.unknownCharGroup;
 
 		for (const arr of this.groups) {
@@ -565,9 +568,9 @@ export class SentenceGuessPage implements OnInit {
 			const redBox = document.getElementById('box-' + this.currentIndex());
 			redBox.classList.remove('blue-text');
 			redBox.classList.add('red-text');
-			redBox.innerText = charForHiding;
+			redBox.innerText = this.globals.charForHiding;
 
-			if (!this.util.isEnglishChar(this.curCorrectChar())) {
+			if (!this.utils.isEnglishChar(this.curCorrectChar())) {
 				++this.curCharsIndexes[this.curWordIndex];
 				const status = this.status();
 				if (status === 1) {

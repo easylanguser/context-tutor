@@ -23,15 +23,15 @@ import { ForgetPageModule } from './pages/forget/forget.module';
 import { ChangePageModule } from './pages/change/change.module';
 import { environment } from 'src/environments/environment';
 import { AddLessonPageModule } from './pages/add-lesson/add-lesson.module';
-import { TOKEN_KEY } from './services/auth/auth.service';
 import { ShareAddingChoicePageModule } from './pages/share-adding-choice/share-adding-choice.module';
 import { SentenceAddingPageModule } from './pages/sentence-adding/sentence-adding.module';
 import { EditLessonTitlePageModule } from './pages/edit-lesson-title/edit-lesson-title.module';
+import { Globals } from './services/globals/globals';
 
 export function jwtOptionsFactory(storage) {
 	return {
 		tokenGetter: () => {
-			return storage.get(TOKEN_KEY);
+			return storage.get('access_token');
 		},
 		whitelistedDomains: [environment.url]
 	};
@@ -69,6 +69,7 @@ export function jwtOptionsFactory(storage) {
 		StatusBar,
 		SplashScreen,
 		HttpClient,
+		Globals,
 		InAppBrowser,
 		{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
 	],

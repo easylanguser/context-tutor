@@ -6,9 +6,7 @@ import { tap, catchError } from 'rxjs/operators';
 import { BehaviorSubject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Storage } from '@ionic/storage';
-
-export const TOKEN_KEY = 'access_token';
-export const USER_ID_KEY = 'user_id';
+import { Globals } from '../globals/globals';
 
 interface AuthData {
 	token: string,
@@ -30,14 +28,15 @@ export class AuthService {
 		private helper: JwtHelperService,
 		private storage: Storage,
 		private plt: Platform,
-		private alertController: AlertController) {
+		private alertController: AlertController,
+		private globals: Globals) {
 		this.plt.ready().then(() => {
 			this.checkToken();
 		});
 	}
 
 	checkToken(): Promise<any> {
-		return this.storage.get(TOKEN_KEY).then(token => {
+		return this.storage.get(this.globals.TOKEN_KEY).then(token => {
 			if (token) {
 				parent.postMessage({ token: token }, '*');
 				let isExpired = this.helper.isTokenExpired(token);
@@ -46,8 +45,8 @@ export class AuthService {
 					this.token = token;
 					this.authenticationState.next(true);
 				} else {
-					this.storage.remove(TOKEN_KEY);
-					this.storage.remove(USER_ID_KEY);
+					this.storage.remove(this.globals.TOKEN_KEY);
+					this.storage.remove(this.globals.USER_ID_KEY);
 				}
 			}
 		});
@@ -66,11 +65,11 @@ export class AuthService {
 		return this.http.post(`${this.url}/api/auth/login`, credentials)
 			.pipe(
 				tap((res: AuthData) => {
-					this.storage.set(TOKEN_KEY, res.token);
+					this.storage.set(this.globals.TOKEN_KEY, res.token);
 					this.token = res.token;
 					parent.postMessage({ token: this.token }, '*');
 
-					this.storage.set(USER_ID_KEY, res.id);
+					this.storage.set(this.globals.USER_ID_KEY, res.id);
 					this.authenticationState.next(true);
 				}),
 				catchError(e =>
@@ -80,8 +79,8 @@ export class AuthService {
 	}
 
 	async logout() {
-		await this.storage.remove(USER_ID_KEY);
-		await this.storage.remove(TOKEN_KEY);
+		await this.storage.remove(this.globals.USER_ID_KEY);
+		await this.storage.remove(this.globals.TOKEN_KEY);
 		this.token = null;
 		parent.postMessage({ userLoggedOut: true }, '*');
 

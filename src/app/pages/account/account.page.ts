@@ -7,13 +7,11 @@ import { environment } from 'src/environments/environment';
 import { UserHttpService } from 'src/app/services/http/users/user-http.service';
 import { Storage } from '@ionic/storage';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { Globals } from 'src/app/services/globals/globals';
 
 interface HTMLInputEvent extends Event {
 	target: HTMLInputElement & EventTarget;
 }
-
-export const USER_AVATAR_KEY = 'user-avatar';
-export const USER_EMAIL_KEY = 'user-email';
 
 @Component({
 	selector: 'app-account',
@@ -32,6 +30,7 @@ export class AccountPage {
 		private httpService: HttpService,
 		private alertController: AlertController,
 		private utils: UtilsService,
+		private globals: Globals,
 		private router: Router,
 		private storage: Storage) { }
 
@@ -57,7 +56,7 @@ export class AccountPage {
 					reader.readAsDataURL(event.target.files[0]);
 					reader.onloadend = () => {
 						const image = String(reader.result);
-						this.storage.set(USER_AVATAR_KEY, image);
+						this.storage.set(this.globals.USER_AVATAR_KEY, image);
 						this.avatars[0].src = image;
 						this.avatars[1].src = image;
 						this.utils.dismissLoader();
@@ -77,16 +76,16 @@ export class AccountPage {
 	}
 
 	async getInfo() {
-		const email = await this.storage.get(USER_EMAIL_KEY);
+		const email = await this.storage.get(this.globals.USER_EMAIL_KEY);
 		if (email) {
 			this.userEmail = email;
 		} else {
 			const userInfo = await this.userHttpService.getUserInfo();
 			this.userEmail = userInfo.email;
-			this.storage.set(USER_EMAIL_KEY, userInfo.email);
+			this.storage.set(this.globals.USER_EMAIL_KEY, userInfo.email);
 		}
 
-		const avatar = await this.storage.get(USER_AVATAR_KEY);
+		const avatar = await this.storage.get(this.globals.USER_AVATAR_KEY);
 		if (avatar) {
 			this.avatars[1].src = avatar;
 		}
