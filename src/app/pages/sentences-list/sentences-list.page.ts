@@ -36,15 +36,10 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		private cdRef: ChangeDetectorRef) { }
 
 	async ngOnInit() {
-		const showLoader = this.route.snapshot.queryParamMap.get('showLoader');
-		if (showLoader === 'true') {
-			await this.utils.createAndShowLoader('Loading...<br>Please, wait');
-		}
-
 		if (!this.lessonsDataService.lessons.length) {
 			await this.lessonsDataService.refreshLessons();
 		}
-		this.initData(showLoader);
+		this.initData();
 
 		this.addFabHandler();
 	}
@@ -67,12 +62,9 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		}, 300));
 	}
 
-	async initData(showLoader) {
+	async initData() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
 		await this.getData();
-		if (showLoader === 'true') {
-			await this.utils.dismissLoader();
-		}
 	}
 
 	goBack() {
@@ -266,7 +258,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	async filterClick(type: number) {
 		await this.sentencesList.closeSlidingItems();
-		await this.utils.createAndShowLoader('Loading');
 
 		if (type === 1) {
 			this.getData();
@@ -282,6 +273,5 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				);
 			}
 		}
-		await this.utils.dismissLoader();
 	}
 }

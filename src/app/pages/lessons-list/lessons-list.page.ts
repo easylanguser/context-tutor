@@ -31,9 +31,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private cdRef: ChangeDetectorRef) { }
 
 	async ngOnInit() {
-		await this.utils.createAndShowLoader('Loading');
 		await this.getData();
-		await this.utils.dismissLoader();
 	}
 
 	ionViewDidEnter() {
@@ -129,7 +127,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	async filterClick(type: number) {
 		await this.lessonsList.closeSlidingItems();
-		await this.utils.createAndShowLoader('Loading');
 
 		const allLessons = await this.lessonsDataService.lessons;
 		if (type === 1) {
@@ -143,15 +140,13 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				);
 			}
 		}
-		await this.utils.dismissLoader();
 	}
 
 	openLesson(lesson: Lesson) {
 		this.navController.navigateForward(
 			['sentences-list'], {
 				queryParams: {
-					lessonID: lesson.id,
-					showLoader: lesson.statistics.length > 20
+					lessonID: lesson.id
 				}
 			});
 	}

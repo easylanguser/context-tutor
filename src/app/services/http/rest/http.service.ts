@@ -21,7 +21,6 @@ export class HttpService {
 		return this.http.post(url, body,
 			{
 				headers: new HttpHeaders({
-					'Authorization': this.authService.token,
 					'enctype': 'multipart/form-data; boundary=----WebKitFormBoundaryuL67FWkv1CA'
 				})
 			});
@@ -48,11 +47,9 @@ export class HttpService {
 	}
 
 	addHeaders() {
-		const token = this.authService.token;
 		const headers = new HttpHeaders(
 			{
-				'Content-Type': 'application/json',
-				'Authorization': token
+				'Content-Type': 'application/json'
 			}
 		);
 		return { headers: headers };
