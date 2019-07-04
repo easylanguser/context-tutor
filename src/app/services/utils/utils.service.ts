@@ -77,6 +77,36 @@ export class UtilsService {
 		});
 	}
 
+	calculatePeriod(diff: number): [string, string] {
+		let label: string, flooredValue: string;
+
+		if (diff < 60) {
+			flooredValue = '';
+			label = 'A moment ago';
+		} else if (diff >= 60 && diff < 3600) {
+			flooredValue = String(Math.floor(diff / 60));
+			label = ' minutes ago';
+			if (flooredValue === '1') { label = ' minute ago'; }
+		} else if (diff >= 3600 && diff < 86400) {
+			flooredValue = String(Math.floor(diff / 3600));
+			label = ' hours ago';
+			if (flooredValue === '1') { label = ' hour ago'; }
+		} else if (diff >= 86400 && diff < 1209600) {
+			flooredValue = String(Math.floor(diff / 86400));
+			label = ' days ago';
+			if (flooredValue === '1') { label = ' day ago'; }
+		} else if (diff >= 1209600 && diff < 2678400) {
+			flooredValue = String(Math.floor(diff / 604800));
+			label = ' weeks ago';
+		} else {
+			flooredValue = String(Math.floor(diff / 2678400));
+			label = ' months ago';
+			if (flooredValue === '1') { label = ' month ago'; }
+		}
+
+		return [flooredValue, label];
+	}
+
 	hideChars(inputText: string, indexes: Array<[number, number]>, hiddenChar): string {
 		let textWithHiddenCharacters = inputText.substr(0, indexes[0][0]);
 		for (let i = 0; i < indexes.length - 1; i++) {

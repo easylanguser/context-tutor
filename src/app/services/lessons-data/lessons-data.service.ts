@@ -7,6 +7,39 @@ import { LessonHttpService } from '../http/lessons/lesson-http.service';
 import { SentenceHttpService } from '../http/sentences/sentence-http.service';
 import { StatisticHttpService } from '../http/statistics/statistic-http.service';
 
+interface ILesson {
+    id: number;
+    name: string;
+    url: string;
+	created_at: string;
+	updated_at: string;
+}
+
+interface ISentence {
+	id: number;
+	lesson_id: number;
+	text: string;
+	words: [number, number][];
+	selectors: string[];
+	selectors_words: string[];
+	created_at: string;
+	updated_at: string;
+}
+
+interface IStatistic {
+	id: number;
+	userId: number;
+	lessonId: number;
+	sentenceId: number;
+	timeSpent: number;
+	correctAnswers: number;
+	giveUps: number;
+	hintUsages: number;
+	wrongAnswers: number;
+	createdAt: string;
+	updatedAt: string;
+}
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -77,38 +110,38 @@ export class LessonsDataService {
 	}
 
 	async getSentencesByLessonId(id: number): Promise<Sentence[]> {
-		const sntns = await this.sentenceHttpService.getLessonSentences(id);
+		const apiSentences: ISentence[] = await this.sentenceHttpService.getLessonSentences(id);
 
-		for (const i in sntns) {
+		for (const apiSentence of apiSentences) {
 			const hiddenChars: Array<string[]> = [];
 
-			sntns[i].words.sort((a, b) => a[0] - b[0]);
+			apiSentence.words.sort((a, b) => a[0] - b[0]);
 
-			for (const j in sntns[i].words) {
+			for (const i in apiSentence.words) {
 				const chars: string[] = [];
-				for (let k = 0; k < sntns[i].words[j][1]; k++) {
-					chars.push(sntns[i].text.charAt(sntns[i].words[j][0] + k));
+				for (let j = 0; j < apiSentence.words[i][1]; j++) {
+					chars.push(apiSentence.text.charAt(apiSentence.words[i][0] + j));
 				}
 				hiddenChars.push(chars);
 			}
-			const hiddenSentence = this.utils.hideChars(sntns[i].text, sntns[i].words, charForHiding);
-			const sentencesListSentence = this.utils.hideChars(sntns[i].text, sntns[i].words, blueCharForHiding);
+			const hiddenSentence = this.utils.hideChars(apiSentence.text, apiSentence.words, charForHiding);
+			const sentencesListSentence = this.utils.hideChars(apiSentence.text, apiSentence.words, blueCharForHiding);
 			const sentence = new Sentence(
-				sntns[i].id,
-				sntns[i].lesson_id,
-				sntns[i].words,
-				sntns[i].text,
+				apiSentence.id,
+				apiSentence.lesson_id,
+				apiSentence.words,
+				apiSentence.text,
 				hiddenSentence,
 				hiddenChars,
 				sentencesListSentence,
-				sntns[i].created_at,
-				sntns[i].updated_at);
-			if (!this.getLessonByID(id).sentences.some(sntn => sntn.id === sentence.id)) {
+				apiSentence.created_at,
+				apiSentence.updated_at);
+			if (!this.getLessonByID(id).sentences.some(sntnc => sntnc.id === sentence.id)) {
 				this.getLessonByID(id).addSentence(sentence);
 			}
 
 			const stat = this.getStatisticsOfSentence(sentence);
-			for (let _ in sentence.hiddenChars) {
+			for (const _ in sentence.hiddenChars) {
 				stat.curCharsIndexes.push(0);
 			}
 		}
@@ -121,74 +154,44 @@ export class LessonsDataService {
 	}
 
 	async getStatisticByUser(): Promise<Statistics[]> {
-		const statistics = await this.statisticHttpService.getStatisticsOfUser();
+		const apiStatistics: IStatistic[] = await this.statisticHttpService.getStatisticsOfUser();
 		const statisticsArray: Statistics[] = [];
 
-		for (const stat of statistics) {
-			this.getLessonByID(stat.lessonId).statistics.push(
+		for (const apiStatistic of apiStatistics) {
+			this.getLessonByID(apiStatistic.lessonId).statistics.push(
 				(new Statistics(
-					stat.id,
-					stat.sentenceId,
-					stat.lessonId,
-					stat.userId,
+					apiStatistic.id,
+					apiStatistic.sentenceId,
+					apiStatistic.lessonId,
+					apiStatistic.userId,
 					[], 0,
 					false,
-					stat.correctAnswers,
-					stat.wrongAnswers,
-					stat.giveUps,
-					stat.hintUsages,
-					stat.created_at,
-					stat.updated_at)
+					apiStatistic.correctAnswers,
+					apiStatistic.wrongAnswers,
+					apiStatistic.giveUps,
+					apiStatistic.hintUsages,
+					apiStatistic.createdAt,
+					apiStatistic.updatedAt)
 			));
 		}
 
 		return statisticsArray;
 	}
 
-	calculatePeriod(diff: number): [string, string] {
-		let label: string, flooredValue: string;
-
-		if (diff < 60) {
-			flooredValue = '';
-			label = 'A moment ago';
-		} else if (diff >= 60 && diff < 3600) {
-			flooredValue = String(Math.floor(diff / 60));
-			label = ' minutes ago';
-			if (flooredValue === '1') { label = ' minute ago'; }
-		} else if (diff >= 3600 && diff < 86400) {
-			flooredValue = String(Math.floor(diff / 3600));
-			label = ' hours ago';
-			if (flooredValue === '1') { label = ' hour ago'; }
-		} else if (diff >= 86400 && diff < 1209600) {
-			flooredValue = String(Math.floor(diff / 86400));
-			label = ' days ago';
-			if (flooredValue === '1') { label = ' day ago'; }
-		} else if (diff >= 1209600 && diff < 2678400) {
-			flooredValue = String(Math.floor(diff / 604800));
-			label = ' weeks ago';
-		} else {
-			flooredValue = String(Math.floor(diff / 2678400));
-			label = ' months ago';
-			if (flooredValue === '1') { label = ' month ago'; }
-		}
-
-		return [flooredValue, label];
-	}
-
 	async refreshLessons(): Promise<void> {
-		const lsn = await this.lessonHttpService.getLessons();
+		const apiLessons: ILesson[] = await this.lessonHttpService.getLessons();
 		this.lessons = [];
 		const now = new Date().getTime();
 
-		for (let i in lsn) {
-			const diff = (now - new Date(lsn[i].created_at).getTime()) / 1000;
-			const period = this.calculatePeriod(diff);
+		for (let apiLesson of apiLessons) {
+			const diff = (now - new Date(apiLesson.created_at).getTime()) / 1000;
+			const period = this.utils.calculatePeriod(diff);
 			const lesson = new Lesson(
-				lsn[i].id,
-				lsn[i].name,
-				lsn[i].url,
-				lsn[i].created_at,
-				lsn[i].updated_at,
+				apiLesson.id,
+				apiLesson.name,
+				apiLesson.url,
+				apiLesson.created_at,
+				apiLesson.updated_at,
 				period[0] + period[1]);
 
 			this.addLesson(lesson);
