@@ -168,7 +168,14 @@ ion-toolbar {
 }
 
 .dashed {
+    background-color: #F8F9F9 !important;
     border: 2px dashed;
+    &:hover {
+        box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.4) !important;
+    }
+    span {
+        color: var(--ion-color-primary) !important;
+    }
 }
 
 ion-item-option {
