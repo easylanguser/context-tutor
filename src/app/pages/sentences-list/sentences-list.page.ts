@@ -32,7 +32,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		private toastController: ToastController,
 		private alertController: AlertController,
 		private utils: UtilsService,
-		private globals: Globals,
+		public globals: Globals,
 		private route: ActivatedRoute,
 		private navController: NavController,
 		public lessonsDataService: LessonsDataService,
@@ -85,7 +85,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 			this.getData();
 			this.globals.updateIsRequired[0] = false;
 		}
-		this.updateCharts();
+		this.syncCharts();
 	}
 
 	ngAfterViewInit() {

@@ -32,7 +32,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private alertController: AlertController,
 		private lessonHttpService: LessonHttpService,
 		private utils: UtilsService,
-		private globals: Globals,
+		public globals: Globals,
 		private browser: InAppBrowser,
 		private cdRef: ChangeDetectorRef) { }
 
