@@ -237,20 +237,18 @@ export class LessonsDataService {
 						}
 						const statStringArray = storageStat.split('|');
 						lesson.statistics.push(new Statistics(
-							sntc.id,
-							sntc.id,
-							lsn.id,
-							userId,
+							sntc.id, sntc.id, lsn.id, userId,
 							new Array(sntc.words.length).fill(0),
-							0,
-							false,
+							0, false,
 							Number(statStringArray[0]),
 							Number(statStringArray[1]),
 							Number(statStringArray[2]),
 							Number(statStringArray[3]),
 							'', ''));
 					}
-					this.addLesson(lesson);
+					if (this.lessons.findIndex(lsn => lsn.id === lesson.id) === -1) {
+						this.addLesson(lesson);	
+					}
 				}
 			});
 		} else {
