@@ -120,12 +120,12 @@ export class AppComponent {
 				const target = [document.querySelector('#demo-informer')];
 				anime({
 					targets: target,
-					translateX: '+=85vw',
+					translateX: '+=95vw',
 					duration: 1000
 				}).finished.then(() => {
 					anime({
 						targets: target,
-						translateX: '-=85vw',
+						translateX: '-=95vw',
 						delay: 1500,
 						duration: 1000
 					})

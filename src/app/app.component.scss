@@ -75,12 +75,16 @@
     width: 50vw;
     position: absolute;
     bottom: 25vh;
-    left: -60vw;
+    left: -70vw;
     border: 1px solid;
     border-radius: 4px;
     font-size: 3vh;
     color: var(--ion-color-danger);
     text-align: center;
+
+    @media (min-width: 992px) {
+        left: -56vw;
+    }
 }
 
 #about-btn {

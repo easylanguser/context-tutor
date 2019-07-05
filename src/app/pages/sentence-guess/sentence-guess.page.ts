@@ -10,6 +10,7 @@ import * as anime from 'animejs';
 import { Location } from '@angular/common';
 import { StatisticHttpService } from 'src/app/services/http/statistics/statistic-http.service';
 import { Globals } from 'src/app/services/globals/globals';
+import { Storage } from '@ionic/storage';
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -72,6 +73,7 @@ export class SentenceGuessPage implements OnInit {
 		private statisticHttpService: StatisticHttpService,
 		private location: Location,
 		private navController: NavController,
+		private storage: Storage,
 		private globals: Globals) { }
 
 	async ngOnInit() {
@@ -206,14 +208,17 @@ export class SentenceGuessPage implements OnInit {
 
 	saveStatistics() {
 		const stats = this.curStats();
-		if (!this.globals.getIsDemo()) {
+		if (this.globals.getIsDemo()) {
+			this.storage.set('sentence-' + this.curSentence().id, stats.correctAnswers +
+				'|' + stats.wrongAnswers + '|' + stats.giveUps + '|' + stats.hintUsages);
+		} else {
 			this.statisticHttpService
 				.updateStatisticsOfSentence({
 					sentenceId: this.curSentence().id,
 					correctAnswers: stats.correctAnswers,
+					wrongAnswers: stats.wrongAnswers,
 					giveUps: stats.giveUps,
-					hintUsages: stats.hintUsages,
-					wrongAnswers: stats.wrongAnswers
+					hintUsages: stats.hintUsages
 				});
 		}
 
