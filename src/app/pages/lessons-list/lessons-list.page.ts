@@ -23,7 +23,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	@ViewChild('lessonsList', { static: false }) lessonsList: IonList;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
-	
+
 	contentIsScrolled: boolean = false;
 
 	constructor(
@@ -47,10 +47,12 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		const content = <HTMLIonContentElement>document.getElementById('list-scroll');
 		content.scrollEvents = true;
 		content.addEventListener('ionScroll', _.throttle((ev: CustomEvent) => {
-			if (ev.detail.velocityY > 0.1) {
-				this.contentIsScrolled = true;
-			} else if (ev.detail.velocityY < -0.1) {
-				this.contentIsScrolled = false;
+			if (!this.globals.getIsDemo()) {
+				if (ev.detail.velocityY > 0.1) {
+					this.contentIsScrolled = true;
+				} else if (ev.detail.velocityY < -0.1) {
+					this.contentIsScrolled = false;
+				}
 			}
 		}, 250));
 	}
@@ -181,7 +183,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	async doRefresh(event) {
 		await this.getData();
 		(<HTMLIonSegmentElement>document.getElementById('lessons-filter-segment')).value = "all";
-		
+
 		event.target.complete();
 		setTimeout(() => {
 			event.target.complete();
@@ -190,10 +192,10 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	private async getData() {
 		await this.utils.createAndShowLoader('Loading...');
-		
+
 		await this.lessonsDataService.refreshLessons();
 		this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
-		
+
 		await this.utils.dismissLoader();
 	}
 
@@ -213,7 +215,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				);
 			}
 		}
-		
+
 		await this.utils.dismissLoader();
 	}
 
