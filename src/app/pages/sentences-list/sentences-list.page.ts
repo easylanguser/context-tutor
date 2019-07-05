@@ -68,6 +68,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	async initData(showLoader) {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
+		
 		await this.getData();
 		if (showLoader === 'true') {
 			await this.utils.dismissLoader();
@@ -247,7 +248,11 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	private async getData() {
 		this.lessonTitle = this.lessonsDataService.getLessonByID(this.lessonId).name.toString();
-		this.displayedSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
+		if (this.globals.getIsDemo()) {
+			this.displayedSentences = this.lessonsDataService.getLessonByID(this.lessonId).sentences;
+		} else {
+			this.displayedSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
+		}
 	}
 
 	async filterClick(type: number) {
@@ -255,7 +260,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		await this.utils.createAndShowLoader('Loading');
 
 		if (type === 1) {
-			this.getData();
+			await this.getData();
 		} else {
 			const allSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
 			if (type === 2) {

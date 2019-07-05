@@ -50,7 +50,7 @@
           </div>
         </ion-item>
 
-        <ion-item-options side="end">
+        <ion-item-options side="end" *ngIf="!this.globals.getIsDemo()">
           <ion-item-option class="delete-sliding-option" color="danger"
             (click)="deleteItem(slidingItem, sentence.lessonId, sentence.id, index)">
             Delete
@@ -62,13 +62,13 @@
 
   </ion-content>
 
-  <ion-fab id="add-sentence-fab" [ngClass]="{'hidden-btn': contentIsScrolled}" vertical="bottom" horizontal="end">
+  <ion-fab id="add-sentence-fab" *ngIf="!this.globals.getIsDemo()" [ngClass]="{'hidden-btn': contentIsScrolled}" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="addSentenceToLesson()">
       <ion-icon name="ios-add-circle"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <ion-fab id="edit-sentence-fab" [ngClass]="{'hidden-btn': contentIsScrolled}" vertical="bottom" horizontal="start">
+  <ion-fab id="edit-sentence-fab" *ngIf="!this.globals.getIsDemo()" [ngClass]="{'hidden-btn': contentIsScrolled}" vertical="bottom" horizontal="start">
     <ion-fab-button (click)="editSentence()">
       <ion-icon id="edit-sentence-icon" name="md-create"></ion-icon>
     </ion-fab-button>
