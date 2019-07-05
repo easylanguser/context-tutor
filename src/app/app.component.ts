@@ -177,7 +177,7 @@ export class AppComponent {
 
 	async showAbout() {
 		let header = 'EasyLang Context Tutor';
-		let message = '0.1.16';
+		let message = '0.1.17';
 		const alert = await this.alertController.create({
 			header: header,
 			message: 'Version: ' + message,
