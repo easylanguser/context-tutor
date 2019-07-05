@@ -204,7 +204,7 @@ export class LessonsDataService {
 		this.globals.updIsDemo(apiLessons.length === 0);
 
 		if (this.globals.getIsDemo()) {
-			await this.http.get('../assets/demo-lessons.json').toPromise().then(async (lessons: IDemoLesson[]) => {
+			await this.http.get('assets/demo-lessons.json').toPromise().then(async (lessons: IDemoLesson[]) => {
 				const userId = await this.storage.get(this.globals.USER_ID_KEY);
 
 				for (const lsn of lessons) {
