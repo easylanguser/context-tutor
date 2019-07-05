@@ -11,6 +11,7 @@ import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller'
 import { UserHttpService } from './services/http/users/user-http.service';
 import { Storage } from '@ionic/storage';
 import { Globals } from './services/globals/globals';
+import * as anime from 'animejs';
 
 @Component({
 	selector: 'app-root',
@@ -111,6 +112,24 @@ export class AppComponent {
 			} else {
 				this.loggedIn = false;
 				this.router.navigate(['login']);
+			}
+		});
+
+		this.globals.isDemo.subscribe(demo => {
+			if (demo && this.globals.isDemoHasChanged) {
+				const target = [document.querySelector('#demo-informer')];
+				anime({
+					targets: target,
+					translateX: '+=85vw',
+					duration: 1000
+				}).finished.then(() => {
+					anime({
+						targets: target,
+						translateX: '-=85vw',
+						delay: 1500,
+						duration: 1000
+					})
+				});
 			}
 		});
 	}

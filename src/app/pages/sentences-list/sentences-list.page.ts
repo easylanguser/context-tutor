@@ -109,7 +109,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		this.updateCharts();
 	}
 
-	async deleteItem(slidingItem: IonItemSliding, lessonID: number, sentenceID: number) {
+	async deleteItem(slidingItem: IonItemSliding, lessonID: number, sentenceID: number, index: number) {
 		const alert = await this.alertController.create({
 			message: 'Are you sure you want to delete this sentence?',
 			buttons: [
@@ -124,22 +124,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 					text: 'Delete',
 					handler: () => {
 						slidingItem.close();
-
 						this.sentenceHttpService.deleteSentence(sentenceID);
-						this.lessonsDataService.removeSentence(lessonID, sentenceID)
-
-						let i = 0;
-						for (i; i < this.displayedSentences.length; i++) {
-							if (this.displayedSentences[i].id === sentenceID) {
-								break;
-							}
-						}
-
-						if (i !== this.displayedSentences.length) {
-							this.displayedSentences.splice(i, 1);
-							this.pieCharts[i].destroy();
-							this.pieCharts.splice(i, 1);
-						}
+						this.lessonsDataService.removeSentence(lessonID, sentenceID);
 					}
 				}
 			]

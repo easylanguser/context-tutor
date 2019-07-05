@@ -38,7 +38,7 @@
     <ion-list id="sentences-list" #sentencesList no-padding no-margin>
       <ion-item-sliding #slidingItem *ngFor="let sentence of this.displayedSentences;index as i">
         <ion-item class="sentence-ion-item" no-padding>
-          <div (click)="openSentence(sentence.id)">
+          <div (click)="openSentence(sentence.id)" [ngClass]="{'dashed': this.globals.getIsDemo()}">
             <div>
               <p [innerHTML]="sentence.sentencesListSentence"></p>
             </div>
@@ -52,7 +52,7 @@
 
         <ion-item-options side="end">
           <ion-item-option class="delete-sliding-option" color="danger"
-            (click)="deleteItem(slidingItem, sentence.lessonId, sentence.id)">
+            (click)="deleteItem(slidingItem, sentence.lessonId, sentence.id, index)">
             Delete
           </ion-item-option>
         </ion-item-options>

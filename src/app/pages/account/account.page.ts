@@ -76,6 +76,11 @@ export class AccountPage {
 	}
 
 	async getInfo() {
+		const avatar = await this.storage.get(this.globals.USER_AVATAR_KEY);
+		if (avatar) {
+			this.avatars[1].src = avatar;
+		}
+		
 		const email = await this.storage.get(this.globals.USER_EMAIL_KEY);
 		if (email) {
 			this.userEmail = email;
@@ -83,11 +88,6 @@ export class AccountPage {
 			const userInfo = await this.userHttpService.getUserInfo();
 			this.userEmail = userInfo.email;
 			this.storage.set(this.globals.USER_EMAIL_KEY, userInfo.email);
-		}
-
-		const avatar = await this.storage.get(this.globals.USER_AVATAR_KEY);
-		if (avatar) {
-			this.avatars[1].src = avatar;
 		}
 	}
 

@@ -1,9 +1,21 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class Globals {
 	// Variables
-	isDemo: boolean = false;
+	isDemo: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+	isDemoHasChanged: boolean;
+
+	updIsDemo(newVal: boolean) {
+		this.isDemoHasChanged = (newVal !== this.getIsDemo());
+		this.isDemo.next(newVal);
+	}
+
+	getIsDemo(): boolean {
+		return this.isDemo.getValue();
+	}
+
 	sharedText = [];
 	updateIsRequired = [false];
 

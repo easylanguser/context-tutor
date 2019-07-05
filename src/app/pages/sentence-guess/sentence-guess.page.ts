@@ -206,7 +206,7 @@ export class SentenceGuessPage implements OnInit {
 
 	saveStatistics() {
 		const stats = this.curStats();
-		if (!this.globals.isDemo) {
+		if (!this.globals.getIsDemo()) {
 			this.statisticHttpService
 				.updateStatisticsOfSentence({
 					sentenceId: this.curSentence().id,

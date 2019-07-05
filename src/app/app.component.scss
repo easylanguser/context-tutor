@@ -71,6 +71,18 @@
     }
 }
 
+#demo-informer {
+    width: 50vw;
+    position: absolute;
+    bottom: 25vh;
+    left: -60vw;
+    border: 1px solid;
+    border-radius: 4px;
+    font-size: 3vh;
+    color: var(--ion-color-danger);
+    text-align: center;
+}
+
 #about-btn {
     position: absolute;
     bottom: 1vh;

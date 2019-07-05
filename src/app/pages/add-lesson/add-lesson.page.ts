@@ -5,7 +5,6 @@ import { Storage } from '@ionic/storage';
 import * as anime from 'animejs';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Globals } from 'src/app/services/globals/globals';
-import { Lesson } from 'src/app/models/lesson';
 
 @Component({
 	selector: 'app-add-lesson',
@@ -107,7 +106,7 @@ export class AddLessonPage implements OnInit {
 					url: 'http://easy4learn.com/tutor'
 				});
 			}
-			this.globals.isDemo = false;
+			this.globals.updIsDemo(false);
 			this.utils.showToast('New lesson was added');
 			this.fileInput.value = "";
 			this.globals.updateIsRequired[0] = true;

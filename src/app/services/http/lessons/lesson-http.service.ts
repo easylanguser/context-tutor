@@ -22,8 +22,8 @@ export class LessonHttpService {
 			userId + '&lessonFileName=' + lessonName, formData).toPromise();
 	}
 
-	deleteLesson(lessonId: number) {
-		this.httpService.doDelete(apiUrl + 'delete?id=' + lessonId);
+	deleteLesson(lessonId: number): Promise<any> {
+		return this.httpService.doDelete(apiUrl + 'delete?id=' + lessonId).toPromise();
 	}
 
 	updateLessonName(lessonId: string, newTitle: string): Promise<any> {

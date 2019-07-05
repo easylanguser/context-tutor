@@ -42,9 +42,9 @@ export class HttpService {
 		return this.http.get(url, { ...headers, responseType: "blob" });
 	}
 
-	doDelete(url: string) {
+	doDelete(url: string): Observable<any> {
 		const headers = this.addHeaders();
-		return this.http.delete(url, headers).toPromise();
+		return this.http.delete(url, headers);
 	}
 
 	addHeaders() {

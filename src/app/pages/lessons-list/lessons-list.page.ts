@@ -145,7 +145,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		this.cdRef.detectChanges();
 	}
 
-	async deleteItem(slidingItem: IonItemSliding, lessonID: number) {
+	async deleteItem(slidingItem: IonItemSliding, lessonID: number, index: number) {
 		const alert = await this.alertController.create({
 			message: 'Are you sure you want to delete this lesson?',
 			buttons: [
@@ -158,23 +158,13 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				},
 				{
 					text: 'Delete',
-					handler: () => {
+					handler: async () => {
 						slidingItem.close();
-
-						this.lessonHttpService.deleteLesson(lessonID);
+						await this.lessonHttpService.deleteLesson(lessonID);
 						this.lessonsDataService.removeLesson(lessonID);
 
-						let i = 0;
-						for (i; i < this.displayedLessons.length; i++) {
-							if (this.displayedLessons[i].id === lessonID) {
-								break;
-							}
-						}
-
-						if (i !== this.displayedLessons.length) {
-							this.displayedLessons.splice(i, 1);
-							this.pieCharts[i].destroy();
-							this.pieCharts.splice(i, 1);
+						if (this.displayedLessons.length === 0) {
+							await this.getData();
 						}
 					}
 				}
@@ -188,32 +178,30 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		this.navController.navigateForward(['edit-lesson-title'], { queryParams: { lessonId: lessonId } });
 	}
 
-	doRefresh(event) {
-		this.lessonsDataService.refreshLessons().then(() => {
-			event.target.complete();
-			(<HTMLIonSegmentElement>document.getElementById('lessons-filter-segment')).value = "all";
-		});
+	async doRefresh(event) {
+		await this.getData();
+		(<HTMLIonSegmentElement>document.getElementById('lessons-filter-segment')).value = "all";
+		
+		event.target.complete();
 		setTimeout(() => {
 			event.target.complete();
 		}, 5000);
 	}
 
 	private async getData() {
+		await this.utils.createAndShowLoader('Loading...');
+		
 		await this.lessonsDataService.refreshLessons();
 		this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
-		if (this.displayedLessons.length === 0) {
-			this.globals.isDemo = true;
-			await this.lessonsDataService.refreshLessons();
-			this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
-			this.cdRef.detectChanges();
-		}
+		
+		await this.utils.dismissLoader();
 	}
 
 	async filterClick(type: number) {
 		await this.lessonsList.closeSlidingItems();
 		await this.utils.createAndShowLoader('Loading');
 
-		const allLessons = await this.lessonsDataService.lessons;
+		const allLessons = this.lessonsDataService.lessons;
 		if (type === 1) {
 			this.displayedLessons = allLessons;
 		} else {
@@ -225,6 +213,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				);
 			}
 		}
+		
 		await this.utils.dismissLoader();
 	}
 

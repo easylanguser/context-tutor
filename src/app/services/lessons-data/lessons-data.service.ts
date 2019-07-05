@@ -199,7 +199,11 @@ export class LessonsDataService {
 
 	async refreshLessons(): Promise<void> {
 		this.lessons = [];
-		if (this.globals.isDemo) {
+
+		const apiLessons: ILesson[] = await this.lessonHttpService.getLessons();
+		this.globals.updIsDemo(apiLessons.length === 0);
+
+		if (this.globals.getIsDemo()) {
 			this.http.get('../assets/demo-lessons.json').subscribe(async (lessons: IDemoLesson[]) => {
 				const userId = await this.storage.get(this.globals.USER_ID_KEY);
 
@@ -247,13 +251,12 @@ export class LessonsDataService {
 							'', ''));
 					}
 					this.addLesson(lesson);
-				} 
+				}
 			});
 		} else {
-			const lessons: ILesson[] = await this.lessonHttpService.getLessons();
 			const now = new Date().getTime();
 
-			for (const lsn of lessons) {
+			for (const lsn of apiLessons) {
 				const diff = (now - new Date(lsn.created_at).getTime()) / 1000;
 				const period = this.utils.calculatePeriod(diff);
 				const lesson = new Lesson(
@@ -285,10 +288,10 @@ export class LessonsDataService {
 
 	sortLessonsByTime(first: Lesson, second: Lesson): number {
 		if (first.statistics.length === 0) {
-			return -1;
+			return 1;
 		}
 		if (second.statistics.length === 0) {
-			return 1;
+			return -1;
 		}
 		const firstLatestUpd = new Date(Math.max.apply(null, first.statistics.map(elem => new Date(elem.updated_at))));
 		const secondLatestUpd = new Date(Math.max.apply(null, second.statistics.map(elem => new Date(elem.updated_at))));
