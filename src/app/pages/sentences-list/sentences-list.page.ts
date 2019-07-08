@@ -85,7 +85,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 			this.getData();
 			this.globals.updateIsRequired[0] = false;
 		}
-		this.syncCharts();
+		this.updateCharts();
 	}
 
 	ngAfterViewInit() {
@@ -135,7 +135,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	private updateCharts() {
-		if (this.displayedSentences === undefined || this.displayedSentences.length === 0) {
+		if (!this.displayedSentences || !this.displayedSentences.length) {
 			return;
 		}
 		let i = 0;
@@ -249,7 +249,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	private async getData() {
 		this.lessonTitle = this.lessonsDataService.getLessonByID(this.lessonId).name.toString();
 		if (this.globals.getIsDemo()) {
-			this.displayedSentences = this.lessonsDataService.getLessonByID(this.lessonId).sentences;
+			this.displayedSentences = await this.lessonsDataService.getLessonByID(this.lessonId)
+				.sentences.sort(this.lessonsDataService.sortSentencesByAddingTime);
 		} else {
 			this.displayedSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
 		}
