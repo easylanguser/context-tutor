@@ -9,6 +9,7 @@ import { NavParams } from '@ionic/angular';
 export class ShareLessonModal {
 
 	lessonId: number;
+	usersAreLoaded: boolean = false;
 
 	constructor(navParams: NavParams) {
 		this.lessonId = Number(navParams.get('lessonId'));

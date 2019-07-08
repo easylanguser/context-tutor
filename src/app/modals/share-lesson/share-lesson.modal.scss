@@ -1,0 +1,17 @@
+ion-spinner {
+    position: absolute;
+    left: calc(50% - 14px);
+    top: 40%;
+}
+
+#dismiss-btn {
+    position: absolute;
+    bottom: 8px;
+    width: calc(100% - 16px);
+    height: 3vh;
+    min-height: 40px;
+    margin: 0 0 0 8px;
+    font-size: 2vh;
+    color: #FFF;
+    --background: var(--ion-color-danger-tint);
+}
