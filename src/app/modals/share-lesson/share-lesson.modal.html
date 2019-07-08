@@ -1,22 +1,25 @@
-<ion-content scrollY="false">
-
-  <ion-header>
-    <ion-toolbar mode="ios">
-      <ion-buttons slot="start" (click)="goBack()">
-        <ion-button>
-          <ion-icon name="arrow-back"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-
+<ion-content>
   <ion-spinner *ngIf="!usersAreLoaded" name="dots"></ion-spinner>
 
-  <p *ngIf="usersAreLoaded">
-    id is = {{lessonId}}
-  </p>
+  <div *ngIf="usersAreLoaded">
+    <ion-searchbar
+      id="users-search-bar"
+      (ionChange)="filterUsers($event)">
+    </ion-searchbar>
 
-  <ion-button id="dismiss-btn">
+    <div id="no-users-found" *ngIf="users.length === 0">No users found</div>
+
+    <ion-list id="users-list">
+      <div *ngFor="let user of users">
+          <img id="user-avatar" src="assets/img/account_icon.svg" alt="avatar">
+          <p>
+            {{ user.email }}
+          </p>
+      </div>
+    </ion-list>
+  </div>
+
+  <ion-button id="dismiss-btn" (click)="dismissModal()">
     Dismiss
   </ion-button>
 

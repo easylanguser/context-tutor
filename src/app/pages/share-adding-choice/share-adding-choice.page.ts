@@ -32,9 +32,9 @@ export class ShareAddingChoicePage implements OnInit {
 	}
 
 	filterLessons(event: CustomEvent) {
-		const filterName = String(event.detail.value);
+		const filterName = String(event.detail.value).toLowerCase();
 		this.displayedLessons = this.allLessons
-			.filter(lsn => lsn.name.toLowerCase().indexOf(filterName.toLowerCase()) >= 0);
+			.filter(lsn => lsn.name.toLowerCase().indexOf(filterName) >= 0);
 	}
 
 	private async getData() {

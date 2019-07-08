@@ -28,4 +28,8 @@ export class UserHttpService {
 	getUserInfo(): Promise<any> {
 		return this.httpService.doGet(apiUrl + 'getUserInfo').toPromise();
 	}
+
+	getAllUsers(): Promise<any> {
+		return this.httpService.doGet(apiUrl + 'getAllUsers').toPromise();
+	}
 }

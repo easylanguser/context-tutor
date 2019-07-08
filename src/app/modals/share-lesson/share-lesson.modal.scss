@@ -4,14 +4,68 @@ ion-spinner {
     top: 40%;
 }
 
-#dismiss-btn {
+#no-users-found {
+    width: 100%;
     position: absolute;
+    bottom: 50%;
+    text-align: center;
+}
+
+#dismiss-btn {
+    position: fixed;
     bottom: 8px;
-    width: calc(100% - 16px);
-    height: 3vh;
-    min-height: 40px;
-    margin: 0 0 0 8px;
-    font-size: 2vh;
+    width: 40%;
+    height: 2.5vh;
+    margin: 0 0 0 30%;
+    font-size: 1.75vh;
     color: #FFF;
     --background: var(--ion-color-danger-tint);
+
+    @media (max-width: 991px) {
+        height: 4vh;
+        font-size: 2.5vh;
+    }
+}
+
+#users-list {
+    padding: 58px 0 3.5vh 0;
+
+    div {
+        height: 4vh;
+        font-size: 2vh;
+        text-align: end;
+        overflow: auto;
+        padding: 0 5%;
+        margin: 1vh 0;
+        line-height: 4vh;
+        cursor: pointer;
+
+        #user-avatar {
+            height: 4vh;
+            width: 4vh;
+            float: left;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+            background: #FFF;
+            margin-right: 2%;
+        }
+
+        p {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            max-height: 4vh;
+        }
+
+        &:hover {
+            background: rgb(204, 204, 204);
+        }
+    }
+}
+
+#users-search-bar {
+    position: fixed;
+    top: 0;
+    z-index: 1000001;
 }
