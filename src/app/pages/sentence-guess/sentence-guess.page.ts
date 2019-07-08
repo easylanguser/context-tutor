@@ -57,7 +57,7 @@ export class SentenceGuessPage implements OnInit {
 	fourthCharBack: string;
 
 	sentenceContent: HTMLElement;
-	savedTemplates: Array<[number, HTMLElement[]]> = [];
+	
 
 	// Highlights colors
 	yellowHighlight = '0 0 5px 1px #E0E306';
@@ -124,6 +124,7 @@ export class SentenceGuessPage implements OnInit {
 			const span = this.createSpan(false);
 			span.innerText = this.curSentence().text;
 			this.sentenceContent.appendChild(span);
+			this.hideBottomControls();
 		} else {
 			// Restore user progress 
 			this.curWordIndex = this.curStats().curWordIndex;
@@ -133,7 +134,7 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	restoreSentence() {
-		const templates = this.savedTemplates.find(elem => elem[0] === this.curSentence().id);
+		const templates = this.globals.savedTemplates.find(elem => elem[0] === this.curSentence().id);
 		if (templates) {
 			for (let template of templates[1]) {
 				this.sentenceContent.appendChild(template);
@@ -246,6 +247,15 @@ export class SentenceGuessPage implements OnInit {
 	saveData() {
 		this.curStats().curWordIndex = this.curWordIndex;
 		this.curStats().curCharsIndexes = this.curCharsIndexes;
+
+		const elements = [];
+		const id = this.curSentence().id;
+		this.sentenceContent.childNodes.forEach(node => elements.push(<HTMLElement>(node)));
+		const indexOfExisting = this.globals.savedTemplates.findIndex(elem => elem[0] === id);
+		indexOfExisting === -1 ?
+			this.globals.savedTemplates.push([id, elements]) :
+			this.globals.savedTemplates[indexOfExisting] = [id, elements];
+
 		this.saveStatistics();
 	}
 
@@ -302,15 +312,6 @@ export class SentenceGuessPage implements OnInit {
 		if (this.sentenceTranslateIsPlayed) {
 			return;
 		}
-
-		const elements = [];
-		const id = this.curSentence().id;
-		const indexOfExisting = this.savedTemplates.findIndex(elem => elem[0] === id);
-		this.sentenceContent.childNodes.forEach(node => elements.push(<HTMLElement>(node)));
-
-		indexOfExisting === -1 ?
-			this.savedTemplates.push([id, elements]) :
-			this.savedTemplates[indexOfExisting] = [id, elements];
 
 		this.saveData();
 
@@ -635,6 +636,32 @@ export class SentenceGuessPage implements OnInit {
 		this.charactersRotationIsPlayed = false;
 	}
 
+	hideBottomControls() {
+		const targets = [
+			document.querySelector('#chars'),
+			document.querySelector('#hint-button'),
+			document.querySelector('#give-up-button')
+		];
+		const footer = document.getElementById('footer').style;
+		if (this.curStats().solvedStatus) {
+			footer.background = 'var(--ion-background-color)';
+			anime({
+				targets: targets,
+				opacity: 0,
+				easing: 'easeInOutBack',
+				duration: 400
+			});
+		} else {
+			footer.background = '#FFF';
+			anime({
+				targets: targets,
+				opacity: 1,
+				easing: 'easeInOutBack',
+				duration: 400
+			});
+		}
+	}
+
 	async animateSwipe(forward: boolean) {
 		if (this.sentenceTranslateIsPlayed) {
 			return;
@@ -659,29 +686,7 @@ export class SentenceGuessPage implements OnInit {
 
 		await this.getData();
 
-		const targets = [
-			document.querySelector('#chars'),
-			document.querySelector('#hint-button'),
-			document.querySelector('#give-up-button')
-		];
-		const footer = document.getElementById('footer').style;
-		if (this.curStats().solvedStatus) {
-			footer.background = 'var(--ion-background-color)';
-			anime({
-				targets: targets,
-				opacity: 0,
-				easing: 'easeInOutBack',
-				duration: 400
-			});
-		} else {
-			footer.background = '#FFF';
-			anime({
-				targets: targets,
-				opacity: 1,
-				easing: 'easeInOutBack',
-				duration: 400
-			});
-		}
+		this.hideBottomControls();
 
 		await anime({
 			targets: [document.querySelector(textShownId)],

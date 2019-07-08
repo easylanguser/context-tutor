@@ -18,6 +18,7 @@ export class Globals {
 
 	sharedText = [];
 	updateIsRequired = [false];
+	savedTemplates: Array<[number, HTMLElement[]]> = [];
 
 	// Constants
 	SHARED_TEXT_ID_KEY = "shared_text_id";
