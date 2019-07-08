@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { IonItemSliding, AlertController, NavController, IonList } from '@ionic/angular';
+import { IonItemSliding, AlertController, NavController, IonList, ModalController } from '@ionic/angular';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Globals } from 'src/app/services/globals/globals';
+import { ShareLessonModal } from 'src/app/modals/share-lesson/share-lesson.modal';
 
 const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
 
@@ -34,7 +35,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private utils: UtilsService,
 		public globals: Globals,
 		private browser: InAppBrowser,
-		private cdRef: ChangeDetectorRef) { }
+		private cdRef: ChangeDetectorRef,
+		private modalController: ModalController) { }
 
 	async ngOnInit() {
 		await this.utils.createAndShowLoader('Loading');
@@ -148,7 +150,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		this.cdRef.detectChanges();
 	}
 
-	async deleteItem(slidingItem: IonItemSliding, lessonID: number, index: number) {
+	async deleteItem(slidingItem: IonItemSliding, lessonID: number) {
 		const alert = await this.alertController.create({
 			message: 'Are you sure you want to delete this lesson?',
 			buttons: [
@@ -174,6 +176,17 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 			]
 		});
 		await alert.present();
+	}
+
+	async shareLesson(slidingItem: IonItemSliding, lessonId: number) {
+		slidingItem.close();
+		const modal = await this.modalController.create({
+			component: ShareLessonModal,
+			componentProps: {
+				'lessonId': lessonId
+			}
+		});
+		return await modal.present();
 	}
 
 	async editItem(slidingItem: IonItemSliding, lessonId: number) {

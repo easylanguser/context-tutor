@@ -64,8 +64,11 @@
           <ion-item-option *ngIf="!this.globals.getIsDemo()" color="warning" (click)="editItem(slidingItem, lesson.id)">
             Edit
           </ion-item-option>
-          <ion-item-option *ngIf="!this.globals.getIsDemo()" id="delete-sliding-item" color="danger" (click)="deleteItem(slidingItem, lesson.id, i)">
+          <ion-item-option *ngIf="!this.globals.getIsDemo()" color="danger" (click)="deleteItem(slidingItem, lesson.id)">
             Delete
+          </ion-item-option>
+          <ion-item-option *ngIf="!this.globals.getIsDemo()" color="primary" (click)="shareLesson(slidingItem, lesson.id)">
+            Share
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>

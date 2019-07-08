@@ -27,6 +27,7 @@ import { ShareAddingChoicePageModule } from './pages/share-adding-choice/share-a
 import { SentenceAddingPageModule } from './pages/sentence-adding/sentence-adding.module';
 import { EditLessonTitlePageModule } from './pages/edit-lesson-title/edit-lesson-title.module';
 import { Globals } from './services/globals/globals';
+import { ShareLessonModal } from './modals/share-lesson/share-lesson.modal';
 
 export function jwtOptionsFactory(storage) {
 	return {
@@ -38,8 +39,8 @@ export function jwtOptionsFactory(storage) {
 }
 
 @NgModule({
-	declarations: [AppComponent],
-	entryComponents: [],
+	declarations: [AppComponent, ShareLessonModal],
+	entryComponents: [ShareLessonModal],
 	imports: [BrowserModule, IonicModule.forRoot(),
 		AppRoutingModule,
 		HttpClientModule,

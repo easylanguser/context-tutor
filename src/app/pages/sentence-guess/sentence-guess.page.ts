@@ -591,7 +591,7 @@ export class SentenceGuessPage implements OnInit {
 		} else {
 			++this.curStats().wrongAnswers; // Statistics
 
-			let indexOfCharBox: number;
+			let indexOfCharBox: number = 0;
 			switch (event.key) {
 				case (this.updateFront ? this.firstChar : this.firstCharBack).toLowerCase(): {
 					indexOfCharBox = 1;
@@ -610,7 +610,9 @@ export class SentenceGuessPage implements OnInit {
 					break;
 				}
 			}
-			document.getElementById('char-box-' + indexOfCharBox).style.boxShadow = this.redHighlight;
+			if (indexOfCharBox !== 0) {
+				document.getElementById('char-box-' + indexOfCharBox).style.boxShadow = this.redHighlight;
+			}
 		}
 
 		this.updateChart();
