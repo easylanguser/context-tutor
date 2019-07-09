@@ -7,6 +7,8 @@ export class Globals {
 	isDemo: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	isDemoHasChanged: boolean;
 
+	commonLessonsAreFetched: boolean = false;
+
 	updIsDemo(newVal: boolean) {
 		this.isDemoHasChanged = (newVal !== this.getIsDemo());
 		this.isDemo.next(newVal);

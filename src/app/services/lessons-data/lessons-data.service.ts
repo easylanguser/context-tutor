@@ -177,14 +177,18 @@ export class LessonsDataService {
 		const statisticsArray: Statistics[] = [];
 
 		for (const apiStatistic of apiStatistics) {
+			if (apiStatistic.lessonId === -1 && !this.globals.commonLessonsAreFetched) {
+				const commonLessons = await this.lessonHttpService.getLessons(-1);
+				this.createAndInsertFromAPIData(commonLessons);
+				this.globals.commonLessonsAreFetched = true;
+			}
 			this.getLessonByID(apiStatistic.lessonId).statistics.push(
 				(new Statistics(
 					apiStatistic.id,
 					apiStatistic.sentenceId,
 					apiStatistic.lessonId,
 					apiStatistic.userId,
-					[], 0,
-					false,
+					[], 0, false,
 					apiStatistic.correctAnswers,
 					apiStatistic.wrongAnswers,
 					apiStatistic.giveUps,
@@ -252,23 +256,26 @@ export class LessonsDataService {
 				}
 			});
 		} else {
-			const now = new Date().getTime();
-
-			for (const lsn of apiLessons) {
-				const diff = (now - new Date(lsn.created_at).getTime()) / 1000;
-				const period = this.utils.calculatePeriod(diff);
-				const lesson = new Lesson(
-					lsn.id,
-					lsn.name,
-					lsn.url,
-					lsn.created_at,
-					lsn.updated_at,
-					period[0] + period[1]);
-
-				this.addLesson(lesson);
-			}
-
+			this.createAndInsertFromAPIData(apiLessons);
 			await this.getStatisticByUser();
+		}
+	}
+
+	private createAndInsertFromAPIData(apiLessons: ILesson[]) {
+		const now = new Date().getTime();
+
+		for (const lsn of apiLessons) {
+			const diff = (now - new Date(lsn.created_at).getTime()) / 1000;
+			const period = this.utils.calculatePeriod(diff);
+			const lesson = new Lesson(
+				lsn.id,
+				lsn.name,
+				lsn.url,
+				lsn.created_at,
+				lsn.updated_at,
+				period[0] + period[1]);
+
+			this.addLesson(lesson);
 		}
 	}
 

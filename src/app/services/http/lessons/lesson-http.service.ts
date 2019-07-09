@@ -30,7 +30,7 @@ export class LessonHttpService {
 		return this.httpService.doPut(apiUrl + 'updateLessonName?lessonId=' + lessonId + '&newName=' + newTitle).toPromise();
 	}
 
-	getLessons(): Promise<any> {
-		return this.httpService.doGet(apiUrl + 'getLessons').toPromise();
+	getLessons(userId ?: number): Promise<any> {
+		return this.httpService.doGet(apiUrl + 'getLessons' + (userId ? ('?userId=' + userId) : '')).toPromise();
 	}
 }
