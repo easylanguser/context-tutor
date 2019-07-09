@@ -11,8 +11,8 @@ export class UserHttpService {
 
 	constructor(private httpService: HttpService) { }
 
-	getAvatar(): Promise<Blob> {
-		return this.httpService.doGetImage(apiUrl + 'getUserAvatar').toPromise();
+	getAvatar(userId ?: number): Promise<Blob> {
+		return this.httpService.doGetImage(apiUrl + 'getUserAvatar' + (userId ? ('?userId=' + userId) : '')).toPromise();
 	}
 
 	postNewAvatar(avatar: FileList): Promise<any> {

@@ -4,6 +4,11 @@ ion-spinner {
     top: 40%;
 }
 
+ion-button {
+    transition: background .2s ease-in-out;
+    -webkit-transition: background .2s ease-in-out;
+}
+
 #no-users-found {
     width: 100%;
     position: absolute;
@@ -40,14 +45,18 @@ ion-spinner {
         line-height: 4vh;
         cursor: pointer;
 
+        transition: background .2s ease-in-out;
+        -webkit-transition: background .2s ease-in-out;
+
         #user-avatar {
-            height: 4vh;
-            width: 4vh;
+            height: 3vh;
+            width: 3vh;
             float: left;
             border-radius: 50%;
             object-fit: cover;
             object-position: center;
             background: #FFF;
+            margin-top: 0.5vh;
             margin-right: 2%;
         }
 

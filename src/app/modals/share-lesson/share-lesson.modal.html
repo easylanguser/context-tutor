@@ -11,7 +11,7 @@
 
     <ion-list id="users-list">
       <div *ngFor="let user of users">
-          <img id="user-avatar" src="assets/img/account_icon.svg" alt="avatar">
+          <img id="user-avatar" [src]="user.avatar" alt="avatar">
           <p>
             {{ user.email }}
           </p>
