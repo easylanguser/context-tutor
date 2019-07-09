@@ -3,9 +3,24 @@ import { NavParams, ModalController } from '@ionic/angular';
 import { UserHttpService } from 'src/app/services/http/users/user-http.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
 	selector: 'share-lesson-modal',
+	animations: [
+		trigger(
+			'enterAnimation', [
+				transition(':enter', [
+					style({ opacity: 0 }),
+					animate('700ms', style({ opacity: 1 }))
+				]),
+				transition(':leave', [
+					style({ opacity: 1 }),
+					animate('700ms', style({ opacity: 0 }))
+				])
+			]
+		)
+	],
 	templateUrl: './share-lesson.modal.html',
 	styleUrls: ['./share-lesson.modal.scss']
 })
@@ -21,7 +36,7 @@ export class ShareLessonModal implements OnInit {
 		private userHttpService: UserHttpService,
 		private utils: UtilsService,
 		private modalController: ModalController,
-		private sanitizer : DomSanitizer) {
+		private sanitizer: DomSanitizer) {
 		this.lessonId = Number(navParams.get('lessonId'));
 	}
 
