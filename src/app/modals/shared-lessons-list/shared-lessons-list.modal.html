@@ -1,3 +1,5 @@
-<p>
-  shared-lessons-list works!
-</p>
+<div>
+  <p *ngFor="let lesson of shownSharedLessons">
+    {{lesson.userEmail}} : {{lesson.lessonTitle}}
+  </p>
+</div>

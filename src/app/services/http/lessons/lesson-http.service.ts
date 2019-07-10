@@ -33,4 +33,8 @@ export class LessonHttpService {
 	getLessons(userId ?: number): Promise<any> {
 		return this.httpService.doGet(apiUrl + 'getLessons' + (userId ? ('?userId=' + userId) : '')).toPromise();
 	}
+
+	getLessonAndUserInfoByLessonId(lessonId: number): Promise<any> {
+		return this.httpService.doGet(apiUrl + 'getLessonAndUserByLessonId?lessonId=' + lessonId).toPromise();
+	}
 }
