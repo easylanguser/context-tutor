@@ -28,8 +28,8 @@ export class ShareLessonModal implements OnInit {
 
 	lessonId: number;
 	usersAreLoaded: boolean = false;
-	allUsers: { email: string, avatar: SafeUrl }[] = [];
-	users: { email: string, avatar: SafeUrl }[] = [];
+	allUsers: { id: number, email: string, avatar: SafeUrl }[] = [];
+	users: { id: number, email: string, avatar: SafeUrl }[] = [];
 
 	constructor(
 		private navParams: NavParams,
@@ -52,12 +52,12 @@ export class ShareLessonModal implements OnInit {
 					}
 					if (!avatar || avatar.size <= 19) {
 						avatar = 'assets/img/account_icon.svg';
-						this.pushUsers(user.email, avatar, resLength);
+						this.pushUsers(user, avatar, resLength);
 					} else {
 						reader.readAsDataURL(avatar);
 						reader.onloadend = () => {
 							avatar = this.sanitizer.bypassSecurityTrustUrl(String(reader.result));
-							this.pushUsers(user.email, avatar, resLength);
+							this.pushUsers(user, avatar, resLength);
 						}
 					}
 				}
@@ -68,13 +68,15 @@ export class ShareLessonModal implements OnInit {
 			});
 	}
 
-	private pushUsers(email: string, avatar: SafeUrl, resLength: number) {
+	private pushUsers(user: any, avatar: SafeUrl, resLength: number) {
 		this.users.push({
-			email: email,
+			id: user.id,
+			email: user.email,
 			avatar: avatar
 		});
 		this.allUsers.push({
-			email: email,
+			id: user.id,
+			email: user.email,
 			avatar: avatar
 		});
 
@@ -83,6 +85,11 @@ export class ShareLessonModal implements OnInit {
 			this.allUsers.sort((user1, user2) => user1.email.localeCompare(user2.email));
 			this.usersAreLoaded = true;
 		}
+	}
+
+	sendShareRequest (user: any) {
+		this.userHttpService.sendShareRequest(user.id, this.lessonId);
+		this.dismissModal();
 	}
 
 	filterUsers(event: CustomEvent) {

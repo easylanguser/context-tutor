@@ -25,6 +25,13 @@ export class UserHttpService {
 		return this.httpService.doPost(environment.url + '/api/user/sendPassword', email).toPromise();
 	}
 
+	sendShareRequest(userId: number, lessonId: number): Promise<any> {
+		return this.httpService.doPut(apiUrl + 'sendShareRequest', {
+			userId: userId,
+			lessonId: lessonId
+		}).toPromise();
+	}
+
 	getUserInfo(): Promise<any> {
 		return this.httpService.doGet(apiUrl + 'getUserInfo').toPromise();
 	}
