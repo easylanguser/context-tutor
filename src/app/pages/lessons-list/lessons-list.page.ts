@@ -10,6 +10,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Globals } from 'src/app/services/globals/globals';
 import { ShareLessonModal } from 'src/app/modals/share-lesson/share-lesson.modal';
 import { UserHttpService } from 'src/app/services/http/users/user-http.service';
+import { SharedLessonsListModal } from 'src/app/modals/shared-lessons-list/shared-lessons-list.modal';
 
 const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
 
@@ -61,6 +62,13 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				}
 			}
 		}, 250));
+	}
+
+	private async showSharedLessons() {
+		const modal = await this.modalController.create({
+			component: SharedLessonsListModal
+		});
+		return await modal.present();
 	}
 
 	ionViewDidEnter() {

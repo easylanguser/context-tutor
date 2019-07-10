@@ -200,6 +200,10 @@ ion-item-option {
 #shared-lessons-fab {
     margin-left: 3vh;
     margin-bottom: 3vh;
+
+    ion-fab-button {
+        font-size: 24px;        
+    }
 }
 
 #add-lesson-fab {
