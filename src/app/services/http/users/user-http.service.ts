@@ -36,6 +36,10 @@ export class UserHttpService {
 		return this.httpService.doGet(apiUrl + 'getUserInfo').toPromise();
 	}
 
+	getSharedLessons(): Promise<any> {
+		return this.httpService.doGet(apiUrl + 'getSharedLessons').toPromise();
+	}
+
 	getAllUsers(): Promise<any> {
 		return this.httpService.doGet(apiUrl + 'getAllUsers').toPromise();
 	}

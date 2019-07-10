@@ -75,6 +75,12 @@
     </ion-list>
   </ion-content>
 
+  <ion-fab id="shared-lessons-fab" *ngIf="this.sharedLessons.length > 0" (click)="showSharedLessons()" vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button color="danger">
+      {{this.sharedLessons.length}}
+    </ion-fab-button>
+  </ion-fab>
+
   <ion-fab id="add-lesson-fab" [ngClass]="{'hidden-btn': contentIsScrolled}" (click)="addLessonFile()" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>

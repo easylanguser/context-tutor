@@ -9,6 +9,7 @@ import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.ser
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Globals } from 'src/app/services/globals/globals';
 import { ShareLessonModal } from 'src/app/modals/share-lesson/share-lesson.modal';
+import { UserHttpService } from 'src/app/services/http/users/user-http.service';
 
 const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
 
@@ -24,6 +25,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	@ViewChild('lessonsList', { static: false }) lessonsList: IonList;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
+	sharedLessons: any = [];
 
 	contentIsScrolled: boolean = false;
 
@@ -32,6 +34,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private lessonsDataService: LessonsDataService,
 		private alertController: AlertController,
 		private lessonHttpService: LessonHttpService,
+		private userHttpService: UserHttpService,
 		private utils: UtilsService,
 		public globals: Globals,
 		private browser: InAppBrowser,
@@ -40,6 +43,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	async ngOnInit() {
 		await this.utils.createAndShowLoader('Loading');
+		this.sharedLessons = (await this.userHttpService.getSharedLessons()).shared_lessons;
 		await this.getData();
 		this.addFabsHandler();
 		await this.utils.dismissLoader();
