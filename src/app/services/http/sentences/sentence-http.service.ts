@@ -20,8 +20,8 @@ export class SentenceHttpService {
 		).toPromise();
 	}
 
-	deleteSentence(sentenceId: number) {
-		this.httpService.doDelete(apiUrl + 'delete?id=' + sentenceId);
+	deleteSentence(sentenceId: number): Promise<any> {
+		return this.httpService.doDelete(apiUrl + 'delete?id=' + sentenceId).toPromise();
 	}
 
 	updateSentenceWords(sentenceId: string, words: Array<[number, number]>, text: string): Promise<any> {

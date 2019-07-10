@@ -123,9 +123,9 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				},
 				{
 					text: 'Delete',
-					handler: () => {
+					handler: async () => {
 						slidingItem.close();
-						this.sentenceHttpService.deleteSentence(sentenceID);
+						await this.sentenceHttpService.deleteSentence(sentenceID);
 						this.lessonsDataService.removeSentence(lessonID, sentenceID);
 					}
 				}
