@@ -43,4 +43,11 @@ export class UserHttpService {
 	getAllUsers(): Promise<any> {
 		return this.httpService.doGet(apiUrl + 'getAllUsers').toPromise();
 	}
+
+	updateShareStatus(lessonId: number, status: number): Promise<any> {
+		return this.httpService.doPut(apiUrl + 'updateShareStatus', {
+			lessonId: lessonId,
+			status: status
+		}).toPromise();
+	}
 }

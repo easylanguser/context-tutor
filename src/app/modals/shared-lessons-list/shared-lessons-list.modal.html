@@ -5,12 +5,12 @@
   <ion-list id="shared-lessons-list">
     <div class="shared-lesson" *ngFor="let lesson of shownSharedLessons">
       <div class="info-text">
-        <b>{{lesson.userEmail}}</b><br>shared lesson<br><i>{{lesson.lessonTitle}}</i>
+        <b>{{lesson.userEmail}}</b><br>shared lesson<br><i>{{lesson.lessonName}}</i>
       </div>
-      <ion-fab-button class="accept-btn" color="success">
+      <ion-fab-button class="accept-btn" (click)="updateShare(lesson.lessonId, 1)" color="success">
         <ion-icon name="checkmark-circle-outline"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button class="decline-btn" color="danger">
+      <ion-fab-button class="decline-btn" (click)="updateShare(lesson.lessonId, 0)" color="danger">
         <ion-icon name="close-circle-outline"></ion-icon>
       </ion-fab-button>
     </div>
