@@ -7,7 +7,8 @@ export class Globals {
 	isDemo: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	isDemoHasChanged: boolean;
 
-	shownSharedLessons: { userEmail: string, lessonName: string, lessonId: number }[] = [];
+	unmarkedSharedLessons: { userEmail: string, lessonName: string, lessonId: number }[] = [];
+	markedSharedLessons: number[] = [];
 	sharesToUnmark: number = 0;
 
 	commonLessonsAreFetched: boolean = false;

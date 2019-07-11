@@ -3,7 +3,7 @@
   <div id="modal-title">New shared lessons</div>
 
   <ion-list id="shared-lessons-list">
-    <div class="shared-lesson" *ngFor="let lesson of this.globals.shownSharedLessons">
+    <div class="shared-lesson" *ngFor="let lesson of this.globals.unmarkedSharedLessons">
       <div class="info-text">
         <b>{{lesson.userEmail}}</b><br>shared lesson<br><i>{{lesson.lessonName}}</i>
       </div>

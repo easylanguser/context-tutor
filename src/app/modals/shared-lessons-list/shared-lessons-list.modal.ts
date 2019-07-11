@@ -18,10 +18,10 @@ export class SharedLessonsListModal {
 		private globals: Globals) {	}
 
 	updateShare(lessonId: number, status: number) {
-		const index = this.globals.shownSharedLessons.findIndex(
+		const index = this.globals.unmarkedSharedLessons.findIndex(
 			lesson => lesson.lessonId === lessonId
 		);
-		this.globals.shownSharedLessons.splice(index, 1);
+		this.globals.unmarkedSharedLessons.splice(index, 1);
 		this.globals.sharesToUnmark++;
 		this.userHttpService.updateShareStatus(lessonId, status);
 	}

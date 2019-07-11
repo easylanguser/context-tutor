@@ -46,19 +46,22 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	async ngOnInit() {
 		await this.utils.createAndShowLoader('Loading');
 		this.sharedLessons = (await this.userHttpService.getSharedLessons()).shared_lessons;
-
-		const unmarkedLessons = this.sharedLessons.filter(lesson => lesson[1] === 0);
-		for (const unmarkedLesson of unmarkedLessons) {
-			this.lessonHttpService.getLessonAndUserInfoByLessonId(unmarkedLesson[0]).then(info => {
-				this.globals.shownSharedLessons.push({
-					userEmail: info.userEmail,
-					lessonName: info.lessonTitle,
-					lessonId: unmarkedLesson[0]
-				});
-			});
+		for (const lesson of this.sharedLessons) {
+			if (lesson[1] === 1) {
+				this.globals.markedSharedLessons.push(lesson[0]);
+			} else {
+				await this.lessonHttpService.getLessonAndUserInfoByLessonId(lesson[0])
+					.then(info => {
+						this.globals.unmarkedSharedLessons.push({
+							userEmail: info.userEmail,
+							lessonName: info.lessonTitle,
+							lessonId: lesson[0]
+						})
+					});
+			}
 		}
 
-		this.unwatchedShares = unmarkedLessons.length;
+		this.unwatchedShares = this.globals.unmarkedSharedLessons.length;
 		await this.getData();
 		this.addFabsHandler();
 		await this.utils.dismissLoader();

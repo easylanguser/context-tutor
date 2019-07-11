@@ -182,6 +182,9 @@ export class LessonsDataService {
 				this.createAndInsertFromAPIData(commonLessons);
 				this.globals.commonLessonsAreFetched = true;
 			}
+			
+
+			for (const lessonId of this.globals.unmarkedSharedLessons)
 			this.getLessonByID(apiStatistic.lessonId).statistics.push(
 				(new Statistics(
 					apiStatistic.id,
@@ -206,6 +209,9 @@ export class LessonsDataService {
 
 		const apiLessons: ILesson[] = await this.lessonHttpService.getLessons();
 		this.globals.updIsDemo(apiLessons.length === 0);
+		
+		const sharedLessons = await this.lessonHttpService.getListOfSharedLessons(this.globals.markedSharedLessons);
+		this.createAndInsertFromAPIData(sharedLessons);
 
 		if (this.globals.getIsDemo()) {
 			await this.http.get('assets/demo-lessons.json').toPromise().then(async (lessons: IDemoLesson[]) => {
