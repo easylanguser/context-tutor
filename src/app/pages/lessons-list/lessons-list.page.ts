@@ -27,6 +27,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
 	sharedLessons: any = [];
+	unwatchedShares: number = 0;
 
 	contentIsScrolled: boolean = false;
 
@@ -45,6 +46,19 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	async ngOnInit() {
 		await this.utils.createAndShowLoader('Loading');
 		this.sharedLessons = (await this.userHttpService.getSharedLessons()).shared_lessons;
+
+		const unmarkedLessons = this.sharedLessons.filter(lesson => lesson[1] === 0);
+		for (const unmarkedLesson of unmarkedLessons) {
+			this.lessonHttpService.getLessonAndUserInfoByLessonId(unmarkedLesson[0]).then(info => {
+				this.globals.shownSharedLessons.push({
+					userEmail: info.userEmail,
+					lessonName: info.lessonTitle,
+					lessonId: unmarkedLesson[0]
+				});
+			});
+		}
+
+		this.unwatchedShares = unmarkedLessons.length;
 		await this.getData();
 		this.addFabsHandler();
 		await this.utils.dismissLoader();
@@ -62,16 +76,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				}
 			}
 		}, 250));
-	}
-
-	async showSharedLessons() {
-		const modal = await this.modalController.create({
-			component: SharedLessonsListModal,
-			componentProps: {
-				'sharedLessons': this.sharedLessons.filter(lesson => lesson[1] === 0)
-			}
-		});
-		return await modal.present();
 	}
 
 	ionViewDidEnter() {
@@ -191,6 +195,19 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 			]
 		});
 		await alert.present();
+	}
+
+	async showSharedLessons() {
+		const modal = await this.modalController.create({
+			component: SharedLessonsListModal,
+			componentProps: {
+				'sharedLessons': this.sharedLessons.filter(lesson => lesson[1] === 0)
+			}
+		});
+		await modal.present();
+		await modal.onWillDismiss();
+		this.unwatchedShares -= this.globals.sharesToUnmark;
+		this.globals.sharesToUnmark = 0;
 	}
 
 	async shareLesson(slidingItem: IonItemSliding, lessonId: number) {
