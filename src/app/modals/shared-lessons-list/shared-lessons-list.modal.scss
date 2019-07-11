@@ -1,0 +1,62 @@
+#shared-lessons-list {
+    padding-bottom: 4vh;
+}
+
+#modal-title {
+    height: 5vh;
+    line-height: 5vh;
+    text-align: center;
+    font-size: 2vh;
+    border-bottom: 2px solid;
+    color: var(--ion-color-primary);
+}
+
+.shared-lesson {
+    height: 10vh;
+    display: flex;
+    justify-content: space-evenly;
+    margin: 16px 8px;
+
+    div {
+        height: 10vh;
+        width: 5vh;
+        display: inline-block;
+    }
+
+    ion-fab-button {
+        height: 5vh;
+        width: 5vh;
+        margin-top: 2.5vh;
+    }
+
+    .info-text {
+        text-align: center;
+        width: 75%;
+        overflow: auto;
+        line-height: 3vh;
+    }
+
+    .accept-btn {
+        
+    }
+
+    .decline-btn {
+        
+    }
+}
+
+#dismiss-btn {
+    position: fixed;
+    bottom: 8px;
+    width: 40%;
+    height: 2.5vh;
+    margin: 0 0 0 30%;
+    font-size: 1.75vh;
+    color: #FFF;
+    --background: var(--ion-color-danger-tint);
+
+    @media (max-width: 991px) {
+        height: 4vh;
+        font-size: 2.5vh;
+    }
+}

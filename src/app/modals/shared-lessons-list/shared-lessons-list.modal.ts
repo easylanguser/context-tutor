@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavParams } from '@ionic/angular';
+import { NavParams, ModalController } from '@ionic/angular';
 import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
 
 @Component({
@@ -14,7 +14,8 @@ export class SharedLessonsListModal implements OnInit {
 
 	constructor(
 		private navParams: NavParams,
-		private lessonHttpService: LessonHttpService) {
+		private lessonHttpService: LessonHttpService,
+		private modalController: ModalController) {
 		this.sharedLesson = navParams.get('sharedLessons');
 		for (let lesson of this.sharedLesson) {
 			this.lessonHttpService.getLessonAndUserInfoByLessonId(lesson[0]).then(info => {
@@ -26,4 +27,7 @@ export class SharedLessonsListModal implements OnInit {
 	ngOnInit() {
 	}
 
+	dismissModal() {
+		this.modalController.dismiss(/* params to return */);
+	}
 }

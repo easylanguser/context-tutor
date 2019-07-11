@@ -1,5 +1,22 @@
-<div>
-  <p *ngFor="let lesson of shownSharedLessons">
-    {{lesson.userEmail}} : {{lesson.lessonTitle}}
-  </p>
-</div>
+<ion-content>
+  
+  <div id="modal-title">New shared lessons</div>
+
+  <ion-list id="shared-lessons-list">
+    <div class="shared-lesson" *ngFor="let lesson of shownSharedLessons">
+      <div class="info-text">
+        <b>{{lesson.userEmail}}</b><br>shared lesson<br><i>{{lesson.lessonTitle}}</i>
+      </div>
+      <ion-fab-button class="accept-btn" color="success">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button class="decline-btn" color="danger">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </ion-fab-button>
+    </div>
+  </ion-list>
+
+  <ion-button id="dismiss-btn" (click)="dismissModal()">
+    Dismiss
+  </ion-button>
+</ion-content>

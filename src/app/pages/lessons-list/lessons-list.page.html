@@ -61,13 +61,16 @@
           <ion-item-option color="secondary" (click)="openLink(slidingItem, lesson.url)">
             Open link
           </ion-item-option>
-          <ion-item-option *ngIf="!this.globals.getIsDemo()" color="warning" (click)="editItem(slidingItem, lesson.id)">
+          <ion-item-option *ngIf="!this.globals.getIsDemo()" color="warning"
+            (click)="editItem(slidingItem, lesson.id)">
             Edit
           </ion-item-option>
-          <ion-item-option *ngIf="!this.globals.getIsDemo()" color="danger" (click)="deleteItem(slidingItem, lesson.id)">
+          <ion-item-option *ngIf="!this.globals.getIsDemo()" color="danger"
+            (click)="deleteItem(slidingItem, lesson.id)">
             Delete
           </ion-item-option>
-          <ion-item-option *ngIf="!this.globals.getIsDemo()" color="primary" (click)="shareLesson(slidingItem, lesson.id)">
+          <ion-item-option *ngIf="!this.globals.getIsDemo()" color="primary"
+            (click)="shareLesson(slidingItem, lesson.id)">
             Share
           </ion-item-option>
         </ion-item-options>
@@ -75,13 +78,15 @@
     </ion-list>
   </ion-content>
 
-  <ion-fab id="shared-lessons-fab" *ngIf="this.sharedLessons.length > 0" (click)="showSharedLessons()" vertical="bottom" horizontal="start" slot="fixed">
+  <ion-fab id="shared-lessons-fab" *ngIf="this.sharedLessons.length > 0"
+    (click)="showSharedLessons()" vertical="bottom" horizontal="start" slot="fixed">
     <ion-fab-button color="danger">
       {{this.sharedLessons.length}}
     </ion-fab-button>
   </ion-fab>
 
-  <ion-fab id="add-lesson-fab" [ngClass]="{'hidden-btn': contentIsScrolled}" (click)="addLessonFile()" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab id="add-lesson-fab" [ngClass]="{'hidden-btn': contentIsScrolled}"
+    (click)="addLessonFile()" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

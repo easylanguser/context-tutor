@@ -64,7 +64,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		}, 250));
 	}
 
-	private async showSharedLessons() {
+	async showSharedLessons() {
 		const modal = await this.modalController.create({
 			component: SharedLessonsListModal,
 			componentProps: {
