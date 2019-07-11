@@ -183,20 +183,23 @@ export class LessonsDataService {
 				this.globals.commonLessonsAreFetched = true;
 			}
 
-			this.getLessonByID(apiStatistic.lessonId).statistics.push(
-				(new Statistics(
-					apiStatistic.id,
-					apiStatistic.sentenceId,
-					apiStatistic.lessonId,
-					apiStatistic.userId,
-					[], 0, false,
-					apiStatistic.correctAnswers,
-					apiStatistic.wrongAnswers,
-					apiStatistic.giveUps,
-					apiStatistic.hintUsages,
-					apiStatistic.createdAt,
-					apiStatistic.updatedAt)
-				));
+			const lesson = this.getLessonByID(apiStatistic.lessonId);
+			if (lesson && lesson.statistics) {
+				lesson.statistics.push(
+					(new Statistics(
+						apiStatistic.id,
+						apiStatistic.sentenceId,
+						apiStatistic.lessonId,
+						apiStatistic.userId,
+						[], 0, false,
+						apiStatistic.correctAnswers,
+						apiStatistic.wrongAnswers,
+						apiStatistic.giveUps,
+						apiStatistic.hintUsages,
+						apiStatistic.createdAt,
+						apiStatistic.updatedAt)
+					));
+			}
 		}
 
 		return statisticsArray;
