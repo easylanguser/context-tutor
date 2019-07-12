@@ -23,7 +23,11 @@ export class SharedLessonsListModal {
 		);
 		this.globals.unmarkedSharedLessons.splice(index, 1);
 		this.globals.sharesToUnmark++;
-		this.userHttpService.updateShareStatus(lessonId, status);
+		this.userHttpService.updateShareStatus(lessonId, status).then(() => {
+			if (!this.globals.unmarkedSharedLessons.length) {
+				this.dismissModal();
+			}
+		});
 	}
 
 	dismissModal() {

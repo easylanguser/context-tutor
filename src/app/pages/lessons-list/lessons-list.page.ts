@@ -45,23 +45,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	async ngOnInit() {
 		await this.utils.createAndShowLoader('Loading');
-		this.sharedLessons = (await this.userHttpService.getSharedLessons()).shared_lessons;
-		for (const lesson of this.sharedLessons) {
-			if (lesson[1] === 1) {
-				this.globals.markedSharedLessons.push(lesson[0]);
-			} else {
-				await this.lessonHttpService.getLessonAndUserInfoByLessonId(lesson[0])
-					.then(info => {
-						this.globals.unmarkedSharedLessons.push({
-							userEmail: info.userEmail,
-							lessonName: info.lessonTitle,
-							lessonId: lesson[0]
-						})
-					});
-			}
-		}
-
-		this.unwatchedShares = this.globals.unmarkedSharedLessons.length;
 		await this.getData();
 		this.addFabsHandler();
 		await this.utils.dismissLoader();
@@ -210,7 +193,9 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		});
 		await modal.present();
 		await modal.onWillDismiss();
-		this.unwatchedShares -= this.globals.sharesToUnmark;
+		if (this.globals.sharesToUnmark) {
+			await this.getData();
+		}
 		this.globals.sharesToUnmark = 0;
 	}
 
@@ -246,6 +231,24 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	private async getData() {
 		await this.utils.createAndShowLoader('Loading...');
+
+		this.sharedLessons = (await this.userHttpService.getSharedLessons()).shared_lessons;
+		for (const lesson of this.sharedLessons) {
+			if (lesson[1] === 1) {
+				this.globals.markedSharedLessons.push(lesson[0]);
+			} else {
+				await this.lessonHttpService.getLessonAndUserInfoByLessonId(lesson[0])
+					.then(info => {
+						this.globals.unmarkedSharedLessons.push({
+							userEmail: info.userEmail,
+							lessonName: info.lessonTitle,
+							lessonId: lesson[0]
+						})
+					});
+			}
+		}
+
+		this.unwatchedShares = this.globals.unmarkedSharedLessons.length;
 
 		await this.lessonsDataService.refreshLessons();
 		this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
