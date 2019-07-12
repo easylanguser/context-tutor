@@ -19,7 +19,7 @@ export class StatisticHttpService {
 		return this.httpService.doGet(apiUrl + 'getStatisticByUser').toPromise();
 	}
 
-	postNewStatisticsRecord(lessonId, sentenceId): Promise<any> {
+	postNewStatisticsRecord(lessonId: number, sentenceId: number): Promise<any> {
 		return this.httpService.doPost(apiUrl + 'addStatistics', {
 			lessonId: lessonId,
 			sentenceId: sentenceId

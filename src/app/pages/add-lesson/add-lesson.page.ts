@@ -78,14 +78,12 @@ export class AddLessonPage implements OnInit {
 		importButton.innerText = showFileInput ? 'Upload file' : 'Import file';
 		fileInput.display = showFileInput ? 'inline' : 'none';
 
-		const fileInputAnimatingPromise = anime({
+		await anime({
 			targets: showFileInput ? fileTargets : nameEditingTargets,
 			opacity: 1,
 			easing: 'easeInOutCirc',
 			duration: 300
 		}).finished;
-
-		await Promise.all([fileInputAnimatingPromise]);
 
 		this.fileImportIsOpened = showFileInput;
 	}
