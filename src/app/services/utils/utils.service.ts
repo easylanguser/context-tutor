@@ -21,10 +21,10 @@ export class UtilsService {
 		if (!this.toast) {
 			this.toast = await this.toastController.create({
 				message: message,
-				duration: 1500
+				duration: 2500
 			});
 			this.toast.present();
-			setTimeout(() => { this.toast = null }, 2000);
+			setTimeout(() => { this.toast = null }, 2800);
 		}
 	}
 

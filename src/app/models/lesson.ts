@@ -9,6 +9,7 @@ export class Lesson {
 		public id: number,
 		public name: string,
 		public url: string,
+		public isShared: boolean,
 		public created_at: string,
 		public updated_at: string,
 		public displayedDate: string) { }

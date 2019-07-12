@@ -14,6 +14,7 @@ interface ILesson {
 	id: number;
 	name: string;
 	url: string;
+	is_shared: boolean,
 	created_at: string;
 	updated_at: string;
 }
@@ -235,7 +236,7 @@ export class LessonsDataService {
 				const userId = await this.storage.get(this.globals.USER_ID_KEY);
 
 				for (const lsn of lessons) {
-					const lesson = new Lesson(lsn.id, lsn.name, lsn.url, '', '', 'Demo lesson');
+					const lesson = new Lesson(lsn.id, lsn.name, lsn.url, true, '', '', 'Demo lesson');
 					for (const sntc of lsn.sentences) {
 						const hiddenChars: Array<string[]> = [];
 						sntc.words.sort((a, b) => a[0] - b[0]);
@@ -294,10 +295,11 @@ export class LessonsDataService {
 				lsn.id,
 				lsn.name,
 				lsn.url,
+				lsn.is_shared,
 				lsn.created_at,
 				lsn.updated_at,
 				period[0] + period[1]);
-
+			
 			this.addLesson(lesson);
 		}
 	}

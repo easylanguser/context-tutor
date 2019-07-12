@@ -91,6 +91,10 @@ input:-webkit-autofill {
     color: black;
 }
 
+ion-toast {
+    text-align: center;
+}
+
 @media (min-width: 992px) {
     ion-toast {
         width: 67vw;

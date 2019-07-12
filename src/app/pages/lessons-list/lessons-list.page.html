@@ -39,7 +39,7 @@
       </ion-refresher-content>
     </ion-refresher>
 
-    <ion-list no-padding no-margin style="padding-top: 2vh; padding-bottom: 110px;" #lessonsList>
+    <ion-list no-padding no-margin style="padding-top: 2vh; padding-bottom: 8em;" #lessonsList>
       <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem>
         <ion-item class="lesson-ion-item" no-padding>
           <div (click)="openLesson(lesson)" [ngClass]="{'dashed': this.globals.getIsDemo()}">
@@ -70,7 +70,7 @@
             Delete
           </ion-item-option>
           <ion-item-option *ngIf="!this.globals.getIsDemo()" color="primary"
-            (click)="shareLesson(slidingItem, lesson.id)">
+            (click)="shareLesson(slidingItem, lesson)">
             Share
           </ion-item-option>
         </ion-item-options>

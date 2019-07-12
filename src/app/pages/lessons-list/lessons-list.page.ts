@@ -173,6 +173,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	async deleteItem(slidingItem: IonItemSliding, lessonID: number) {
+		
 		const alert = await this.alertController.create({
 			message: 'Are you sure you want to delete this lesson?',
 			buttons: [
@@ -213,15 +214,19 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		this.globals.sharesToUnmark = 0;
 	}
 
-	async shareLesson(slidingItem: IonItemSliding, lessonId: number) {
+	async shareLesson(slidingItem: IonItemSliding, lesson: Lesson) {
 		slidingItem.close();
-		const modal = await this.modalController.create({
-			component: ShareLessonModal,
-			componentProps: {
-				'lessonId': lessonId
-			}
-		});
-		return await modal.present();
+		if (lesson.statistics.length) {
+			const modal = await this.modalController.create({
+				component: ShareLessonModal,
+				componentProps: {
+					'lessonId': lesson.id
+				}
+			});
+			return await modal.present();
+		} else {
+			this.utils.showToast('Please, add at least one sentence to this lesson to share it')
+		}
 	}
 
 	async editItem(slidingItem: IonItemSliding, lessonId: number) {
