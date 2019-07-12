@@ -51,6 +51,7 @@
                 {{lesson.displayedDate}} ({{lesson.statistics.length}} sentences)
               </span>
             </div>
+            <ion-icon id="share-icon" *ngIf="lesson.isShared" name="share" ></ion-icon>
             <div>
               <canvas #chartsid width="50" height="50"></canvas>
             </div>

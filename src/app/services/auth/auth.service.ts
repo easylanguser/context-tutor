@@ -81,12 +81,12 @@ export class AuthService {
 	async logout() {
 		await this.storage.remove(this.globals.USER_ID_KEY);
 		await this.storage.remove(this.globals.TOKEN_KEY);
+		await this.storage.remove(this.globals.USER_AVATAR_KEY);
+		await this.storage.remove(this.globals.USER_EMAIL_KEY);
+
 		this.token = null;
 		parent.postMessage({ userLoggedOut: true }, '*');
-
-		this.storage.remove('user-avatar');
-		this.storage.remove('user-email');
-		(<HTMLImageElement>document.getElementById('user-avatar')).src = 'assets/img/account_icon.svg';
+		(<HTMLImageElement>document.getElementById(this.globals.USER_AVATAR_KEY)).src = 'assets/img/account_icon.svg';
 		this.authenticationState.next(false);
 	}
 

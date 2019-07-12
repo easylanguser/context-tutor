@@ -165,6 +165,13 @@ ion-toolbar {
             margin-right: 4vw;
         }
     }
+
+    #share-icon {
+        width: 4vh;
+        height: 4vh;
+        margin-top: 4vh;
+        color: var(--ion-color-primary);
+    }
 }
 
 .dashed {
