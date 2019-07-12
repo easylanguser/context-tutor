@@ -86,7 +86,6 @@ export class AuthService {
 
 		this.token = null;
 		parent.postMessage({ userLoggedOut: true }, '*');
-		(<HTMLImageElement>document.getElementById(this.globals.USER_AVATAR_KEY)).src = 'assets/img/account_icon.svg';
 		this.authenticationState.next(false);
 	}
 

@@ -1,5 +1,7 @@
-ion-menu {
-    border-right: 2px solid var(--ion-color-primary) !important;
+@media (min-width: 992px) {
+    ion-menu {
+        border-right: 2px solid var(--ion-color-primary) !important;
+    }
 }
 
 #menu {

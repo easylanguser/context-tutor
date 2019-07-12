@@ -131,7 +131,6 @@ export class AccountPage {
 	}
 
 	logout() {
-		this.globals.updateIsRequired[0] = true;
 		this.authService.logout().then(() => {
 			window.location.reload();
 		});
