@@ -21,6 +21,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	displayedSentences: Sentence[];
 	lessonId: number;
 	lessonTitle: string;
+	isSharedLesson: boolean = true;
 	@ViewChildren('chartsid') pieCanvases: any;
 	@ViewChild('sentencesList', { static: false }) sentencesList: IonList;
 	pieCharts: Array<Chart> = [];
@@ -68,7 +69,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	async initData(showLoader) {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
-		
+
 		await this.getData();
 		if (showLoader === 'true') {
 			await this.utils.dismissLoader();
@@ -247,10 +248,11 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	private async getData() {
-		this.lessonTitle = this.lessonsDataService.getLessonByID(this.lessonId).name.toString();
+		const lesson = this.lessonsDataService.getLessonByID(this.lessonId);
+		this.lessonTitle = lesson.name.toString();
+		this.isSharedLesson = lesson.isShared;
 		if (this.globals.getIsDemo()) {
-			this.displayedSentences = await this.lessonsDataService.getLessonByID(this.lessonId)
-				.sentences.sort(this.lessonsDataService.sortSentencesByAddingTime);
+			this.displayedSentences = await lesson.sentences.sort(this.lessonsDataService.sortSentencesByAddingTime);
 		} else {
 			this.displayedSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
 		}

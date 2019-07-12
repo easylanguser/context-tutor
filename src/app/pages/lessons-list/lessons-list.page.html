@@ -62,7 +62,7 @@
           <ion-item-option color="secondary" (click)="openLink(slidingItem, lesson.url)">
             Open link
           </ion-item-option>
-          <ion-item-option *ngIf="!this.globals.getIsDemo()" color="warning"
+          <ion-item-option *ngIf="!this.globals.getIsDemo() && !lesson.isShared" color="warning"
             (click)="editItem(slidingItem, lesson.id)">
             Edit
           </ion-item-option>
