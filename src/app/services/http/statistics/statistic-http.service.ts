@@ -19,6 +19,13 @@ export class StatisticHttpService {
 		return this.httpService.doGet(apiUrl + 'getStatisticByUser').toPromise();
 	}
 
+	postNewStatisticsRecord(lessonId, sentenceId): Promise<any> {
+		return this.httpService.doPost(apiUrl + 'addStatistics', {
+			lessonId: lessonId,
+			sentenceId: sentenceId
+		}).toPromise();
+	}
+
 	updateStatisticsOfSentence(newStatistics: any): Promise<any> {
 		return this.httpService.doPut(apiUrl + 'updateStatistics?sentenceId=' +
 			newStatistics.sentenceId, newStatistics).toPromise();

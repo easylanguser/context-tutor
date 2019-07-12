@@ -97,8 +97,9 @@ input:-webkit-autofill {
         margin-left: 30.5vw;
     }
 
-    .sc-ion-loading-md-h.sc-ion-loading-md-s,
-    .sc-ion-loading-ios.ios.backdrop-no-tappable.hydrated {
+    .sc-ion-loading-md-h.sc-ion-loading-md-s, .sc-ion-modal-md.md.hydrated,
+    .sc-ion-loading-ios.ios.backdrop-no-tappable.hydrated,
+    .modal-wrapper.md.sc-ion-modal-md {
         .loading-wrapper.sc-ion-loading-md {
             margin-left: 0;
         }
@@ -107,7 +108,7 @@ input:-webkit-autofill {
     }
 
     .modal-wrapper.md.sc-ion-modal-md {
-        width: 60%;
+        width: 40%;
     }
 
     .loading-wrapper.sc-ion-loading-ios {

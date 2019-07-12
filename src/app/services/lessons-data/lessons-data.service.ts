@@ -128,8 +128,16 @@ export class LessonsDataService {
 		return lessonToSearchIn.statistics.find(stat => stat.sentenceId === sentence.id);
 	}
 
+	createNewStatisticRecord(sentenceId: number, lessonId: number, userId: number, words: [number, number][]) {
+		this.getLessonByID(lessonId).statistics.push(new Statistics(sentenceId, sentenceId,
+			lessonId, userId, new Array(words.length).fill(0), 0, false, 0, 0, 0, 0,
+			new Date().toISOString(), new Date().toISOString()
+		));
+	}
+
 	async getSentencesByLessonId(id: number): Promise<Sentence[]> {
 		const apiSentences: ISentence[] = await this.sentenceHttpService.getLessonSentences(id);
+		const lessonToFill =  this.getLessonByID(id);
 
 		for (const apiSentence of apiSentences) {
 			const hiddenChars: Array<string[]> = [];
@@ -155,21 +163,27 @@ export class LessonsDataService {
 				sentencesListSentence,
 				apiSentence.created_at,
 				apiSentence.updated_at);
-			if (!this.getLessonByID(id).sentences.some(sntnc => sntnc.id === sentence.id)) {
-				this.getLessonByID(id).addSentence(sentence);
+			if (!lessonToFill.sentences.some(sntnc => sntnc.id === sentence.id)) {
+				lessonToFill.addSentence(sentence);
 			}
 
-			const stat = this.getStatisticsOfSentence(sentence);
+			let stat = this.getStatisticsOfSentence(sentence);
+			if (!stat) {
+				await this.statisticHttpService.postNewStatisticsRecord(sentence.lessonId, sentence.id);
+				const userId = await this.storage.get(this.globals.USER_ID_KEY);
+				this.createNewStatisticRecord(sentence.id, sentence.lessonId, userId, sentence.words);
+				stat = this.getStatisticsOfSentence(sentence);
+			}
 			for (const _ in sentence.hiddenChars) {
 				stat.curCharsIndexes.push(0);
 			}
 		}
 
-		if (this.getLessonByID(id).sentences.length > 0) {
-			this.getLessonByID(id).sentences.sort(this.sortSentencesByAddingTime);
+		if (lessonToFill.sentences.length > 0) {
+			lessonToFill.sentences.sort(this.sortSentencesByAddingTime);
 		}
 
-		return this.getLessonByID(id).sentences;
+		return lessonToFill.sentences;
 	}
 
 	async getStatisticByUser(): Promise<Statistics[]> {

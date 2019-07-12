@@ -136,7 +136,7 @@ export class SentenceAddingPage implements OnInit {
 					text: text
 				});
 				const userId = await this.storage.get(this.globals.USER_ID_KEY);
-				this.createNewStatisticRecord(newSentence.id, this.lessonId, userId, indexesArray, text)
+				this.lessonsDataService.createNewStatisticRecord(newSentence.id, this.lessonId, userId, indexesArray)
 			}
 		} else { // Sentence is added to a new lesson
 			this.storage.get(this.globals.USER_ID_KEY).then(async userId => {
@@ -151,7 +151,7 @@ export class SentenceAddingPage implements OnInit {
 						words: indexesArray,
 						text: this.sentence
 				});
-				this.createNewStatisticRecord(newSentence.id, newLessonId, userId, indexesArray, this.sentence);
+				this.lessonsDataService.createNewStatisticRecord(newSentence.id, newLessonId, userId, indexesArray);
 			});
 		}
 
@@ -165,14 +165,7 @@ export class SentenceAddingPage implements OnInit {
 		});
 	}
 
-	createNewStatisticRecord(sentenceId: number, lessonId: number,
-			userId: number, words: [number, number][], text: string) {
-
-		this.lessonsDataService.getLessonByID(lessonId).statistics.push(new Statistics(
-			sentenceId, sentenceId, lessonId, userId, new Array(words.length).fill(0), 0,
-			false, 0, 0, 0, 0, new Date().toISOString(), new Date().toISOString()
-		));
-	}
+	
 
 	showSelectionButton() {
 		setTimeout(function () {
