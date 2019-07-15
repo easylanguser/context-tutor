@@ -9,11 +9,38 @@ ion-button {
     -webkit-transition: background .2s ease-in-out;
 }
 
-#no-users-found {
-    width: 100%;
-    position: absolute;
-    bottom: 50%;
+#search-user-input {
+    border-radius: 8px;
+    border: 1px solid var(--ion-color-primary);
+    margin: 2% 4%;
+    width: 92%;
+}
+
+#search-btn {
+    width: 30%;
+    margin-left: 35%;
+}
+
+#user-avatar {
+    height: 150px;
+    width: 150px;
+    margin-top: 5%;
+    background: #FFF;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+}
+
+#results-div {
+    margin-top: 10%;
     text-align: center;
+}
+
+#send-btn {
+    display: table;
+    width: 20%;
+    margin-left: 40%;
+    margin-top: 5%;
 }
 
 #dismiss-btn {
@@ -27,49 +54,8 @@ ion-button {
     --background: var(--ion-color-danger-tint);
 
     @media (max-width: 991px) {
-        height: 4vh;
+        height: 6vh;
         font-size: 2.5vh;
-    }
-}
-
-#users-list {
-    padding: 58px 0 5vh 0;
-
-    div {
-        height: 4vh;
-        font-size: 2vh;
-        text-align: end;
-        overflow: auto;
-        padding: 0 5%;
-        margin: 1vh 0;
-        line-height: 4vh;
-        cursor: pointer;
-
-        transition: background .2s ease-in-out;
-        -webkit-transition: background .2s ease-in-out;
-
-        #user-avatar {
-            height: 3vh;
-            width: 3vh;
-            float: left;
-            border-radius: 50%;
-            object-fit: cover;
-            object-position: center;
-            background: #FFF;
-            margin-top: 0.5vh;
-            margin-right: 2%;
-        }
-
-        p {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            max-height: 4vh;
-        }
-
-        &:hover {
-            background: rgb(204, 204, 204);
-        }
     }
 }
 

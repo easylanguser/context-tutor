@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
 import { HttpService } from "../../services/http/rest/http.service";
 import { AlertController } from "@ionic/angular";
 import { environment } from 'src/environments/environment';

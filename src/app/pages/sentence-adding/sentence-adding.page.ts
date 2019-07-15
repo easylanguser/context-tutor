@@ -59,7 +59,7 @@ export class SentenceAddingPage implements OnInit {
 
 		indexesArray = [];
 		this.sentence = this.sentenceToEditId ?
-			this.lessonsDataService.getSentenceByIDs(this.lessonId, Number(this.sentenceToEditId)).text :
+			this.lessonsDataService.getSentenceByIds(this.lessonId, Number(this.sentenceToEditId)).text :
 			this.globals.sharedText[0];
 
 		this.updateTitle();
@@ -76,7 +76,7 @@ export class SentenceAddingPage implements OnInit {
 	}
 
 	goBack() {
-		this.navController.navigateBack(['sentences-list'], { queryParams: { lessonID: this.lessonId } });
+		this.navController.navigateBack(['sentences-list'], { queryParams: { lessonId: this.lessonId } });
 	}
 
 	ionViewDidEnter() {
@@ -85,7 +85,7 @@ export class SentenceAddingPage implements OnInit {
 
 	updateTitle() {
 		this.lessonId ?
-			this.title = this.lessonsDataService.getLessonByID(this.lessonId).name :
+			this.title = this.lessonsDataService.getLessonById(this.lessonId).name :
 			this.title = new Date().toJSON().slice(0, 10).replace(/-/g, '/') +
 				' ' + this.globals.sharedText[0].substr(0, 10);
 	}
@@ -160,7 +160,7 @@ export class SentenceAddingPage implements OnInit {
 
 		this.navController.navigateBack(['sentences-list'], {
 			queryParams: {
-				lessonID: this.lessonId
+				lessonId: this.lessonId
 			}
 		});
 	}

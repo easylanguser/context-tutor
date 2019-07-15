@@ -144,7 +144,7 @@ export class AppComponent {
 			if (blob.size === 19) {
 				return;
 			}
-			var reader = new FileReader();
+			const reader = new FileReader();
 			reader.readAsDataURL(blob);
 			reader.onloadend = () => {
 				const image = String(reader.result);

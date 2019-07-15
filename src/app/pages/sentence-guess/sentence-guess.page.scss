@@ -210,6 +210,10 @@
     #footer {
         height: 10vw;
         width: 72vw;
+
+        border-top-left-radius: 20px;
+        border-top: 2px solid var(--ion-color-primary);
+
         ion-toolbar {
             height: 10vw;
         }
@@ -245,7 +249,7 @@
 
     #bottom-bar-container {
         height: 10vw;
-        width: 36vw;
+        width: calc(36vw - 2px);
         float: right;
     }
 

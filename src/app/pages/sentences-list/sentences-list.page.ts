@@ -20,8 +20,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	displayedSentences: Sentence[];
 	lessonId: number;
+	parentId: number = null;
 	lessonTitle: string;
-	isSharedLesson: boolean = true;
 	@ViewChildren('chartsid') pieCanvases: any;
 	@ViewChild('sentencesList', { static: false }) sentencesList: IonList;
 	pieCharts: Array<Chart> = [];
@@ -68,7 +68,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	async initData(showLoader) {
-		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonID'));
+		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
+		this.parentId = Number(this.route.snapshot.queryParamMap.get('parentId'));
 
 		await this.getData();
 		if (showLoader === 'true') {
@@ -82,7 +83,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	async ionViewDidEnter() {
 		if (this.globals.updateIsRequired[0] || (this.displayedSentences && this.displayedSentences.length === 0)) {
-			await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
+			await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
 			this.getData();
 			this.globals.updateIsRequired[0] = false;
 		}
@@ -111,7 +112,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		this.updateCharts();
 	}
 
-	async deleteItem(slidingItem: IonItemSliding, lessonID: number, sentenceID: number, index: number) {
+	async deleteItem(slidingItem: IonItemSliding, lessonId: number, sentenceId: number, index: number) {
 		const alert = await this.alertController.create({
 			message: 'Are you sure you want to delete this sentence?',
 			buttons: [
@@ -126,8 +127,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 					text: 'Delete',
 					handler: async () => {
 						slidingItem.close();
-						await this.sentenceHttpService.deleteSentence(sentenceID);
-						this.lessonsDataService.removeSentence(lessonID, sentenceID);
+						await this.sentenceHttpService.deleteSentence(sentenceId);
+						this.lessonsDataService.removeSentence(lessonId, sentenceId);
 					}
 				}
 			]
@@ -219,7 +220,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 			this.navController.navigateForward(['sentence-guess'], {
 				queryParams: {
 					current: sentenceId,
-					lesson: this.lessonId
+					lessonId: this.lessonId,
+					parentId: this.parentId
 				}
 			});
 		} else {
@@ -248,13 +250,12 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	private async getData() {
-		const lesson = this.lessonsDataService.getLessonByID(this.lessonId);
+		const lesson = this.lessonsDataService.getLessonById(this.lessonId);
 		this.lessonTitle = lesson.name.toString();
-		this.isSharedLesson = lesson.isShared;
 		if (this.globals.getIsDemo()) {
 			this.displayedSentences = await lesson.sentences.sort(this.lessonsDataService.sortSentencesByAddingTime);
 		} else {
-			this.displayedSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
+			this.displayedSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
 		}
 	}
 
@@ -265,7 +266,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		if (type === 1) {
 			await this.getData();
 		} else {
-			const allSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
+			const allSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
 			if (type === 2) {
 				this.displayedSentences = allSentences.filter(sentence =>
 					this.lessonsDataService.getStatisticsOfSentence(sentence).wrongAnswers > 0

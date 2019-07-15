@@ -22,11 +22,11 @@ export class EditLessonTitlePage implements OnInit {
 
 	ngOnInit() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
-		this.lessonTitle = this.lessonsDataService.getLessonByID(this.lessonId).name;
+		this.lessonTitle = this.lessonsDataService.getLessonById(this.lessonId).name;
 	}
 
 	submitNewTitle() {
-		const lessonToEdit = this.lessonsDataService.getLessonByID(this.lessonId);
+		const lessonToEdit = this.lessonsDataService.getLessonById(this.lessonId);
 		lessonToEdit.name = this.lessonTitle;
 		this.lessonsDataService.editLesson(lessonToEdit);
 		this.lessonHttpService.updateLessonName(String(this.lessonId), this.lessonTitle.replace(/\s+/g, '%20'))

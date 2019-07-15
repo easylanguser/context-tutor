@@ -9,9 +9,9 @@ export class Lesson {
 		public id: number,
 		public name: string,
 		public url: string,
-		public isShared: boolean,
-		public created_at: string,
-		public updated_at: string,
+		public parentId: number,
+		public createdAt: string,
+		public updatedAt: string,
 		public displayedDate: string) { }
 
 	addSentence(sentence: Sentence) {

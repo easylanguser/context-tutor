@@ -52,7 +52,7 @@ export class AccountPage {
 			this.utils.createAndShowLoader('Avatar is being updated, please wait...');
 			this.userHttpService.postNewAvatar(event.target.files)
 				.then(_ => {
-					var reader = new FileReader();
+					const reader = new FileReader();
 					reader.readAsDataURL(event.target.files[0]);
 					reader.onloadend = () => {
 						const image = String(reader.result);

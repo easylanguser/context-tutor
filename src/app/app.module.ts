@@ -28,7 +28,7 @@ import { SentenceAddingPageModule } from './pages/sentence-adding/sentence-addin
 import { EditLessonTitlePageModule } from './pages/edit-lesson-title/edit-lesson-title.module';
 import { Globals } from './services/globals/globals';
 import { ShareLessonModal } from './modals/share-lesson/share-lesson.modal';
-import { SharedLessonsListModal } from './modals/shared-lessons-list/shared-lessons-list.modal';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 export function jwtOptionsFactory(storage) {
 	return {
@@ -40,10 +40,12 @@ export function jwtOptionsFactory(storage) {
 }
 
 @NgModule({
-	declarations: [AppComponent, ShareLessonModal, SharedLessonsListModal],
-	entryComponents: [ShareLessonModal, SharedLessonsListModal],
+	declarations: [AppComponent, ShareLessonModal],
+	entryComponents: [ShareLessonModal],
 	imports: [BrowserModule, IonicModule.forRoot(),
 		AppRoutingModule,
+		ReactiveFormsModule,
+		FormsModule,
 		HttpClientModule,
 		SentencesListPageModule,
 		SentenceGuessPageModule,

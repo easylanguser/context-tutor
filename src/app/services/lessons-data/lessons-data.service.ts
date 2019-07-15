@@ -12,22 +12,23 @@ import { Globals } from '../globals/globals';
 
 interface ILesson {
 	id: number;
+	userId: number;
 	name: string;
 	url: string;
-	is_shared: boolean,
-	created_at: string;
-	updated_at: string;
+	parentId: number;
+	createdAt: string;
+	updatedAt: string;
 }
 
 interface ISentence {
 	id: number;
-	lesson_id: number;
+	lessonId: number;
 	text: string;
 	words: [number, number][];
 	selectors: string[];
-	selectors_words: string[];
-	created_at: string;
-	updated_at: string;
+	selectorsWords: string[];
+	createdAt: string;
+	updatedAt: string;
 }
 
 interface IStatistic {
@@ -78,67 +79,78 @@ export class LessonsDataService {
 	}
 
 	removeLesson(lessonToRemoveId: number) {
-		const index = this.lessons.indexOf(this.getLessonByID(lessonToRemoveId));
+		const index = this.lessons.indexOf(this.getLessonById(lessonToRemoveId));
 		if (index > -1) {
 			this.lessons.splice(index, 1);
 		}
 	}
 
 	removeSentence(lessonId: number, sentenceToRemoveId: number) {
-		const index = this.getSentenceNumberByIDs(lessonId, sentenceToRemoveId);
+		const index = this.getSentenceNumberByIds(lessonId, sentenceToRemoveId);
 		if (index > -1) {
-			this.getLessonByID(lessonId).sentences.splice(index, 1);
+			this.getLessonById(lessonId).sentences.splice(index, 1);
 		}
 	}
 
 	removeAllLessonSentences(lessonId: number) {
-		this.getLessonByID(lessonId).sentences = [];
+		this.getLessonById(lessonId).sentences = [];
 	}
 
-	getLessonByID(id: number): Lesson {
+	getLessonById(id: number): Lesson {
 		return this.lessons.find(lesson => lesson.id === id);
 	}
 
-	getSentenceNumberByIDs(lessonId: number, sentenceId: number): number {
-		return this.getLessonByID(lessonId).sentences.findIndex(
+	getSentenceNumberByIds(lessonId: number, sentenceId: number): number {
+		return this.getLessonById(lessonId).sentences.findIndex(
 			(sentence: Sentence) => sentence.id === sentenceId
 		);
 	}
 
-	getSentenceByIDs(lessonId: number, sentenceId: number): Sentence {
-		return this.getLessonByID(lessonId).sentences.find(
+	getSentenceByIds(lessonId: number, sentenceId: number): Sentence {
+		return this.getLessonById(lessonId).sentences.find(
 			(sentence: Sentence) => sentence.id === sentenceId
 		);
 	}
 
 	getRangeOfLessonSentences(lessonId: number, from: number, to: number): Sentence[] {
-		return this.getLessonByID(lessonId).sentences.slice(from, to);
+		return this.getLessonById(lessonId).sentences.slice(from, to);
 	}
 
 	editLesson(lesson: Lesson) {
-		this.lessons[this.lessons.indexOf(this.getLessonByID(lesson.id))] = lesson;
+		this.lessons[this.lessons.indexOf(this.getLessonById(lesson.id))] = lesson;
 	}
 
 	editSentence(lessonId: number, newSentence: Sentence) {
-		const idx = this.getSentenceNumberByIDs(lessonId, newSentence.id);
-		this.getLessonByID(lessonId).sentences[idx] = newSentence;
+		const idx = this.getSentenceNumberByIds(lessonId, newSentence.id);
+		this.getLessonById(lessonId).sentences[idx] = newSentence;
 	}
 
 	getStatisticsOfSentence(sentence: Sentence): Statistics {
-		const lessonToSearchIn = this.lessons.find(lesson => lesson.id === sentence.lessonId);
+		let lessonToSearchIn = this.lessons.find(lesson => lesson.id === sentence.lessonId);
+
+		if (!lessonToSearchIn) {
+			lessonToSearchIn = this.lessons.find(lesson => lesson.parentId === sentence.lessonId);
+		}
+		if (!lessonToSearchIn.statistics) {
+			return null;
+		}
 		return lessonToSearchIn.statistics.find(stat => stat.sentenceId === sentence.id);
 	}
 
 	createNewStatisticRecord(sentenceId: number, lessonId: number, userId: number, words: [number, number][]) {
-		this.getLessonByID(lessonId).statistics.push(new Statistics(sentenceId, sentenceId,
+		this.getLessonById(lessonId).statistics.push(new Statistics(sentenceId, sentenceId,
 			lessonId, userId, new Array(words.length).fill(0), 0, false, 0, 0, 0, 0,
 			new Date().toISOString(), new Date().toISOString()
 		));
 	}
 
-	async getSentencesByLessonId(id: number): Promise<Sentence[]> {
-		const apiSentences: ISentence[] = await this.sentenceHttpService.getLessonSentences(id);
-		const lessonToFill =  this.getLessonByID(id);
+	async getSentencesByLessonId(lessonId: number, parentId: number): Promise<Sentence[]> {
+
+		const apiSentences: ISentence[] = parentId ?
+			await this.sentenceHttpService.getLessonSentences(parentId) :
+			await this.sentenceHttpService.getLessonSentences(lessonId);
+
+		const lessonToFill = this.getLessonById(lessonId);
 
 		for (const apiSentence of apiSentences) {
 			const hiddenChars: Array<string[]> = [];
@@ -156,27 +168,20 @@ export class LessonsDataService {
 			const sentencesListSentence = this.utils.hideChars(apiSentence.text, apiSentence.words, this.globals.blueCharForHiding);
 			const sentence = new Sentence(
 				apiSentence.id,
-				apiSentence.lesson_id,
+				apiSentence.lessonId,
 				apiSentence.words,
 				apiSentence.text,
 				hiddenSentence,
 				hiddenChars,
 				sentencesListSentence,
-				apiSentence.created_at,
-				apiSentence.updated_at);
+				apiSentence.createdAt,
+				apiSentence.updatedAt);
 			if (!lessonToFill.sentences.some(sntnc => sntnc.id === sentence.id)) {
 				lessonToFill.addSentence(sentence);
 			}
 
-			let stat = this.getStatisticsOfSentence(sentence);
-			if (!stat) {
-				await this.statisticHttpService.postNewStatisticsRecord(sentence.lessonId, sentence.id);
-				const userId = await this.storage.get(this.globals.USER_ID_KEY);
-				this.createNewStatisticRecord(sentence.id, sentence.lessonId, userId, sentence.words);
-				stat = this.getStatisticsOfSentence(sentence);
-			}
-			for (const _ in sentence.hiddenChars) {
-				stat.curCharsIndexes.push(0);
+			for (const stat of lessonToFill.statistics) {
+				stat.curCharsIndexes = new Array(apiSentence.words.length).fill(0);
 			}
 		}
 
@@ -192,14 +197,8 @@ export class LessonsDataService {
 		const statisticsArray: Statistics[] = [];
 
 		for (const apiStatistic of apiStatistics) {
-			if (apiStatistic.lessonId === -1 && !this.globals.commonLessonsAreFetched) {
-				const commonLessons = await this.lessonHttpService.getLessons(-1);
-				this.createAndInsertFromAPIData(commonLessons);
-				this.globals.commonLessonsAreFetched = true;
-			}
-
-			const lesson = this.getLessonByID(apiStatistic.lessonId);
-			if (lesson && lesson.statistics) {
+			const lesson = this.getLessonById(apiStatistic.lessonId);
+			if (lesson) {
 				lesson.statistics.push(
 					(new Statistics(
 						apiStatistic.id,
@@ -226,17 +225,12 @@ export class LessonsDataService {
 		const apiLessons: ILesson[] = await this.lessonHttpService.getLessons();
 		this.globals.updIsDemo(apiLessons.length === 0);
 
-		const sharedLessons = await this.lessonHttpService.getListOfSharedLessons(this.globals.markedSharedLessons);
-		if (sharedLessons && sharedLessons.length > 0) {
-			this.createAndInsertFromAPIData(sharedLessons);
-		}
-
 		if (this.globals.getIsDemo()) {
 			await this.http.get('assets/demo-lessons.json').toPromise().then(async (lessons: IDemoLesson[]) => {
 				const userId = await this.storage.get(this.globals.USER_ID_KEY);
 
 				for (const lsn of lessons) {
-					const lesson = new Lesson(lsn.id, lsn.name, lsn.url, true, '', '', 'Demo lesson');
+					const lesson = new Lesson(lsn.id, lsn.name, lsn.url, null, '', '', 'Demo lesson');
 					for (const sntc of lsn.sentences) {
 						const hiddenChars: Array<string[]> = [];
 						sntc.words.sort((a, b) => a[0] - b[0]);
@@ -289,17 +283,17 @@ export class LessonsDataService {
 		const now = new Date().getTime();
 
 		for (const lsn of apiLessons) {
-			const diff = (now - new Date(lsn.created_at).getTime()) / 1000;
+			const diff = (now - new Date(lsn.createdAt).getTime()) / 1000;
 			const period = this.utils.calculatePeriod(diff);
 			const lesson = new Lesson(
 				lsn.id,
 				lsn.name,
 				lsn.url,
-				lsn.is_shared,
-				lsn.created_at,
-				lsn.updated_at,
+				lsn.parentId,
+				lsn.createdAt,
+				lsn.updatedAt,
 				period[0] + period[1]);
-			
+
 			this.addLesson(lesson);
 		}
 	}

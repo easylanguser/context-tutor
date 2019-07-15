@@ -10,7 +10,6 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Globals } from 'src/app/services/globals/globals';
 import { ShareLessonModal } from 'src/app/modals/share-lesson/share-lesson.modal';
 import { UserHttpService } from 'src/app/services/http/users/user-http.service';
-import { SharedLessonsListModal } from 'src/app/modals/shared-lessons-list/shared-lessons-list.modal';
 
 const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
 
@@ -26,8 +25,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	@ViewChild('lessonsList', { static: false }) lessonsList: IonList;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
-	sharedLessons: any = [];
-	unwatchedShares: number = 0;
 
 	contentIsScrolled: boolean = false;
 
@@ -36,7 +33,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private lessonsDataService: LessonsDataService,
 		private alertController: AlertController,
 		private lessonHttpService: LessonHttpService,
-		private userHttpService: UserHttpService,
 		private utils: UtilsService,
 		public globals: Globals,
 		private browser: InAppBrowser,
@@ -78,14 +74,16 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		this.lessonsDataService.lessons.forEach(lsn => {
 			lsn.sentences.forEach(sentence => {
 				const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
-				stat.solvedStatus = false;
-				stat.curWordIndex = 0;
-				for (let i in stat.curCharsIndexes) {
-					stat.curCharsIndexes[i] = 0;
-				}
-				if (stat.curCharsIndexes.length === 0) {
-					for (let _ in sentence.hiddenChars) {
-						stat.curCharsIndexes.push(0);
+				if (stat) {
+					stat.solvedStatus = false;
+					stat.curWordIndex = 0;
+					for (let i in stat.curCharsIndexes) {
+						stat.curCharsIndexes[i] = 0;
+					}
+					if (stat.curCharsIndexes.length === 0) {
+						for (let _ in sentence.hiddenChars) {
+							stat.curCharsIndexes.push(0);
+						}
 					}
 				}
 			});
@@ -129,34 +127,35 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	private updateCharts() {
 		let i = 0;
 		for (const lesson of this.displayedLessons) {
-			const chart = this.pieCharts[i].data.datasets[0], chartData = chart.data;
-			chartData[0] = 1;
-			chartData[1] = 0;
-			chartData[2] = 0;
-			for (const stats of lesson.statistics) {
-				if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps > 0) {
-					chartData[0] += stats.correctAnswers;
-					chartData[1] += stats.wrongAnswers;
-					chartData[2] += stats.hintUsages + stats.giveUps;
+			if (lesson.statistics) {
+				const chart = this.pieCharts[i].data.datasets[0], chartData = chart.data;
+				chartData[0] = 1;
+				chartData[1] = 0;
+				chartData[2] = 0;
+				for (const stats of lesson.statistics) {
+					if (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps > 0) {
+						chartData[0] += stats.correctAnswers;
+						chartData[1] += stats.wrongAnswers;
+						chartData[2] += stats.hintUsages + stats.giveUps;
+					}
 				}
-			}
 
-			if (chartData[0] + chartData[1] + chartData[2] > 1) {
-				--chartData[0];
-				chart.backgroundColor[0] = this.globals.chartsColors[0];
-				chart.backgroundColor[1] = this.globals.chartsColors[1];
-				chart.backgroundColor[2] = this.globals.chartsColors[2];
-				this.pieCharts[i].options.cutoutPercentage = 60;
-				this.pieCharts[i].update();
+				if (chartData[0] + chartData[1] + chartData[2] > 1) {
+					--chartData[0];
+					chart.backgroundColor[0] = this.globals.chartsColors[0];
+					chart.backgroundColor[1] = this.globals.chartsColors[1];
+					chart.backgroundColor[2] = this.globals.chartsColors[2];
+					this.pieCharts[i].options.cutoutPercentage = 60;
+					this.pieCharts[i].update();
+				}
+				++i;
 			}
-			++i;
 		}
 
 		this.cdRef.detectChanges();
 	}
 
-	async deleteItem(slidingItem: IonItemSliding, lessonID: number) {
-		
+	async deleteItem(slidingItem: IonItemSliding, lessonId: number) {
 		const alert = await this.alertController.create({
 			message: 'Are you sure you want to delete this lesson?',
 			buttons: [
@@ -171,8 +170,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 					text: 'Delete',
 					handler: async () => {
 						slidingItem.close();
-						await this.lessonHttpService.deleteLesson(lessonID);
-						this.lessonsDataService.removeLesson(lessonID);
+						await this.lessonHttpService.deleteLesson(lessonId);
+						this.lessonsDataService.removeLesson(lessonId);
 
 						if (this.displayedLessons.length === 0) {
 							await this.getData();
@@ -184,34 +183,16 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		await alert.present();
 	}
 
-	async showSharedLessons() {
-		const modal = await this.modalController.create({
-			component: SharedLessonsListModal,
-			componentProps: {
-				'sharedLessons': this.sharedLessons.filter(lesson => lesson[1] === 0)
-			}
-		});
-		await modal.present();
-		await modal.onWillDismiss();
-		if (this.globals.sharesToUnmark) {
-			await this.getData();
-		}
-		this.globals.sharesToUnmark = 0;
-	}
-
 	async shareLesson(slidingItem: IonItemSliding, lesson: Lesson) {
 		slidingItem.close();
-		if (lesson.statistics.length) {
-			const modal = await this.modalController.create({
-				component: ShareLessonModal,
-				componentProps: {
-					'lessonId': lesson.id
-				}
-			});
-			return await modal.present();
-		} else {
-			this.utils.showToast('Please, add at least one sentence to this lesson to share it')
-		}
+		const modal = await this.modalController.create({
+			component: ShareLessonModal,
+			componentProps: {
+				'lessonId': lesson.id
+			}
+		});
+		return await modal.present();
+
 	}
 
 	async editItem(slidingItem: IonItemSliding, lessonId: number) {
@@ -231,25 +212,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	private async getData() {
 		await this.utils.createAndShowLoader('Loading...');
-
-		this.sharedLessons = (await this.userHttpService.getSharedLessons()).shared_lessons;
-		for (const lesson of this.sharedLessons) {
-			if (lesson[1] === 1) {
-				this.globals.markedSharedLessons.push(lesson[0]);
-			} else {
-				await this.lessonHttpService.getLessonAndUserInfoByLessonId(lesson[0])
-					.then(info => {
-						this.globals.unmarkedSharedLessons.push({
-							userEmail: info.userEmail,
-							lessonName: info.lessonTitle,
-							lessonId: lesson[0]
-						})
-					});
-			}
-		}
-
-		this.unwatchedShares = this.globals.unmarkedSharedLessons.length;
-
 		await this.lessonsDataService.refreshLessons();
 		this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
 
@@ -280,7 +242,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		this.navController.navigateForward(
 			['sentences-list'], {
 				queryParams: {
-					lessonID: lesson.id,
+					lessonId: lesson.id,
+					parentId: lesson.parentId,
 					showLoader: lesson.statistics.length > 20
 				}
 			});

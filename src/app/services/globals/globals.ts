@@ -3,15 +3,9 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class Globals {
-	// Variables
+	// VARIABLES 
 	isDemo: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	isDemoHasChanged: boolean;
-
-	unmarkedSharedLessons: { userEmail: string, lessonName: string, lessonId: number }[] = [];
-	markedSharedLessons: number[] = [];
-	sharesToUnmark: number = 0;
-
-	commonLessonsAreFetched: boolean = false;
 
 	updIsDemo(newVal: boolean) {
 		this.isDemoHasChanged = (newVal !== this.getIsDemo());
@@ -26,7 +20,7 @@ export class Globals {
 	updateIsRequired = [false];
 	savedTemplates: Array<[number, HTMLElement[]]> = [];
 
-	// Constants
+	// CONSTANTS
 	SHARED_TEXT_ID_KEY = "shared_text_id";
 	USER_AVATAR_KEY = 'user-avatar';
 	USER_EMAIL_KEY = 'user-email';

@@ -48,10 +48,10 @@
                 {{lesson.name}}
               </p>
               <span>
-                {{lesson.displayedDate}} ({{lesson.statistics.length}} sentences)
+                {{lesson.displayedDate}}
               </span>
             </div>
-            <ion-icon id="share-icon" *ngIf="lesson.isShared" name="md-share" ></ion-icon>
+            <ion-icon id="share-icon" *ngIf="lesson.parentId" name="md-share" ></ion-icon>
             <div>
               <canvas #chartsid width="50" height="50"></canvas>
             </div>
@@ -62,7 +62,7 @@
           <ion-item-option color="secondary" (click)="openLink(slidingItem, lesson.url)">
             Open link
           </ion-item-option>
-          <ion-item-option *ngIf="!this.globals.getIsDemo() && !lesson.isShared" color="warning"
+          <ion-item-option *ngIf="!this.globals.getIsDemo() && !lesson.parentId" color="warning"
             (click)="editItem(slidingItem, lesson.id)">
             Edit
           </ion-item-option>
@@ -78,13 +78,6 @@
       </ion-item-sliding>
     </ion-list>
   </ion-content>
-
-  <ion-fab id="shared-lessons-fab" *ngIf="this.unwatchedShares > 0"
-    (click)="showSharedLessons()" vertical="bottom" horizontal="start" slot="fixed">
-    <ion-fab-button color="danger">
-      {{this.unwatchedShares}}
-    </ion-fab-button>
-  </ion-fab>
 
   <ion-fab id="add-lesson-fab" [ngClass]="{'hidden-btn': contentIsScrolled}"
     (click)="addLessonFile()" vertical="bottom" horizontal="end" slot="fixed">

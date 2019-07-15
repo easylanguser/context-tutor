@@ -26,23 +26,23 @@ export class SentenceGuessPage implements OnInit {
 	@ViewChild('pieCanvas', { static: false }) pieCanvas;
 	pieChart: any;
 
-	alertIsShown: boolean; // Single alert flag
-	lessonId: number = 0; // Id of current lesson
-	sentenceId: number; // Number of current sentence in lesson
+	alertIsShown: boolean;
+	lessonId: number = 0;
+	parentId: number = 0;
+	sentenceId: number;
 
 	sentenceNumber: number;
 	sentencesTotal: number;
 
-	curWordIndex: number = 0; // Number of word, that user is currently at
-	curCharsIndexes: number[] = []; // Number of character for each word, that user is currently at
+	curWordIndex: number = 0;
+	curCharsIndexes: number[] = [];
 
-	statisticsDeltasArray: Array<[number, number, number, number]> = []; // Deltas by id for red, yellow, green stats
+	statisticsDeltasArray: Array<[number, number, number, number]> = [];
 
 	alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 	updateFront: boolean = false;
 
-	// Single animation at a time flags
 	sentenceTranslateIsPlayed: boolean = false;
 	charactersRotationIsPlayed: boolean = false;
 
@@ -57,9 +57,7 @@ export class SentenceGuessPage implements OnInit {
 	fourthCharBack: string;
 
 	sentenceContent: HTMLElement;
-	
 
-	// Highlights colors
 	yellowHighlight = '0 0 5px 1px #E0E306';
 	redHighlight = '0px 0px 8px 0px rgba(167, 1, 6, 1)';
 
@@ -78,14 +76,35 @@ export class SentenceGuessPage implements OnInit {
 
 	async ngOnInit() {
 		this.sentenceId = Number(this.route.snapshot.queryParamMap.get('current'));
-		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lesson'));
-
+		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
+		this.parentId = Number(this.route.snapshot.queryParamMap.get('parentId'));
+		
 		this.sentenceContent = document.getElementById('sentence-content');
 
 		if (!this.lessonsDataService.lessons.length) {
 			await this.lessonsDataService.refreshLessons();
-			await this.lessonsDataService.getSentencesByLessonId(this.lessonId);
+			await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
 		}
+		let stat = await this.statisticHttpService.getStatisticsOfLesson(this.lessonId);
+
+		if (!this.lessonsDataService.getLessonById(this.lessonId).statistics
+			.find(stat => stat.sentenceId === this.sentenceId)) {
+			const userId = await this.storage.get(this.globals.USER_ID_KEY);
+			this.lessonsDataService.createNewStatisticRecord(
+				this.sentenceId,
+				this.lessonId,
+				userId,
+				this.lessonsDataService.getSentenceByIds(this.lessonId, this.sentenceId).words
+			);
+		}
+
+		if (!stat || !stat.find(elem => elem.sentenceId === this.sentenceId)) {
+			this.statisticHttpService.postNewStatisticsRecord(
+				this.lessonId,
+				this.sentenceId
+			);
+		}
+
 		this.getData();
 	}
 
@@ -105,8 +124,8 @@ export class SentenceGuessPage implements OnInit {
 		this.pieChart = new Chart(this.pieCanvas.nativeElement, this.utils.getNewChartObject());
 		this.updateChart();
 
-		this.sentenceNumber = this.lessonsDataService.getSentenceNumberByIDs(this.lessonId, this.sentenceId) + 1;
-		this.sentencesTotal = this.lessonsDataService.getLessonByID(this.lessonId).sentences.length;
+		this.sentenceNumber = this.lessonsDataService.getSentenceNumberByIds(this.lessonId, this.sentenceId) + 1;
+		this.sentencesTotal = this.lessonsDataService.getLessonById(this.lessonId).sentences.length;
 
 		const stats = this.curStats();
 		this.statisticsDeltasArray.push([
@@ -120,13 +139,12 @@ export class SentenceGuessPage implements OnInit {
 			this.sentenceContent.removeChild(this.sentenceContent.firstChild);
 		}
 
-		if (this.curStats().solvedStatus) { // Display filled sentence, if it has already been solved
+		if (this.curStats().solvedStatus) {
 			const span = this.createSpan(false);
 			span.innerText = this.curSentence().text;
 			this.sentenceContent.appendChild(span);
 			this.hideBottomControls();
 		} else {
-			// Restore user progress 
 			this.curWordIndex = this.curStats().curWordIndex;
 			this.curCharsIndexes = this.curStats().curCharsIndexes;
 			this.restoreSentence();
@@ -175,9 +193,8 @@ export class SentenceGuessPage implements OnInit {
 		this.refreshCharBoxes();
 	}
 
-	// Get current Sentence object from service
 	curSentence(): Sentence {
-		const lessonSentences = this.lessonsDataService.getLessonByID(this.lessonId).sentences;
+		const lessonSentences = this.lessonsDataService.getLessonById(this.lessonId).sentences;
 		return lessonSentences.find(sentence => sentence.id === this.sentenceId);
 	}
 
@@ -241,7 +258,12 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	goBack() {
-		this.navController.navigateBack(['sentences-list'], { queryParams: { lessonID: this.lessonId } });
+		this.navController.navigateBack(['sentences-list'], {
+			queryParams: {
+				lessonId: this.lessonId,
+				parentId: this.parentId
+			}
+		});
 	}
 
 	saveData() {
@@ -315,8 +337,8 @@ export class SentenceGuessPage implements OnInit {
 
 		this.saveData();
 
-		const lessonSentences = this.lessonsDataService.getLessonByID(this.lessonId).sentences;
-		const currentLessonIndex = this.lessonsDataService.getSentenceNumberByIDs(this.lessonId, this.sentenceId);
+		const lessonSentences = this.lessonsDataService.getLessonById(this.lessonId).sentences;
+		const currentLessonIndex = this.lessonsDataService.getSentenceNumberByIds(this.lessonId, this.sentenceId);
 		const firstSentenceId = lessonSentences[0].id
 		const lastSentenceId = lessonSentences[lessonSentences.length - 1].id;
 
@@ -334,7 +356,7 @@ export class SentenceGuessPage implements OnInit {
 		this.curCharsIndexes = [];
 
 		this.animateSwipe(forward);
-		this.sentenceNumber = this.lessonsDataService.getSentenceNumberByIDs(this.lessonId, this.sentenceId) + 1;
+		this.sentenceNumber = this.lessonsDataService.getSentenceNumberByIds(this.lessonId, this.sentenceId) + 1;
 
 		// Change url parameter displaying current sentence
 		let path = this.location.path();
@@ -508,8 +530,8 @@ export class SentenceGuessPage implements OnInit {
 
 	// Reset characters boxes highlighting and generate random characters
 	refreshCharBoxes() {
-		const boxesIDs = ['char-box-1', 'char-box-2', 'char-box-3', 'char-box-4'];
-		for (const id of boxesIDs) {
+		const boxesIds = ['char-box-1', 'char-box-2', 'char-box-3', 'char-box-4'];
+		for (const id of boxesIds) {
 			document.getElementById(id).style.boxShadow = 'none';
 		}
 		this.generateRandomCharacters();

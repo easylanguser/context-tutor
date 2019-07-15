@@ -1,12 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavParams, ModalController } from '@ionic/angular';
-import { UserHttpService } from 'src/app/services/http/users/user-http.service';
-import { UtilsService } from 'src/app/services/utils/utils.service';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { UserHttpService } from 'src/app/services/http/users/user-http.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Storage } from '@ionic/storage';
+import { Globals } from 'src/app/services/globals/globals';
+import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
+import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
+
+interface IUserInfo {
+	id: number,
+	email: string,
+	hasAvatar: boolean,
+	msg: string
+}
 
 @Component({
 	selector: 'share-lesson-modal',
+	templateUrl: './share-lesson.modal.html',
+	styleUrls: ['./share-lesson.modal.scss'],
 	animations: [
 		trigger(
 			'enterAnimation', [
@@ -20,86 +33,78 @@ import { trigger, transition, style, animate } from '@angular/animations';
 				])
 			]
 		)
-	],
-	templateUrl: './share-lesson.modal.html',
-	styleUrls: ['./share-lesson.modal.scss']
+	]
 })
-export class ShareLessonModal implements OnInit {
+export class ShareLessonModal {
 
 	lessonId: number;
-	usersAreLoaded: boolean = false;
-	allUsers: { id: number, email: string, avatar: SafeUrl }[] = [];
-	users: { id: number, email: string, avatar: SafeUrl }[] = [];
+	emailSearchForm: FormGroup
+	userIsLoaded: boolean = true;
+	email: string;
+	user: { id: number, email: string, avatar: SafeUrl } = { id: 0, email: '', avatar: 'assets/img/account_icon.svg' };
 
 	constructor(
-		private navParams: NavParams,
 		private userHttpService: UserHttpService,
-		private utils: UtilsService,
+		private navParams: NavParams,
 		private modalController: ModalController,
-		private sanitizer: DomSanitizer) {
-		this.lessonId = Number(navParams.get('lessonId'));
+		private sanitizer: DomSanitizer,
+		private formBuilder: FormBuilder,
+		private lessonHttpService: LessonHttpService,
+		private lessonsDataService: LessonsDataService,
+		private globals: Globals,
+		private storage: Storage) {
+		this.lessonId = Number(this.navParams.get('lessonId'));
+		this.emailSearchForm = this.formBuilder.group({
+			email: ['', [Validators.required, Validators.minLength(6)]]
+		});
 	}
 
-	ngOnInit() {
-		this.userHttpService.getAllUsers()
-			.then(async res => {
-				const resLength = res.length;
-				var reader = new FileReader();
-				for (let user of res) {
-					let avatar;
-					if (user.has_avatar) {
-						avatar = await this.userHttpService.getAvatar(user.id);
+	startSearch() {
+		this.userIsLoaded = false;
+		this.userHttpService.getUserByEmail(this.emailSearchForm.get('email').value).then(async (res: IUserInfo) => {
+			if (res.id && res.email) {
+				if (res.hasAvatar) {
+					const blob = await this.userHttpService.getAvatar(res.id);
+					const reader = new FileReader();
+					reader.readAsDataURL(blob);
+					reader.onloadend = () => {
+						this.user = {
+							id: res.id,
+							email: res.email,
+							avatar: this.sanitizer.bypassSecurityTrustUrl(String(reader.result))
+						};
 					}
-					if (!avatar || avatar.size <= 19) {
-						avatar = 'assets/img/account_icon.svg';
-						this.pushUsers(user, avatar, resLength);
-					} else {
-						reader.readAsDataURL(avatar);
-						reader.onloadend = () => {
-							avatar = this.sanitizer.bypassSecurityTrustUrl(String(reader.result));
-							this.pushUsers(user, avatar, resLength);
-						}
-					}
+				} else {
+					this.user = {
+						id: res.id,
+						email: res.email,
+						avatar: 'assets/img/account_icon.svg'
+					};
 				}
-			})
-			.catch(error => {
-				this.utils.showToast('Failed to load users list');
-				this.usersAreLoaded = true;
-			});
+			} else {
+				this.user = {
+					id: 0,
+					email: res.msg,
+					avatar: 'assets/img/account_icon.svg'
+				};
+			}
+			this.userIsLoaded = true;
+		});
 	}
 
-	private pushUsers(user: any, avatar: SafeUrl, resLength: number) {
-		this.users.push({
-			id: user.id,
-			email: user.email,
-			avatar: avatar
-		});
-		this.allUsers.push({
-			id: user.id,
-			email: user.email,
-			avatar: avatar
-		});
-
-		if (this.users.length === resLength && this.allUsers.length === resLength) {
-			this.users.sort((user1, user2) => user1.email.localeCompare(user2.email));
-			this.allUsers.sort((user1, user2) => user1.email.localeCompare(user2.email));
-			this.usersAreLoaded = true;
+	shareLesson() {
+		if (this.user.id > 0) {
+			const lesson = this.lessonsDataService.getLessonById(this.lessonId);
+			this.lessonHttpService.postNewLesson({
+				userId: this.user.id,
+				name: lesson.name,
+				url: lesson.url,
+				parentId: lesson.parentId ? lesson.parentId : lesson.id
+			}).then(() => this.dismissModal());
 		}
 	}
 
-	sendShareRequest (user: any) {
-		this.userHttpService.sendShareRequest(user.id, this.lessonId);
-		this.dismissModal();
-	}
-
-	filterUsers(event: CustomEvent) {
-		const filter = event.detail.value.toLowerCase();
-		this.users = this.allUsers.filter(user => {
-			return user.email.toLowerCase().indexOf(filter) >= 0;
-		});
-	}
-
 	dismissModal() {
-		this.modalController.dismiss(/* params to return */);
+		this.modalController.dismiss();
 	}
 }

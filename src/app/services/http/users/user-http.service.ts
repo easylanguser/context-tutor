@@ -24,30 +24,12 @@ export class UserHttpService {
 	sendPassResetRequest(email: string): Promise<any> {
 		return this.httpService.doPost(environment.url + '/api/user/sendPassword', email).toPromise();
 	}
-
-	sendShareRequest(userId: number, lessonId: number): Promise<any> {
-		return this.httpService.doPut(apiUrl + 'sendShareRequest', {
-			userId: userId,
-			lessonId: lessonId
-		}).toPromise();
-	}
-
+	
 	getUserInfo(): Promise<any> {
 		return this.httpService.doGet(apiUrl + 'getUserInfo').toPromise();
 	}
 
-	getSharedLessons(): Promise<any> {
-		return this.httpService.doGet(apiUrl + 'getSharedLessons').toPromise();
-	}
-
-	getAllUsers(): Promise<any> {
-		return this.httpService.doGet(apiUrl + 'getAllUsers').toPromise();
-	}
-
-	updateShareStatus(lessonId: number, status: number): Promise<any> {
-		return this.httpService.doPut(apiUrl + 'updateShareStatus', {
-			lessonId: lessonId,
-			status: status
-		}).toPromise();
+	getUserByEmail(userEmail: string): Promise<any> {
+		return this.httpService.doGet(apiUrl + 'getUserByEmail?userEmail=' + userEmail).toPromise();
 	}
 }

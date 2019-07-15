@@ -12,7 +12,7 @@ export class LessonHttpService {
 	constructor(private httpService: HttpService) { }
 
 	postNewLesson(lesson: any): Promise<any> {
-		return this.httpService.doPost(apiUrl + 'addLessons?userId=' + lesson.userId, lesson).toPromise();
+		return this.httpService.doPost(apiUrl + 'addLessons', lesson).toPromise();
 	}
 
 	postNewLessonFile(lesson: FileList, lessonName: string, userId: number): Promise<any> {
@@ -36,21 +36,5 @@ export class LessonHttpService {
 
 	getLessonAndUserInfoByLessonId(lessonId: number): Promise<any> {
 		return this.httpService.doGet(apiUrl + 'getLessonAndUserByLessonId?lessonId=' + lessonId).toPromise();
-	}
-
-	getListOfSharedLessons(idsArray: number[]) {
-		let constructedParameters: string = '';
-		if (!idsArray.length) {
-			return;
-		} else if (idsArray.length > 0) {
-			constructedParameters += ('?idsArray=' + idsArray[0]);
-			if (idsArray.length > 1) {
-				for (let i = 1; i < idsArray.length; i++) {
-					constructedParameters += ('&idsArray=' + idsArray[i]);
-				}
-			}
-		}
-
-		return this.httpService.doGet(apiUrl + 'getSharedLessonsList' + constructedParameters).toPromise();
 	}
 }

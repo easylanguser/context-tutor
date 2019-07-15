@@ -1,22 +1,27 @@
 <ion-content>
-  <ion-spinner *ngIf="!usersAreLoaded" [@enterAnimation] name="dots"></ion-spinner>
 
-  <div *ngIf="usersAreLoaded">
-    <ion-searchbar
-      id="users-search-bar"
-      (ionChange)="filterUsers($event)">
-    </ion-searchbar>
+  <form [formGroup]="emailSearchForm" (ngSubmit)="startSearch()">
+    <ion-input id="search-user-input" text-center type="email"
+      formControlName="email" placeholder="Enter user email">
+    </ion-input>
+    <ion-button id="search-btn" type="submit">
+      Search
+    </ion-button>
+  </form>
 
-    <div id="no-users-found" *ngIf="users.length === 0">No users found</div>
+  <ion-spinner *ngIf="!userIsLoaded"></ion-spinner>
 
-    <ion-list id="users-list" *ngIf="usersAreLoaded" [@enterAnimation]>
-      <div *ngFor="let user of users" (click)="sendShareRequest(user)">
-          <img id="user-avatar" [src]="user.avatar" alt="avatar">
-          <p>
-            {{ user.email }}
-          </p>
-      </div>
-    </ion-list>
+  <div *ngIf="userIsLoaded" id="results-div">
+    <ion-label [@enterAnimation]>
+      {{ user.email }}
+    </ion-label>
+
+    <div id="users-list" *ngIf="userIsLoaded && user.id > 0" [@enterAnimation]>
+      <img id="user-avatar" [src]="user.avatar" alt="avatar">
+      <ion-button id="send-btn" (click)="shareLesson()">
+        <ion-icon name="send"></ion-icon>
+      </ion-button>
+    </div>
   </div>
 
   <ion-button id="dismiss-btn" (click)="dismissModal()">
