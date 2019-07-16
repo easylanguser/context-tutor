@@ -35,9 +35,9 @@ export class AppComponent {
 		private alertController: AlertController,
 		private location: Location,
 		private sanitizer: DomSanitizer,
-		private globals: Globals,
 		private userHttpService: UserHttpService,
-		private navController: NavController) {
+		private navController: NavController,
+		public globals: Globals) {
 		this.initializeApp(this.location.path());
 	}
 

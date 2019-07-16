@@ -31,9 +31,9 @@ export class AccountPage {
 		private alertController: AlertController,
 		private utils: UtilsService,
 		private sanitizer: DomSanitizer,
-		private globals: Globals,
 		private router: Router,
-		private storage: Storage) { }
+		private storage: Storage,
+		public globals: Globals) { }
 
 	ionViewDidEnter() {
 		this.checkTokenAndGetInfo();
