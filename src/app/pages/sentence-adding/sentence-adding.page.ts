@@ -48,7 +48,7 @@ export class SentenceAddingPage implements OnInit {
 		document.getElementById("selectable-sentence-div").focus();
 		document.getElementById("selectable-sentence-div").addEventListener("paste", (e: ClipboardEvent) => {
 			e.preventDefault();
-			var text = e.clipboardData.getData("text/plain");
+			const text = e.clipboardData.getData("text/plain");
 			document.execCommand("insertText", false, text.replace(/^\s+|\s+$|\s+(?=\s)/g, ""));
 		});
 
@@ -144,7 +144,7 @@ export class SentenceAddingPage implements OnInit {
 			const res = await this.lessonHttpService.postNewLesson({
 				userId: this.globals.userId,
 				name: this.title,
-				url: 'someurl@url.com'
+				url: 'http://easy4learn.com/tutor'
 			});
 			const newLessonId = res.id;
 			const newSentence = await this.sentenceHttpService.postNewSentence({
