@@ -4,6 +4,9 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class Globals {
 	// VARIABLES 
+
+	userId: number;
+
 	isDemo: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	isDemoHasChanged: boolean;
 

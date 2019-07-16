@@ -94,12 +94,15 @@ export class AddLessonPage implements OnInit {
 
 	async addNewLesson() {
 		if (this.lessonName) {
-			const userId = await this.storage.get(this.globals.USER_ID_KEY);
 			if (this.fileInput.files && this.fileInput.files.length > 0) {
-				await this.lessonHttpService.postNewLessonFile(this.fileInput.files, this.lessonName, userId);
+				await this.lessonHttpService.postNewLessonFile(
+					this.fileInput.files, 
+					this.lessonName,
+					this.globals.userId
+				);
 			} else {
 				await this.lessonHttpService.postNewLesson({
-					userId: userId,
+					userId: this.globals.userId,
 					name: this.lessonName,
 					url: 'http://easy4learn.com/tutor'
 				});

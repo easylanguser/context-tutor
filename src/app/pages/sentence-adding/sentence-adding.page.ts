@@ -135,24 +135,31 @@ export class SentenceAddingPage implements OnInit {
 					words: indexesArray,
 					text: text
 				});
-				const userId = await this.storage.get(this.globals.USER_ID_KEY);
-				this.lessonsDataService.createNewStatisticRecord(newSentence.id, this.lessonId, userId, indexesArray)
+				this.lessonsDataService.createNewStatisticRecord(
+					newSentence.id,
+					this.lessonId,
+					this.globals.userId,
+					indexesArray
+				);
 			}
 		} else { // Sentence is added to a new lesson
-			this.storage.get(this.globals.USER_ID_KEY).then(async userId => {
-				const res = await this.lessonHttpService.postNewLesson({
-					userId: userId,
-					name: this.title,
-					url: 'someurl@url.com'
-				});
-				const newLessonId = res.id;
-				const newSentence = await this.sentenceHttpService.postNewSentence({
-						lessonId: newLessonId,
-						words: indexesArray,
-						text: this.sentence
-				});
-				this.lessonsDataService.createNewStatisticRecord(newSentence.id, newLessonId, userId, indexesArray);
+			const res = await this.lessonHttpService.postNewLesson({
+				userId: this.globals.userId,
+				name: this.title,
+				url: 'someurl@url.com'
 			});
+			const newLessonId = res.id;
+			const newSentence = await this.sentenceHttpService.postNewSentence({
+					lessonId: newLessonId,
+					words: indexesArray,
+					text: this.sentence
+			});
+			this.lessonsDataService.createNewStatisticRecord(
+				newSentence.id,
+				newLessonId,
+				this.globals.userId,
+				indexesArray
+			);
 		}
 
 		this.globals.sharedText[0] = undefined;

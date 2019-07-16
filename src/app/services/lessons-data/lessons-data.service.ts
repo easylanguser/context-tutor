@@ -227,8 +227,6 @@ export class LessonsDataService {
 
 		if (this.globals.getIsDemo()) {
 			await this.http.get('assets/demo-lessons.json').toPromise().then(async (lessons: IDemoLesson[]) => {
-				const userId = await this.storage.get(this.globals.USER_ID_KEY);
-
 				for (const lsn of lessons) {
 					const lesson = new Lesson(lsn.id, lsn.name, lsn.url, null, '', '', 'Demo lesson');
 					for (const sntc of lsn.sentences) {
@@ -259,7 +257,7 @@ export class LessonsDataService {
 						}
 						const statStringArray = storageStat.split('|');
 						lesson.statistics.push(new Statistics(
-							sntc.id, sntc.id, lsn.id, userId,
+							sntc.id, sntc.id, lsn.id, this.globals.userId,
 							new Array(sntc.words.length).fill(0),
 							0, false,
 							Number(statStringArray[0]),

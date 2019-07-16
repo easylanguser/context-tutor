@@ -127,15 +127,11 @@ ion-toolbar {
     }
 
     >:first-child {
-        width: 80%;
+        width: 85%;
         display: table-cell;
         position: relative;
         vertical-align: top;
         padding: 1vh 4vw 1vh 4vw;
-
-        @media (min-width: 992px) {
-            width: 61.8vw;
-        }
 
         >:first-child {
             word-break: normal;

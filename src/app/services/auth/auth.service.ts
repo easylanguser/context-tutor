@@ -10,7 +10,7 @@ import { Globals } from '../globals/globals';
 
 interface AuthData {
 	token: string,
-	id: string
+	id: number
 }
 
 @Injectable({
@@ -44,6 +44,9 @@ export class AuthService {
 				if (!isExpired) {
 					this.token = token;
 					this.authenticationState.next(true);
+					this.storage.get(this.globals.USER_ID_KEY).then(userId => {
+						this.globals.userId = userId;
+					});
 				} else {
 					this.storage.remove(this.globals.TOKEN_KEY);
 					this.storage.remove(this.globals.USER_ID_KEY);
@@ -70,6 +73,8 @@ export class AuthService {
 					parent.postMessage({ token: this.token }, '*');
 
 					this.storage.set(this.globals.USER_ID_KEY, res.id);
+					this.globals.userId = res.id;
+					
 					this.authenticationState.next(true);
 				}),
 				catchError(e =>

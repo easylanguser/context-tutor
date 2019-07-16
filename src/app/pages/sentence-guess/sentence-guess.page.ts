@@ -78,34 +78,32 @@ export class SentenceGuessPage implements OnInit {
 		this.sentenceId = Number(this.route.snapshot.queryParamMap.get('current'));
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
 		this.parentId = Number(this.route.snapshot.queryParamMap.get('parentId'));
-		
+
 		this.sentenceContent = document.getElementById('sentence-content');
 
 		if (!this.lessonsDataService.lessons.length) {
 			await this.lessonsDataService.refreshLessons();
 			await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
 		}
-		let stat = await this.statisticHttpService.getStatisticsOfLesson(this.lessonId);
 
-		if (!this.lessonsDataService.getLessonById(this.lessonId).statistics
-			.find(stat => stat.sentenceId === this.sentenceId)) {
-			const userId = await this.storage.get(this.globals.USER_ID_KEY);
+		await this.createAndPostStatisticsIfNotExists();
+
+		this.getData();
+	}
+
+	async createAndPostStatisticsIfNotExists() {
+		if (!this.curStats()) {
 			this.lessonsDataService.createNewStatisticRecord(
 				this.sentenceId,
 				this.lessonId,
-				userId,
+				this.globals.userId,
 				this.lessonsDataService.getSentenceByIds(this.lessonId, this.sentenceId).words
 			);
-		}
-
-		if (!stat || !stat.find(elem => elem.sentenceId === this.sentenceId)) {
-			this.statisticHttpService.postNewStatisticsRecord(
+			await this.statisticHttpService.postNewStatisticsRecord(
 				this.lessonId,
 				this.sentenceId
 			);
 		}
-
-		this.getData();
 	}
 
 	private createSpan(isHidden: boolean, indexOfHidden?: number): HTMLElement {
@@ -364,15 +362,17 @@ export class SentenceGuessPage implements OnInit {
 			path.indexOf('&')), 'current=' + this.curSentence().id);
 		this.location.go(path);
 
-		if (this.statisticsDeltasArray.findIndex(elem => elem[0] === this.curSentence().id) === -1) {
-			const stats = this.curStats();
-			this.statisticsDeltasArray.push([
-				this.curSentence().id,
-				stats.wrongAnswers,
-				stats.hintUsages + stats.giveUps,
-				stats.correctAnswers
-			]);
-		}
+		this.createAndPostStatisticsIfNotExists().then(() => {
+			if (this.statisticsDeltasArray.findIndex(elem => elem[0] === this.curSentence().id) === -1) {
+				const stats = this.curStats();
+				this.statisticsDeltasArray.push([
+					this.curSentence().id,
+					stats.wrongAnswers,
+					stats.hintUsages + stats.giveUps,
+					stats.correctAnswers
+				]);
+			}
+		});
 	}
 
 	markAsSolved() {
