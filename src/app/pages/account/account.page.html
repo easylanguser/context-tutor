@@ -11,7 +11,7 @@
 
   <ion-content id="outer-content" scrollY="false">
     <div padding-top text-center>
-      <img id="user-avatar" class="avatar" (click)="openChooser()" src="assets/img/account_icon.svg" alt="avatar">
+      <img id="user-avatar" class="avatar" (click)="openChooser()" [src]="this.globals.userAvatar || 'assets/img/account_icon.svg'" alt="avatar">
       <input id="file-input" type="file" name="name" style="display: none;" />
       <div id="user-email">{{userEmail}}</div>
       <ion-button class="list-block" (click)="changePassword()">Change password</ion-button>

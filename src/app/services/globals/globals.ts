@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { SafeUrl } from '@angular/platform-browser';
 
 @Injectable()
 export class Globals {
 	// VARIABLES 
 
 	userId: number;
+
+	userAvatar: SafeUrl;
 
 	isDemo: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	isDemoHasChanged: boolean;

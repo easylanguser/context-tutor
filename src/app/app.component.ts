@@ -12,6 +12,7 @@ import { UserHttpService } from './services/http/users/user-http.service';
 import { Storage } from '@ionic/storage';
 import { Globals } from './services/globals/globals';
 import * as anime from 'animejs';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
 	selector: 'app-root',
@@ -33,10 +34,11 @@ export class AppComponent {
 		private storage: Storage,
 		private alertController: AlertController,
 		private location: Location,
+		private sanitizer: DomSanitizer,
 		private globals: Globals,
 		private userHttpService: UserHttpService,
 		private navController: NavController) {
-		this.initializeApp(location.path());
+		this.initializeApp(this.location.path());
 	}
 
 	private getParams(url): NavigationOptions {
@@ -136,9 +138,8 @@ export class AppComponent {
 
 	private async loadAvatar() {
 		const image = await this.storage.get(this.globals.USER_AVATAR_KEY);
-		const avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
 		if (image) {
-			avatars[0].src = image;
+			this.globals.userAvatar = this.sanitizer.bypassSecurityTrustUrl(image);
 		} else {
 			const blob = await this.userHttpService.getAvatar();
 			if (blob.size === 19) {
@@ -149,7 +150,7 @@ export class AppComponent {
 			reader.onloadend = () => {
 				const image = String(reader.result);
 				this.storage.set(this.globals.USER_AVATAR_KEY, image);
-				avatars[0].src = image;
+				this.globals.userAvatar = this.sanitizer.bypassSecurityTrustUrl(image);
 			}
 		}
 	}

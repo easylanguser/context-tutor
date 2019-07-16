@@ -8,6 +8,7 @@ import { UserHttpService } from 'src/app/services/http/users/user-http.service';
 import { Storage } from '@ionic/storage';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Globals } from 'src/app/services/globals/globals';
+import { DomSanitizer } from '@angular/platform-browser';
 
 interface HTMLInputEvent extends Event {
 	target: HTMLInputElement & EventTarget;
@@ -21,7 +22,6 @@ interface HTMLInputEvent extends Event {
 
 export class AccountPage {
 
-	avatars: HTMLCollectionOf<HTMLImageElement>;
 	userEmail: string;
 
 	constructor(
@@ -30,12 +30,12 @@ export class AccountPage {
 		private httpService: HttpService,
 		private alertController: AlertController,
 		private utils: UtilsService,
+		private sanitizer: DomSanitizer,
 		private globals: Globals,
 		private router: Router,
 		private storage: Storage) { }
 
 	ionViewDidEnter() {
-		this.avatars = <HTMLCollectionOf<HTMLImageElement>>(document.getElementsByClassName('avatar'));
 		this.checkTokenAndGetInfo();
 		this.addAvatarClickHandler();
 	}
@@ -57,8 +57,7 @@ export class AccountPage {
 					reader.onloadend = () => {
 						const image = String(reader.result);
 						this.storage.set(this.globals.USER_AVATAR_KEY, image);
-						this.avatars[0].src = image;
-						this.avatars[1].src = image;
+						this.globals.userAvatar = this.sanitizer.bypassSecurityTrustUrl(image);
 						this.utils.dismissLoader();
 					}
 				})
@@ -76,11 +75,6 @@ export class AccountPage {
 	}
 
 	async getInfo() {
-		const avatar = await this.storage.get(this.globals.USER_AVATAR_KEY);
-		if (avatar) {
-			this.avatars[1].src = avatar;
-		}
-		
 		const email = await this.storage.get(this.globals.USER_EMAIL_KEY);
 		if (email) {
 			this.userEmail = email;
