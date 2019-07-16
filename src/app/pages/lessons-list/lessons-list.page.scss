@@ -160,11 +160,7 @@ ion-toolbar {
         width: 4vh;
         float: right;
         margin-top: 4vh;
-        margin-right: 6vw;
-
-        @media (min-width: 992px) {
-            margin-right: 4vw;
-        }
+        margin-right: 4vw;
     }
 
     #share-icon {

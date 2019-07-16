@@ -4,7 +4,7 @@ import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
-import { IonItemSliding, AlertController, NavController, ToastController, LoadingController, IonList } from '@ionic/angular';
+import { IonItemSliding, AlertController, NavController, ToastController, IonList } from '@ionic/angular';
 import * as anime from 'animejs';
 import * as _ from 'lodash';
 import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
@@ -268,13 +268,18 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		} else {
 			const allSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
 			if (type === 2) {
-				this.displayedSentences = allSentences.filter(sentence =>
-					this.lessonsDataService.getStatisticsOfSentence(sentence).wrongAnswers > 0
-				);
+				this.displayedSentences = allSentences.filter(sentence => {
+					const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
+					return stat && stat.wrongAnswers > 0;
+				});
 			} else {
-				this.displayedSentences = allSentences.filter(sentence =>
-					this.utils.redAndYellowFilterSentence(this.lessonsDataService.getStatisticsOfSentence(sentence))
-				);
+				this.displayedSentences = allSentences.filter(sentence => {
+					const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
+					if (!stat) {
+						return false;
+					}
+					return this.utils.redAndYellowFilterSentence(stat);
+				});
 			}
 		}
 		await this.utils.dismissLoader();

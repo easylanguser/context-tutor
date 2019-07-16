@@ -4,7 +4,6 @@ import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.s
 import { NavController, Platform } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { Statistics } from 'src/app/models/statistics';
 import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
 import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
 import { Storage } from '@ionic/storage';
@@ -30,7 +29,6 @@ export class SentenceAddingPage implements OnInit {
 	constructor(
 		private platform: Platform,
 		private navController: NavController,
-		private storage: Storage,
 		private sentenceHttpService: SentenceHttpService,
 		private lessonHttpService: LessonHttpService,
 		private route: ActivatedRoute,

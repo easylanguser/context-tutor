@@ -127,7 +127,6 @@ export class LessonsDataService {
 
 	getStatisticsOfSentence(sentence: Sentence): Statistics {
 		let lessonToSearchIn = this.lessons.find(lesson => lesson.id === sentence.lessonId);
-
 		if (!lessonToSearchIn) {
 			lessonToSearchIn = this.lessons.find(lesson => lesson.parentId === sentence.lessonId);
 		}

@@ -4,10 +4,9 @@ import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { UserHttpService } from 'src/app/services/http/users/user-http.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Storage } from '@ionic/storage';
-import { Globals } from 'src/app/services/globals/globals';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 interface IUserInfo {
 	id: number,
@@ -51,8 +50,7 @@ export class ShareLessonModal {
 		private formBuilder: FormBuilder,
 		private lessonHttpService: LessonHttpService,
 		private lessonsDataService: LessonsDataService,
-		private globals: Globals,
-		private storage: Storage) {
+		private utils: UtilsService) {
 		this.lessonId = Number(this.navParams.get('lessonId'));
 		this.emailSearchForm = this.formBuilder.group({
 			email: ['', [Validators.required, Validators.minLength(6)]]
@@ -100,7 +98,10 @@ export class ShareLessonModal {
 				name: lesson.name,
 				url: lesson.url,
 				parentId: lesson.parentId ? lesson.parentId : lesson.id
-			}).then(() => this.dismissModal());
+			}).then(res => {
+				this.utils.showToast('You have successfully shared lesson ' + res['name']);
+				this.dismissModal();
+			});
 		}
 	}
 

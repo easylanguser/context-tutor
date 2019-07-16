@@ -1,4 +1,4 @@
-import { Component, ErrorHandler } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { HttpService } from '../../services/http/rest/http.service';
 import { AlertController } from '@ionic/angular';

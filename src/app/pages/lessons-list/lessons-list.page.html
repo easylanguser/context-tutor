@@ -62,9 +62,9 @@
           <ion-item-option color="secondary" (click)="openLink(slidingItem, lesson.url)">
             Open link
           </ion-item-option>
-          <ion-item-option *ngIf="!this.globals.getIsDemo() && !lesson.parentId" color="warning"
+          <ion-item-option *ngIf="!this.globals.getIsDemo()" color="warning"
             (click)="editItem(slidingItem, lesson.id)">
-            Edit
+            Edit Name
           </ion-item-option>
           <ion-item-option *ngIf="!this.globals.getIsDemo()" color="danger"
             (click)="deleteItem(slidingItem, lesson.id)">
