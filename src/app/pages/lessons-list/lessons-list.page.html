@@ -40,9 +40,12 @@
     </ion-refresher>
 
     <ion-list no-padding no-margin style="padding-top: 2vh; padding-bottom: 8em;" #lessonsList>
-      <ion-item-sliding *ngFor="let lesson of this.displayedLessons;index as i" #slidingItem>
-        <ion-item class="lesson-ion-item" no-padding>
-          <div (click)="openLesson(lesson)" [ngClass]="{'dashed': this.globals.getIsDemo()}">
+        <ion-item *ngFor="let lesson of this.displayedLessons;index as i" class="lesson-ion-item" no-padding>
+          <div (mousedown)="mouseIsDown(lesson)"
+            (touchstart)="mouseIsDown(lesson)"
+            (mouseup)="mouseIsUp(lesson)"
+            (touchend)="mouseIsUp(lesson)"
+            [ngClass]="{'dashed': this.globals.getIsDemo()}">
             <div>
               <p>
                 {{lesson.name}}
@@ -57,25 +60,6 @@
             </div>
           </div>
         </ion-item>
-
-        <ion-item-options side="end">
-          <ion-item-option color="secondary" (click)="openLink(slidingItem, lesson.url)">
-            Open link
-          </ion-item-option>
-          <ion-item-option *ngIf="!this.globals.getIsDemo()" color="warning"
-            (click)="editItem(slidingItem, lesson.id)">
-            Edit Name
-          </ion-item-option>
-          <ion-item-option *ngIf="!this.globals.getIsDemo()" color="danger"
-            (click)="deleteItem(slidingItem, lesson.id)">
-            Delete
-          </ion-item-option>
-          <ion-item-option *ngIf="!this.globals.getIsDemo()" color="primary"
-            (click)="shareLesson(slidingItem, lesson)">
-            Share
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
     </ion-list>
   </ion-content>
 

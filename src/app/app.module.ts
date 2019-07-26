@@ -29,6 +29,7 @@ import { EditLessonTitlePageModule } from './pages/edit-lesson-title/edit-lesson
 import { Globals } from './services/globals/globals';
 import { ShareLessonModal } from './modals/share-lesson/share-lesson.modal';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { LongPressChooserComponent } from './components/long-press-chooser/long-press-chooser.component';
 
 export function jwtOptionsFactory(storage) {
 	return {
@@ -40,8 +41,8 @@ export function jwtOptionsFactory(storage) {
 }
 
 @NgModule({
-	declarations: [AppComponent, ShareLessonModal],
-	entryComponents: [ShareLessonModal],
+	declarations: [AppComponent, ShareLessonModal, LongPressChooserComponent],
+	entryComponents: [ShareLessonModal, LongPressChooserComponent],
 	imports: [BrowserModule, IonicModule.forRoot(),
 		AppRoutingModule,
 		ReactiveFormsModule,

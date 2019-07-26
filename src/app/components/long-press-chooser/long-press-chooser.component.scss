@@ -1,0 +1,22 @@
+ion-label {
+    text-align: center;
+
+    transition: --background 1s ease-in-out;
+    -webkit-transition: --background 1s ease-in-out;
+}
+
+ion-item {
+    cursor: pointer;
+}
+
+ion-item:hover {
+    --background: #8e8e8e;
+}
+
+ion-list {
+    padding: 0;
+    margin: 0;
+    >:last-child {
+        --inner-border-width: 0;
+    }
+}

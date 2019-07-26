@@ -52,6 +52,14 @@ input:-webkit-autofill {
     color: #FF7575;
 }
 
+.green-text {
+    color: green;
+}
+
+.yellow-text {
+    color: #d2d212;
+}
+
 .blue-text {
     color: var(--ion-color-primary);
 }
@@ -96,13 +104,13 @@ ion-toast {
 }
 
 @media (min-width: 992px) {
+
     ion-toast {
         width: 67vw;
         margin-left: 30.5vw;
     }
 
     .sc-ion-loading-md-h.sc-ion-loading-md-s, .sc-ion-modal-md.md.hydrated,
-    .sc-ion-loading-ios.ios.backdrop-no-tappable.hydrated,
     .modal-wrapper.md.sc-ion-modal-md {
         .loading-wrapper.sc-ion-loading-md {
             margin-left: 0;

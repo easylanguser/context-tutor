@@ -1,16 +1,14 @@
 import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { IonItemSliding, AlertController, NavController, IonList, ModalController } from '@ionic/angular';
+import { NavController, IonList, PopoverController } from '@ionic/angular';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import * as _ from 'lodash';
-import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Globals } from 'src/app/services/globals/globals';
-import { ShareLessonModal } from 'src/app/modals/share-lesson/share-lesson.modal';
+import { LongPressChooserComponent } from 'src/app/components/long-press-chooser/long-press-chooser.component';
 
-const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
+
 
 @Component({
 	selector: 'page-lessons-list',
@@ -25,18 +23,18 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
 
+	popover: HTMLIonPopoverElement = null;
+	pressDuration: number = 0;
+	interval: any;
 	contentIsScrolled: boolean = false;
 
 	constructor(
+		private popoverController: PopoverController,
 		private navController: NavController,
 		private lessonsDataService: LessonsDataService,
-		private alertController: AlertController,
-		private lessonHttpService: LessonHttpService,
 		private utils: UtilsService,
 		public globals: Globals,
-		private browser: InAppBrowser,
-		private cdRef: ChangeDetectorRef,
-		private modalController: ModalController) { }
+		private cdRef: ChangeDetectorRef) { }
 
 	async ngOnInit() {
 		await this.utils.createAndShowLoader('Loading');
@@ -113,16 +111,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		this.updateCharts();
 	}
 
-	async openLink(slidingItem: IonItemSliding, lessonUrl: string) {
-		if (lessonUrl.match(urlRegex)) {
-			slidingItem.close().then(() => {
-				this.browser.create(lessonUrl);
-			});
-		} else {
-			this.utils.showToast('Lesson URL is not valid');
-		}
-	}
-
 	private updateCharts() {
 		let i = 0;
 		for (const lesson of this.displayedLessons) {
@@ -152,51 +140,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		}
 
 		this.cdRef.detectChanges();
-	}
-
-	async deleteItem(slidingItem: IonItemSliding, lessonId: number) {
-		const alert = await this.alertController.create({
-			message: 'Are you sure you want to delete this lesson?',
-			buttons: [
-				{
-					text: 'Cancel',
-					role: 'cancel',
-					handler: () => {
-						slidingItem.close();
-					}
-				},
-				{
-					text: 'Delete',
-					handler: async () => {
-						slidingItem.close();
-						await this.lessonHttpService.deleteLesson(lessonId);
-						this.lessonsDataService.removeLesson(lessonId);
-
-						if (this.displayedLessons.length === 0) {
-							await this.getData();
-						}
-					}
-				}
-			]
-		});
-		await alert.present();
-	}
-
-	async shareLesson(slidingItem: IonItemSliding, lesson: Lesson) {
-		slidingItem.close();
-		const modal = await this.modalController.create({
-			component: ShareLessonModal,
-			componentProps: {
-				'lessonId': lesson.id
-			}
-		});
-		return await modal.present();
-
-	}
-
-	async editItem(slidingItem: IonItemSliding, lessonId: number) {
-		slidingItem.close();
-		this.navController.navigateForward(['edit-lesson-title'], { queryParams: { lessonId: lessonId } });
 	}
 
 	async doRefresh(event) {
@@ -235,6 +178,36 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		}
 
 		await this.utils.dismissLoader();
+	}
+
+	mouseIsDown(lesson: Lesson) {
+		this.popover = null;
+		this.interval = setInterval(async () => {
+			this.pressDuration++;
+			if (this.pressDuration > 7) {
+				clearInterval(this.interval);
+				this.pressDuration = 0;
+				if (!this.popover) {
+					this.popover = await this.popoverController.create({
+						component: LongPressChooserComponent,
+						componentProps: {
+							lesson: lesson
+						},
+						animated: true,
+						showBackdrop: true
+					});
+					return await this.popover.present();
+				}
+			}
+		}, 100);
+	}
+
+	mouseIsUp(lesson: Lesson) {
+		if (this.pressDuration <= 7 && !this.popover) {
+			this.openLesson(lesson)
+		}
+		clearInterval(this.interval);
+		this.pressDuration = 0;
 	}
 
 	openLesson(lesson: Lesson) {
