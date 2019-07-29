@@ -79,12 +79,12 @@ ion-icon {
 	text-align: center;
 	font-size: 50px;
 	color: white;
-	background-color: #7dddff;
+	background-color: var(--ion-color-secondary);
 	border-radius: 25px;
     outline: none;
     
-    transition: margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
-    -webkit-transition: margin-left 300ms ease-in-out, margin-top 300ms ease-in-out;
+    transition: left 300ms ease-in-out, top 300ms ease-in-out;
+    -webkit-transition: left 300ms ease-in-out, top 300ms ease-in-out;
 }
 
 #submit-btn, #cancel-btn {

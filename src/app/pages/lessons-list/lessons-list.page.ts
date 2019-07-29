@@ -8,8 +8,6 @@ import * as _ from 'lodash';
 import { Globals } from 'src/app/services/globals/globals';
 import { LongPressChooserComponent } from 'src/app/components/long-press-chooser/long-press-chooser.component';
 
-
-
 @Component({
 	selector: 'page-lessons-list',
 	templateUrl: 'lessons-list.page.html',
@@ -22,11 +20,14 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	@ViewChild('lessonsList', { static: false }) lessonsList: IonList;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
+	filter: string = 'all';
 
 	popover: HTMLIonPopoverElement = null;
 	pressDuration: number = 0;
 	interval: any;
 	contentIsScrolled: boolean = false;
+	xDown = null;
+	yDown = null;
 
 	constructor(
 		private popoverController: PopoverController,
@@ -37,9 +38,70 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private cdRef: ChangeDetectorRef) { }
 
 	async ngOnInit() {
-		await this.utils.createAndShowLoader('Loading');
 		await this.getData();
 		this.addFabsHandler();
+	}
+
+	handleTouchStart(evt) {
+		const firstTouch = evt.type === 'mousedown' ?
+			evt :
+		 	(evt.touches || evt.originalEvent.touches)[0];
+		this.xDown = firstTouch.clientX;
+		this.yDown = firstTouch.clientY;
+	}
+
+	handleTouchMove(evt) {
+		if (!(this.xDown && this.yDown)) {
+			return;
+		}
+
+		let xDiff, yDiff, minDistance = 8;
+		if (evt.type === 'mouseup') {
+			xDiff = this.xDown - evt.clientX;
+			yDiff = this.yDown - evt.clientY;
+			minDistance *= 10;
+		} else {
+			xDiff = this.xDown - evt.touches[0].clientX;
+			yDiff = this.yDown - evt.touches[0].clientY;
+		}
+		
+		if (Math.abs(xDiff) > Math.abs(yDiff)) {
+			if (xDiff > minDistance) {
+				this.changeFilter(false);
+			} else if (xDiff < -minDistance) {
+				this.changeFilter(true);
+			}
+		}
+
+		this.xDown = null;
+		this.yDown = null;
+	}
+
+	changeFilter(isLeftSwipe: boolean) {
+		if (this.filter === 'all') {
+			this.filter = isLeftSwipe ? 'not-correct' : 'almost-correct';
+		} else if (this.filter === 'almost-correct') {
+			this.filter = isLeftSwipe ? 'all' : 'not-correct';
+		} else {
+			this.filter = isLeftSwipe ? 'almost-correct' : 'all';
+		}
+	}
+
+	async filterClick() {
+		await this.lessonsList.closeSlidingItems();
+		await this.utils.createAndShowLoader('Loading');
+
+		const allLessons = this.lessonsDataService.lessons;
+		if (this.filter === 'all') {
+			this.displayedLessons = allLessons;
+		} else if (this.filter === 'almost-correct') {
+			this.displayedLessons = allLessons.filter(this.utils.redAndYellowFilterLesson);
+		} else {
+			this.displayedLessons = allLessons.filter(lesson =>
+				lesson.statistics.some(stat => stat.wrongAnswers > 0)
+			);
+		}
+
 		await this.utils.dismissLoader();
 	}
 
@@ -156,26 +218,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		await this.utils.createAndShowLoader('Loading...');
 		await this.lessonsDataService.refreshLessons();
 		this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
-
-		await this.utils.dismissLoader();
-	}
-
-	async filterClick(type: number) {
-		await this.lessonsList.closeSlidingItems();
-		await this.utils.createAndShowLoader('Loading');
-
-		const allLessons = this.lessonsDataService.lessons;
-		if (type === 1) {
-			this.displayedLessons = allLessons;
-		} else {
-			if (type === 2) {
-				this.displayedLessons = allLessons.filter(this.utils.redAndYellowFilterLesson);
-			} else {
-				this.displayedLessons = allLessons.filter(lesson =>
-					lesson.statistics.some(stat => stat.wrongAnswers > 0)
-				);
-			}
-		}
 
 		await this.utils.dismissLoader();
 	}

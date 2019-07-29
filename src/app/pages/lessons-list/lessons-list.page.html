@@ -13,14 +13,15 @@
     </ion-toolbar>
 
     <div id="segments-div">
-      <ion-segment id="lessons-filter-segment" mode="ios">
-        <ion-segment-button value="all" mode="ios" (click)="filterClick(1)" checked="true">
+      <ion-segment id="lessons-filter-segment" mode="ios"
+        [(ngModel)]="filter" (ionChange)="filterClick()">
+        <ion-segment-button value="all" mode="ios">
           All
         </ion-segment-button>
-        <ion-segment-button id="center-segment" mode="ios" (click)="filterClick(2)">
+        <ion-segment-button value="almost-correct" id="center-segment" mode="ios">
           Almost correct
         </ion-segment-button>
-        <ion-segment-button mode="ios" (click)="filterClick(3)">
+        <ion-segment-button value="not-correct" mode="ios">
           Not correct
         </ion-segment-button>
       </ion-segment>
@@ -32,7 +33,12 @@
     Click button &#8680; <br>to add your own <b> lesson</b>
   </span>
 
-  <ion-content id="list-scroll" style="z-index: 0;">
+  <ion-content id="list-scroll"
+    (touchstart)="handleTouchStart($event)"
+    (touchmove)="handleTouchMove($event)"
+    (mousedown)="handleTouchStart($event)"
+    (mouseup)="handleTouchMove($event)"
+    style="z-index: 0">
 
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">
@@ -40,31 +46,28 @@
     </ion-refresher>
 
     <ion-list no-padding no-margin style="padding-top: 2vh; padding-bottom: 8em;" #lessonsList>
-        <ion-item *ngFor="let lesson of this.displayedLessons;index as i" class="lesson-ion-item" no-padding>
-          <div (mousedown)="mouseIsDown(lesson)"
-            (touchstart)="mouseIsDown(lesson)"
-            (mouseup)="mouseIsUp(lesson)"
-            (touchend)="mouseIsUp(lesson)"
-            [ngClass]="{'dashed': this.globals.getIsDemo()}">
-            <div>
-              <p>
-                {{lesson.name}}
-              </p>
-              <span>
-                {{lesson.displayedDate}}
-              </span>
-            </div>
-            <ion-icon id="share-icon" *ngIf="lesson.parentId" name="md-share" ></ion-icon>
-            <div>
-              <canvas #chartsid width="50" height="50"></canvas>
-            </div>
+      <ion-item *ngFor="let lesson of this.displayedLessons;index as i" class="lesson-ion-item" no-padding>
+        <div (mousedown)="mouseIsDown(lesson)" (touchstart)="mouseIsDown(lesson)" (mouseup)="mouseIsUp(lesson)"
+          (touchend)="mouseIsUp(lesson)" [ngClass]="{'dashed': this.globals.getIsDemo()}">
+          <div>
+            <p>
+              {{lesson.name}}
+            </p>
+            <span>
+              {{lesson.displayedDate}}
+            </span>
           </div>
-        </ion-item>
+          <ion-icon id="share-icon" *ngIf="lesson.parentId" name="md-share"></ion-icon>
+          <div>
+            <canvas #chartsid width="50" height="50"></canvas>
+          </div>
+        </div>
+      </ion-item>
     </ion-list>
   </ion-content>
 
-  <ion-fab id="add-lesson-fab" [ngClass]="{'hidden-btn': contentIsScrolled}"
-    (click)="addLessonFile()" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab id="add-lesson-fab" [ngClass]="{'hidden-btn': contentIsScrolled}" (click)="addLessonFile()" vertical="bottom"
+    horizontal="end" slot="fixed">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

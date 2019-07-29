@@ -4,11 +4,12 @@ import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
-import { IonItemSliding, AlertController, NavController, ToastController, IonList } from '@ionic/angular';
+import { IonItemSliding, AlertController, NavController, ToastController, IonList, PopoverController } from '@ionic/angular';
 import * as anime from 'animejs';
 import * as _ from 'lodash';
 import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
 import { Globals } from 'src/app/services/globals/globals';
+import { LongPressChooserComponent } from 'src/app/components/long-press-chooser/long-press-chooser.component';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -25,19 +26,25 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	@ViewChildren('chartsid') pieCanvases: any;
 	@ViewChild('sentencesList', { static: false }) sentencesList: IonList;
 	pieCharts: Array<Chart> = [];
+
+	filter: string = 'all';
+	popover: HTMLIonPopoverElement = null;
+	pressDuration: number = 0;
+	interval: any;
 	toast: HTMLIonToastElement = null;
 	addButtonIsAnimating: boolean = false;
 	contentIsScrolled: boolean = false;
+	xDown = null;
+	yDown = null;
 
 	constructor(
+		private popoverController: PopoverController,
 		private toastController: ToastController,
-		private alertController: AlertController,
 		private utils: UtilsService,
 		public globals: Globals,
 		private route: ActivatedRoute,
 		private navController: NavController,
 		public lessonsDataService: LessonsDataService,
-		private sentenceHttpService: SentenceHttpService,
 		private cdRef: ChangeDetectorRef) { }
 
 	async ngOnInit() {
@@ -104,36 +111,83 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		}
 	}
 
+	handleTouchStart(evt) {
+		const firstTouch = evt.type === 'mousedown' ?
+			evt :
+			(evt.touches || evt.originalEvent.touches)[0];
+		this.xDown = firstTouch.clientX;
+		this.yDown = firstTouch.clientY;
+	}
+
+	handleTouchMove(evt) {
+		if (!(this.xDown && this.yDown)) {
+			return;
+		}
+
+		let xDiff, yDiff, minDistance = 8;
+		if (evt.type === 'mouseup') {
+			xDiff = this.xDown - evt.clientX;
+			yDiff = this.yDown - evt.clientY;
+			minDistance *= 10;
+		} else {
+			xDiff = this.xDown - evt.touches[0].clientX;
+			yDiff = this.yDown - evt.touches[0].clientY;
+		}
+		
+		if (Math.abs(xDiff) > Math.abs(yDiff)) {
+			if (xDiff > minDistance) {
+				this.changeFilter(false);
+			} else if (xDiff < -minDistance) {
+				this.changeFilter(true);
+			}
+		}
+		
+		this.xDown = null;
+		this.yDown = null;
+	}
+
+	changeFilter(isLeftSwipe: boolean) {
+		if (this.filter === 'all') {
+			this.filter = isLeftSwipe ? 'not-correct' : 'almost-correct';
+		} else if (this.filter === 'almost-correct') {
+			this.filter = isLeftSwipe ? 'all' : 'not-correct';
+		} else {
+			this.filter = isLeftSwipe ? 'almost-correct' : 'all';
+		}
+	}
+
+	async filterClick() {
+		await this.sentencesList.closeSlidingItems();
+		await this.utils.createAndShowLoader('Loading');
+
+		if (this.filter === 'all') {
+			await this.getData();
+		} else {
+			const allSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
+			if (this.filter === 'not-correct') {
+				this.displayedSentences = allSentences.filter(sentence => {
+					const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
+					return stat && stat.wrongAnswers > 0;
+				});
+			} else {
+				this.displayedSentences = allSentences.filter(sentence => {
+					const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
+					if (!stat) {
+						return false;
+					}
+					return this.utils.redAndYellowFilterSentence(stat);
+				});
+			}
+		}
+		await this.utils.dismissLoader();
+	}
+
 	private syncCharts() {
 		this.pieCharts = [];
 		for (const i in this.pieCanvases._results) {
 			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, this.utils.getNewChartObject()));
 		}
 		this.updateCharts();
-	}
-
-	async deleteItem(slidingItem: IonItemSliding, lessonId: number, sentenceId: number, index: number) {
-		const alert = await this.alertController.create({
-			message: 'Are you sure you want to delete this sentence?',
-			buttons: [
-				{
-					text: 'Cancel',
-					role: 'cancel',
-					handler: () => {
-						slidingItem.close();
-					}
-				},
-				{
-					text: 'Delete',
-					handler: async () => {
-						slidingItem.close();
-						await this.sentenceHttpService.deleteSentence(sentenceId);
-						this.lessonsDataService.removeSentence(lessonId, sentenceId);
-					}
-				}
-			]
-		});
-		await alert.present();
 	}
 
 	private updateCharts() {
@@ -161,6 +215,40 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		}
 
 		this.cdRef.detectChanges();
+	}
+
+	mouseIsDown(sentence: Sentence) {
+		if (!this.parentId) {
+			this.popover = null;
+			this.interval = setInterval(async () => {
+				this.pressDuration++;
+				if (this.pressDuration > 7) {
+					clearInterval(this.interval);
+					this.pressDuration = 0;
+					if (!this.popover) {
+						this.popover = await this.popoverController.create({
+							component: LongPressChooserComponent,
+							componentProps: {
+								sentence: sentence
+							},
+							animated: true,
+							showBackdrop: true
+						});
+						return await this.popover.present();
+					}
+				}
+			}, 100);
+		}
+	}
+
+	mouseIsUp(sentence: Sentence) {
+		if (!this.parentId) {
+			if (this.pressDuration <= 7 && !this.popover) {
+				this.openSentence(sentence.id);
+			}
+			clearInterval(this.interval);
+			this.pressDuration = 0;
+		}
 	}
 
 	async addSentenceToLesson() {
@@ -257,31 +345,5 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		} else {
 			this.displayedSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
 		}
-	}
-
-	async filterClick(type: number) {
-		await this.sentencesList.closeSlidingItems();
-		await this.utils.createAndShowLoader('Loading');
-
-		if (type === 1) {
-			await this.getData();
-		} else {
-			const allSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
-			if (type === 2) {
-				this.displayedSentences = allSentences.filter(sentence => {
-					const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
-					return stat && stat.wrongAnswers > 0;
-				});
-			} else {
-				this.displayedSentences = allSentences.filter(sentence => {
-					const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
-					if (!stat) {
-						return false;
-					}
-					return this.utils.redAndYellowFilterSentence(stat);
-				});
-			}
-		}
-		await this.utils.dismissLoader();
 	}
 }

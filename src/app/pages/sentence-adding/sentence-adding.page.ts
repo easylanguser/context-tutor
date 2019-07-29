@@ -39,18 +39,11 @@ export class SentenceAddingPage implements OnInit {
 			if (platform.is('android') || platform.is('ios')) {
 				selectionDelay = 700;
 			}
-		})
-		document.addEventListener('mouseup', this.showSelectionButton);
-		document.addEventListener('touchstart', this.showSelectionButton);
+		});
 	}
 
 	ngOnInit() {
 		document.getElementById("selectable-sentence-div").focus();
-		document.getElementById("selectable-sentence-div").addEventListener("paste", (e: ClipboardEvent) => {
-			e.preventDefault();
-			const text = e.clipboardData.getData("text/plain");
-			document.execCommand("insertText", false, text.replace(/^\s+|\s+$|\s+(?=\s)/g, ""));
-		});
 
 		this.sentenceToEditId = this.route.snapshot.queryParamMap.get('toEdit');
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
@@ -61,16 +54,6 @@ export class SentenceAddingPage implements OnInit {
 			this.globals.sharedText[0];
 
 		this.updateTitle();
-
-		document.getElementById("selectable-sentence-div").addEventListener("input", () => {
-			indexesArray = [];
-			lastSelOffsets = [0, 0];
-			lastSelCoords = [0, 0];
-			const allHighlights = document.getElementsByClassName('border');
-			for (let i = allHighlights.length - 1; i >= 0; i--) {
-				allHighlights[i].parentNode.removeChild(allHighlights[i]);
-			}
-		});
 	}
 
 	goBack() {
@@ -79,6 +62,22 @@ export class SentenceAddingPage implements OnInit {
 
 	ionViewDidEnter() {
 		this.updateTitle();
+	}
+
+	formatInsertedText(event: ClipboardEvent) {
+		event.preventDefault();
+		const text = event.clipboardData.getData("text/plain");
+		document.execCommand("insertText", false, text.replace(/^\s+|\s+$|\s+(?=\s)/g, ""));
+	}
+
+	removeHighlights() {
+		indexesArray = [];
+		lastSelOffsets = [0, 0];
+		lastSelCoords = [0, 0];
+		const allHighlights = document.getElementsByClassName('border');
+		for (let i = allHighlights.length - 1; i >= 0; i--) {
+			allHighlights[i].parentNode.removeChild(allHighlights[i]);
+		}
 	}
 
 	updateTitle() {
@@ -170,22 +169,20 @@ export class SentenceAddingPage implements OnInit {
 		});
 	}
 
-	
-
 	showSelectionButton() {
 		setTimeout(function () {
 			if (window.getSelection().toString() === "") return;
 			const selection: any = window.getSelection().getRangeAt(0).getClientRects()[0];
-			const leftMargin: string = String(selection.x) + 'px';
+			const left: string = String(selection.x) + 'px';
 			const selectBtn = <HTMLDivElement>document.getElementsByClassName("select-btn")[0];
 			const btnStyle = selectBtn.style;
 			btnStyle.position = 'absolute';
 			btnStyle.display = 'block';
-			btnStyle.marginLeft = window.innerWidth < 992 ?
-				leftMargin :
-				'calc(' + leftMargin + ' - 28vw)';
-			btnStyle.marginTop = String(selection.y + 60) + 'px';
-			selectBtn.id = btnStyle.marginTop;
+			btnStyle.left = window.innerWidth < 992 ?
+				left :
+				'calc(' + left + ' - 28vw)';
+			btnStyle.top = String(selection.y + 60) + 'px';
+			selectBtn.id = btnStyle.top;
 
 			lastSelOffsets[0] = window.getSelection().getRangeAt(0).startOffset;
 			lastSelOffsets[1] = window.getSelection().getRangeAt(0).endOffset;

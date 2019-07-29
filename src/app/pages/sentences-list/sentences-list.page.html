@@ -13,14 +13,15 @@
     </ion-toolbar>
 
     <div id="segments-div">
-      <ion-segment id="sentences-filter-segment" mode="ios">
-        <ion-segment-button value="all" mode="ios" (click)="filterClick(1)" checked="true">
+      <ion-segment id="sentences-filter-segment" mode="ios"
+        [(ngModel)]="filter" (ionChange)="filterClick()">
+        <ion-segment-button value="all" mode="ios" checked="true">
           All
         </ion-segment-button>
-        <ion-segment-button id="center-segment" mode="ios" (click)="filterClick(2)">
+        <ion-segment-button value="almost-correct" id="center-segment" mode="ios">
           Almost correct
         </ion-segment-button>
-        <ion-segment-button mode="ios" (click)="filterClick(3)">
+        <ion-segment-button value="not-correct" mode="ios">
           Not correct
         </ion-segment-button>
       </ion-segment>
@@ -28,7 +29,12 @@
 
   </ion-header>
 
-  <ion-content id="sentences-list-scroll" style="z-index: 0;">
+  <ion-content id="sentences-list-scroll"
+    (touchstart)="handleTouchStart($event)"
+    (touchmove)="handleTouchMove($event)"
+    (mousedown)="handleTouchStart($event)"
+    (mouseup)="handleTouchMove($event)"
+    style="z-index: 0;">
 
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">
@@ -36,39 +42,33 @@
     </ion-refresher>
 
     <ion-list id="sentences-list" #sentencesList no-padding no-margin>
-      <ion-item-sliding #slidingItem *ngFor="let sentence of this.displayedSentences;index as i">
-        <ion-item class="sentence-ion-item" no-padding>
-          <div (click)="openSentence(sentence.id)" [ngClass]="{'dashed': this.globals.getIsDemo()}">
+      <ion-item class="sentence-ion-item" *ngFor="let sentence of this.displayedSentences;index as i" no-padding>
+        <div (click)="openSentence(sentence.id)" [ngClass]="{'dashed': this.globals.getIsDemo()}"
+          (mousedown)="mouseIsDown(sentence)" (touchstart)="mouseIsDown(sentence)" (mouseup)="mouseIsUp(sentence)"
+          (touchend)="mouseIsUp(sentence)">
+          <div>
+            <p [innerHTML]="sentence.sentencesListSentence"></p>
+          </div>
+          <div>
             <div>
-              <p [innerHTML]="sentence.sentencesListSentence"></p>
-            </div>
-            <div>
-              <div>
-                <canvas #chartsid width="50" height="50"></canvas>
-              </div>
+              <canvas #chartsid width="50" height="50"></canvas>
             </div>
           </div>
-        </ion-item>
-
-        <ion-item-options side="end" *ngIf="!this.globals.getIsDemo() && !this.parentId">
-          <ion-item-option class="delete-sliding-option" color="danger"
-            (click)="deleteItem(slidingItem, sentence.lessonId, sentence.id, index)">
-            Delete
-          </ion-item-option>
-        </ion-item-options>
-
-      </ion-item-sliding>
+        </div>
+      </ion-item>
     </ion-list>
 
   </ion-content>
 
-  <ion-fab id="add-sentence-fab" *ngIf="!this.globals.getIsDemo() && !this.parentId" [ngClass]="{'hidden-btn': contentIsScrolled}" vertical="bottom" horizontal="end">
+  <ion-fab id="add-sentence-fab" *ngIf="!this.globals.getIsDemo() && !this.parentId"
+    [ngClass]="{'hidden-btn': contentIsScrolled}" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="addSentenceToLesson()">
       <ion-icon name="ios-add-circle"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <ion-fab id="edit-sentence-fab" *ngIf="!this.globals.getIsDemo() && !this.parentId" [ngClass]="{'hidden-btn': contentIsScrolled}" vertical="bottom" horizontal="start">
+  <ion-fab id="edit-sentence-fab" *ngIf="!this.globals.getIsDemo() && !this.parentId"
+    [ngClass]="{'hidden-btn': contentIsScrolled}" vertical="bottom" horizontal="start">
     <ion-fab-button (click)="editSentence()">
       <ion-icon id="edit-sentence-icon" name="md-create"></ion-icon>
     </ion-fab-button>

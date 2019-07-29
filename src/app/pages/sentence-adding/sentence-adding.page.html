@@ -1,4 +1,6 @@
-<ion-content scrollY="false">
+<ion-content scrollY="false"
+    (mouseup)="showSelectionButton()"
+    (touchstart)="showSelectionButton()">
     <ion-header>
         <ion-toolbar id="toolbar" mode="ios">
 
@@ -18,7 +20,9 @@
         </ion-toolbar>
     </ion-header>
 
-    <div contenteditable="true" id="selectable-sentence-div">
+    <div contenteditable="true" id="selectable-sentence-div"
+        (input)="removeHighlights()"
+        (paste)="formatInsertedText($event)">
         {{sentence}}
     </div>
 

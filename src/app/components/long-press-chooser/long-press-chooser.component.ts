@@ -7,6 +7,8 @@ import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.ser
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Globals } from 'src/app/services/globals/globals';
+import { Sentence } from 'src/app/models/sentence';
+import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
 
 const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
 
@@ -18,6 +20,7 @@ const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-
 export class LongPressChooserComponent {
 
 	@Input("lesson") lesson: Lesson;
+	@Input("sentence") sentence: Sentence;
 
 	constructor(
 		private browser: InAppBrowser,
@@ -26,6 +29,7 @@ export class LongPressChooserComponent {
 		private popoverController: PopoverController,
 		private modalController: ModalController,
 		private lessonHttpService: LessonHttpService,
+		private sentenceHttpService: SentenceHttpService,
 		private utils: UtilsService,
 		private lessonsDataService: LessonsDataService,
 		public globals: Globals) { }
@@ -42,7 +46,8 @@ export class LongPressChooserComponent {
 
 	async deleteItem() {
 		const alert = await this.alertController.create({
-			message: 'Are you sure you want to delete this lesson?',
+			message: 'Are you sure you want to delete this ' +
+				(this.lesson ? 'lesson?' : 'sentence?'),
 			buttons: [
 				{
 					text: 'Cancel',
@@ -51,12 +56,13 @@ export class LongPressChooserComponent {
 				{
 					text: 'Delete',
 					handler: async () => {
-						await this.lessonHttpService.deleteLesson(this.lesson.id);
-						this.lessonsDataService.removeLesson(this.lesson.id);
-
-					/*  if (this.displayedLessons.length === 0) {
-							await this.getData();
-						} */
+						if (this.lesson) {
+							await this.lessonHttpService.deleteLesson(this.lesson.id);
+							this.lessonsDataService.removeLesson(this.lesson.id);
+						} else {
+							await this.sentenceHttpService.deleteSentence(this.sentence.id);
+							this.lessonsDataService.removeSentence(this.sentence.lessonId, this.sentence.id);
+						}
 					}
 				}
 			]
