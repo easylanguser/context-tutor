@@ -1,13 +1,12 @@
-import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
-import { IonItemSliding, AlertController, NavController, ToastController, IonList, PopoverController } from '@ionic/angular';
+import { NavController, ToastController, IonList, PopoverController } from '@ionic/angular';
 import * as anime from 'animejs';
 import * as _ from 'lodash';
-import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
 import { Globals } from 'src/app/services/globals/globals';
 import { LongPressChooserComponent } from 'src/app/components/long-press-chooser/long-press-chooser.component';
 
@@ -34,6 +33,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	toast: HTMLIonToastElement = null;
 	addButtonIsAnimating: boolean = false;
 	contentIsScrolled: boolean = false;
+	refresherIsPulled: boolean = false;
 	xDown = null;
 	yDown = null;
 
@@ -44,8 +44,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		public globals: Globals,
 		private route: ActivatedRoute,
 		private navController: NavController,
-		public lessonsDataService: LessonsDataService,
-		private cdRef: ChangeDetectorRef) { }
+		public lessonsDataService: LessonsDataService) { }
 
 	async ngOnInit() {
 		const showLoader = this.route.snapshot.queryParamMap.get('showLoader');
@@ -111,27 +110,74 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		}
 	}
 
-	handleTouchStart(evt) {
-		const firstTouch = evt.type === 'mousedown' ?
-			evt :
-			(evt.touches || evt.originalEvent.touches)[0];
-		this.xDown = firstTouch.clientX;
-		this.yDown = firstTouch.clientY;
+	getClickOrTouchEvent(event) {
+		return event.type === 'mousedown' ? event : (event.touches || event.originalEvent.touches)[0];
 	}
 
-	handleTouchMove(evt) {
+	mouseIsDown(sentence: Sentence) {
+		if (!this.parentId) {
+			this.popover = null;
+			this.interval = setInterval(async () => {
+				this.pressDuration++;
+				if (this.pressDuration > 7) {
+					clearInterval(this.interval);
+					this.pressDuration = 0;
+					if (!this.popover && !this.refresherIsPulled) {
+						this.popover = await this.popoverController.create({
+							component: LongPressChooserComponent,
+							componentProps: {
+								sentence: sentence
+							},
+							animated: true,
+							showBackdrop: true
+						});
+						await this.popover.present();
+					}
+				}
+			}, 100);
+		}
+	}
+
+	mouseIsUp(evt, sentence: Sentence) {
+		this.refresherIsPulled = false;
+		let xDiff, yDiff;
+		if (evt.type === 'mouseup') {
+			xDiff = this.xDown - evt.clientX;
+			yDiff = this.yDown - evt.clientY;
+		} else {
+			xDiff = this.xDown - evt.changedTouches[0].clientX;
+			yDiff = this.yDown - evt.changedTouches[0].clientY;
+		}
+
+		if (Math.abs(Math.abs(xDiff) - Math.abs(yDiff)) < 20 && !this.popover) {
+			this.openSentence(sentence.id);
+		}
+
+		clearInterval(this.interval);
+		this.pressDuration = 0;
+	}
+
+	handleTouchStart(evt) {
+		const firstTouch = this.getClickOrTouchEvent(evt);
+		if (firstTouch.clientX > 50) {
+			this.xDown = firstTouch.clientX;
+			this.yDown = firstTouch.clientY;
+		}
+	}
+
+	handleTouchEnd(evt) {
 		if (!(this.xDown && this.yDown)) {
 			return;
 		}
 
-		let xDiff, yDiff, minDistance = 8;
+		let xDiff, yDiff, minDistance = 6;
 		if (evt.type === 'mouseup') {
 			xDiff = this.xDown - evt.clientX;
 			yDiff = this.yDown - evt.clientY;
 			minDistance *= 10;
 		} else {
-			xDiff = this.xDown - evt.touches[0].clientX;
-			yDiff = this.yDown - evt.touches[0].clientY;
+			xDiff = this.xDown - evt.changedTouches[0].clientX;
+			yDiff = this.yDown - evt.changedTouches[0].clientY;
 		}
 		
 		if (Math.abs(xDiff) > Math.abs(yDiff)) {
@@ -141,7 +187,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 				this.changeFilter(true);
 			}
 		}
-		
+
 		this.xDown = null;
 		this.yDown = null;
 	}
@@ -212,42 +258,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 			}
 
 			++i;
-		}
-
-		this.cdRef.detectChanges();
-	}
-
-	mouseIsDown(sentence: Sentence) {
-		if (!this.parentId) {
-			this.popover = null;
-			this.interval = setInterval(async () => {
-				this.pressDuration++;
-				if (this.pressDuration > 7) {
-					clearInterval(this.interval);
-					this.pressDuration = 0;
-					if (!this.popover) {
-						this.popover = await this.popoverController.create({
-							component: LongPressChooserComponent,
-							componentProps: {
-								sentence: sentence
-							},
-							animated: true,
-							showBackdrop: true
-						});
-						return await this.popover.present();
-					}
-				}
-			}, 100);
-		}
-	}
-
-	mouseIsUp(sentence: Sentence) {
-		if (!this.parentId) {
-			if (this.pressDuration <= 7 && !this.popover) {
-				this.openSentence(sentence.id);
-			}
-			clearInterval(this.interval);
-			this.pressDuration = 0;
 		}
 	}
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, AfterViewInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewInit, ViewChild } from '@angular/core';
 import { NavController, IonList, PopoverController } from '@ionic/angular';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
@@ -20,11 +20,12 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	@ViewChild('lessonsList', { static: false }) lessonsList: IonList;
 	pieCharts: Array<Chart> = [];
 	firstEnter: boolean = true;
-	filter: string = 'all';
 
+	filter: string = 'all';
 	popover: HTMLIonPopoverElement = null;
 	pressDuration: number = 0;
 	interval: any;
+	refresherIsPulled: boolean = false;
 	contentIsScrolled: boolean = false;
 	xDown = null;
 	yDown = null;
@@ -34,37 +35,82 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		private navController: NavController,
 		private lessonsDataService: LessonsDataService,
 		private utils: UtilsService,
-		public globals: Globals,
-		private cdRef: ChangeDetectorRef) { }
+		public globals: Globals) { }
 
 	async ngOnInit() {
+		await this.utils.createAndShowLoader('Loading...');
 		await this.getData();
 		this.addFabsHandler();
+		await this.utils.dismissLoader();
+	}
+
+	getClickOrTouchEvent(event) {
+		return event.type === 'mousedown' ? event : (event.touches || event.originalEvent.touches)[0];
+	}
+
+	mouseIsDown(lesson: Lesson) {
+		this.popover = null;
+		this.interval = setInterval(async () => {
+			this.pressDuration++;
+			if (this.pressDuration > 7) {
+				clearInterval(this.interval);
+				this.pressDuration = 0;
+				if (!this.popover && !this.refresherIsPulled) {
+					this.popover = await this.popoverController.create({
+						component: LongPressChooserComponent,
+						componentProps: {
+							lesson: lesson
+						},
+						animated: true,
+						showBackdrop: true
+					});
+					await this.popover.present();
+				}
+			}
+		}, 100);
+	}
+
+	mouseIsUp(evt, lesson: Lesson) {
+		this.refresherIsPulled = false;
+		let xDiff, yDiff;
+		if (evt.type === 'mouseup') {
+			xDiff = this.xDown - evt.clientX;
+			yDiff = this.yDown - evt.clientY;
+		} else {
+			xDiff = this.xDown - evt.changedTouches[0].clientX;
+			yDiff = this.yDown - evt.changedTouches[0].clientY;
+		}
+
+		if (Math.abs(Math.abs(xDiff) - Math.abs(yDiff)) < 20 && !this.popover) {
+			this.openLesson(lesson);
+		}
+		clearInterval(this.interval);
+		this.pressDuration = 0;
 	}
 
 	handleTouchStart(evt) {
-		const firstTouch = evt.type === 'mousedown' ?
-			evt :
-		 	(evt.touches || evt.originalEvent.touches)[0];
-		this.xDown = firstTouch.clientX;
-		this.yDown = firstTouch.clientY;
+		const firstTouch = this.getClickOrTouchEvent(evt);
+		if (firstTouch.clientX > 50) {
+			this.xDown = firstTouch.clientX;
+			this.yDown = firstTouch.clientY;
+		}
 	}
 
-	handleTouchMove(evt) {
+	handleTouchEnd(evt) {	
 		if (!(this.xDown && this.yDown)) {
 			return;
 		}
 
-		let xDiff, yDiff, minDistance = 8;
+		let xDiff, yDiff, minDistance = 6;
 		if (evt.type === 'mouseup') {
 			xDiff = this.xDown - evt.clientX;
 			yDiff = this.yDown - evt.clientY;
 			minDistance *= 10;
 		} else {
-			xDiff = this.xDown - evt.touches[0].clientX;
-			yDiff = this.yDown - evt.touches[0].clientY;
+			xDiff = this.xDown - evt.changedTouches[0].clientX;
+			yDiff = this.yDown - evt.changedTouches[0].clientY;
 		}
-		
+
 		if (Math.abs(xDiff) > Math.abs(yDiff)) {
 			if (xDiff > minDistance) {
 				this.changeFilter(false);
@@ -88,8 +134,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	async filterClick() {
+		await this.utils.createAndShowLoader('Loading...');
 		await this.lessonsList.closeSlidingItems();
-		await this.utils.createAndShowLoader('Loading');
 
 		const allLessons = this.lessonsDataService.lessons;
 		if (this.filter === 'all') {
@@ -153,7 +199,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	ngAfterViewInit() {
 		this.pieCanvases.changes.subscribe(() => {
 			this.syncCharts();
-			this.cdRef.detectChanges();
 		});
 	}
 
@@ -200,8 +245,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				++i;
 			}
 		}
-
-		this.cdRef.detectChanges();
 	}
 
 	async doRefresh(event) {
@@ -215,41 +258,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	private async getData() {
-		await this.utils.createAndShowLoader('Loading...');
 		await this.lessonsDataService.refreshLessons();
 		this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
-
-		await this.utils.dismissLoader();
-	}
-
-	mouseIsDown(lesson: Lesson) {
-		this.popover = null;
-		this.interval = setInterval(async () => {
-			this.pressDuration++;
-			if (this.pressDuration > 7) {
-				clearInterval(this.interval);
-				this.pressDuration = 0;
-				if (!this.popover) {
-					this.popover = await this.popoverController.create({
-						component: LongPressChooserComponent,
-						componentProps: {
-							lesson: lesson
-						},
-						animated: true,
-						showBackdrop: true
-					});
-					return await this.popover.present();
-				}
-			}
-		}, 100);
-	}
-
-	mouseIsUp(lesson: Lesson) {
-		if (this.pressDuration <= 7 && !this.popover) {
-			this.openLesson(lesson)
-		}
-		clearInterval(this.interval);
-		this.pressDuration = 0;
 	}
 
 	openLesson(lesson: Lesson) {

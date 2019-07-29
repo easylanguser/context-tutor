@@ -110,6 +110,15 @@ ion-toast {
         margin-left: 30.5vw;
     }
 
+    .popover-content.sc-ion-popover-md, .popover-content.sc-ion-popover-ios {
+        width: 26vw;
+        left: 51vw !important;
+    }
+
+    .sc-ion-popover-md, .sc-ion-popover-ios {
+        left: 28vw;
+    }
+
     .sc-ion-loading-md-h.sc-ion-loading-md-s, .sc-ion-modal-md.md.hydrated,
     .modal-wrapper.md.sc-ion-modal-md {
         .loading-wrapper.sc-ion-loading-md {

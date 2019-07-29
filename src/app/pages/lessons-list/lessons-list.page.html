@@ -35,20 +35,24 @@
 
   <ion-content id="list-scroll"
     (touchstart)="handleTouchStart($event)"
-    (touchmove)="handleTouchMove($event)"
+    (touchend)="handleTouchEnd($event)"
     (mousedown)="handleTouchStart($event)"
-    (mouseup)="handleTouchMove($event)"
+    (mouseup)="handleTouchEnd($event)"
     style="z-index: 0">
 
-    <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher (ionPull)="this.refresherIsPulled = true" (ionRefresh)="doRefresh($event)">
       <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">
       </ion-refresher-content>
     </ion-refresher>
 
     <ion-list no-padding no-margin style="padding-top: 2vh; padding-bottom: 8em;" #lessonsList>
-      <ion-item *ngFor="let lesson of this.displayedLessons;index as i" class="lesson-ion-item" no-padding>
-        <div (mousedown)="mouseIsDown(lesson)" (touchstart)="mouseIsDown(lesson)" (mouseup)="mouseIsUp(lesson)"
-          (touchend)="mouseIsUp(lesson)" [ngClass]="{'dashed': this.globals.getIsDemo()}">
+      <ion-item *ngFor="let lesson of this.displayedLessons;index as i" class="lesson-ion-item no-selection" no-padding>
+        <div
+          (touchstart)="mouseIsDown(lesson)"
+          (touchend)="mouseIsUp($event, lesson)"
+          (mousedown)="mouseIsDown($event, lesson)"
+          (mouseup)="mouseIsUp($event, lesson)"
+          [ngClass]="{'dashed': this.globals.getIsDemo()}">
           <div>
             <p>
               {{lesson.name}}

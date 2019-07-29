@@ -1,16 +1,17 @@
 ion-label {
     text-align: center;
-
-    transition: --background 1s ease-in-out;
-    -webkit-transition: --background 1s ease-in-out;
 }
 
 ion-item {
     cursor: pointer;
+
+    transition: --background 11s ease-in-out;
+    -webkit-transition: --background 11s ease-in-out;
 }
 
 ion-item:hover {
     --background: #8e8e8e;
+    --border-color: transparent;
 }
 
 ion-list {
