@@ -94,9 +94,10 @@ input:-webkit-autofill {
     }
 }
 
-.loading-wrapper.sc-ion-loading-ios {
-    --background: white;
+.loading-wrapper.sc-ion-loading-ios,
+.loading-wrapper.sc-ion-loading-md {
     color: black;
+    --background: white;
 }
 
 ion-toast {

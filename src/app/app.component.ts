@@ -30,7 +30,7 @@ export class AppComponent {
 		private statusBar: StatusBar,
 		private authService: AuthService,
 		private router: Router,
-		private theme: ThemeService,
+		private themeService: ThemeService,
 		private storage: Storage,
 		private alertController: AlertController,
 		private location: Location,
@@ -59,12 +59,13 @@ export class AppComponent {
 
 	onChangeTheme(ev: CustomEvent) {
 		if (ev.detail.value === 'dark') {
-			this.theme.enableDarkMode(true);
+			this.themeService.addBodyClass('dark-theme');
 			this.themeName = 'dark';
 		} else {
-			this.theme.enableDarkMode(false);
+			this.themeService.removeBodyClass('dark-theme');
 			this.themeName = 'light';
 		}
+		this.storage.set(this.globals.THEME_ID_KEY, this.themeName);
 	}
 
 	authenticationState = new BehaviorSubject(false);
@@ -83,11 +84,11 @@ export class AppComponent {
 			this.splashScreen.hide();
 		}
 
-		const themeName = await this.storage.get("theme");
 		const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} });
-		themeName === "dark" ?
-			customEvent.detail.value = "dark" :
-			customEvent.detail.value = "light";
+		const themeName = await this.storage.get(this.globals.THEME_ID_KEY);
+		customEvent.detail.value = (themeName === "dark") ?
+			"dark" :
+			"light";
 		this.onChangeTheme(customEvent);
 		
 		this.authService.authenticationState.subscribe(async state => {
@@ -178,7 +179,7 @@ export class AppComponent {
 
 	async showAbout() {
 		let header = 'EasyLang Context Tutor';
-		let message = '0.1.17';
+		let message = '0.1.18';
 		const alert = await this.alertController.create({
 			header: header,
 			message: 'Version: ' + message,

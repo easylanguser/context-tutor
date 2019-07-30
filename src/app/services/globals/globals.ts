@@ -28,10 +28,11 @@ export class Globals {
 
 	// CONSTANTS
 	SHARED_TEXT_ID_KEY = "shared_text_id";
-	USER_AVATAR_KEY = 'user-avatar';
-	USER_EMAIL_KEY = 'user-email';
+	USER_AVATAR_KEY = 'user_avatar';
+	USER_EMAIL_KEY = 'user_email';
 	TOKEN_KEY = 'access_token';
 	USER_ID_KEY = 'user_id';
+	THEME_ID_KEY = 'theme_id';
 	
 	charForHiding: string = '•';
 	redCharForHiding: string = '<span class=\'red-text\'>•</span>';

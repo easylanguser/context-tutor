@@ -35,7 +35,7 @@ export class AccountPage {
 		private storage: Storage,
 		public globals: Globals) { }
 
-	ionViewDidEnter() {
+	ngOnInit() {
 		this.checkTokenAndGetInfo();
 		this.addAvatarClickHandler();
 	}
