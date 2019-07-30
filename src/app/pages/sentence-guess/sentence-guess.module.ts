@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { SentenceGuessPage } from './sentence-guess.page';
+import { WordViewComponent } from 'src/app/components/word-view/word-view.component';
 
 const routes: Routes = [
 	{
@@ -20,6 +21,6 @@ const routes: Routes = [
 		RouterModule.forChild(routes)
 	],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
-	declarations: [SentenceGuessPage]
+	declarations: [SentenceGuessPage, WordViewComponent]
 })
 export class SentenceGuessPageModule { }

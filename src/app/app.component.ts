@@ -13,6 +13,7 @@ import { Storage } from '@ionic/storage';
 import { Globals } from './services/globals/globals';
 import * as anime from 'animejs';
 import { DomSanitizer } from '@angular/platform-browser';
+import { HttpService } from './services/http/rest/http.service';
 
 @Component({
 	selector: 'app-root',
@@ -37,6 +38,7 @@ export class AppComponent {
 		private sanitizer: DomSanitizer,
 		private userHttpService: UserHttpService,
 		private navController: NavController,
+		private httpService: HttpService,
 		public globals: Globals) {
 		this.initializeApp(this.location.path());
 	}
@@ -102,6 +104,10 @@ export class AppComponent {
 					}
 
 					await this.loadAvatar();
+
+					this.globals.alphabet = await this.httpService
+						.doGet('../../../assets/chars-accordance.json')
+						.toPromise();
 
 					const paramsOfUrl = this.getParams(pathToGo);
 					if (paramsOfUrl) {

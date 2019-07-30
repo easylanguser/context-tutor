@@ -1,0 +1,56 @@
+{
+    "english": {
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "groups": [
+            "QWSD",
+            "RTFG",
+            "EAIO"
+        ]
+    },
+    "russian": {
+        "alphabet": "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",
+        "groups": [
+            "ОАИЯ",
+            "ТЦДШ",
+            "ЬЪАЯ",
+            "ИЫЭЮ"
+        ]
+    },
+    "german": {
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞ",
+        "groups": [
+            "QWSD",
+            "RTFG",
+            "EAIO",
+            "ÄÖÜA",
+            "ẞSBC"
+        ]
+    },
+    "spanish": {
+        "alphabet": "ABCDEFGHIJKLMNÑOPQRSTUVWXYZÀÄÁÈËÉÌÏÍÒÖÓÙÜÚỲŸÝ",
+        "groups": [
+            "QWSD",
+            "RTFG",
+            "EAIO",
+            "ÄÖÜA"
+        ]
+    },
+    "french": {
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZÂÁÀÇÊÉÈËÏÎÔŒÜÛÚÙ",
+        "groups": [
+            "QWSD",
+            "RTFG",
+            "EAIO",
+            "ÄÖÜA"
+        ]
+    },
+    "portuguese": {
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZÃÂÁÀÄÇÈÉÊÌÍÒÓÕÔÙÚ",
+        "groups": [
+            "QWSD",
+            "RTFG",
+            "EAIO",
+            "ÄÖÜA"
+        ]
+    }
+}

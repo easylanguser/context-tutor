@@ -18,7 +18,16 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-content id="sentence-content"></ion-content>
+  <ion-content id="sentence-content">
+    <word-view
+      *ngFor="let word of this.words; index as i"
+      id="{{'word' + i}}"
+      [allCharacters]="word.allCharacters"
+      [index]="word.index"
+      [language]="word.language">
+      123
+    </word-view>
+  </ion-content>
 
   <ion-footer id="footer" no-padding>
     <div id="chars">

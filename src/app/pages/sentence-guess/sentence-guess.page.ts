@@ -1,5 +1,5 @@
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
@@ -20,11 +20,12 @@ import { Storage } from '@ionic/storage';
 		'(document:keypress)': 'handleKeyboardEvent($event)'
 	}
 })
-
 export class SentenceGuessPage implements OnInit {
 
 	@ViewChild('pieCanvas', { static: false }) pieCanvas;
 	pieChart: any;
+
+	words: { allCharacters: any, index: number, language: string }[] = [];
 
 	alertIsShown: boolean;
 	lessonId: number = 0;
@@ -56,8 +57,6 @@ export class SentenceGuessPage implements OnInit {
 	thirdCharBack: string;
 	fourthCharBack: string;
 
-	sentenceContent: HTMLElement;
-
 	yellowHighlight = '0 0 5px 1px #E0E306';
 	redHighlight = '0px 0px 8px 0px rgba(167, 1, 6, 1)';
 
@@ -72,14 +71,13 @@ export class SentenceGuessPage implements OnInit {
 		private location: Location,
 		private navController: NavController,
 		private storage: Storage,
-		private globals: Globals) { }
+		private globals: Globals,
+		private cdRef: ChangeDetectorRef) {	}
 
 	async ngOnInit() {
 		this.sentenceId = Number(this.route.snapshot.queryParamMap.get('current'));
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
 		this.parentId = Number(this.route.snapshot.queryParamMap.get('parentId'));
-
-		this.sentenceContent = document.getElementById('sentence-content');
 
 		if (!this.lessonsDataService.lessons.length) {
 			await this.lessonsDataService.refreshLessons();
@@ -106,18 +104,6 @@ export class SentenceGuessPage implements OnInit {
 		}
 	}
 
-	private createSpan(isHidden: boolean, indexOfHidden?: number): HTMLElement {
-		const span = document.createElement('span');
-		span.className = isHidden ? 'hidden' : 'visible';
-		if (isHidden) {
-			span.id = 'box-' + String(indexOfHidden);
-		}
-		span.style.fontSize = '4vh';
-		span.style.fontFamily = "Arial";
-		span.style.userSelect = 'text';
-		return span;
-	}
-
 	private getData() {
 		this.pieChart = new Chart(this.pieCanvas.nativeElement, this.utils.getNewChartObject());
 		this.updateChart();
@@ -132,63 +118,27 @@ export class SentenceGuessPage implements OnInit {
 			stats.hintUsages + stats.giveUps,
 			stats.correctAnswers
 		]);
-
-		while (this.sentenceContent.firstChild) {
-			this.sentenceContent.removeChild(this.sentenceContent.firstChild);
+	
+		const sentence = this.curSentence();
+		let prevIndex: number = 0, i = 0;
+		for (let word of sentence.words) {
+			this.words.push({
+				allCharacters: sentence.hiddenChars[i],
+				index: 0,
+				language: 'english'
+			});
+			this.cdRef.detectChanges();
+			document.getElementById('word' + i).insertAdjacentText(
+				'beforebegin',
+				sentence.text.substring(prevIndex, word[0])
+			);
+			prevIndex = (word[0] + word[1]);
+			++i;
 		}
-
-		if (this.curStats().solvedStatus) {
-			const span = this.createSpan(false);
-			span.innerText = this.curSentence().text;
-			this.sentenceContent.appendChild(span);
-			this.hideBottomControls();
-		} else {
-			this.curWordIndex = this.curStats().curWordIndex;
-			this.curCharsIndexes = this.curStats().curCharsIndexes;
-			this.restoreSentence();
-		}
-	}
-
-	restoreSentence() {
-		const templates = this.globals.savedTemplates.find(elem => elem[0] === this.curSentence().id);
-		if (templates) {
-			for (let template of templates[1]) {
-				this.sentenceContent.appendChild(template);
-			}
-		} else {
-			const underscored = this.curSentence().textUnderscored;
-			let previousIndex = 0, index = 1, span;
-			for (let i = 0; i < underscored.length; i++) {
-				if (underscored.charAt(i) === this.globals.charForHiding) {
-					span = this.createSpan(false);
-					span.innerText = this.curSentence().textUnderscored.substring(previousIndex, i);
-					this.sentenceContent.appendChild(span);
-
-					previousIndex = i;
-
-					do {
-						++i;
-						span = this.createSpan(true, index++);
-						span.classList.add('blue-text');
-						span.innerText = this.globals.charForHiding;
-						this.sentenceContent.appendChild(span);
-						previousIndex = i;
-					} while (underscored.charAt(i) === this.globals.charForHiding && i < underscored.length);
-				}
-			}
-
-			if (this.curSentence().textUnderscored.charAt(previousIndex) !== this.globals.charForHiding) {
-				span = this.createSpan(false);
-				span.innerText = this.curSentence().textUnderscored.substring(previousIndex);
-				this.sentenceContent.appendChild(span);
-			}
-			const firstBox = document.getElementById('box-1');
-			firstBox.classList.remove('blue-text');
-			firstBox.classList.add('red-text');
-			firstBox.innerText = this.globals.charForHiding;
-		}
-
-		this.refreshCharBoxes();
+		document.getElementById('word' + (i - 1)).insertAdjacentText(
+			'afterend',
+			sentence.text.substring(prevIndex, sentence.text.length)
+		);
 	}
 
 	curSentence(): Sentence {
@@ -270,7 +220,6 @@ export class SentenceGuessPage implements OnInit {
 
 		const elements = [];
 		const id = this.curSentence().id;
-		this.sentenceContent.childNodes.forEach(node => elements.push(<HTMLElement>(node)));
 		const indexOfExisting = this.globals.savedTemplates.findIndex(elem => elem[0] === id);
 		indexOfExisting === -1 ?
 			this.globals.savedTemplates.push([id, elements]) :

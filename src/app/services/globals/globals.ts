@@ -4,14 +4,16 @@ import { SafeUrl } from '@angular/platform-browser';
 
 @Injectable()
 export class Globals {
-	// VARIABLES 
 
+	// VARIABLES 
 	userId: number;
 
 	userAvatar: SafeUrl;
 
 	isDemo: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	isDemoHasChanged: boolean;
+
+	alphabet: any;
 
 	updIsDemo(newVal: boolean) {
 		this.isDemoHasChanged = (newVal !== this.getIsDemo());

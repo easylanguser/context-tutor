@@ -3,6 +3,7 @@ import { Lesson } from 'src/app/models/lesson';
 import { Statistics } from 'src/app/models/statistics';
 import { ToastController, LoadingController } from '@ionic/angular';
 import { Globals } from '../globals/globals';
+import { HttpService } from '../http/rest/http.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -13,6 +14,7 @@ export class UtilsService {
 	loader: HTMLIonLoadingElement;
 
 	constructor(
+		private httpService: HttpService,
 		private toastController: ToastController,
 		private loadingController: LoadingController,
 		private globals: Globals) { }
@@ -71,6 +73,15 @@ export class UtilsService {
 				}
 			}
 		});
+	}
+
+	public async getCharsAccordance() {
+		if (!this.globals.alphabet) {
+			this.globals.alphabet = await this.httpService
+				.doGet('../../../assets/chars-accordance.json')
+				.toPromise();
+		}
+		return this.globals.alphabet;
 	}
 
 	calculatePeriod(diff: number): [string, string] {
