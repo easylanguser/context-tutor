@@ -1,3 +1,9 @@
-span {
-    border: 1px solid red;
+.word-component {
+    display: inline-block;
+    background: transparent;
+    transition: background 500ms ease-in-out;
+}
+
+.active {
+    background: rgb(230, 230, 230);
 }

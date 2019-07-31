@@ -20,12 +20,15 @@
 
   <ion-content id="sentence-content">
     <word-view
-      *ngFor="let word of this.words; index as i"
+      *ngFor="let sentenceWord of sentenceWords; index as i"
       id="{{'word' + i}}"
-      [allCharacters]="word.allCharacters"
-      [index]="word.index"
-      [language]="word.language">
-      123
+      [index]="sentenceWord.word.index"
+      [allCharacters]="sentenceWord.word.allCharacters"
+      [guessChar]="sentenceWord.word.guessChar"
+      [language]="sentenceWord.word.language"
+      [isActive]="sentenceWord.word.isActive"
+      (guessProgress)="updateProgress($event)"
+      (click)="makeActive(i)">
     </word-view>
   </ion-content>
 
@@ -50,7 +53,9 @@
     </div>
 
     <div id="bottom-bar-container">
-      <ion-button id="prev-sentence-button" [ngClass]="{'hidden': sentencesTotal === 1}" (click)="changeSentence(false)">
+      <ion-button id="prev-sentence-button" 
+        [ngClass]="{'hidden': sentencesTotal === 1}"
+        (click)="changeSentence(false)">
         <ion-icon name="ios-arrow-back"></ion-icon>
       </ion-button>
 

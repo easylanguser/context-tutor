@@ -25,7 +25,16 @@ export class SentenceGuessPage implements OnInit {
 	@ViewChild('pieCanvas', { static: false }) pieCanvas;
 	pieChart: any;
 
-	words: { allCharacters: any, index: number, language: string }[] = [];
+	sentenceWords: {
+		word: {
+			index: number,
+			allCharacters: any,
+			guessChar: string,
+			language: string,
+			isActive: boolean
+		},
+		isSolved: boolean
+	}[] = [];
 
 	alertIsShown: boolean;
 	lessonId: number = 0;
@@ -37,6 +46,7 @@ export class SentenceGuessPage implements OnInit {
 
 	curWordIndex: number = 0;
 	curCharsIndexes: number[] = [];
+	wordsGuessed: number = 0;
 
 	statisticsDeltasArray: Array<[number, number, number, number]> = [];
 
@@ -72,7 +82,7 @@ export class SentenceGuessPage implements OnInit {
 		private navController: NavController,
 		private storage: Storage,
 		private globals: Globals,
-		private cdRef: ChangeDetectorRef) {	}
+		private cdRef: ChangeDetectorRef) { }
 
 	async ngOnInit() {
 		this.sentenceId = Number(this.route.snapshot.queryParamMap.get('current'));
@@ -97,6 +107,7 @@ export class SentenceGuessPage implements OnInit {
 				this.globals.userId,
 				this.lessonsDataService.getSentenceByIds(this.lessonId, this.sentenceId).words
 			);
+			
 			await this.statisticHttpService.postNewStatisticsRecord(
 				this.lessonId,
 				this.sentenceId
@@ -118,14 +129,30 @@ export class SentenceGuessPage implements OnInit {
 			stats.hintUsages + stats.giveUps,
 			stats.correctAnswers
 		]);
-	
+
+		console.log(this.curStats().curCharsIndexes);
+		
+
+		this.curWordIndex = this.curStats().curWordIndex;
+		this.curCharsIndexes = this.curStats().curCharsIndexes;
+		this.wordsGuessed = 0;
+
+		if (!this.curStats().solvedStatus) {
+			this.refreshCharBoxes();
+		}
+
 		const sentence = this.curSentence();
 		let prevIndex: number = 0, i = 0;
 		for (let word of sentence.words) {
-			this.words.push({
-				allCharacters: sentence.hiddenChars[i],
-				index: 0,
-				language: 'english'
+			this.sentenceWords.push({
+				word: {
+					index: this.curCharsIndexes[this.curWordIndex],
+					allCharacters: sentence.hiddenChars[i],
+					guessChar: null,
+					language: 'english',
+					isActive: (i === 0)
+				},
+				isSolved: false
 			});
 			this.cdRef.detectChanges();
 			document.getElementById('word' + i).insertAdjacentText(
@@ -141,12 +168,39 @@ export class SentenceGuessPage implements OnInit {
 		);
 	}
 
+	removeAllTextNodes(node) {
+		if (node.nodeType === 3) {
+			node.parentNode.removeChild(node);
+		} else if (node.childNodes) {
+			for (let i = node.childNodes.length; i--;) {
+				this.removeAllTextNodes(node.childNodes[i]);
+			}
+		}
+	}
+
+	makeActive(i: number) {
+		this.sentenceWords.map(el => {
+			if (el.word.isActive) {
+				el.word.isActive = false;
+			}
+		});
+		this.curWordIndex = i;
+		this.refreshCharBoxes();
+		this.sentenceWords[i].word.isActive = true;
+		this.cdRef.detectChanges();
+	}
+
 	curSentence(): Sentence {
 		const lessonSentences = this.lessonsDataService.getLessonById(this.lessonId).sentences;
 		return lessonSentences.find(sentence => sentence.id === this.sentenceId);
 	}
 
 	curStats(): Statistics {
+		console.log(this.lessonId);
+		
+		console.log(this.curSentence());
+		console.log(this.lessonsDataService.getStatisticsOfSentence(this.curSentence()));
+		
 		return this.lessonsDataService.getStatisticsOfSentence(this.curSentence());
 	}
 
@@ -217,14 +271,6 @@ export class SentenceGuessPage implements OnInit {
 	saveData() {
 		this.curStats().curWordIndex = this.curWordIndex;
 		this.curStats().curCharsIndexes = this.curCharsIndexes;
-
-		const elements = [];
-		const id = this.curSentence().id;
-		const indexOfExisting = this.globals.savedTemplates.findIndex(elem => elem[0] === id);
-		indexOfExisting === -1 ?
-			this.globals.savedTemplates.push([id, elements]) :
-			this.globals.savedTemplates[indexOfExisting] = [id, elements];
-
 		this.saveStatistics();
 	}
 
@@ -300,9 +346,6 @@ export class SentenceGuessPage implements OnInit {
 				: lessonSentences[currentLessonIndex - 1].id;
 		}
 
-		this.curWordIndex = 0;
-		this.curCharsIndexes = [];
-
 		this.animateSwipe(forward);
 		this.sentenceNumber = this.lessonsDataService.getSentenceNumberByIds(this.lessonId, this.sentenceId) + 1;
 
@@ -340,9 +383,7 @@ export class SentenceGuessPage implements OnInit {
 
 			let event = this.correctCharEvent();
 			this.handleKeyboardEvent(event);
-
 			button.disabled = true;
-
 			setTimeout(() => {
 				event = this.correctCharEvent();
 				this.handleKeyboardEvent(event);
@@ -352,10 +393,6 @@ export class SentenceGuessPage implements OnInit {
 					button.disabled = false;
 				}, 300);
 			}, 300);
-
-			if (this.status() === 2) {
-				this.markAsSolved();
-			}
 		}
 	}
 
@@ -371,9 +408,21 @@ export class SentenceGuessPage implements OnInit {
 
 	handleBoxClick(index: number) {
 		if (!this.curStats().solvedStatus) {
-			const fronts = [this.firstChar, this.secondChar, this.thirdChar, this.fourthChar];
-			const backs = [this.firstCharBack, this.secondCharBack, this.thirdCharBack, this.fourthCharBack];
-			const event = new KeyboardEvent('ev' + index, { key: (this.updateFront ? fronts[index] : backs[index]).toLowerCase() });
+			const fronts = [
+				this.firstChar,
+				this.secondChar,
+				this.thirdChar,
+				this.fourthChar
+			];
+			const backs = [
+				this.firstCharBack,
+				this.secondCharBack,
+				this.thirdCharBack,
+				this.fourthCharBack
+			];
+			const event = new KeyboardEvent('ev' + index, {
+				key: (this.updateFront ? fronts[index] : backs[index]).toLowerCase()
+			});
 			this.handleKeyboardEvent(event);
 		}
 	}
@@ -478,7 +527,6 @@ export class SentenceGuessPage implements OnInit {
 		return firstChar + secondChar + thirdChar + fourthChar;
 	}
 
-	// Reset characters boxes highlighting and generate random characters
 	refreshCharBoxes() {
 		const boxesIds = ['char-box-1', 'char-box-2', 'char-box-3', 'char-box-4'];
 		for (const id of boxesIds) {
@@ -487,107 +535,35 @@ export class SentenceGuessPage implements OnInit {
 		this.generateRandomCharacters();
 	}
 
-	/*
-	*	0 - current word is not guessed
-	*	1 - current word is guessed, current sentence is not guessed
-	*	2 - current word is guessed, current sentence is guessed
-	*/
-	private status(): number {
-		if (this.curCharsIndexes[this.curWordIndex] === this.curSentence().hiddenChars[this.curWordIndex].length) {
-			if (this.curWordIndex === this.curSentence().hiddenChars.length - 1) {
-				return 2;
+	updateProgress(progress: string) {
+		if (progress === 'full_guess') {
+			this.sentenceWords[this.curWordIndex].isSolved = true;
+			this.wordsGuessed++;
+			if (this.sentenceWords.length !== this.wordsGuessed) {
+				do {
+					this.curWordIndex++;
+					if (this.curWordIndex === this.sentenceWords.length) {
+						this.curWordIndex = 0;
+					}
+				} while (this.sentenceWords[this.curWordIndex].isSolved);
+				this.makeActive(this.curWordIndex);
 			} else {
-				return 1;
-			}
-		}
-		return 0;
-	}
-
-	private currentIndex(): number {
-		return this.curCharsIndexes.reduce((a, b) => a + b) + 1;
-	}
-
-	// Handle keyboard event from desktop and clicks on char boxes from mobiles and desktop
-	handleKeyboardEvent(event: KeyboardEvent) {
-		if (this.sentenceTranslateIsPlayed || this.charactersRotationIsPlayed) {
-			return;
-		}
-		if (this.curStats().solvedStatus) {
-			if (!this.alertIsShown) {
-				this.showAlert();
-			}
-			return;
-		}
-
-		if (event.key.toUpperCase() === this.curCorrectChar().toUpperCase()) {
-			const newBox = document.createElement('span');
-			newBox.innerText = this.curCorrectChar();
-			if (event.type === 'evGiveUp' || event.type === 'evHint') {
-				newBox.className = 'yellow';
-			} else {
-				++this.curStats().correctAnswers; // Statistics
-				newBox.className = 'green';
-			}
-
-			const box = document.getElementById('box-' + this.currentIndex());
-			box.parentNode.replaceChild(newBox, box);
-
-			// Fill guessed character
-			++this.curCharsIndexes[this.curWordIndex];
-
-			const status = this.status();
-			if (status === 1) {
-				++this.curWordIndex;
-			} else if (status === 2) {
 				this.markAsSolved();
-				return;
+				this.sentenceWords[this.curWordIndex].word.isActive = false;
+				this.cdRef.detectChanges();
 			}
-
-			const redBox = document.getElementById('box-' + this.currentIndex());
-			redBox.classList.remove('blue-text');
-			redBox.classList.add('red-text');
-			redBox.innerText = this.globals.charForHiding;
-
-			if (!this.utils.isEnglishChar(this.curCorrectChar())) {
-				++this.curCharsIndexes[this.curWordIndex];
-				const status = this.status();
-				if (status === 1) {
-					++this.curWordIndex;
-				} else if (status === 2) {
-					this.markAsSolved();
-					return;
-				}
-			}
-
+			this.curCharsIndexes[this.curWordIndex]++;
+		} else if (progress === 'correct_guess') {
+			this.curStats().correctAnswers++;
+			this.curCharsIndexes[this.curWordIndex]++;
 			this.refreshCharBoxes();
-		} else {
-			++this.curStats().wrongAnswers; // Statistics
-
-			let indexOfCharBox: number = 0;
-			switch (event.key) {
-				case (this.updateFront ? this.firstChar : this.firstCharBack).toLowerCase(): {
-					indexOfCharBox = 1;
-					break;
-				}
-				case (this.updateFront ? this.secondChar : this.secondCharBack).toLowerCase(): {
-					indexOfCharBox = 2;
-					break;
-				}
-				case (this.updateFront ? this.thirdChar : this.thirdCharBack).toLowerCase(): {
-					indexOfCharBox = 3;
-					break;
-				}
-				case (this.updateFront ? this.fourthChar : this.fourthCharBack).toLowerCase(): {
-					indexOfCharBox = 4;
-					break;
-				}
-			}
-			if (indexOfCharBox !== 0) {
-				document.getElementById('char-box-' + indexOfCharBox).style.boxShadow = this.redHighlight;
-			}
+		} else if (progress === 'wrong') {
+			this.curStats().wrongAnswers++;
 		}
+	}
 
-		this.updateChart();
+	handleKeyboardEvent(event: KeyboardEvent) {
+		this.sentenceWords[this.curWordIndex].word.guessChar = event.key;
 	}
 
 	async animateFlip() {
@@ -598,10 +574,12 @@ export class SentenceGuessPage implements OnInit {
 		this.charactersRotationIsPlayed = true;
 
 		await anime({
-			targets: [document.querySelector('#char-box-1'),
-			document.querySelector('#char-box-2'),
-			document.querySelector('#char-box-3'),
-			document.querySelector('#char-box-4')],
+			targets: [
+				document.querySelector('#char-box-1'),
+				document.querySelector('#char-box-2'),
+				document.querySelector('#char-box-3'),
+				document.querySelector('#char-box-4')
+			],
 			rotateY: '+=180',
 			easing: 'easeInOutSine',
 			duration: 200
@@ -643,9 +621,9 @@ export class SentenceGuessPage implements OnInit {
 
 		this.sentenceTranslateIsPlayed = true;
 
-		const textShownId = '#sentence-content';
+		const textShown = document.querySelector('#sentence-content');
 		await anime({
-			targets: [document.querySelector(textShownId)],
+			targets: [textShown],
 			translateX: forward ? '-=40vw' : '+=40vw',
 			opacity: 0,
 			easing: 'easeInOutBack',
@@ -653,17 +631,20 @@ export class SentenceGuessPage implements OnInit {
 		}).finished;
 
 		await anime({
-			targets: [document.querySelector(textShownId)],
+			targets: [textShown],
 			translateX: forward ? '+=80vw' : '-=80vw',
 			duration: 0
 		}).finished;
-
+		
+		this.sentenceWords = [];
+		this.cdRef.detectChanges();
+		this.removeAllTextNodes(document.getElementById('sentence-content'));
 		await this.getData();
-
+			
 		this.hideBottomControls();
 
 		await anime({
-			targets: [document.querySelector(textShownId)],
+			targets: [textShown],
 			translateX: forward ? '-=40vw' : '+=40vw',
 			opacity: 1,
 			easing: 'easeInOutBack',

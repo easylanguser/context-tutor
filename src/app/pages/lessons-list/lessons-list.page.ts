@@ -268,7 +268,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				queryParams: {
 					lessonId: lesson.id,
 					parentId: lesson.parentId,
-					showLoader: lesson.statistics.length > 20
+					showLoader: lesson.sentences.length > 20
 				}
 			});
 	}

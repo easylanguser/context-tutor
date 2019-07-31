@@ -151,6 +151,7 @@ export class LessonsDataService {
 
 		const lessonToFill = this.getLessonById(lessonId);
 
+		let k = 0;
 		for (const apiSentence of apiSentences) {
 			const hiddenChars: Array<string[]> = [];
 
@@ -179,9 +180,9 @@ export class LessonsDataService {
 				lessonToFill.addSentence(sentence);
 			}
 
-			for (const stat of lessonToFill.statistics) {
-				stat.curCharsIndexes = new Array(apiSentence.words.length).fill(0);
-			}
+			lessonToFill.statistics[k].curCharsIndexes = new Array(apiSentence.words.length).fill(0);
+			
+			k++;
 		}
 
 		if (lessonToFill.sentences.length > 0) {

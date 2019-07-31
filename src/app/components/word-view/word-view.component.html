@@ -1,3 +1,7 @@
-<div style="display: inline-block">
-  {{this.allCharacters}}
+<div class="word-component" [ngClass]="{'active': this.isActive}">
+  <app-character
+    *ngFor="let character of guessedWord"
+    [char]="character.char"
+    [type]="character.type">
+  </app-character>
 </div>

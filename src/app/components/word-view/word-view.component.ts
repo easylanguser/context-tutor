@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import '../../../assets/chars-accordance.json';
-import { UtilsService } from 'src/app/services/utils/utils.service.js';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
 	selector: 'word-view',
@@ -10,21 +10,50 @@ import { UtilsService } from 'src/app/services/utils/utils.service.js';
 export class WordViewComponent implements OnInit {
 
 	alphabet: any;
-	@Input("allCharacters") allCharacters: any;
+	guessedWord: { char: string, type: number }[] = [];
+
 	@Input("index") index: number;
+	@Input("allCharacters") allCharacters: any;
+	@Input("guessChar") guessChar: string;
 	@Input("language") language: string;
+	@Input("isActive") isActive: boolean;
+
+	@Output() guessProgress = new EventEmitter();
 
 	constructor(private utils: UtilsService) { }
 
 	async ngOnInit() {
 		this.alphabet = await this.utils.getCharsAccordance();
-		if (typeof this.allCharacters === 'object') {
-			this.allCharacters = this.allCharacters.join('');
-		} else {
-			this.allCharacters = '';
+
+		if (typeof this.allCharacters === 'string') {
+			this.allCharacters = this.allCharacters.split('');
 		}
-		this.index = this.index >= 0 ? this.index : 0;
+
+		for (let i = 0; i < this.allCharacters.length; i++) {
+			this.guessedWord.push({
+				char: this.allCharacters[i],
+				type: (this.index > i) ? 0 : ((this.index === i) ? 1 : 2)
+			});
+		}
+
 		this.language = this.alphabet[this.language] ? this.language : 'english';
+	}
+
+	ngOnChanges() {
+		if (this.isActive) {
+			if (this.allCharacters[this.index] === this.guessChar) {
+				this.guessedWord[this.index].type = 0;
+				if (this.index === this.allCharacters.length - 1) {
+					this.guessProgress.emit('full_guess');
+				} else {
+					this.guessedWord[this.index + 1].type = 1;
+					this.guessProgress.emit('correct_guess');
+				}
+				this.index++;
+			} else {
+				this.guessProgress.emit('wrong');
+			}
+		}
 	}
 
 	getCurGroup() {
