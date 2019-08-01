@@ -59,19 +59,9 @@ export class SentenceGuessPage implements OnInit {
 	sentenceTranslateIsPlayed: boolean = false;
 	charactersRotationIsPlayed: boolean = false;
 
-	firstChar: string;
-	secondChar: string;
-	thirdChar: string;
-	fourthChar: string;
-
-	firstCharBack: string;
-	secondCharBack: string;
-	thirdCharBack: string;
-	fourthCharBack: string;
+	charsRefs = ['', '', '', '', '', '', '', ''];
 
 	buttonsHighlights: boolean[] = [false, false, false, false];
-
-	yellowHighlight = '0 0 5px 1px #E0E306';
 	redHighlight = '0px 0px 8px 2px rgb(255, 10, 18) ';
 
 	groups = ['QWSD', 'RTFG', 'EAIO'];
@@ -111,7 +101,7 @@ export class SentenceGuessPage implements OnInit {
 				this.globals.userId,
 				this.lessonsDataService.getSentenceByIds(this.lessonId, this.sentenceId).words
 			);
-			
+
 			await this.statisticHttpService.postNewStatisticsRecord(
 				this.lessonId,
 				this.sentenceId
@@ -138,16 +128,17 @@ export class SentenceGuessPage implements OnInit {
 		this.curCharsIndexes = this.curStats().curCharsIndexes;
 		this.wordsGuessed = 0;
 
-		if (!this.curStats().solvedStatus) {
+		if (!this.curStats().isSolved) {
 			this.refreshCharBoxes();
 		}
 
 		const sentence = this.curSentence();
 		let prevIndex: number = 0, i = 0;
+		
 		for (let word of sentence.words) {
 			this.sentenceWords.push({
 				word: {
-					index: this.curCharsIndexes[this.curWordIndex],
+					index: this.curCharsIndexes[i],
 					allCharacters: sentence.hiddenChars[i],
 					guessChar: null,
 					guessType: null,
@@ -181,12 +172,14 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	makeActive(i: number) {
+		if (this.sentenceWords[i].word.isActive || this.curStats().isSolved)
+			return;
 		this.sentenceWords.map(el => {
 			if (el.word.isActive) {
 				el.word.isActive = false;
 			}
 		});
-		
+
 		this.curWordIndex = i;
 		this.refreshCharBoxes();
 		this.sentenceWords[i].word.guessChar = null;
@@ -368,14 +361,14 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	markAsSolved() {
-		this.curStats().solvedStatus = true;
+		this.curStats().isSolved = true;
 		if (!this.alertIsShown) {
 			this.showAlert();
 		}
 	}
 
 	giveUpClick() {
-		if (!this.curStats().solvedStatus) {
+		if (!this.curStats().isSolved) {
 			++this.curStats().giveUps;
 			this.hintsClicks += 3;
 			this.updateChart();
@@ -398,7 +391,7 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	hintClick() {
-		if (!this.curStats().solvedStatus) {
+		if (!this.curStats().isSolved) {
 			this.curStats().hintUsages++;
 			this.hintsClicks++;
 			this.updateChart();
@@ -408,21 +401,9 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	handleBoxClick(index: number) {
-		if (!this.curStats().solvedStatus) {
-			const fronts = [
-				this.firstChar,
-				this.secondChar,
-				this.thirdChar,
-				this.fourthChar
-			];
-			const backs = [
-				this.firstCharBack,
-				this.secondCharBack,
-				this.thirdCharBack,
-				this.fourthCharBack
-			];
+		if (!this.curStats().isSolved) {
 			const event = new KeyboardEvent('ev' + index, {
-				key: (this.updateFront ? fronts[index] : backs[index]).toLowerCase()
+				key: (this.updateFront ? this.charsRefs[index] : this.charsRefs[index + 4]).toLowerCase()
 			});
 			this.handleKeyboardEvent(event);
 		}
@@ -446,34 +427,17 @@ export class SentenceGuessPage implements OnInit {
 
 		this.updateFront = !this.updateFront;
 		const srand = Math.floor(Math.random() * 4);
-		if (this.updateFront) {
-			this.firstChar = charsToSelectFrom.charAt(0);
-			this.secondChar = charsToSelectFrom.charAt(1);
-			this.thirdChar = charsToSelectFrom.charAt(2);
-			this.fourthChar = charsToSelectFrom.charAt(3);
-			if (this.correctIsNotPresent(this.firstChar, this.secondChar,
-				this.thirdChar, this.fourthChar, correctChar)) {
-				switch (srand) {
-					case 0: this.firstChar = correctChar; break;
-					case 1: this.secondChar = correctChar; break;
-					case 2: this.thirdChar = correctChar; break;
-					case 3: this.fourthChar = correctChar; break;
-				}
-			}
-		} else {
-			this.firstCharBack = charsToSelectFrom.charAt(0);
-			this.secondCharBack = charsToSelectFrom.charAt(1);
-			this.thirdCharBack = charsToSelectFrom.charAt(2);
-			this.fourthCharBack = charsToSelectFrom.charAt(3);
-			if (this.correctIsNotPresent(this.firstCharBack, this.secondCharBack,
-				this.thirdCharBack, this.fourthCharBack, correctChar)) {
-				switch (srand) {
-					case 0: this.firstCharBack = correctChar; break;
-					case 1: this.secondCharBack = correctChar; break;
-					case 2: this.thirdCharBack = correctChar; break;
-					case 3: this.fourthCharBack = correctChar; break;
-				}
-			}
+
+		this.charsRefs[this.updateFront ? 0 : 4] = charsToSelectFrom.charAt(0);
+		this.charsRefs[this.updateFront ? 1 : 5] = charsToSelectFrom.charAt(1);
+		this.charsRefs[this.updateFront ? 2 : 6] = charsToSelectFrom.charAt(2);
+		this.charsRefs[this.updateFront ? 3 : 7] = charsToSelectFrom.charAt(3);
+		if (this.correctIsNotPresent(
+			this.charsRefs[this.updateFront ? 0 : 4],
+			this.charsRefs[this.updateFront ? 1 : 5],
+			this.charsRefs[this.updateFront ? 2 : 6],
+			this.charsRefs[this.updateFront ? 3 : 7], correctChar)) {
+			this.charsRefs[this.updateFront ? srand : srand + 4] = correctChar;
 		}
 
 		this.animateFlip();
@@ -566,18 +530,13 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	setRedHighlight(char: string) {
-		if (char === this.firstChar || char === this.firstCharBack) {
-			this.buttonsHighlights[0] = true;
-		} else if (char === this.secondChar || char === this.secondCharBack) {
-			this.buttonsHighlights[1] = true;
-		} else if (char === this.thirdChar || char === this.thirdCharBack) {
-			this.buttonsHighlights[2] = true;
-		} else if (char === this.fourthChar || char === this.fourthCharBack) {
-			this.buttonsHighlights[3] = true;
-		} else {
-			return;
+		for (let i = 0; i < this.charsRefs.length; i++) {
+			if (this.charsRefs[i] === char) {
+				this.buttonsHighlights[i%4] = true;
+				this.cdRef.detectChanges();
+				return;
+			}
 		}
-		this.cdRef.detectChanges();
 	}
 
 	handleKeyboardEvent(event: KeyboardEvent) {
@@ -616,7 +575,7 @@ export class SentenceGuessPage implements OnInit {
 			document.querySelector('#give-up-button')
 		];
 		const footer = document.getElementById('footer').style;
-		if (this.curStats().solvedStatus) {
+		if (this.curStats().isSolved) {
 			footer.background = 'var(--ion-background-color)';
 			anime({
 				targets: targets,
@@ -656,12 +615,12 @@ export class SentenceGuessPage implements OnInit {
 			translateX: forward ? '+=80vw' : '-=80vw',
 			duration: 0
 		}).finished;
-		
+
 		this.sentenceWords = [];
 		this.cdRef.detectChanges();
 		this.removeAllTextNodes(document.getElementById('sentence-content'));
 		await this.getData();
-			
+
 		this.hideBottomControls();
 
 		await anime({

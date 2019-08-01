@@ -6,7 +6,7 @@ export class Statistics {
 		public userId: number,
 		public curCharsIndexes: number[],
 		public curWordIndex: number,
-		public solvedStatus: boolean,
+		public isSolved: boolean,
 		public correctAnswers: number,
 		public wrongAnswers: number,
 		public giveUps: number,

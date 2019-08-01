@@ -1,3 +1,4 @@
-<div class="char-component" [ngClass]="{'current' : type === 1}">
+<div class="char-component"
+  [ngClass]="{'current' : type === 1, 'red-text' : type === 3, 'opened' : type === 0}">
   {{type === 0 ? char : '•'}}
 </div>

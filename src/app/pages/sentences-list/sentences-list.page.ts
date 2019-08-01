@@ -23,7 +23,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	parentId: number = null;
 	lessonTitle: string;
 	@ViewChildren('chartsid') pieCanvases: any;
-	@ViewChild('sentencesList', { static: false }) sentencesList: IonList;
 	pieCharts: Array<Chart> = [];
 
 	filter: string = 'all';
@@ -103,7 +102,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	async ionViewWillLeave() {
-		await this.sentencesList.closeSlidingItems();
 		if (this.toast) {
 			await this.toast.dismiss();
 			this.toast = null;
@@ -203,7 +201,6 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	async filterClick() {
-		await this.sentencesList.closeSlidingItems();
 		await this.utils.createAndShowLoader('Loading');
 
 		if (this.filter === 'all') {

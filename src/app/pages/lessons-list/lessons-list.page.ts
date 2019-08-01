@@ -17,9 +17,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 
 	displayedLessons: Lesson[] = [];
 	@ViewChildren('chartsid') pieCanvases: any;
-	@ViewChild('lessonsList', { static: false }) lessonsList: IonList;
 	pieCharts: Array<Chart> = [];
-	firstEnter: boolean = true;
 
 	filter: string = 'all';
 	popover: HTMLIonPopoverElement = null;
@@ -133,9 +131,12 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		}
 	}
 
-	async filterClick() {
-		await this.utils.createAndShowLoader('Loading...');
-		await this.lessonsList.closeSlidingItems();
+	async filterChanged(event) {
+		/* \|/ Prevents ionChange trigger if lesson-list page was not the first to load */
+		const isFirst: boolean = event.path.length > 15;
+		if (isFirst) {
+			await this.utils.createAndShowLoader('Loading...');
+		}
 
 		const allLessons = this.lessonsDataService.lessons;
 		if (this.filter === 'all') {
@@ -148,7 +149,9 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 			);
 		}
 
-		await this.utils.dismissLoader();
+		if (isFirst) {
+			await this.utils.dismissLoader();
+		}
 	}
 
 	private addFabsHandler() {
@@ -180,7 +183,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 			lsn.sentences.forEach(sentence => {
 				const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
 				if (stat) {
-					stat.solvedStatus = false;
+					stat.isSolved = false;
 					stat.curWordIndex = 0;
 					for (let i in stat.curCharsIndexes) {
 						stat.curCharsIndexes[i] = 0;
@@ -200,10 +203,6 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		this.pieCanvases.changes.subscribe(() => {
 			this.syncCharts();
 		});
-	}
-
-	async ionViewWillLeave() {
-		await this.lessonsList.closeSlidingItems();
 	}
 
 	addLessonFile() {

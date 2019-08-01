@@ -1,7 +1,12 @@
 .char-component {
     display: inline-block;
+    transition: color 300ms ease-in-out;
 }
 
 .current {
     color: var(--ion-color-primary);
+}
+
+.opened {
+    color: darkcyan;
 }

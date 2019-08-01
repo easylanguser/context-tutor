@@ -37,26 +37,26 @@
       <div class="char-box no-selection" id="char-box-1"
         [ngStyle]="{ 'box-shadow': this.buttonsHighlights[0] ? this.redHighlight : null }"
         (click)="handleBoxClick(0)">
-        <div class="front">{{firstCharBack}}</div>
-        <div class="back">{{firstChar}}</div>
+        <div class="front">{{charsRefs[4]}}</div>
+        <div class="back">{{charsRefs[0]}}</div>
       </div>
       <div class="char-box no-selection" id="char-box-2"
         [ngStyle]="{ 'box-shadow': this.buttonsHighlights[1] ? this.redHighlight : null }"
         (click)="handleBoxClick(1)">
-        <div class="front">{{secondCharBack}}</div>
-        <div class="back">{{secondChar}}</div>
+        <div class="front">{{charsRefs[5]}}</div>
+        <div class="back">{{charsRefs[1]}}</div>
       </div>
       <div class="char-box no-selection" id="char-box-3"
         [ngStyle]="{ 'box-shadow': this.buttonsHighlights[2] ? this.redHighlight : null }"
         (click)="handleBoxClick(2)">
-        <div class="front">{{thirdCharBack}}</div>
-        <div class="back">{{thirdChar}}</div>
+        <div class="front">{{charsRefs[6]}}</div>
+        <div class="back">{{charsRefs[2]}}</div>
       </div>
       <div class="char-box no-selection" id="char-box-4"
         [ngStyle]="{ 'box-shadow': this.buttonsHighlights[3] ? this.redHighlight : null }"
         (click)="handleBoxClick(3)">
-        <div class="front">{{fourthCharBack}}</div>
-        <div class="back">{{fourthChar}}</div>
+        <div class="front">{{charsRefs[7]}}</div>
+        <div class="back">{{charsRefs[3]}}</div>
       </div>
     </div>
 

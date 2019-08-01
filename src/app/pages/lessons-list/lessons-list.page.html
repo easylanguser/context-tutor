@@ -14,7 +14,7 @@
 
     <div id="segments-div">
       <ion-segment id="lessons-filter-segment" mode="ios"
-        [(ngModel)]="filter" (ionChange)="filterClick()">
+        [(ngModel)]="filter" (ionChange)="filterChanged($event)">
         <ion-segment-button value="all" mode="ios">
           All
         </ion-segment-button>

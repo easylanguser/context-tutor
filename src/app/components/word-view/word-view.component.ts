@@ -39,7 +39,7 @@ export class WordViewComponent implements OnInit {
 		this.language = this.alphabet[this.language] ? this.language : 'english';
 	}
 
-	ngOnChanges() {
+	ngOnChanges() {	
 		if (this.isActive && this.guessChar) {
 			if (this.allCharacters[this.index].toUpperCase() === this.guessChar.toUpperCase()) {
 				this.guessedWord[this.index].type = 0;
@@ -51,6 +51,7 @@ export class WordViewComponent implements OnInit {
 				}
 				this.index++;
 			} else {
+				this.guessedWord[this.index].type = 3;
 				this.guessProgress.emit(this.guessChar);
 			}
 		}

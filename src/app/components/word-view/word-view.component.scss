@@ -1,9 +1,11 @@
 .word-component {
     display: inline-block;
     background: transparent;
-    transition: background 500ms ease-in-out;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 200ms ease-in-out;
 }
 
 .active {
-    background: rgb(230, 230, 230);
+    background: rgb(210, 210, 210);
 }
