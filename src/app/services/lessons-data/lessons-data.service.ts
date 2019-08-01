@@ -180,7 +180,10 @@ export class LessonsDataService {
 				lessonToFill.addSentence(sentence);
 			}
 
-			this.getStatisticsOfSentence(sentence).curCharsIndexes = new Array(apiSentence.words.length).fill(0);
+			const sentenceStat = this.getStatisticsOfSentence(sentence);
+			if (sentenceStat) {
+				sentenceStat.curCharsIndexes = new Array(apiSentence.words.length).fill(0);
+			}
 			k++;
 		}
 

@@ -113,6 +113,8 @@
     -webkit-transform-style: preserve-3d;
     color: black;
     cursor: pointer;
+
+    transition: box-shadow 500ms ease-in-out;
 }
 
 .front,

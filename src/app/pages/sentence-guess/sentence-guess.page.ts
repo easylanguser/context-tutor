@@ -30,6 +30,7 @@ export class SentenceGuessPage implements OnInit {
 			index: number,
 			allCharacters: any,
 			guessChar: string,
+			guessType: string,
 			language: string,
 			isActive: boolean
 		},
@@ -49,6 +50,7 @@ export class SentenceGuessPage implements OnInit {
 	wordsGuessed: number = 0;
 
 	statisticsDeltasArray: Array<[number, number, number, number]> = [];
+	hintsClicks: number = 0;
 
 	alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -67,8 +69,10 @@ export class SentenceGuessPage implements OnInit {
 	thirdCharBack: string;
 	fourthCharBack: string;
 
+	buttonsHighlights: boolean[] = [false, false, false, false];
+
 	yellowHighlight = '0 0 5px 1px #E0E306';
-	redHighlight = '0px 0px 8px 0px rgba(167, 1, 6, 1)';
+	redHighlight = '0px 0px 8px 2px rgb(255, 10, 18) ';
 
 	groups = ['QWSD', 'RTFG', 'EAIO'];
 	unknownCharGroup = '!@#&';
@@ -146,6 +150,7 @@ export class SentenceGuessPage implements OnInit {
 					index: this.curCharsIndexes[this.curWordIndex],
 					allCharacters: sentence.hiddenChars[i],
 					guessChar: null,
+					guessType: null,
 					language: 'english',
 					isActive: (i === 0)
 				},
@@ -184,6 +189,7 @@ export class SentenceGuessPage implements OnInit {
 		
 		this.curWordIndex = i;
 		this.refreshCharBoxes();
+		this.sentenceWords[i].word.guessChar = null;
 		this.sentenceWords[i].word.isActive = true;
 		this.cdRef.detectChanges();
 	}
@@ -368,9 +374,11 @@ export class SentenceGuessPage implements OnInit {
 		}
 	}
 
-	giveUpClick() { // Give up and show full sentence
+	giveUpClick() {
 		if (!this.curStats().solvedStatus) {
-			++this.curStats().giveUps; // Statistics
+			++this.curStats().giveUps;
+			this.hintsClicks += 3;
+			this.updateChart();
 
 			const button: HTMLIonButtonElement = <HTMLIonButtonElement>(document.getElementById('give-up-button'));
 
@@ -389,10 +397,10 @@ export class SentenceGuessPage implements OnInit {
 		}
 	}
 
-	// Show user one current character
 	hintClick() {
 		if (!this.curStats().solvedStatus) {
-			++this.curStats().hintUsages; // Statistics
+			this.curStats().hintUsages++;
+			this.hintsClicks++;
 			this.updateChart();
 			const event = this.correctCharEvent();
 			this.handleKeyboardEvent(event);
@@ -428,7 +436,6 @@ export class SentenceGuessPage implements OnInit {
 		return this.alphabet.charAt(Math.random() * this.alphabet.length);
 	}
 
-	// Generate 3 random characters from alphabet and random position for correct character
 	private generateRandomCharacters() {
 		if (this.charactersRotationIsPlayed) {
 			return;
@@ -530,6 +537,7 @@ export class SentenceGuessPage implements OnInit {
 
 	updateProgress(progress: string) {
 		if (progress === 'full_guess') {
+			this.hintsClicks > 0 ? this.hintsClicks-- : this.curStats().correctAnswers++;
 			this.sentenceWords[this.curWordIndex].isSolved = true;
 			this.curCharsIndexes[this.curWordIndex]++;
 			this.wordsGuessed++;
@@ -547,12 +555,29 @@ export class SentenceGuessPage implements OnInit {
 				this.cdRef.detectChanges();
 			}
 		} else if (progress === 'correct_guess') {
-			this.curStats().correctAnswers++;
+			this.hintsClicks > 0 ? this.hintsClicks-- : this.curStats().correctAnswers++;
 			this.curCharsIndexes[this.curWordIndex]++;
 			this.refreshCharBoxes();
-		} else if (progress === 'wrong') {
+		} else if (progress.length === 1) {
 			this.curStats().wrongAnswers++;
+			this.setRedHighlight(progress.toUpperCase());
 		}
+		this.updateChart();
+	}
+
+	setRedHighlight(char: string) {
+		if (char === this.firstChar || char === this.firstCharBack) {
+			this.buttonsHighlights[0] = true;
+		} else if (char === this.secondChar || char === this.secondCharBack) {
+			this.buttonsHighlights[1] = true;
+		} else if (char === this.thirdChar || char === this.thirdCharBack) {
+			this.buttonsHighlights[2] = true;
+		} else if (char === this.fourthChar || char === this.fourthCharBack) {
+			this.buttonsHighlights[3] = true;
+		} else {
+			return;
+		}
+		this.cdRef.detectChanges();
 	}
 
 	handleKeyboardEvent(event: KeyboardEvent) {
@@ -565,6 +590,9 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		this.charactersRotationIsPlayed = true;
+
+		this.buttonsHighlights = [false, false, false, false];
+		this.cdRef.detectChanges();
 
 		await anime({
 			targets: [

@@ -28,7 +28,7 @@ export class WordViewComponent implements OnInit {
 		if (typeof this.allCharacters === 'string') {
 			this.allCharacters = this.allCharacters.split('');
 		}
-
+		
 		for (let i = 0; i < this.allCharacters.length; i++) {
 			this.guessedWord.push({
 				char: this.allCharacters[i],
@@ -40,8 +40,8 @@ export class WordViewComponent implements OnInit {
 	}
 
 	ngOnChanges() {
-		if (this.isActive) {
-			if (this.allCharacters[this.index] === this.guessChar) {
+		if (this.isActive && this.guessChar) {
+			if (this.allCharacters[this.index].toUpperCase() === this.guessChar.toUpperCase()) {
 				this.guessedWord[this.index].type = 0;
 				if (this.index === this.allCharacters.length - 1) {
 					this.guessProgress.emit('full_guess');
@@ -51,7 +51,7 @@ export class WordViewComponent implements OnInit {
 				}
 				this.index++;
 			} else {
-				this.guessProgress.emit('wrong');
+				this.guessProgress.emit(this.guessChar);
 			}
 		}
 	}

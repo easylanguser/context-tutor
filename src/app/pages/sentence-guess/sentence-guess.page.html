@@ -34,19 +34,27 @@
 
   <ion-footer id="footer" no-padding>
     <div id="chars">
-      <div class="char-box no-selection" id="char-box-1" (click)="handleBoxClick(0)">
+      <div class="char-box no-selection" id="char-box-1"
+        [ngStyle]="{ 'box-shadow': this.buttonsHighlights[0] ? this.redHighlight : null }"
+        (click)="handleBoxClick(0)">
         <div class="front">{{firstCharBack}}</div>
         <div class="back">{{firstChar}}</div>
       </div>
-      <div class="char-box no-selection" id="char-box-2" (click)="handleBoxClick(1)">
+      <div class="char-box no-selection" id="char-box-2"
+        [ngStyle]="{ 'box-shadow': this.buttonsHighlights[1] ? this.redHighlight : null }"
+        (click)="handleBoxClick(1)">
         <div class="front">{{secondCharBack}}</div>
         <div class="back">{{secondChar}}</div>
       </div>
-      <div class="char-box no-selection" id="char-box-3" (click)="handleBoxClick(2)">
+      <div class="char-box no-selection" id="char-box-3"
+        [ngStyle]="{ 'box-shadow': this.buttonsHighlights[2] ? this.redHighlight : null }"
+        (click)="handleBoxClick(2)">
         <div class="front">{{thirdCharBack}}</div>
         <div class="back">{{thirdChar}}</div>
       </div>
-      <div class="char-box no-selection" id="char-box-4" (click)="handleBoxClick(3)">
+      <div class="char-box no-selection" id="char-box-4"
+        [ngStyle]="{ 'box-shadow': this.buttonsHighlights[3] ? this.redHighlight : null }"
+        (click)="handleBoxClick(3)">
         <div class="front">{{fourthCharBack}}</div>
         <div class="back">{{fourthChar}}</div>
       </div>
