@@ -2,6 +2,8 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/spec",
+    "target": "es2015",
+    "module": "esNext",
     "types": [
       "jasmine",
       "node"

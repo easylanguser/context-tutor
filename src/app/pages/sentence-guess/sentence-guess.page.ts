@@ -130,9 +130,6 @@ export class SentenceGuessPage implements OnInit {
 			stats.correctAnswers
 		]);
 
-		console.log(this.curStats().curCharsIndexes);
-		
-
 		this.curWordIndex = this.curStats().curWordIndex;
 		this.curCharsIndexes = this.curStats().curCharsIndexes;
 		this.wordsGuessed = 0;
@@ -184,6 +181,7 @@ export class SentenceGuessPage implements OnInit {
 				el.word.isActive = false;
 			}
 		});
+		
 		this.curWordIndex = i;
 		this.refreshCharBoxes();
 		this.sentenceWords[i].word.isActive = true;
@@ -196,11 +194,6 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	curStats(): Statistics {
-		console.log(this.lessonId);
-		
-		console.log(this.curSentence());
-		console.log(this.lessonsDataService.getStatisticsOfSentence(this.curSentence()));
-		
 		return this.lessonsDataService.getStatisticsOfSentence(this.curSentence());
 	}
 
@@ -538,6 +531,7 @@ export class SentenceGuessPage implements OnInit {
 	updateProgress(progress: string) {
 		if (progress === 'full_guess') {
 			this.sentenceWords[this.curWordIndex].isSolved = true;
+			this.curCharsIndexes[this.curWordIndex]++;
 			this.wordsGuessed++;
 			if (this.sentenceWords.length !== this.wordsGuessed) {
 				do {
@@ -552,7 +546,6 @@ export class SentenceGuessPage implements OnInit {
 				this.sentenceWords[this.curWordIndex].word.isActive = false;
 				this.cdRef.detectChanges();
 			}
-			this.curCharsIndexes[this.curWordIndex]++;
 		} else if (progress === 'correct_guess') {
 			this.curStats().correctAnswers++;
 			this.curCharsIndexes[this.curWordIndex]++;

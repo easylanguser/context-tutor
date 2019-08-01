@@ -180,8 +180,7 @@ export class LessonsDataService {
 				lessonToFill.addSentence(sentence);
 			}
 
-			lessonToFill.statistics[k].curCharsIndexes = new Array(apiSentence.words.length).fill(0);
-			
+			this.getStatisticsOfSentence(sentence).curCharsIndexes = new Array(apiSentence.words.length).fill(0);
 			k++;
 		}
 
