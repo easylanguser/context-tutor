@@ -4,6 +4,11 @@ ion-spinner {
     top: 40%;
 }
 
+#toolbar {
+    --background: transparent;
+    --border-width: 0;
+}
+
 ion-button {
     transition: background .2s ease-in-out;
     -webkit-transition: background .2s ease-in-out;
@@ -41,22 +46,6 @@ ion-button {
     width: 20%;
     margin-left: 40%;
     margin-top: 5%;
-}
-
-#dismiss-btn {
-    position: fixed;
-    bottom: 8px;
-    width: 40%;
-    height: 2.5vh;
-    margin: 0 0 0 30%;
-    font-size: 1.75vh;
-    color: #FFF;
-    --background: var(--ion-color-danger-tint);
-
-    @media (max-width: 991px) {
-        height: 6vh;
-        font-size: 2.5vh;
-    }
 }
 
 #users-search-bar {

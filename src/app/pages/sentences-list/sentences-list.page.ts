@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChildren, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
-import { NavController, ToastController, IonList, PopoverController } from '@ionic/angular';
+import { NavController, ToastController, PopoverController } from '@ionic/angular';
 import * as anime from 'animejs';
 import * as _ from 'lodash';
 import { Globals } from 'src/app/services/globals/globals';

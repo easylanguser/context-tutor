@@ -1,6 +1,8 @@
 .char-component {
     display: inline-block;
     transition: color 300ms ease-in-out;
+    width: 16px;
+    text-align: center;
 }
 
 .current {
@@ -9,4 +11,5 @@
 
 .opened {
     color: darkcyan;
+    width: auto !important;
 }

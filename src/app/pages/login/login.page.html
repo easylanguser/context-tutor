@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content no-padding class="forms" scrollY="false">
-  <form [formGroup]="credentialsForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="credentialsForm" id="credentials-form" (ngSubmit)="onSubmit()">
 
     <div id="form-div">
       <ion-label id="email-label" position="floating">Email</ion-label>
@@ -33,7 +33,7 @@
       <div style="margin-bottom: 4vh;"></div>
 
       <ion-label id="password-label" position="floating">Password</ion-label>
-      <div>
+      <div style="border-bottom: 2px solid rgb(196, 196, 196);">
         <input id="password-input" class="credentials-inputs" type="password" formControlName="password" required />
         <ion-icon id="lock-icon" name="eye" (click)="togglePasswordVisibility()"></ion-icon>
       </div>

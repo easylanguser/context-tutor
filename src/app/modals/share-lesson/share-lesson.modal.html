@@ -1,5 +1,16 @@
 <ion-content>
 
+  <ion-header>
+    <ion-toolbar mode="ios" id="toolbar">
+      <ion-title>Share lesson</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="dismissModal()">
+          <ion-label>Close</ion-label>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
   <form [formGroup]="emailSearchForm" (ngSubmit)="startSearch()">
     <ion-input id="search-user-input" text-center type="email"
       formControlName="email" placeholder="Enter user email">
@@ -23,9 +34,5 @@
       </ion-button>
     </div>
   </div>
-
-  <ion-button id="dismiss-btn" (click)="dismissModal()">
-    Dismiss
-  </ion-button>
 
 </ion-content>

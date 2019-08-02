@@ -151,7 +151,6 @@ export class LessonsDataService {
 
 		const lessonToFill = this.getLessonById(lessonId);
 
-		let k = 0;
 		for (const apiSentence of apiSentences) {
 			const hiddenChars: Array<string[]> = [];
 
@@ -184,12 +183,9 @@ export class LessonsDataService {
 			if (sentenceStat) {
 				sentenceStat.curCharsIndexes = new Array(apiSentence.words.length).fill(0);
 			}
-			k++;
 		}
-
-		if (lessonToFill.sentences.length > 0) {
-			lessonToFill.sentences.sort(this.sortSentencesByAddingTime);
-		}
+		
+		lessonToFill.sentences.sort(this.sortSentencesByAddingTime);
 
 		return lessonToFill.sentences;
 	}
@@ -301,13 +297,7 @@ export class LessonsDataService {
 	sortSentencesByAddingTime(first: Sentence, second: Sentence): number {
 		const firstTime = new Date(first.created_at);
 		const secondTime = new Date(second.created_at);
-		if (firstTime > secondTime) {
-			return 1;
-		} else if (firstTime === secondTime) {
-			return 0;
-		} else {
-			return -1;
-		}
+		return firstTime > secondTime ? 1 : -1;
 	}
 
 	sortLessonsByTime(first: Lesson, second: Lesson): number {

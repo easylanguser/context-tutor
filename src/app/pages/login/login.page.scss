@@ -32,14 +32,26 @@ ion-title {
     font-size: 2.5vh;
 }
 
+#credentials-form {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
 #form-div {
+    width: 70vw;
+    max-width: 700px;
     background: white;
     -webkit-box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
     -moz-box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
     box-shadow: 0px 1px 3px 0px rgba(87, 87, 87, 0.3);
-    border-radius: 35px;
+    border-radius: 20px;
     margin: 7vmax 3vw 0 3vw;
-    padding: 7vmin;
+    padding: 2vh 3vmax 4vh 3vmax;
+
+    @media (max-width: 700px) {
+        width: 90vw;
+    }
 }
 
 .credentials-inputs {
@@ -47,9 +59,7 @@ ion-title {
     border-top: 0;
     border-left: 0;
     border-right: 0;
-    width: 95%;
     height: 30px;
-    margin-top: 1vh;
 }
 
 #email-label {
@@ -57,6 +67,7 @@ ion-title {
     color: #000;
 }
 #email-input {
+    width: 100%;
     font-family: "Arial";
     border-bottom: 2px solid rgb(196, 196, 196);
 }
@@ -66,9 +77,9 @@ ion-title {
     color: #000;
 }
 #password-input {
+    width: 95%;
     font-family: "Arial";
-    border-bottom: 2px solid rgb(196, 196, 196);
-
+    border-bottom: 0;
     ion-icon {
         z-index: -104;
         font-size: 22px;
@@ -76,12 +87,16 @@ ion-title {
         bottom: 4px;
         right: 0px;
     }
+
+    @media (max-width: 450px) {
+        width: 90%;
+    }
 }
 
 #sign-in-button {
     width: 70vw;
-    margin-left: calc(15vw - 16px);
     height: 6vh;
+    max-width: 400px;
     border-radius: 100px;
     background: linear-gradient(rgb(68, 207, 255), rgb(69, 184, 255));
     color: white;
@@ -94,11 +109,6 @@ ion-title {
 
     &:hover {
         background: linear-gradient(rgb(69, 184, 255), rgb(68, 207, 255));
-    }
-
-    @media (min-width: 992px) {
-        width: 40vw;
-        margin-left: calc(16vw - 16px);
     }
 }
 
