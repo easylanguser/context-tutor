@@ -1,10 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ChangePage } from './change.page';
 
+const routes: Routes = [
+	{
+		path: '',
+		component: ChangePage
+	}
+];
 
 @NgModule({
 	imports: [
@@ -12,12 +18,7 @@ import { ChangePage } from './change.page';
 		FormsModule,
 		IonicModule,
 		ReactiveFormsModule,
-		RouterModule.forChild([
-			{
-				path: '',
-				component: ChangePage
-			}
-		])
+		RouterModule.forChild(routes)
 	],
 	declarations: [ChangePage]
 })

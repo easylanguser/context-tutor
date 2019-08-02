@@ -1,20 +1,30 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from './services/guard/auth-guard.service';
+import { SentencesListPage } from './pages/sentences-list/sentences-list.page';
+import { SentenceGuessPage } from './pages/sentence-guess/sentence-guess.page';
+import { LoginPage } from './pages/login/login.page';
+import { AccountPage } from './pages/account/account.page';
+import { ForgetPage } from './pages/forget/forget.page';
+import { ChangePage } from './pages/change/change.page';
+import { AddLessonPage } from './pages/add-lesson/add-lesson.page';
+import { ShareAddingChoicePage } from './pages/share-adding-choice/share-adding-choice.page';
+import { SentenceAddingPage } from './pages/sentence-adding/sentence-adding.page';
+import { EditLessonTitlePage } from './pages/edit-lesson-title/edit-lesson-title.page';
 
 const routes: Routes = [
 	{ path: '', redirectTo: 'lessons-list', pathMatch: 'full' },
-	{ path: 'lessons-list', loadChildren: () => import('./pages/lessons-list/lessons-list.page.module').then(mod => mod.LessonsListPageModule), canActivate: [AuthGuardService] },
-	{ path: 'sentences-list', loadChildren: () => import('./pages/sentences-list/sentences-list.page.module').then(mod => mod.SentencesListPageModule), canActivate: [AuthGuardService] },
-	{ path: 'sentence-guess', loadChildren: () => import('./pages/sentence-guess/sentence-guess.module').then(mod => mod.SentenceGuessPageModule), canActivate: [AuthGuardService]  },
-	{ path: 'login', loadChildren: () => import('./pages/login/login.module').then(mod => mod.LoginPageModule) },
-	{ path: 'account', loadChildren: () => import('./pages/account/account.module').then(mod => mod.AccountPageModule) },
-	{ path: 'forget', loadChildren: () => import('./pages/forget/forget.module').then(mod => mod.ForgetPageModule) },
-	{ path: 'change', loadChildren: () => import('./pages/change/change.module').then(mod => mod.ChangePageModule) },
-	{ path: 'add-lesson', loadChildren: () => import('./pages/add-lesson/add-lesson.module').then(mod => mod.AddLessonPageModule) },
-	{ path: 'share-adding-choice', loadChildren: () => import('./pages/share-adding-choice/share-adding-choice.module').then(mod => mod.ShareAddingChoicePageModule)  },
-	{ path: 'sentence-adding', loadChildren: () => import('./pages/sentence-adding/sentence-adding.module').then(mod => mod.SentenceAddingPageModule) },
-	{ path: 'edit-lesson-title', loadChildren: () => import('./pages/edit-lesson-title/edit-lesson-title.module').then(mod => mod.EditLessonTitlePageModule) },
+	{ path: 'lessons-list', loadChildren: './pages/lessons-list/lessons-list.page.module#LessonsListPageModule', canActivate: [AuthGuardService] },
+	{ path: 'sentences-list', component: SentencesListPage, canActivate: [AuthGuardService] },
+	{ path: 'sentence-guess', component: SentenceGuessPage, canActivate: [AuthGuardService]  },
+	{ path: 'login', component: LoginPage },
+	{ path: 'account', component: AccountPage },
+	{ path: 'forget', component: ForgetPage },
+	{ path: 'change', component: ChangePage },
+	{ path: 'add-lesson', component: AddLessonPage, canActivate: [AuthGuardService]  },
+	{ path: 'share-adding-choice', component: ShareAddingChoicePage, canActivate: [AuthGuardService]  },
+	{ path: 'sentence-adding', component: SentenceAddingPage, canActivate: [AuthGuardService]  },
+	{ path: 'edit-lesson-title', component: EditLessonTitlePage, canActivate: [AuthGuardService]  }
 ];
 
 @NgModule({

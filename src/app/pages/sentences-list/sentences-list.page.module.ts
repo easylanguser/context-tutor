@@ -3,19 +3,21 @@ import { SentencesListPage } from './sentences-list.page';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+	{
+		path: '',
+		component: SentencesListPage
+	}
+]
 
 @NgModule({
 	imports: [
 		CommonModule,
 		FormsModule,
 		IonicModule,
-		RouterModule.forChild([
-			{
-				path: '',
-				component: SentencesListPage
-			}
-		])
+		RouterModule.forChild(routes)
 	],
 	declarations: [
 		SentencesListPage,
