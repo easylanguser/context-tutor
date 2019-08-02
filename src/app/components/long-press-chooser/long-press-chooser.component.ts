@@ -29,7 +29,6 @@ export class LongPressChooserComponent {
 		private popoverController: PopoverController,
 		private modalController: ModalController,
 		private lessonHttpService: LessonHttpService,
-		private sentenceHttpService: SentenceHttpService,
 		private utils: UtilsService,
 		private lessonsDataService: LessonsDataService,
 		public globals: Globals) { }
@@ -46,8 +45,7 @@ export class LongPressChooserComponent {
 
 	async deleteItem() {
 		const alert = await this.alertController.create({
-			message: 'Are you sure you want to delete this ' +
-				(this.lesson ? 'lesson?' : 'sentence?'),
+			message: 'Are you sure you want to delete this lesson?',
 			buttons: [
 				{
 					text: 'Cancel',
@@ -56,13 +54,8 @@ export class LongPressChooserComponent {
 				{
 					text: 'Delete',
 					handler: async () => {
-						if (this.lesson) {
-							await this.lessonHttpService.deleteLesson(this.lesson.id);
-							this.lessonsDataService.removeLesson(this.lesson.id);
-						} else {
-							await this.sentenceHttpService.deleteSentence(this.sentence.id);
-							this.lessonsDataService.removeSentence(this.sentence.lessonId, this.sentence.id);
-						}
+						await this.lessonHttpService.deleteLesson(this.lesson.id);
+						this.lessonsDataService.removeLesson(this.lesson.id);
 					}
 				}
 			]

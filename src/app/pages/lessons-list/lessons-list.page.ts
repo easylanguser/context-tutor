@@ -94,11 +94,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		}
 	}
 
-	handleTouchEnd(evt) {	
-		if (!(this.xDown && this.yDown)) {
-			return;
-		}
-
+	handleTouchEnd(evt) {
+		evt.preventDefault();
 		let xDiff, yDiff, minDistance = 6;
 		if (evt.type === 'mouseup') {
 			xDiff = this.xDown - evt.clientX;
@@ -131,12 +128,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		}
 	}
 
-	async filterChanged(event) {
-		/* \|/ Prevents ionChange trigger if lesson-list page was not the first to load */
-		const isFirst: boolean = event.path.length > 15;
-		if (isFirst) {
-			await this.utils.createAndShowLoader('Loading...');
-		}
+	async filterChanged() {
+		await this.utils.createAndShowLoader('Loading...');
 
 		const allLessons = this.lessonsDataService.lessons;
 		if (this.filter === 'all') {
@@ -149,9 +142,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 			);
 		}
 
-		if (isFirst) {
-			await this.utils.dismissLoader();
-		}
+		await this.utils.dismissLoader();
 	}
 
 	private addFabsHandler() {
@@ -267,7 +258,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				queryParams: {
 					lessonId: lesson.id,
 					parentId: lesson.parentId,
-					showLoader: lesson.sentences.length > 20
+					showLoader: lesson.statistics.length > 20
 				}
 			});
 	}

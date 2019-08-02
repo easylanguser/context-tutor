@@ -4,11 +4,11 @@ import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
-import { NavController, ToastController, PopoverController } from '@ionic/angular';
+import { NavController, ToastController, AlertController } from '@ionic/angular';
 import * as anime from 'animejs';
 import * as _ from 'lodash';
 import { Globals } from 'src/app/services/globals/globals';
-import { LongPressChooserComponent } from 'src/app/components/long-press-chooser/long-press-chooser.component';
+import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -26,7 +26,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	pieCharts: Array<Chart> = [];
 
 	filter: string = 'all';
-	popover: HTMLIonPopoverElement = null;
+	alert: HTMLIonAlertElement = null;
 	pressDuration: number = 0;
 	interval: any;
 	toast: HTMLIonToastElement = null;
@@ -37,13 +37,14 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	yDown = null;
 
 	constructor(
-		private popoverController: PopoverController,
 		private toastController: ToastController,
 		private utils: UtilsService,
 		public globals: Globals,
 		private route: ActivatedRoute,
 		private navController: NavController,
-		public lessonsDataService: LessonsDataService) { }
+		private alertController: AlertController,
+		private sentenceHttpService: SentenceHttpService,
+		public lessonsDataService: LessonsDataService,) { }
 
 	async ngOnInit() {
 		const showLoader = this.route.snapshot.queryParamMap.get('showLoader');
@@ -114,22 +115,30 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	mouseIsDown(sentence: Sentence) {
 		if (!this.parentId) {
-			this.popover = null;
 			this.interval = setInterval(async () => {
 				this.pressDuration++;
 				if (this.pressDuration > 7) {
 					clearInterval(this.interval);
 					this.pressDuration = 0;
-					if (!this.popover && !this.refresherIsPulled) {
-						this.popover = await this.popoverController.create({
-							component: LongPressChooserComponent,
-							componentProps: {
-								sentence: sentence
-							},
-							animated: true,
-							showBackdrop: true
+					if (!this.refresherIsPulled) {
+						this.alert = await this.alertController.create({
+							message: 'Are you sure you want to delete this sentence?',
+							buttons: [
+								{
+									text: 'Cancel',
+									role: 'cancel'
+								},
+								{
+									text: 'Delete',
+									handler: async () => {
+										await this.sentenceHttpService.deleteSentence(sentence.id);
+										this.lessonsDataService.removeSentence(sentence.lessonId, sentence.id);
+									}
+								}
+							]
 						});
-						await this.popover.present();
+						this.alert.onDidDismiss().then(() => this.alert = null);
+						this.alert.present();
 					}
 				}
 			}, 100);
@@ -147,7 +156,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 			yDiff = this.yDown - evt.changedTouches[0].clientY;
 		}
 
-		if (Math.abs(Math.abs(xDiff) - Math.abs(yDiff)) < 20 && !this.popover) {
+		if (Math.abs(Math.abs(xDiff) - Math.abs(yDiff)) < 20 && !this.alert) {
 			this.openSentence(sentence.id);
 		}
 
@@ -164,10 +173,7 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	handleTouchEnd(evt) {
-		if (!(this.xDown && this.yDown)) {
-			return;
-		}
-
+		evt.preventDefault();
 		let xDiff, yDiff, minDistance = 6;
 		if (evt.type === 'mouseup') {
 			xDiff = this.xDown - evt.clientX;
