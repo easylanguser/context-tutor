@@ -29,11 +29,10 @@ export class LoginPage implements OnInit {
 		});
 	}
 
-	togglePasswordVisibility(event: MouseEvent) {
-		event.preventDefault();
+	togglePasswordVisibility() {
 		const input = document.getElementById('password-input');
 		const button = document.getElementById('lock-icon');	
-		if (event.layerX + 35 > input.getBoundingClientRect().width && input.hasAttribute('type')) {
+		if (input.hasAttribute('type')) {
 			input.removeAttribute('type');
 			button.setAttribute('name', 'eye-off');
 		} else {

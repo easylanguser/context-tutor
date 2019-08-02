@@ -9,12 +9,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding class="forms" scrollY="false">
+<ion-content no-padding class="forms" scrollY="false">
   <form [formGroup]="credentialsForm" (ngSubmit)="onSubmit()">
 
     <div id="form-div">
-      <ion-label id="email-label">Email</ion-label>
-      <ion-input id="email-input" autocomplete="on" formControlName="email" required></ion-input>
+      <ion-label id="email-label" position="floating">Email</ion-label>
+      <div>
+        <input id="email-input" class="credentials-inputs" formControlName="email" required />
+      </div>
 
       <div *ngIf="submitted && formData.email.errors" class="error-label">
         <div *ngIf="formData.email.errors.required">
@@ -31,9 +33,10 @@
       <div style="margin-bottom: 4vh;"></div>
 
       <ion-label id="password-label" position="floating">Password</ion-label>
-      <ion-input id="password-input" (click)="togglePasswordVisibility($event)" autocomplete="on" type="password" formControlName="password" required>
-        <ion-icon id="lock-icon" name="eye"></ion-icon>
-      </ion-input>
+      <div>
+        <input id="password-input" class="credentials-inputs" type="password" formControlName="password" required />
+        <ion-icon id="lock-icon" name="eye" (click)="togglePasswordVisibility()"></ion-icon>
+      </div>
       
 
       <div *ngIf="submitted && formData.password.errors" class="error-label">
@@ -58,7 +61,7 @@
 
 <ion-footer>
   <ion-toolbar mode="ios">
-    <ion-title text-center>
+    <ion-title class="no-selection" text-center>
       <a (click)="toForget()">Forgot </a>your password?
     </ion-title>
   </ion-toolbar>
