@@ -14,6 +14,7 @@ export class Globals {
 	isDemoHasChanged: boolean;
 
 	alphabet: any;
+	guessedWords: string[] = [];
 
 	updIsDemo(newVal: boolean) {
 		this.isDemoHasChanged = (newVal !== this.getIsDemo());

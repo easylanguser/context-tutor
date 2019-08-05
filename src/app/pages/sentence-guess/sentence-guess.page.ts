@@ -1,5 +1,5 @@
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
@@ -35,7 +35,7 @@ export class SentenceGuessPage implements OnInit {
 			isActive: boolean,
 			fullWord: string
 		},
-		isSolved: boolean
+		wordIsSolved: boolean
 	}[] = [];
 
 	alertIsShown: boolean;
@@ -65,7 +65,7 @@ export class SentenceGuessPage implements OnInit {
 	charsRefs = ['', '', '', '', '', '', '', ''];
 
 	buttonsHighlights: boolean[] = [false, false, false, false];
-	redHighlight = '0px 0px 8px 2px rgb(255, 10, 18) ';
+	redHighlight = '0px 0px 8px 2px rgb(255, 10, 18)';
 
 	groups = ['QWSD', 'RTFG', 'EAIO'];
 	unknownCharGroup = '!@#&';
@@ -131,17 +131,13 @@ export class SentenceGuessPage implements OnInit {
 		this.curCharsIndexes = this.curStats().curCharsIndexes;
 		this.wordsGuessed = 0;
 
-		if (!this.curStats().isSolved) {
-			this.refreshCharBoxes();
-		}
-
 		const sentence = this.curSentence();
 		const sentenceLength = sentence.text.length;
 		let prevIndex: number = 0, i = 0;
 		
 		for (let word of sentence.words) {
-			let endIndex = sentence.words[i][0], startIndex = sentence.words[i][0];
-			let curChar;
+			let endIndex: number = sentence.words[i][0], startIndex: number = sentence.words[i][0];
+			let curChar: string;
 
 			do {
 				startIndex--;
@@ -152,31 +148,45 @@ export class SentenceGuessPage implements OnInit {
 				endIndex++;
 				curChar = sentence.text.charAt(endIndex);
 			} while (this.edgeCharacters.indexOf(curChar) === -1 && endIndex < sentenceLength);
-			
+
+			const fullWord = sentence.text.substring(startIndex + 1, endIndex);
+			const allCharacters = sentence.hiddenChars[i];
+			const isAlreadyGuessed = this.globals.guessedWords.indexOf(fullWord) > -1;
+			if (isAlreadyGuessed) {
+				this.wordsGuessed++;
+				if (sentence.words.length === this.wordsGuessed) {
+					this.markAsSolved();
+				}
+			}
+
 			this.sentenceWords.push({
 				word: {
-					index: this.curCharsIndexes[i],
-					allCharacters: sentence.hiddenChars[i],
+					index: isAlreadyGuessed ? allCharacters.length : this.curCharsIndexes[i],
+					allCharacters: allCharacters,
 					guessChar: null,
 					guessType: null,
 					language: 'english',
 					isActive: (i === 0),
-					fullWord: sentence.text.substring(startIndex + 1, endIndex)
+					fullWord: fullWord
 				},
-				isSolved: false
+				wordIsSolved: isAlreadyGuessed
 			});
 			this.cdRef.detectChanges();
 			document.getElementById('word' + i).insertAdjacentText(
 				'beforebegin',
 				sentence.text.substring(prevIndex, word[0])
 			);
-			prevIndex = (word[0] + word[1]);
+			prevIndex = word[0] + word[1];
 			++i;
 		}
 		document.getElementById('word' + (i - 1)).insertAdjacentText(
 			'afterend',
 			sentence.text.substring(prevIndex, sentence.text.length)
 		);
+
+		if (!this.curStats().isSolved) {
+			this.refreshCharBoxes();
+		}
 	}
 
 	removeAllTextNodes(node) {
@@ -520,7 +530,8 @@ export class SentenceGuessPage implements OnInit {
 	updateProgress(progress: string) {
 		if (progress === 'full_guess') {
 			this.hintsClicks > 0 ? this.hintsClicks-- : this.curStats().correctAnswers++;
-			this.sentenceWords[this.curWordIndex].isSolved = true;
+			this.sentenceWords[this.curWordIndex].wordIsSolved = true;
+			this.globals.guessedWords.push(this.sentenceWords[this.curWordIndex].word.fullWord.toLowerCase());
 			this.curCharsIndexes[this.curWordIndex]++;
 			this.wordsGuessed++;
 			if (this.sentenceWords.length !== this.wordsGuessed) {
@@ -529,7 +540,7 @@ export class SentenceGuessPage implements OnInit {
 					if (this.curWordIndex === this.sentenceWords.length) {
 						this.curWordIndex = 0;
 					}
-				} while (this.sentenceWords[this.curWordIndex].isSolved);
+				} while (this.sentenceWords[this.curWordIndex].wordIsSolved);
 				this.makeActive(this.curWordIndex);
 			} else {
 				this.markAsSolved();

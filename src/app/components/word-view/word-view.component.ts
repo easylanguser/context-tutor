@@ -10,7 +10,7 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 export class WordViewComponent implements OnInit {
 
 	alphabet: any;
-	guessedWord: { char: string, type: number }[] = [];
+	guessWord: { char: string, type: number }[] = [];
 
 	@Input("index") index: number;
 	@Input("allCharacters") allCharacters: any;
@@ -19,94 +19,47 @@ export class WordViewComponent implements OnInit {
 	@Input("isActive") isActive: boolean;
 	@Input("fullWord") fullWord: string;
 
-	@Output() guessProgress = new EventEmitter();
+	@Output() guessProgress = new EventEmitter<string>();
 
 	constructor(private utils: UtilsService) { }
 
-	async ngOnInit() {
-		this.alphabet = await this.utils.getCharsAccordance();
-
+	ngOnInit() {
 		if (typeof this.allCharacters === 'string') {
 			this.allCharacters = this.allCharacters.split('');
 		}
 		
 		for (let i = 0; i < this.allCharacters.length; i++) {
-			this.guessedWord.push({
+			this.guessWord.push({
 				char: this.allCharacters[i],
 				type: (this.index > i) ? 0 : ((this.index === i) ? 1 : 2)
 			});
 		}
 
-		this.language = this.alphabet[this.language] ? this.language : 'english';
+		if (this.isActive && this.index === this.allCharacters.length) {
+			this.isActive = false;
+		}
+
+		this.utils.getCharsAccordance().then(alphabet => {
+			this.alphabet = alphabet;
+			this.language = this.alphabet[this.language] ? this.language : 'english';
+		});
 	}
 
 	ngOnChanges() {	
 		if (this.isActive && this.guessChar) {
 			if (this.allCharacters[this.index].toUpperCase() === this.guessChar.toUpperCase()) {
-				this.guessedWord[this.index].type = 0;
-				if (this.index === this.allCharacters.length - 1) {
+				this.guessWord[this.index].type = 0;
+				if (this.index >= this.allCharacters.length - 1) {
 					this.guessProgress.emit('full_guess');
 				} else {
-					this.guessedWord[this.index + 1].type = 1;
+					this.guessWord[this.index + 1].type = 1;
 					this.guessProgress.emit('correct_guess');
 				}
 				this.index++;
 			} else {
-				this.guessedWord[this.index].type = 3;
+				this.guessWord[this.index].type = 3;
 				this.guessProgress.emit(this.guessChar);
 			}
 		}
-	}
-
-	getCurGroup() {
-		const curLang = this.alphabet[this.language];
-		const curCharacter = this.allCharacters.charAt(this.index);
-		if (!curLang || !curCharacter) {
-			return false;
-		}
-		const upperCase = curCharacter === curCharacter.toUpperCase();
-		let curGroup = curLang.groups.filter(g =>
-			g.toUpperCase().indexOf(curCharacter.toUpperCase()) !== -1
-		)[0];
-		if (!curGroup) {
-			curGroup = this._createNewGroup(curLang.alphabet, curCharacter);
-		}
-		return upperCase ? curGroup.toUpperCase() : curGroup.toLowerCase();
-	}
-
-	_createNewGroup(str, curCharacter) {
-		let curGroup = curCharacter;
-		for (let i = 0; i < 3;) {
-			let rand = this.chooseRandomCharFromString(str);
-			if (curGroup.split('').every(e => e.toUpperCase() !== rand.toUpperCase())) {
-				curGroup += rand;
-				i++;
-			}
-		}
-		return this.randomSortStr(curGroup);
-	}
-
-	chooseRandomCharFromString(str) {
-		return str.charAt(Math.floor(Math.random() * str.length));
-	}
-
-	randomSortStr(str) {
-		function compareRandom(a, b) {
-			return Math.random() - 0.5;
-		}
-		let arr = str.split('');
-		arr.sort(compareRandom);
-		return arr.join('');
-	}
-
-	openChar() {
-		if (this.allCharacters.charAt(this.index)) {
-			this.index++;
-			if (this.index >= this.allCharacters.length) {
-				return 1;
-			}
-			return this.getCurGroup();
-		}
-		return 0;
 	}
 }

@@ -1,6 +1,6 @@
 <div class="word-component" [ngClass]="{'active': this.isActive}">
   <app-character
-    *ngFor="let character of guessedWord"
+    *ngFor="let character of guessWord"
     [char]="character.char"
     [type]="character.type">
   </app-character>
