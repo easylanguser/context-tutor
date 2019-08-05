@@ -105,10 +105,6 @@ export class AppComponent {
 
 					await this.loadAvatar();
 
-					this.globals.alphabet = await this.httpService
-						.doGet('../../../assets/chars-accordance.json')
-						.toPromise();
-
 					const paramsOfUrl = this.getParams(pathToGo);
 					if (paramsOfUrl) {
 						this.navController.navigateForward(

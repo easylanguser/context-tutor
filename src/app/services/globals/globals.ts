@@ -12,8 +12,7 @@ export class Globals {
 
 	isDemo: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	isDemoHasChanged: boolean;
-
-	alphabet: any;
+	
 	guessedWords: string[] = [];
 
 	updIsDemo(newVal: boolean) {

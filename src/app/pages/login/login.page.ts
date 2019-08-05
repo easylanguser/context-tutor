@@ -2,11 +2,26 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { NavController, AlertController } from '@ionic/angular';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
 	selector: 'page-login',
 	templateUrl: 'login.page.html',
-	styleUrls: ['login.page.scss']
+	styleUrls: ['login.page.scss'],
+	animations: [
+		trigger(
+			'enterAnimation', [
+				transition(':enter', [
+					style({ opacity: 0 }),
+					animate('500ms', style({ opacity: 1 }))
+				]),
+				transition(':leave', [
+					style({ opacity: 1 }),
+					animate('500ms', style({ opacity: 0 }))
+				])
+			]
+		)
+	]
 })
 export class LoginPage implements OnInit {
 	credentialsForm: FormGroup;

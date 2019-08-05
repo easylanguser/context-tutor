@@ -14,17 +14,21 @@
 
     <div id="form-div">
       <ion-label id="email-label" position="floating">Email</ion-label>
-      <div>
-        <input id="email-input" class="credentials-inputs" formControlName="email" required />
+      <div style="margin-top: 4px;">
+        <input id="email-input" class="credentials-inputs" type="email" formControlName="email" required />
       </div>
 
-      <div *ngIf="submitted && formData.email.errors" class="error-label">
+      <div *ngIf="submitted && formData.email.errors"
+        [@enterAnimation]
+        class="error-label">
         <div *ngIf="formData.email.errors.required">
           This field is required
         </div>
       </div>
 
-      <div *ngIf="formData.email.errors && formData.email.touched && !formData.email.errors.required && submitted" class="error-label">
+      <div *ngIf="formData.email.errors && formData.email.touched && !formData.email.errors.required && submitted"
+        [@enterAnimation]
+        class="error-label">
         <div>
           Invalid email
         </div>
@@ -33,19 +37,22 @@
       <div style="margin-bottom: 4vh;"></div>
 
       <ion-label id="password-label" position="floating">Password</ion-label>
-      <div style="border-bottom: 2px solid rgb(196, 196, 196);">
+      <div style="border-bottom: 2px solid rgb(196, 196, 196); margin-top: 4px;">
         <input id="password-input" class="credentials-inputs" type="password" formControlName="password" required />
         <ion-icon id="lock-icon" name="eye" (click)="togglePasswordVisibility()"></ion-icon>
       </div>
       
 
-      <div *ngIf="submitted && formData.password.errors" class="error-label">
+      <div *ngIf="submitted && formData.password.errors"
+        [@enterAnimation]  
+        class="error-label">
         <div *ngIf="formData.password.errors.required">
           This field is required
         </div>
       </div>
 
       <div *ngIf="formData.password.errors && formData.password.touched && !formData.password.errors.required && submitted"
+        [@enterAnimation]
         class="error-label">
         <div>
           Password must be at least 6 characters long

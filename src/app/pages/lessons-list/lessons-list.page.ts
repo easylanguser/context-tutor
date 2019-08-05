@@ -59,6 +59,7 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 						componentProps: {
 							lesson: lesson
 						},
+						mode: 'ios',
 						animated: true,
 						showBackdrop: true
 					});

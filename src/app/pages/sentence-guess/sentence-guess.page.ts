@@ -1,5 +1,5 @@
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
@@ -30,15 +30,12 @@ export class SentenceGuessPage implements OnInit {
 			index: number,
 			allCharacters: any,
 			guessChar: string,
-			guessType: string,
-			language: string,
 			isActive: boolean,
 			fullWord: string
 		},
 		wordIsSolved: boolean
 	}[] = [];
 
-	alertIsShown: boolean;
 	lessonId: number = 0;
 	parentId: number = 0;
 	sentenceId: number;
@@ -127,17 +124,18 @@ export class SentenceGuessPage implements OnInit {
 			stats.correctAnswers
 		]);
 
-		this.curWordIndex = this.curStats().curWordIndex;
-		this.curCharsIndexes = this.curStats().curCharsIndexes;
+		this.curWordIndex = stats.curWordIndex;
+		this.curCharsIndexes = stats.curCharsIndexes;
 		this.wordsGuessed = 0;
 
 		const sentence = this.curSentence();
 		const sentenceLength = sentence.text.length;
 		let prevIndex: number = 0, i = 0;
 		
-		for (let word of sentence.words) {
-			let endIndex: number = sentence.words[i][0], startIndex: number = sentence.words[i][0];
-			let curChar: string;
+		for (const word of sentence.words) {
+			let endIndex: number = sentence.words[i][0],
+				startIndex: number = sentence.words[i][0],
+				curChar: string;
 
 			do {
 				startIndex--;
@@ -164,8 +162,6 @@ export class SentenceGuessPage implements OnInit {
 					index: isAlreadyGuessed ? allCharacters.length : this.curCharsIndexes[i],
 					allCharacters: allCharacters,
 					guessChar: null,
-					guessType: null,
-					language: 'english',
 					isActive: (i === 0),
 					fullWord: fullWord
 				},
@@ -299,14 +295,13 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	async showAlert() {
-		this.alertIsShown = true;
 		const stats = this.curStats();
 		const savedStats = this.statisticsDeltasArray.find(elem => elem[0] === this.curSentence().id);
 		const greenDelta = stats.correctAnswers - savedStats[3];
 		const yellowDelta = stats.giveUps + stats.hintUsages - savedStats[2];
 		const redDelta = stats.wrongAnswers - savedStats[1];
 		if (greenDelta + yellowDelta + redDelta !== 0) {
-			const alert = await this.alertController.create({
+			await this.alertController.create({
 				message: '<p class="green-text">Green: +' + greenDelta +
 					'</p><p class="yellow-text">Yellow: +' + yellowDelta +
 					'</p><p class="red-text">Red: +' + redDelta + '</p>',
@@ -331,15 +326,10 @@ export class SentenceGuessPage implements OnInit {
 							role: 'cancel'
 						}
 					]
-			});
-			alert.present();
-			setTimeout(() => { this.alertIsShown = false; }, 1500);
-		} else {
-			this.alertIsShown = false;
+			}).then(alert => alert.present());
 		}
 	}
 
-	// Get current character to be filled
 	private curCorrectChar(): string {
 		return this.curSentence().hiddenChars[this.curWordIndex][this.curCharsIndexes[this.curWordIndex]];
 	}
@@ -390,9 +380,7 @@ export class SentenceGuessPage implements OnInit {
 
 	markAsSolved() {
 		this.curStats().isSolved = true;
-		if (!this.alertIsShown) {
-			this.showAlert();
-		}
+		this.showAlert();
 	}
 
 	giveUpClick() {
@@ -476,8 +464,9 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	randCharsOrGroup(correctChar: string): string {
-		if (!this.utils.isEnglishChar(correctChar))
+		if (!this.utils.isEnglishChar(correctChar)) {
 			return this.unknownCharGroup;
+		}
 
 		for (const arr of this.groups) {
 			if (arr.indexOf(correctChar) > -1) {
@@ -487,7 +476,7 @@ export class SentenceGuessPage implements OnInit {
 
 		const vowelsPositions = [0, 4, 8, 14, 20, 24];
 		const vowelIsGuessed = vowelsPositions.indexOf(this.alphabet.indexOf(correctChar)) !== -1;
-		let firstChar, secondChar, thirdChar, fourthChar;
+		let firstChar: string, secondChar: string, thirdChar: string, fourthChar: string;
 
 		do {
 			firstChar = this.randomAlphabetChar();

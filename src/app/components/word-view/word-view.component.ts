@@ -1,6 +1,4 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import '../../../assets/chars-accordance.json';
-import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
 	selector: 'word-view',
@@ -15,13 +13,12 @@ export class WordViewComponent implements OnInit {
 	@Input("index") index: number;
 	@Input("allCharacters") allCharacters: any;
 	@Input("guessChar") guessChar: string;
-	@Input("language") language: string;
 	@Input("isActive") isActive: boolean;
 	@Input("fullWord") fullWord: string;
 
 	@Output() guessProgress = new EventEmitter<string>();
 
-	constructor(private utils: UtilsService) { }
+	constructor() { }
 
 	ngOnInit() {
 		if (typeof this.allCharacters === 'string') {
@@ -38,11 +35,6 @@ export class WordViewComponent implements OnInit {
 		if (this.isActive && this.index === this.allCharacters.length) {
 			this.isActive = false;
 		}
-
-		this.utils.getCharsAccordance().then(alphabet => {
-			this.alphabet = alphabet;
-			this.language = this.alphabet[this.language] ? this.language : 'english';
-		});
 	}
 
 	ngOnChanges() {	

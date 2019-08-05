@@ -75,15 +75,6 @@ export class UtilsService {
 		});
 	}
 
-	public async getCharsAccordance() {
-		if (!this.globals.alphabet) {
-			this.globals.alphabet = await this.httpService
-				.doGet('../../../assets/chars-accordance.json')
-				.toPromise();
-		}
-		return this.globals.alphabet;
-	}
-
 	calculatePeriod(diff: number): [string, string] {
 		let label: string, flooredValue: string;
 
