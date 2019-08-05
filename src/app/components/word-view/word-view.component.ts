@@ -17,6 +17,7 @@ export class WordViewComponent implements OnInit {
 	@Input("guessChar") guessChar: string;
 	@Input("language") language: string;
 	@Input("isActive") isActive: boolean;
+	@Input("fullWord") fullWord: string;
 
 	@Output() guessProgress = new EventEmitter();
 

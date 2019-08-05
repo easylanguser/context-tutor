@@ -32,7 +32,8 @@ export class SentenceGuessPage implements OnInit {
 			guessChar: string,
 			guessType: string,
 			language: string,
-			isActive: boolean
+			isActive: boolean,
+			fullWord: string
 		},
 		isSolved: boolean
 	}[] = [];
@@ -53,6 +54,8 @@ export class SentenceGuessPage implements OnInit {
 	hintsClicks: number = 0;
 
 	alphabet: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+	edgeCharacters: string[] = [' ', '.', '!', '?', ',', '\n', '\r'];
 
 	updateFront: boolean = false;
 
@@ -133,9 +136,23 @@ export class SentenceGuessPage implements OnInit {
 		}
 
 		const sentence = this.curSentence();
+		const sentenceLength = sentence.text.length;
 		let prevIndex: number = 0, i = 0;
 		
 		for (let word of sentence.words) {
+			let endIndex = sentence.words[i][0], startIndex = sentence.words[i][0];
+			let curChar;
+
+			do {
+				startIndex--;
+				curChar = sentence.text.charAt(startIndex);
+			} while (this.edgeCharacters.indexOf(curChar) === -1 && startIndex > 0);
+
+			do {
+				endIndex++;
+				curChar = sentence.text.charAt(endIndex);
+			} while (this.edgeCharacters.indexOf(curChar) === -1 && endIndex < sentenceLength);
+			
 			this.sentenceWords.push({
 				word: {
 					index: this.curCharsIndexes[i],
@@ -143,7 +160,8 @@ export class SentenceGuessPage implements OnInit {
 					guessChar: null,
 					guessType: null,
 					language: 'english',
-					isActive: (i === 0)
+					isActive: (i === 0),
+					fullWord: sentence.text.substring(startIndex + 1, endIndex)
 				},
 				isSolved: false
 			});
