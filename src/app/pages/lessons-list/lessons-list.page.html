@@ -50,7 +50,7 @@
         <div
           (touchstart)="mouseIsDown(lesson)"
           (touchend)="mouseIsUp($event, lesson)"
-          (mousedown)="mouseIsDown($event, lesson)"
+          (mousedown)="mouseIsDown(lesson)"
           (mouseup)="mouseIsUp($event, lesson)"
           [ngClass]="{'dashed': this.globals.getIsDemo()}">
           <div>
