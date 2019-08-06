@@ -184,7 +184,7 @@ export class AppComponent {
 		let message = '0.1.18';
 		const alert = await this.alertController.create({
 			header: header,
-			message: 'Version: ' + message,
+			message: '<i>Version: ' + message + '</i>',
 			buttons: ['Close']
 		});
 		await alert.present();

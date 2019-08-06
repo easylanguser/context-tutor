@@ -35,7 +35,7 @@
     (mousedown)="handleTouchStart($event)"
     (mouseup)="handleTouchEnd($event)" style="z-index: 0;">
 
-    <ion-refresher (ionPull)="this.refresherIsPulled = true" (ionRefresh)="doRefresh($event)">
+    <ion-refresher (ionPull)="this.gestureHandler.refresherIsPulled = true" (ionRefresh)="doRefresh($event)">
       <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">
       </ion-refresher-content>
     </ion-refresher>

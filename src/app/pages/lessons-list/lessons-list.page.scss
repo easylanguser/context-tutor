@@ -118,6 +118,10 @@ ion-toolbar {
     display: flex;
     justify-content: space-between;
 
+    @media (min-width: 992px) {
+        width: 66vw;
+    }
+
     &:hover {
         box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.07), inset 0 0 0 2px var(--ion-color-primary);
     }

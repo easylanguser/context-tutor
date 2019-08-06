@@ -9,6 +9,7 @@ import * as anime from 'animejs';
 import * as _ from 'lodash';
 import { Globals } from 'src/app/services/globals/globals';
 import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
+import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler.service';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -24,17 +25,10 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	lessonTitle: string;
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
-
 	filter: string = 'all';
-	alert: HTMLIonAlertElement = null;
-	pressDuration: number = 0;
-	interval: any;
 	toast: HTMLIonToastElement = null;
 	addButtonIsAnimating: boolean = false;
 	contentIsScrolled: boolean = false;
-	refresherIsPulled: boolean = false;
-	xDown = null;
-	yDown = null;
 
 	constructor(
 		private toastController: ToastController,
@@ -42,9 +36,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		public globals: Globals,
 		private route: ActivatedRoute,
 		private navController: NavController,
-		private alertController: AlertController,
-		private sentenceHttpService: SentenceHttpService,
-		public lessonsDataService: LessonsDataService,) { }
+		private gestureHandler: GestureHandlerService,
+		public lessonsDataService: LessonsDataService) { }
 
 	async ngOnInit() {
 		const showLoader = this.route.snapshot.queryParamMap.get('showLoader');
@@ -109,91 +102,25 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		}
 	}
 
-	getClickOrTouchEvent(event) {
-		return event.type === 'mousedown' ? event : (event.touches || event.originalEvent.touches)[0];
-	}
-
 	mouseIsDown(sentence: Sentence) {
-		if (!this.parentId) {
-			this.interval = setInterval(async () => {
-				this.pressDuration++;
-				if (this.pressDuration > 7) {
-					clearInterval(this.interval);
-					this.pressDuration = 0;
-					if (!this.refresherIsPulled) {
-						this.alert = await this.alertController.create({
-							message: 'Are you sure you want to delete this sentence?',
-							buttons: [
-								{
-									text: 'Cancel',
-									role: 'cancel'
-								},
-								{
-									text: 'Delete',
-									handler: async () => {
-										await this.sentenceHttpService.deleteSentence(sentence.id);
-										this.lessonsDataService.removeSentence(sentence.lessonId, sentence.id);
-									}
-								}
-							]
-						});
-						this.alert.onDidDismiss().then(() => this.alert = null);
-						this.alert.present();
-					}
-				}
-			}, 100);
-		}
+		this.gestureHandler.mouseIsDown(sentence, this.parentId);
 	}
 
 	mouseIsUp(evt, sentence: Sentence) {
-		this.refresherIsPulled = false;
-		let xDiff, yDiff;
-		if (evt.type === 'mouseup') {
-			xDiff = this.xDown - evt.clientX;
-			yDiff = this.yDown - evt.clientY;
-		} else {
-			xDiff = this.xDown - evt.changedTouches[0].clientX;
-			yDiff = this.yDown - evt.changedTouches[0].clientY;
-		}
-
-		if (Math.abs(Math.abs(xDiff) - Math.abs(yDiff)) < 20 && !this.alert) {
+		if (this.gestureHandler.mouseIsUp(evt)) {
 			this.openSentence(sentence.id);
 		}
-
-		clearInterval(this.interval);
-		this.pressDuration = 0;
 	}
 
-	handleTouchStart(evt) {
-		const firstTouch = this.getClickOrTouchEvent(evt);
-		if (firstTouch.clientX > 50) {
-			this.xDown = firstTouch.clientX;
-			this.yDown = firstTouch.clientY;
-		}
-	}
+	handleTouchStart = (evt) => this.gestureHandler.handleTouchStart(evt);
 
 	handleTouchEnd(evt) {
-		evt.preventDefault();
-		let xDiff, yDiff, minDistance = 6;
-		if (evt.type === 'mouseup') {
-			xDiff = this.xDown - evt.clientX;
-			yDiff = this.yDown - evt.clientY;
-			minDistance *= 10;
-		} else {
-			xDiff = this.xDown - evt.changedTouches[0].clientX;
-			yDiff = this.yDown - evt.changedTouches[0].clientY;
+		const filterRes = this.gestureHandler.handleTouchEnd(evt);
+		if (filterRes === true) {
+			this.changeFilter(true);
+		} else if (filterRes === false) {
+			this.changeFilter(false);
 		}
-		
-		if (Math.abs(xDiff) > Math.abs(yDiff)) {
-			if (xDiff > minDistance) {
-				this.changeFilter(false);
-			} else if (xDiff < -minDistance) {
-				this.changeFilter(true);
-			}
-		}
-
-		this.xDown = null;
-		this.yDown = null;
 	}
 
 	changeFilter(isLeftSwipe: boolean) {

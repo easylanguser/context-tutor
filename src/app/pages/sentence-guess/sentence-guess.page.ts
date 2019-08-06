@@ -558,6 +558,8 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	handleKeyboardEvent(event: KeyboardEvent) {
+		this.sentenceWords[this.curWordIndex].word.guessChar = null;
+		this.cdRef.detectChanges();
 		this.sentenceWords[this.curWordIndex].word.guessChar = event.key;
 	}
 

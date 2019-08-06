@@ -7,6 +7,7 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 import * as _ from 'lodash';
 import { Globals } from 'src/app/services/globals/globals';
 import { LongPressChooserComponent } from 'src/app/components/long-press-chooser/long-press-chooser.component';
+import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler.service';
 
 @Component({
 	selector: 'page-lessons-list',
@@ -18,21 +19,14 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	displayedLessons: Lesson[] = [];
 	@ViewChildren('chartsid') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
-
 	filter: string = 'all';
-	popover: HTMLIonPopoverElement = null;
-	pressDuration: number = 0;
-	interval: any;
-	refresherIsPulled: boolean = false;
 	contentIsScrolled: boolean = false;
-	xDown = null;
-	yDown = null;
 
 	constructor(
-		private popoverController: PopoverController,
 		private navController: NavController,
 		private lessonsDataService: LessonsDataService,
 		private utils: UtilsService,
+		private gestureHandler: GestureHandlerService,
 		public globals: Globals) { }
 
 	async ngOnInit() {
@@ -42,81 +36,25 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		await this.utils.dismissLoader();
 	}
 
-	getClickOrTouchEvent(event) {
-		return event.type === 'mousedown' ? event : (event.touches || event.originalEvent.touches)[0];
-	}
-
 	mouseIsDown(lesson: Lesson) {
-		this.popover = null;
-		this.interval = setInterval(async () => {
-			this.pressDuration++;
-			if (this.pressDuration > 7) {
-				clearInterval(this.interval);
-				this.pressDuration = 0;
-				if (!this.popover && !this.refresherIsPulled) {
-					this.popover = await this.popoverController.create({
-						component: LongPressChooserComponent,
-						componentProps: {
-							lesson: lesson
-						},
-						mode: 'ios',
-						animated: true,
-						showBackdrop: true
-					});
-					await this.popover.present();
-				}
-			}
-		}, 100);
+		this.gestureHandler.mouseIsDown(lesson);
 	}
 
 	mouseIsUp(evt, lesson: Lesson) {
-		this.refresherIsPulled = false;
-		let xDiff, yDiff;
-		if (evt.type === 'mouseup') {
-			xDiff = this.xDown - evt.clientX;
-			yDiff = this.yDown - evt.clientY;
-		} else {
-			xDiff = this.xDown - evt.changedTouches[0].clientX;
-			yDiff = this.yDown - evt.changedTouches[0].clientY;
-		}
-
-		if (Math.abs(Math.abs(xDiff) - Math.abs(yDiff)) < 20 && !this.popover) {
+		if (this.gestureHandler.mouseIsUp(evt)) {
 			this.openLesson(lesson);
 		}
-		clearInterval(this.interval);
-		this.pressDuration = 0;
 	}
 
-	handleTouchStart(evt) {
-		const firstTouch = this.getClickOrTouchEvent(evt);
-		if (firstTouch.clientX > 50) {
-			this.xDown = firstTouch.clientX;
-			this.yDown = firstTouch.clientY;
-		}
-	}
+	handleTouchStart = (evt) => this.gestureHandler.handleTouchStart(evt);
 
 	handleTouchEnd(evt) {
-		evt.preventDefault();
-		let xDiff, yDiff, minDistance = 6;
-		if (evt.type === 'mouseup') {
-			xDiff = this.xDown - evt.clientX;
-			yDiff = this.yDown - evt.clientY;
-			minDistance *= 10;
-		} else {
-			xDiff = this.xDown - evt.changedTouches[0].clientX;
-			yDiff = this.yDown - evt.changedTouches[0].clientY;
+		const filterRes = this.gestureHandler.handleTouchEnd(evt);
+		if (filterRes === true) {
+			this.changeFilter(true);
+		} else if (filterRes === false) {
+			this.changeFilter(false);
 		}
-
-		if (Math.abs(xDiff) > Math.abs(yDiff)) {
-			if (xDiff > minDistance) {
-				this.changeFilter(false);
-			} else if (xDiff < -minDistance) {
-				this.changeFilter(true);
-			}
-		}
-
-		this.xDown = null;
-		this.yDown = null;
 	}
 
 	changeFilter(isLeftSwipe: boolean) {
