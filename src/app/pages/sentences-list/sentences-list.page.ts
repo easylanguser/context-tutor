@@ -34,8 +34,8 @@ export class SentencesListPage implements OnInit {
 		private utils: UtilsService,
 		private route: ActivatedRoute,
 		private navController: NavController,
-		private gestureHandler: GestureHandlerService,
 		private lessonsDataService: LessonsDataService,
+		public gestureHandler: GestureHandlerService,
 		public globals: Globals) { }
 
 	async ngOnInit() {

@@ -26,7 +26,7 @@ export class LessonsListPage implements OnInit {
 		private navController: NavController,
 		private lessonsDataService: LessonsDataService,
 		private utils: UtilsService,
-		private gestureHandler: GestureHandlerService,
+		public gestureHandler: GestureHandlerService,
 		public globals: Globals) { }
 
 	async ngOnInit() {
@@ -38,6 +38,7 @@ export class LessonsListPage implements OnInit {
 		this.pieCanvases.changes.subscribe(() => {
 			this.syncCharts();
 		});
+		this.firstEnter = false;
 	}
 
 	ionItemTouchDown(lesson: Lesson) {
