@@ -18,7 +18,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-content id="sentence-content">
+  <div id="sentence-content">
     <word-view
       *ngFor="let sentenceWord of sentenceWords; index as i"
       id="{{'word' + i}}"
@@ -30,7 +30,7 @@
       (guessProgress)="updateProgress($event)"
       (click)="makeActive(i)">
     </word-view>
-  </ion-content>
+  </div>
 
   <ion-footer id="footer" no-padding>
     <div id="chars">
