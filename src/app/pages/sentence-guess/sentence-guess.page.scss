@@ -237,11 +237,11 @@
     }
 
     #hint-button {
-        font-size: 2vh;
+        font-size: 2vw;
     }
 
     #give-up-button {
-        font-size: 2vh;
+        font-size: 2vw;
     }
 
     .char-box {
@@ -262,13 +262,41 @@
     }
 }
 
-@media (min-width: 1800px) {
+@media (min-width: 1400px) {
+    #footer {
+        width: 1000px;
+        height: 140px;
+        border-radius: 20px;
+        margin-left: calc(36vw - 500px);
+    }
+
+    #chars {
+        width: 500px;
+    }
+
+    #bottom-bar-container {
+        width: 500px;
+    }
+
+    .char-box {
+        height: 98px;
+        width: 98px;
+        margin: 21px 10px;
+        font-size: 75px;
+    }
+
+    ion-button {
+        height: 98px !important;
+        width: 98px !important;
+        margin: 21px 10px !important;
+    }
+
     #hint-button {
-        font-size: 2vh;
+        font-size: 25px !important;
     }
 
     #give-up-button {
-        font-size: 2vh;
+        font-size: 25px !important;
     }
 }
 
