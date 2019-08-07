@@ -50,6 +50,7 @@ export class SentencesListPage implements OnInit {
 		await this.initData(showLoader);
 		
 		this.addFabHandler();
+		this.firstEnter = false;
 		
 		setTimeout(() => {
 			this.syncCharts();
