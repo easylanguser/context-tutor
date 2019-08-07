@@ -548,9 +548,9 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	setRedHighlight(char: string) {
-		for (let i = 0; i < this.charsRefs.length; i++) {
-			if (this.charsRefs[i] === char) {
-				this.buttonsHighlights[i%4] = true;
+		for (let i = 0; i < 4; i++) {
+			if (char === (this.updateFront ? this.charsRefs[i] : this.charsRefs[i + 4])) {
+				this.buttonsHighlights[i] = true;
 				this.cdRef.detectChanges();
 				return;
 			}
