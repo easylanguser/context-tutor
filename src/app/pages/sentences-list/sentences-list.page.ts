@@ -1,14 +1,13 @@
-import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
-import { NavController, ToastController, AlertController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import * as anime from 'animejs';
 import * as _ from 'lodash';
 import { Globals } from 'src/app/services/globals/globals';
-import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
 import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler.service';
 
 @Component({
@@ -16,28 +15,28 @@ import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler
 	templateUrl: 'sentences-list.page.html',
 	styleUrls: ['sentences-list.page.scss'],
 })
+export class SentencesListPage implements OnInit {
 
-export class SentencesListPage implements OnInit, AfterViewInit {
-
-	displayedSentences: Sentence[];
+	displayedSentences: Sentence[] = [];
 	lessonId: number;
 	parentId: number = null;
 	lessonTitle: string;
-	@ViewChildren('chartsid') pieCanvases: any;
+	@ViewChildren('statsSentencesCanvases') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
 	filter: string = 'all';
 	toast: HTMLIonToastElement = null;
 	addButtonIsAnimating: boolean = false;
 	contentIsScrolled: boolean = false;
+	firstEnter: boolean = true;
 
 	constructor(
 		private toastController: ToastController,
 		private utils: UtilsService,
-		public globals: Globals,
 		private route: ActivatedRoute,
 		private navController: NavController,
 		private gestureHandler: GestureHandlerService,
-		public lessonsDataService: LessonsDataService) { }
+		private lessonsDataService: LessonsDataService,
+		public globals: Globals) { }
 
 	async ngOnInit() {
 		const showLoader = this.route.snapshot.queryParamMap.get('showLoader');
@@ -48,9 +47,16 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		if (!this.lessonsDataService.lessons.length) {
 			await this.lessonsDataService.refreshLessons();
 		}
-		this.initData(showLoader);
-
+		await this.initData(showLoader);
+		
 		this.addFabHandler();
+		
+		setTimeout(() => {
+			this.syncCharts();
+			this.pieCanvases.changes.subscribe(() => {
+				this.syncCharts();
+			});	
+		});
 	}
 
 	private addFabHandler() {
@@ -76,23 +82,28 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		}
 	}
 
+	private async getData() {
+		const lesson = this.lessonsDataService.getLessonById(this.lessonId);
+		this.lessonTitle = lesson.name.toString();
+		if (this.globals.getIsDemo()) {
+			this.displayedSentences = await lesson.sentences.sort(this.lessonsDataService.sortSentencesByAddingTime);
+		} else {			
+			this.displayedSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
+		}
+	}
+
 	goBack() {
 		this.navController.navigateBack(['lessons-list']);
 	}
 
-	async ionViewDidEnter() {
-		if (this.globals.updateIsRequired[0] || (this.displayedSentences && this.displayedSentences.length === 0)) {
-			await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
-			this.getData();
-			this.globals.updateIsRequired[0] = false;
+	ionViewDidEnter() {
+		if (this.globals.updateIsRequired[0]) {
+			this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId).then(() => {
+				this.getData();
+				this.globals.updateIsRequired[0] = false;
+			});
 		}
 		this.updateCharts();
-	}
-
-	ngAfterViewInit() {
-		this.pieCanvases.changes.subscribe(() => {
-			this.syncCharts();
-		});
 	}
 
 	async ionViewWillLeave() {
@@ -102,20 +113,20 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		}
 	}
 
-	mouseIsDown(sentence: Sentence) {
-		this.gestureHandler.mouseIsDown(sentence, this.parentId);
+	ionItemTouchDown(sentence: Sentence) {
+		this.gestureHandler.ionItemTouchDown(sentence, this.parentId);
 	}
 
-	mouseIsUp(evt, sentence: Sentence) {
-		if (this.gestureHandler.mouseIsUp(evt)) {
+	ionItemTouchUp(evt, sentence: Sentence) {
+		if (this.gestureHandler.ionItemTouchUp(evt)) {
 			this.openSentence(sentence.id);
 		}
 	}
 
-	handleTouchStart = (evt) => this.gestureHandler.handleTouchStart(evt);
+	ionContentTouchStart = (evt) => this.gestureHandler.ionContentTouchStart(evt);
 
-	handleTouchEnd(evt) {
-		const filterRes = this.gestureHandler.handleTouchEnd(evt);
+	ionContentTouchEnd(evt) {
+		const filterRes = this.gestureHandler.ionContentTouchEnd(evt);
 		if (filterRes === true) {
 			this.changeFilter(true);
 		} else if (filterRes === false) {
@@ -134,6 +145,10 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 	}
 
 	async filterClick() {
+		if (this.firstEnter) {
+			this.firstEnter = false;
+			return;
+		}
 		await this.utils.createAndShowLoader('Loading');
 
 		if (this.filter === 'all') {
@@ -160,8 +175,8 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 
 	private syncCharts() {
 		this.pieCharts = [];
-		for (const i in this.pieCanvases._results) {
-			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, this.utils.getNewChartObject()));
+		for (const canvas of this.pieCanvases._results) {
+			this.pieCharts.push(new Chart(canvas.nativeElement, this.utils.getNewChartObject()));
 		}
 		this.updateCharts();
 	}
@@ -275,15 +290,5 @@ export class SentencesListPage implements OnInit, AfterViewInit {
 		setTimeout(() => {
 			event.target.complete();
 		}, 5000);
-	}
-
-	private async getData() {
-		const lesson = this.lessonsDataService.getLessonById(this.lessonId);
-		this.lessonTitle = lesson.name.toString();
-		if (this.globals.getIsDemo()) {
-			this.displayedSentences = await lesson.sentences.sort(this.lessonsDataService.sortSentencesByAddingTime);
-		} else {
-			this.displayedSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
-		}
 	}
 }

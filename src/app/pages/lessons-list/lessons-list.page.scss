@@ -85,6 +85,10 @@ ion-toolbar {
     }
 }
 
+#list-scroll {
+    z-index: 0;
+}
+
 #tip-add-lesson {
     position: absolute;
     z-index: 102;

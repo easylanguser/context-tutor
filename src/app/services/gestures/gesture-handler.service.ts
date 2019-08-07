@@ -13,7 +13,7 @@ export class GestureHandlerService {
 
 	xDown: number = null;
 	yDown: number = null;
-	refresherIsPulled: false;
+	refresherIsPulled: boolean = false;
 	popover: HTMLIonPopoverElement = null;
 	alert: HTMLIonAlertElement = null;
 	pressDuration: number = 0;
@@ -24,7 +24,7 @@ export class GestureHandlerService {
 		private alertController: AlertController,
 		private sentenceHttpService: SentenceHttpService) { }
 
-	handleTouchStart(evt) {
+	ionContentTouchStart(evt) {
 		const firstTouch = evt.type === 'mousedown' ?
 			event :
 			(evt.touches || evt.originalEvent.touches)[0];
@@ -34,7 +34,7 @@ export class GestureHandlerService {
 		}
 	}
 
-	handleTouchEnd(evt): boolean {
+	ionContentTouchEnd(evt): boolean {
 		evt.preventDefault();
 		let xDiff, yDiff, minDistance = 6;
 		if (evt.type === 'mouseup') {
@@ -59,7 +59,7 @@ export class GestureHandlerService {
 		return null;
 	}
 
-	mouseIsUp(evt): boolean {
+	ionItemTouchUp(evt): boolean {
 		this.refresherIsPulled = false;
 		clearInterval(this.interval);
 		this.pressDuration = 0;
@@ -79,7 +79,7 @@ export class GestureHandlerService {
 		return false;
 	}
 
-	mouseIsDown(lessonOrSentence: Lesson | Sentence, parentId?: number) {
+	ionItemTouchDown(lessonOrSentence: Lesson | Sentence, parentId?: number) {
 		if (lessonOrSentence instanceof Lesson) {
 			this.popover = null;
 			this.interval = setInterval(async () => {

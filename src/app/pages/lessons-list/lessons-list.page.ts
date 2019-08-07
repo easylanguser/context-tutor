@@ -1,12 +1,11 @@
-import { Component, OnInit, ViewChildren, AfterViewInit, ViewChild } from '@angular/core';
-import { NavController, IonList, PopoverController } from '@ionic/angular';
+import { Component, OnInit, ViewChildren } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import * as _ from 'lodash';
 import { Globals } from 'src/app/services/globals/globals';
-import { LongPressChooserComponent } from 'src/app/components/long-press-chooser/long-press-chooser.component';
 import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler.service';
 
 @Component({
@@ -14,13 +13,14 @@ import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler
 	templateUrl: 'lessons-list.page.html',
 	styleUrls: ['lessons-list.page.scss']
 })
-export class LessonsListPage implements OnInit, AfterViewInit {
+export class LessonsListPage implements OnInit {
 
 	displayedLessons: Lesson[] = [];
-	@ViewChildren('chartsid') pieCanvases: any;
+	@ViewChildren('statsLessonsCanvases') pieCanvases: any;
 	pieCharts: Array<Chart> = [];
 	filter: string = 'all';
 	contentIsScrolled: boolean = false;
+	firstEnter: boolean = true;
 
 	constructor(
 		private navController: NavController,
@@ -34,22 +34,26 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		await this.getData();
 		this.addFabsHandler();
 		await this.utils.dismissLoader();
+		this.syncCharts();
+		this.pieCanvases.changes.subscribe(() => {
+			this.syncCharts();
+		});
 	}
 
-	mouseIsDown(lesson: Lesson) {
-		this.gestureHandler.mouseIsDown(lesson);
+	ionItemTouchDown(lesson: Lesson) {
+		this.gestureHandler.ionItemTouchDown(lesson);
 	}
 
-	mouseIsUp(evt, lesson: Lesson) {
-		if (this.gestureHandler.mouseIsUp(evt)) {
+	ionItemTouchUp(evt, lesson: Lesson) {
+		if (this.gestureHandler.ionItemTouchUp(evt)) {
 			this.openLesson(lesson);
 		}
 	}
 
-	handleTouchStart = (evt) => this.gestureHandler.handleTouchStart(evt);
+	ionContentTouchStart = (evt) => this.gestureHandler.ionContentTouchStart(evt);
 
-	handleTouchEnd(evt) {
-		const filterRes = this.gestureHandler.handleTouchEnd(evt);
+	ionContentTouchEnd(evt) {
+		const filterRes = this.gestureHandler.ionContentTouchEnd(evt);
 		if (filterRes === true) {
 			this.changeFilter(true);
 		} else if (filterRes === false) {
@@ -68,6 +72,10 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	async filterChanged() {
+		if (this.firstEnter) {
+			this.firstEnter = false;
+			return;
+		}
 		await this.utils.createAndShowLoader('Loading...');
 
 		const allLessons = this.lessonsDataService.lessons;
@@ -99,13 +107,13 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 	}
 
 	ionViewDidEnter() {
-		this.updateCharts();
 		if (this.globals.updateIsRequired[0]) {
 			this.getData().then(() => {
 				this.globals.updateIsRequired[0] = false;
 			});
 		}
 		this.resetLocalStatistic();
+		this.updateCharts();
 	}
 
 	private resetLocalStatistic() {
@@ -129,20 +137,14 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 		this.globals.savedTemplates = [];
 	}
 
-	ngAfterViewInit() {
-		this.pieCanvases.changes.subscribe(() => {
-			this.syncCharts();
-		});
-	}
-
 	addLessonFile() {
 		this.navController.navigateForward(['add-lesson']);
 	}
 
 	private syncCharts() {
 		this.pieCharts = [];
-		for (const i in this.pieCanvases._results) {
-			this.pieCharts.push(new Chart(this.pieCanvases._results[i].nativeElement, this.utils.getNewChartObject()));
+		for (const canvas of this.pieCanvases._results) {
+			this.pieCharts.push(new Chart(canvas.nativeElement, this.utils.getNewChartObject()));
 		}
 		this.updateCharts();
 	}
@@ -156,7 +158,8 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 				chartData[1] = 0;
 				chartData[2] = 0;
 				for (const stats of lesson.statistics) {
-					if (stats && (stats.correctAnswers + stats.wrongAnswers + stats.hintUsages + stats.giveUps > 0)) {
+					if (stats && (stats.correctAnswers + stats.wrongAnswers +
+							stats.hintUsages + stats.giveUps > 0)) {
 						chartData[0] += stats.correctAnswers;
 						chartData[1] += stats.wrongAnswers;
 						chartData[2] += stats.hintUsages + stats.giveUps;
@@ -171,15 +174,14 @@ export class LessonsListPage implements OnInit, AfterViewInit {
 					this.pieCharts[i].options.cutoutPercentage = 60;
 					this.pieCharts[i].update();
 				}
-				++i;
 			}
+			++i;
 		}
 	}
 
 	async doRefresh(event) {
 		await this.getData();
 		(<HTMLIonSegmentElement>document.getElementById('lessons-filter-segment')).value = "all";
-
 		event.target.complete();
 		setTimeout(() => {
 			event.target.complete();

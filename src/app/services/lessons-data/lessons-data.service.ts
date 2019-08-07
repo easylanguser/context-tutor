@@ -144,7 +144,6 @@ export class LessonsDataService {
 	}
 
 	async getSentencesByLessonId(lessonId: number, parentId: number): Promise<Sentence[]> {
-
 		const apiSentences: ISentence[] = parentId ?
 			await this.sentenceHttpService.getLessonSentences(parentId) :
 			await this.sentenceHttpService.getLessonSentences(lessonId);

@@ -30,10 +30,10 @@
   </ion-header>
 
   <ion-content id="sentences-list-scroll"
-    (touchstart)="handleTouchStart($event)"
-    (touchend)="handleTouchEnd($event)"
-    (mousedown)="handleTouchStart($event)"
-    (mouseup)="handleTouchEnd($event)" style="z-index: 0;">
+    (touchstart)="ionContentTouchStart($event)"
+    (touchend)="ionContentTouchEnd($event)"
+    (mousedown)="ionContentTouchStart($event)"
+    (mouseup)="ionContentTouchEnd($event)">
 
     <ion-refresher (ionPull)="this.gestureHandler.refresherIsPulled = true" (ionRefresh)="doRefresh($event)">
       <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">
@@ -41,19 +41,20 @@
     </ion-refresher>
 
     <ion-list id="sentences-list" #sentencesList no-padding no-margin>
-      <ion-item class="sentence-ion-item no-selection" *ngFor="let sentence of this.displayedSentences;index as i"
-        no-padding>
-        <div [ngClass]="{'dashed': this.globals.getIsDemo()}"
-          (touchstart)="mouseIsDown(sentence)"
-          (touchend)="mouseIsUp($event, sentence)"
-          (mousedown)="mouseIsDown($event, sentence)"
-          (mouseup)="mouseIsUp($event, sentence)">
+      <ion-item no-padding class="sentence-ion-item no-selection"
+        *ngFor="let sentence of this.displayedSentences">
+        <div
+          (touchstart)="ionItemTouchDown(sentence)"
+          (touchend)="ionItemTouchUp($event, sentence)"
+          (mousedown)="ionItemTouchDown($event, sentence)"
+          (mouseup)="ionItemTouchUp($event, sentence)"
+          [ngClass]="{'dashed': this.globals.getIsDemo()}">
           <div>
             <p [innerHTML]="sentence.sentencesListSentence"></p>
           </div>
           <div>
             <div>
-              <canvas #chartsid width="50" height="50"></canvas>
+              <canvas #statsSentencesCanvases width="50" height="50"></canvas>
             </div>
           </div>
         </div>

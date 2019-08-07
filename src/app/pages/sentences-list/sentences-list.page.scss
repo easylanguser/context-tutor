@@ -90,6 +90,10 @@ ion-toolbar {
     }
 }
 
+#sentences-list-scroll {
+    z-index: 0;
+}
+
 #sentences-list {
     margin-top: 2vh;
     margin-bottom: 15vh;
