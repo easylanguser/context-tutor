@@ -116,7 +116,7 @@
     color: black;
     cursor: pointer;
 
-    transition: box-shadow 500ms ease-in-out;
+    transition: box-shadow 200ms ease-in-out;
 }
 
 .front,
@@ -204,6 +204,8 @@
     font-size: 7vh;
 }
 
+$bar-border: 2px solid var(--ion-color-primary);
+
 @media (min-width: 992px) {
     #bottom-bar-container ion-button {
         height: 7vw;
@@ -216,7 +218,7 @@
         width: 72vw;
 
         border-top-left-radius: 20px;
-        border-top: 2px solid var(--ion-color-primary);
+        border-top: $bar-border;
 
         ion-toolbar {
             height: 10vw;
@@ -264,10 +266,12 @@
 
 @media (min-width: 1400px) {
     #footer {
-        width: 1000px;
+        width: 1010px;
         height: 140px;
-        border-radius: 20px;
-        margin-left: calc(36vw - 500px);
+        border-top-right-radius: 20px;
+        border-right: $bar-border;
+        border-left: $bar-border;
+        margin-left: calc(36vw - 505px);
     }
 
     #chars {

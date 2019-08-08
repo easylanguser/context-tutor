@@ -62,7 +62,7 @@ export class SentenceGuessPage implements OnInit {
 	charsRefs = ['', '', '', '', '', '', '', ''];
 
 	buttonsHighlights: boolean[] = [false, false, false, false];
-	redHighlight = '0px 0px 8px 2px rgb(255, 10, 18)';
+	redHighlight = '0px 0px 0px 2px rgb(255, 10, 18)';
 
 	groups = ['QWSD', 'RTFG', 'EAIO'];
 	unknownCharGroup = '!@#&';
