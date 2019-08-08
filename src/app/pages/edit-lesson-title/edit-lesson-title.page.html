@@ -1,24 +1,27 @@
 <ion-content scrollY="false">
 
-    <ion-header>
-        <ion-toolbar id="toolbar" mode="ios">
-            <ion-buttons slot="start" (click)="goBack()">
-                <ion-button>
-                    <ion-icon name="arrow-back"></ion-icon>
-                </ion-button>
-            </ion-buttons>
-            <ion-title class="no-selection">
-                Edit lesson title
-            </ion-title>
-        </ion-toolbar>
-    </ion-header>
+  <ion-header>
+    <ion-toolbar id="toolbar" mode="ios">
 
-    <div style="margin-bottom: 4vh">
-        <textarea id="edit-text-area" [(ngModel)]="lessonTitle"></textarea>
-    </div>
+      <ion-buttons slot="start" (click)="goBack()">
+        <ion-button>
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      
+      <ion-title class="no-selection">
+        Edit lesson title
+      </ion-title>
+      
+    </ion-toolbar>
+  </ion-header>
 
-    <div id="submit-title-btn">
-        <ion-icon name="checkmark" (click)="submitNewTitle()"></ion-icon>
-    </div>
-    
+  <div style="margin-bottom: 4vh">
+    <textarea id="edit-text-area" [(ngModel)]="lessonTitle"></textarea>
+  </div>
+
+  <div id="submit-title-btn">
+    <ion-icon name="checkmark" (click)="submitNewTitle()"></ion-icon>
+  </div>
+
 </ion-content>
