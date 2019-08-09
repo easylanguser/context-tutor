@@ -111,8 +111,8 @@
 			);
 			dependencies = (
 			);
-			name = App;
-			productName = App;
+			name = EasyLang;
+			productName = EasyLang;
 			productReference = 504EC3041FED79650016851F /* App.app */;
 			productType = "com.apple.product-type.application";
 		};

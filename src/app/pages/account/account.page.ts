@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { HttpService } from '../../services/http/rest/http.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { UserHttpService } from 'src/app/services/http/users/user-http.service';
@@ -33,6 +33,7 @@ export class AccountPage {
 		private sanitizer: DomSanitizer,
 		private router: Router,
 		private storage: StorageService,
+		private platform: Platform,
 		public globals: Globals) { }
 
 	ngOnInit() {
@@ -126,7 +127,11 @@ export class AccountPage {
 
 	logout() {
 		this.authService.logout().then(() => {
-			window.location.reload();
+			this.platform.ready().then(() => {
+				if (!this.platform.is('desktop')) {
+					window.location.reload();
+				}
+			});
 		});
 	}
 

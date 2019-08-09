@@ -4,8 +4,7 @@
   "description": "An Amazing Capacitor App",
   "main": "index.js",
   "scripts": {
-    "run.electron.dev": "electron ./",
-    "run.electron.prod": "electron --prod ./"
+    "electron:start": "electron ./"
   },
   "dependencies": {
     "@capacitor/electron": "^1.1.1",
