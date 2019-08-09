@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const isDevMode = require('electron-is-dev');
 const { CapacitorSplashScreen } = require('@capacitor/electron');
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 const path = require('path');
 
@@ -36,6 +37,7 @@ async function createWindow () {
     show: false,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: true,
       preload: path.join(__dirname, 'node_modules', '@capacitor', 'electron', 'dist', 'electron-bridge.js')
     }
   });
