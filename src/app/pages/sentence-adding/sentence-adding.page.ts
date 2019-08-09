@@ -6,7 +6,6 @@ import { Sentence } from 'src/app/models/sentence';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
 import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
-import { Storage } from '@ionic/storage';
 import { Globals } from 'src/app/services/globals/globals';
 
 let lastSelOffsets: Array<number> = [];

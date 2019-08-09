@@ -1,7 +1,8 @@
 {
   "name": "lessons",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "capacitor": {}
   },
   "type": "angular"
 }

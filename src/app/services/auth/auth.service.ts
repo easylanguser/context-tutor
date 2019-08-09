@@ -5,8 +5,10 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { tap, catchError } from 'rxjs/operators';
 import { BehaviorSubject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Storage } from '@ionic/storage';
 import { Globals } from '../globals/globals';
+import { Plugins } from '@capacitor/core';
+
+const { Storage } = Plugins;
 
 interface AuthData {
 	token: string,
@@ -26,7 +28,6 @@ export class AuthService {
 	constructor(
 		private http: HttpClient,
 		private helper: JwtHelperService,
-		private storage: Storage,
 		private plt: Platform,
 		private alertController: AlertController,
 		private globals: Globals) {
@@ -36,20 +37,20 @@ export class AuthService {
 	}
 
 	checkToken(): Promise<any> {
-		return this.storage.get(this.globals.TOKEN_KEY).then(token => {
-			if (token) {
-				parent.postMessage({ token: token }, '*');
-				let isExpired = this.helper.isTokenExpired(token);
+		return Storage.get({ key: this.globals.TOKEN_KEY}).then(token => {
+			if (token.value) {
+				parent.postMessage({ token: token.value }, '*');
+				let isExpired = this.helper.isTokenExpired(token.value);
 
 				if (!isExpired) {
-					this.token = token;
+					this.token = token.value;
 					this.authenticationState.next(true);
-					this.storage.get(this.globals.USER_ID_KEY).then(userId => {
-						this.globals.userId = userId;
+					Storage.get({key: this.globals.USER_ID_KEY }).then(userId => {
+						this.globals.userId = Number(userId.value);
 					});
 				} else {
-					this.storage.remove(this.globals.TOKEN_KEY);
-					this.storage.remove(this.globals.USER_ID_KEY);
+					Storage.remove({ key: this.globals.TOKEN_KEY });
+					Storage.remove({ key: this.globals.USER_ID_KEY });
 				}
 			}
 		});
@@ -68,11 +69,11 @@ export class AuthService {
 		return this.http.post(`${this.url}/api/auth/login`, credentials)
 			.pipe(
 				tap((res: AuthData) => {
-					this.storage.set(this.globals.TOKEN_KEY, res.token);
+					Storage.set({ key: this.globals.TOKEN_KEY, value: res.token });
 					this.token = res.token;
 					parent.postMessage({ token: this.token }, '*');
 
-					this.storage.set(this.globals.USER_ID_KEY, res.id);
+					Storage.set({ key: this.globals.USER_ID_KEY, value: res.id.toString() });
 					this.globals.userId = res.id;
 					
 					this.authenticationState.next(true);
@@ -84,10 +85,10 @@ export class AuthService {
 	}
 
 	async logout() {
-		await this.storage.remove(this.globals.USER_ID_KEY);
-		await this.storage.remove(this.globals.TOKEN_KEY);
-		await this.storage.remove(this.globals.USER_AVATAR_KEY);
-		await this.storage.remove(this.globals.USER_EMAIL_KEY);
+		await Storage.remove({ key: this.globals.USER_ID_KEY });
+		await Storage.remove({ key: this.globals.TOKEN_KEY });
+		await Storage.remove({ key: this.globals.USER_AVATAR_KEY });
+		await Storage.remove({ key: this.globals.USER_EMAIL_KEY });
 
 		this.token = null;
 		parent.postMessage({ userLoggedOut: true }, '*');

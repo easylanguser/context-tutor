@@ -1,0 +1,7 @@
+{
+  "appId": "app.easylang",
+  "appName": "EasyLang",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www"
+}

@@ -7,8 +7,11 @@ import { LessonHttpService } from '../http/lessons/lesson-http.service';
 import { SentenceHttpService } from '../http/sentences/sentence-http.service';
 import { StatisticHttpService } from '../http/statistics/statistic-http.service';
 import { HttpClient } from '@angular/common/http';
-import { Storage } from '@ionic/storage';
 import { Globals } from '../globals/globals';
+import { Plugins } from '@capacitor/core';
+
+const { Storage } = Plugins;
+
 
 interface ILesson {
 	id: number;
@@ -71,8 +74,7 @@ export class LessonsDataService {
 		private statisticHttpService: StatisticHttpService,
 		private utils: UtilsService,
 		private globals: Globals,
-		private http: HttpClient,
-		private storage: Storage) { }
+		private http: HttpClient) { }
 
 	addLesson(lesson: Lesson) {
 		this.lessons.push(lesson);
@@ -247,9 +249,9 @@ export class LessonsDataService {
 							hiddenChars,
 							sentencesListSntc,
 							'', ''));
-						let storageStat: string = await this.storage.get('sentence-' + sntc.id);
+						let storageStat: string = (await Storage.get({ key: 'sentence-' + sntc.id })).value;
 						if (!storageStat) {
-							await this.storage.set('sentence-' + sntc.id, '0|0|0|0');
+							await Storage.set({ key: 'sentence-' + sntc.id, value: '0|0|0|0' });
 							storageStat = '0|0|0|0';
 						}
 						const statStringArray = storageStat.split('|');

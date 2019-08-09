@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">EasyLang</string>
+    <string name="title_activity_main">EasyLang</string>
+    <string name="package_name">app.easylang</string>
+    <string name="fileprovider_authority">app.easylang.fileprovider</string>
+    <string name="custom_url_scheme">app.easylang</string>
+</resources>

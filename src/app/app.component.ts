@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { Platform, AlertController, NavController } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
 import { BehaviorSubject } from 'rxjs';
@@ -9,11 +7,12 @@ import { ThemeService } from './services/theme/theme.service';
 import { Location } from '@angular/common';
 import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
 import { UserHttpService } from './services/http/users/user-http.service';
-import { Storage } from '@ionic/storage';
 import { Globals } from './services/globals/globals';
 import * as anime from 'animejs';
 import { DomSanitizer } from '@angular/platform-browser';
-import { HttpService } from './services/http/rest/http.service';
+import { Plugins } from '@capacitor/core';
+  
+const { Storage, SplashScreen } = Plugins;
 
 @Component({
 	selector: 'app-root',
@@ -27,18 +26,14 @@ export class AppComponent {
 
 	constructor(
 		private platform: Platform,
-		private splashScreen: SplashScreen,
-		private statusBar: StatusBar,
 		private authService: AuthService,
 		private router: Router,
 		private themeService: ThemeService,
-		private storage: Storage,
 		private alertController: AlertController,
 		private location: Location,
 		private sanitizer: DomSanitizer,
 		private userHttpService: UserHttpService,
 		private navController: NavController,
-		private httpService: HttpService,
 		public globals: Globals) {
 		this.initializeApp(this.location.path());
 	}
@@ -67,7 +62,7 @@ export class AppComponent {
 			this.themeService.removeBodyClass('dark-theme');
 			this.themeName = 'light';
 		}
-		this.storage.set(this.globals.THEME_ID_KEY, this.themeName);
+		Storage.set({ key: this.globals.THEME_ID_KEY, value: this.themeName });
 	}
 
 	authenticationState = new BehaviorSubject(false);
@@ -78,16 +73,11 @@ export class AppComponent {
 			this.checkForIntent();
 		}
 		if (this.platform.is('mobile')) {
-			if (this.platform.is('android')) {
-				this.statusBar.styleBlackOpaque;
-			} else if (this.platform.is('ios')) {
-				this.statusBar.styleDefault();
-			}
-			this.splashScreen.hide();
+			SplashScreen.hide();
 		}
 
 		const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} });
-		const themeName = await this.storage.get(this.globals.THEME_ID_KEY);
+		const themeName = (await Storage.get({ key: this.globals.THEME_ID_KEY })).value;
 		customEvent.detail.value = (themeName === "dark") ?
 			"dark" :
 			"light";
@@ -140,7 +130,7 @@ export class AppComponent {
 	}
 
 	private async loadAvatar() {
-		const image = await this.storage.get(this.globals.USER_AVATAR_KEY);
+		const image = (await Storage.get({ key: this.globals.USER_AVATAR_KEY })).value;
 		if (image) {
 			this.globals.userAvatar = this.sanitizer.bypassSecurityTrustUrl(image);
 		} else {
@@ -152,7 +142,7 @@ export class AppComponent {
 			reader.readAsDataURL(blob);
 			reader.onloadend = () => {
 				const image = String(reader.result);
-				this.storage.set(this.globals.USER_AVATAR_KEY, image);
+				Storage.set({ key: this.globals.USER_AVATAR_KEY, value: image });
 				this.globals.userAvatar = this.sanitizer.bypassSecurityTrustUrl(image);
 			}
 		}
@@ -181,7 +171,7 @@ export class AppComponent {
 
 	async showAbout() {
 		let header = 'EasyLang Context Tutor';
-		let message = '0.1.18';
+		let message = '0.2.0';
 		const alert = await this.alertController.create({
 			header: header,
 			message: '<i>Version: ' + message + '</i>',

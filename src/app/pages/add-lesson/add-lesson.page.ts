@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
-import { Storage } from '@ionic/storage';
 import * as anime from 'animejs';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Globals } from 'src/app/services/globals/globals';
@@ -21,7 +20,6 @@ export class AddLessonPage implements OnInit {
 	fileInput: HTMLInputElement;
 
 	constructor(
-		private storage: Storage,
 		private lessonHttpService: LessonHttpService,
 		private utils: UtilsService,
 		private globals: Globals,

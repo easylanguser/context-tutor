@@ -5,10 +5,12 @@ import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { UserHttpService } from 'src/app/services/http/users/user-http.service';
-import { Storage } from '@ionic/storage';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Globals } from 'src/app/services/globals/globals';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Plugins } from '@capacitor/core';
+
+const { Storage } = Plugins;
 
 interface HTMLInputEvent extends Event {
 	target: HTMLInputElement & EventTarget;
@@ -32,7 +34,6 @@ export class AccountPage {
 		private utils: UtilsService,
 		private sanitizer: DomSanitizer,
 		private router: Router,
-		private storage: Storage,
 		public globals: Globals) { }
 
 	ngOnInit() {
@@ -56,7 +57,7 @@ export class AccountPage {
 					reader.readAsDataURL(event.target.files[0]);
 					reader.onloadend = () => {
 						const image = String(reader.result);
-						this.storage.set(this.globals.USER_AVATAR_KEY, image);
+						Storage.set({ key: this.globals.USER_AVATAR_KEY, value: image });
 						this.globals.userAvatar = this.sanitizer.bypassSecurityTrustUrl(image);
 						this.utils.dismissLoader();
 					}
@@ -75,13 +76,13 @@ export class AccountPage {
 	}
 
 	async getInfo() {
-		const email = await this.storage.get(this.globals.USER_EMAIL_KEY);
+		const email = (await Storage.get({ key: this.globals.USER_EMAIL_KEY })).value;
 		if (email) {
 			this.userEmail = email;
 		} else {
 			const userInfo = await this.userHttpService.getUserInfo();
 			this.userEmail = userInfo.email;
-			this.storage.set(this.globals.USER_EMAIL_KEY, userInfo.email);
+			Storage.set({ key: this.globals.USER_EMAIL_KEY, value: userInfo.email });
 		}
 	}
 
