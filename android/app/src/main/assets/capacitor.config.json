@@ -3,5 +3,10 @@
   "appName": "EasyLang",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "www"
+  "webDir": "www",
+  "plugins": {
+    "Keyboard": {
+      "resize": "none"
+    }
+  }
 }

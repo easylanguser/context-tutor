@@ -10,9 +10,10 @@ import { UserHttpService } from './services/http/users/user-http.service';
 import { Globals } from './services/globals/globals';
 import * as anime from 'animejs';
 import { DomSanitizer } from '@angular/platform-browser';
+import { StorageService } from './services/storage/storage.service';
 import { Plugins } from '@capacitor/core';
   
-const { Storage, SplashScreen } = Plugins;
+const { SplashScreen } = Plugins;
 
 @Component({
 	selector: 'app-root',
@@ -34,6 +35,7 @@ export class AppComponent {
 		private sanitizer: DomSanitizer,
 		private userHttpService: UserHttpService,
 		private navController: NavController,
+		private storage: StorageService,
 		public globals: Globals) {
 		this.initializeApp(this.location.path());
 	}
@@ -62,7 +64,7 @@ export class AppComponent {
 			this.themeService.removeBodyClass('dark-theme');
 			this.themeName = 'light';
 		}
-		Storage.set({ key: this.globals.THEME_ID_KEY, value: this.themeName });
+		this.storage.set(this.globals.THEME_ID_KEY, this.themeName);
 	}
 
 	authenticationState = new BehaviorSubject(false);
@@ -77,7 +79,7 @@ export class AppComponent {
 		}
 
 		const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} });
-		const themeName = (await Storage.get({ key: this.globals.THEME_ID_KEY })).value;
+		const themeName = (await this.storage.get(this.globals.THEME_ID_KEY)).value;
 		customEvent.detail.value = (themeName === "dark") ?
 			"dark" :
 			"light";
@@ -130,7 +132,7 @@ export class AppComponent {
 	}
 
 	private async loadAvatar() {
-		const image = (await Storage.get({ key: this.globals.USER_AVATAR_KEY })).value;
+		const image = (await this.storage.get(this.globals.USER_AVATAR_KEY)).value;
 		if (image) {
 			this.globals.userAvatar = this.sanitizer.bypassSecurityTrustUrl(image);
 		} else {
@@ -142,7 +144,7 @@ export class AppComponent {
 			reader.readAsDataURL(blob);
 			reader.onloadend = () => {
 				const image = String(reader.result);
-				Storage.set({ key: this.globals.USER_AVATAR_KEY, value: image });
+				this.storage.set(this.globals.USER_AVATAR_KEY, image);
 				this.globals.userAvatar = this.sanitizer.bypassSecurityTrustUrl(image);
 			}
 		}

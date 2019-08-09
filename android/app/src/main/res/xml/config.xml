@@ -7,11 +7,6 @@
   </feature>
 
 
-  <feature name="InAppBrowser">
-    <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser"/>
-  </feature>
-
-
   <feature name="ReceiveContent">
     <param name="android-package" value="receiveContent.ReceiveContent"/>
   </feature>

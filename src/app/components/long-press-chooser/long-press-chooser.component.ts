@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { Lesson } from 'src/app/models/lesson';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AlertController, NavController, ModalController, PopoverController } from '@ionic/angular';
 import { ShareLessonModal } from 'src/app/modals/share-lesson/share-lesson.modal';
 import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
@@ -8,6 +7,9 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Globals } from 'src/app/services/globals/globals';
 import { Sentence } from 'src/app/models/sentence';
+import { Plugins } from '@capacitor/core';
+
+const { Browser } = Plugins;
 
 const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
 
@@ -22,7 +24,6 @@ export class LongPressChooserComponent {
 	@Input("sentence") sentence: Sentence;
 
 	constructor(
-		private browser: InAppBrowser,
 		private alertController: AlertController,
 		private navController: NavController,
 		private popoverController: PopoverController,
@@ -35,7 +36,7 @@ export class LongPressChooserComponent {
 	openLink() {
 		const lessonUrl: string = this.lesson.url;
 		if (lessonUrl.match(urlRegex)) {
-			this.browser.create(lessonUrl);
+			Browser.open({ url: lessonUrl });
 		} else {
 			this.utils.showToast('Lesson URL is not valid');
 		}

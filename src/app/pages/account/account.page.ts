@@ -8,9 +8,7 @@ import { UserHttpService } from 'src/app/services/http/users/user-http.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Globals } from 'src/app/services/globals/globals';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Plugins } from '@capacitor/core';
-
-const { Storage } = Plugins;
+import { StorageService } from 'src/app/services/storage/storage.service';
 
 interface HTMLInputEvent extends Event {
 	target: HTMLInputElement & EventTarget;
@@ -34,6 +32,7 @@ export class AccountPage {
 		private utils: UtilsService,
 		private sanitizer: DomSanitizer,
 		private router: Router,
+		private storage: StorageService,
 		public globals: Globals) { }
 
 	ngOnInit() {
@@ -57,7 +56,7 @@ export class AccountPage {
 					reader.readAsDataURL(event.target.files[0]);
 					reader.onloadend = () => {
 						const image = String(reader.result);
-						Storage.set({ key: this.globals.USER_AVATAR_KEY, value: image });
+						this.storage.set(this.globals.USER_AVATAR_KEY, image);
 						this.globals.userAvatar = this.sanitizer.bypassSecurityTrustUrl(image);
 						this.utils.dismissLoader();
 					}
@@ -76,13 +75,13 @@ export class AccountPage {
 	}
 
 	async getInfo() {
-		const email = (await Storage.get({ key: this.globals.USER_EMAIL_KEY })).value;
+		const email = (await this.storage.get(this.globals.USER_EMAIL_KEY)).value;
 		if (email) {
 			this.userEmail = email;
 		} else {
 			const userInfo = await this.userHttpService.getUserInfo();
 			this.userEmail = userInfo.email;
-			Storage.set({ key: this.globals.USER_EMAIL_KEY, value: userInfo.email });
+			this.storage.set(this.globals.USER_EMAIL_KEY, userInfo.email);
 		}
 	}
 

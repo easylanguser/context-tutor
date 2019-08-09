@@ -6,9 +6,7 @@ import { tap, catchError } from 'rxjs/operators';
 import { BehaviorSubject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Globals } from '../globals/globals';
-import { Plugins } from '@capacitor/core';
-
-const { Storage } = Plugins;
+import { StorageService } from '../storage/storage.service';
 
 interface AuthData {
 	token: string,
@@ -30,6 +28,7 @@ export class AuthService {
 		private helper: JwtHelperService,
 		private plt: Platform,
 		private alertController: AlertController,
+		private storage: StorageService,
 		private globals: Globals) {
 		this.plt.ready().then(() => {
 			this.checkToken();
@@ -37,7 +36,7 @@ export class AuthService {
 	}
 
 	checkToken(): Promise<any> {
-		return Storage.get({ key: this.globals.TOKEN_KEY}).then(token => {
+		return this.storage.get(this.globals.TOKEN_KEY).then(token => {
 			if (token.value) {
 				parent.postMessage({ token: token.value }, '*');
 				let isExpired = this.helper.isTokenExpired(token.value);
@@ -45,12 +44,12 @@ export class AuthService {
 				if (!isExpired) {
 					this.token = token.value;
 					this.authenticationState.next(true);
-					Storage.get({key: this.globals.USER_ID_KEY }).then(userId => {
+					this.storage.get(this.globals.USER_ID_KEY).then(userId => {
 						this.globals.userId = Number(userId.value);
 					});
 				} else {
-					Storage.remove({ key: this.globals.TOKEN_KEY });
-					Storage.remove({ key: this.globals.USER_ID_KEY });
+					this.storage.remove(this.globals.TOKEN_KEY);
+					this.storage.remove(this.globals.USER_ID_KEY);
 				}
 			}
 		});
@@ -69,11 +68,11 @@ export class AuthService {
 		return this.http.post(`${this.url}/api/auth/login`, credentials)
 			.pipe(
 				tap((res: AuthData) => {
-					Storage.set({ key: this.globals.TOKEN_KEY, value: res.token });
+					this.storage.set(this.globals.TOKEN_KEY, res.token);
 					this.token = res.token;
 					parent.postMessage({ token: this.token }, '*');
 
-					Storage.set({ key: this.globals.USER_ID_KEY, value: res.id.toString() });
+					this.storage.set(this.globals.USER_ID_KEY, res.id.toString());
 					this.globals.userId = res.id;
 					
 					this.authenticationState.next(true);
@@ -85,11 +84,7 @@ export class AuthService {
 	}
 
 	async logout() {
-		await Storage.remove({ key: this.globals.USER_ID_KEY });
-		await Storage.remove({ key: this.globals.TOKEN_KEY });
-		await Storage.remove({ key: this.globals.USER_AVATAR_KEY });
-		await Storage.remove({ key: this.globals.USER_EMAIL_KEY });
-
+		await this.storage.clear();
 		this.token = null;
 		parent.postMessage({ userLoggedOut: true }, '*');
 		this.authenticationState.next(false);
