@@ -131,7 +131,7 @@ export class SentenceGuessPage implements OnInit {
 		const sentence = this.curSentence();
 		const sentenceLength = sentence.text.length;
 		let prevIndex: number = 0, i = 0;
-		
+
 		for (const word of sentence.words) {
 			let endIndex: number = sentence.words[i][0],
 				startIndex: number = sentence.words[i][0],
@@ -558,6 +558,9 @@ export class SentenceGuessPage implements OnInit {
 	}
 
 	handleKeyboardEvent(event: KeyboardEvent) {
+		if (this.sentenceTranslateIsPlayed || this.charactersRotationIsPlayed) {
+			return;
+		}
 		this.sentenceWords[this.curWordIndex].word.guessChar = null;
 		this.cdRef.detectChanges();
 		this.sentenceWords[this.curWordIndex].word.guessChar = event.key;
