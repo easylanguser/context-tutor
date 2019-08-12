@@ -114,8 +114,8 @@ export class SentencesListPage implements OnInit {
 		}
 	}
 
-	ionItemTouchDown(sentence: Sentence) {
-		this.gestureHandler.ionItemTouchDown(sentence, this.parentId);
+	ionItemTouchDown(event: any, sentence: Sentence) {
+		this.gestureHandler.ionItemTouchDown(event, sentence, this.parentId);
 	}
 
 	ionItemTouchUp(evt, sentence: Sentence) {

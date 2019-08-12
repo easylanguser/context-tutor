@@ -79,7 +79,7 @@ export class GestureHandlerService {
 		return false;
 	}
 
-	ionItemTouchDown(lessonOrSentence: Lesson | Sentence, parentId?: number) {
+	ionItemTouchDown(event: any, lessonOrSentence: Lesson | Sentence, parentId?: number) {
 		if (lessonOrSentence instanceof Lesson) {
 			this.popover = null;
 			this.interval = setInterval(async () => {
@@ -88,10 +88,33 @@ export class GestureHandlerService {
 					clearInterval(this.interval);
 					this.pressDuration = 0;
 					if (!this.popover && !this.refresherIsPulled) {
+						let x: number, y: number,
+							winWidth: number = window.innerWidth,
+							winHeight: number = window.innerHeight;
+						if (event instanceof MouseEvent) {
+							x = event.x;
+							y = event.y;
+						} else {
+							x = event.touches[0].clientX;
+							y = event.touches[0].clientY;
+						}
+						if (!x || !y) return;
+
+						if (winWidth < x + 260) {
+							x -= (280 - (winWidth - x));
+						}
+
+						if (winHeight < y + 200) {
+							y -= (220 - (winHeight - y));
+						}
+						
+						
 						this.popover = await this.popoverController.create({
 							component: LongPressChooserComponent,
 							componentProps: {
-								lesson: lessonOrSentence
+								lesson: lessonOrSentence,
+								x: x,
+								y: y,
 							},
 							mode: 'ios',
 							animated: true,

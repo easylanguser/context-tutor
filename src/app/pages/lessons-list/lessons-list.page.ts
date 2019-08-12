@@ -41,8 +41,8 @@ export class LessonsListPage implements OnInit {
 		this.firstEnter = false;
 	}
 
-	ionItemTouchDown(lesson: Lesson) {
-		this.gestureHandler.ionItemTouchDown(lesson);
+	ionItemTouchDown(lesson: Lesson, event: any) {
+		this.gestureHandler.ionItemTouchDown(lesson, event);
 	}
 
 	ionItemTouchUp(evt, lesson: Lesson) {

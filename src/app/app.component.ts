@@ -11,9 +11,7 @@ import { Globals } from './services/globals/globals';
 import * as anime from 'animejs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { StorageService } from './services/storage/storage.service';
-import { Plugins } from '@capacitor/core';
-  
-const { SplashScreen } = Plugins;
+import { SplashScreen } from '@capacitor/core';
 
 @Component({
 	selector: 'app-root',

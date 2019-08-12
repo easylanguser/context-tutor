@@ -47,9 +47,9 @@
     <ion-list no-padding no-margin style="padding-top: 2vh; padding-bottom: 8em;" #lessonsList>
       <ion-item *ngFor="let lesson of this.displayedLessons" class="lesson-ion-item no-selection" no-padding>
         <div
-          (touchstart)="ionItemTouchDown(lesson)"
+          (touchstart)="ionItemTouchDown($event, lesson)"
           (touchend)="ionItemTouchUp($event, lesson)"
-          (mousedown)="ionItemTouchDown(lesson)"
+          (mousedown)="ionItemTouchDown($event, lesson)"
           (mouseup)="ionItemTouchUp($event, lesson)"
           [ngClass]="{'dashed': this.globals.getIsDemo()}">
           <div>

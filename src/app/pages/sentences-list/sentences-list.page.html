@@ -44,7 +44,7 @@
       <ion-item no-padding class="sentence-ion-item no-selection"
         *ngFor="let sentence of this.displayedSentences">
         <div
-          (touchstart)="ionItemTouchDown(sentence)"
+          (touchstart)="ionItemTouchDown($event, sentence)"
           (touchend)="ionItemTouchUp($event, sentence)"
           (mousedown)="ionItemTouchDown($event, sentence)"
           (mouseup)="ionItemTouchUp($event, sentence)"

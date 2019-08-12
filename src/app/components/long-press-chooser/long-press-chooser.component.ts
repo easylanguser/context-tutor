@@ -6,10 +6,7 @@ import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.ser
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Globals } from 'src/app/services/globals/globals';
-import { Sentence } from 'src/app/models/sentence';
-import { Plugins } from '@capacitor/core';
-
-const { Browser } = Plugins;
+import { Browser } from '@capacitor/core';
 
 const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
 
@@ -21,7 +18,8 @@ const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-
 export class LongPressChooserComponent {
 
 	@Input("lesson") lesson: Lesson;
-	@Input("sentence") sentence: Sentence;
+	@Input("x") x: number;
+	@Input("y") y: number;
 
 	constructor(
 		private alertController: AlertController,
