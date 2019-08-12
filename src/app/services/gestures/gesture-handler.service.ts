@@ -84,7 +84,7 @@ export class GestureHandlerService {
 			this.popover = null;
 			this.interval = setInterval(async () => {
 				this.pressDuration++;
-				if (this.pressDuration > 7) {
+				if (this.pressDuration > 4) {
 					clearInterval(this.interval);
 					this.pressDuration = 0;
 					if (!this.popover && !this.refresherIsPulled) {
@@ -127,7 +127,7 @@ export class GestureHandlerService {
 			if (!parentId) {
 				this.interval = setInterval(async () => {
 					this.pressDuration++;
-					if (this.pressDuration > 7) {
+					if (this.pressDuration > 4) {
 						clearInterval(this.interval);
 						this.pressDuration = 0;
 						if (!this.refresherIsPulled) {
