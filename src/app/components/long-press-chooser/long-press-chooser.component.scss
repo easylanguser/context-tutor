@@ -16,9 +16,15 @@ ion-item:hover {
 
 ion-list {
     position: fixed;
-    width: 260px;
+    margin: 0;
     padding: 0;
+    width: 260px;
     >:last-child {
         --inner-border-width: 0;
     }
+}
+
+.list-ios {
+    width: auto !important;
+    position: -webkit-sticky !important;
 }

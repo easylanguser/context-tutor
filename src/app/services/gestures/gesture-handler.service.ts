@@ -108,13 +108,12 @@ export class GestureHandlerService {
 							y -= (220 - (winHeight - y));
 						}
 						
-						
 						this.popover = await this.popoverController.create({
 							component: LongPressChooserComponent,
 							componentProps: {
 								lesson: lessonOrSentence,
 								x: x,
-								y: y,
+								y: y + 20,
 							},
 							mode: 'ios',
 							animated: true,
