@@ -2,7 +2,7 @@
 
   <ion-header>
     <ion-toolbar mode="ios">
-      <ion-buttons slot="start">
+      <ion-buttons slot="start" id="menu-button">
         <ion-menu-button>
           <img src="assets/img/menu_icon_white.svg">
         </ion-menu-button>
@@ -10,6 +10,11 @@
       <ion-title class="no-selection">
         My lessons
       </ion-title>
+      <ion-buttons slot="end" id="desktop-refresher" *ngIf="this.globals.platformName === 'web' ||
+        this.globals.platformName === 'electron' ||
+        this.globals.platformName === 'desktop'" (click)="doRefresh()">
+        <ion-icon name="refresh-circle"></ion-icon>
+      </ion-buttons>
     </ion-toolbar>
 
     <div id="segments-div">
@@ -39,7 +44,8 @@
     (mousedown)="ionContentTouchStart($event)"
     (mouseup)="ionContentTouchEnd($event)">
 
-    <ion-refresher (ionPull)="this.gestureHandler.refresherIsPulled = true" (ionRefresh)="doRefresh($event)">
+    <ion-refresher *ngIf="this.globals.platformName === 'ios' || this.globals.platformName === 'android'"
+      (ionPull)="this.gestureHandler.refresherIsPulled = true" (ionRefresh)="doRefresh($event)">
       <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">
       </ion-refresher-content>
     </ion-refresher>

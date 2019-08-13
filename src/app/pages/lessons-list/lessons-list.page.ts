@@ -180,13 +180,20 @@ export class LessonsListPage implements OnInit {
 		}
 	}
 
-	async doRefresh(event) {
+	async doRefresh(event?: any) {
+		if (!event) {
+			await this.utils.createAndShowLoader('Loading...');
+		}
 		await this.getData();
 		(<HTMLIonSegmentElement>document.getElementById('lessons-filter-segment')).value = "all";
-		event.target.complete();
-		setTimeout(() => {
+		if (event) {
 			event.target.complete();
-		}, 5000);
+			setTimeout(() => {
+				event.target.complete();
+			}, 5000);
+		} else {
+			await this.utils.dismissLoader();
+		}
 	}
 
 	private async getData() {

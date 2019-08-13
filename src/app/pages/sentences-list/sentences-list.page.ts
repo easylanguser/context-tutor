@@ -283,13 +283,19 @@ export class SentencesListPage implements OnInit {
 		}
 	}
 
-	doRefresh(event) {
-		this.getData().then(_ => {
+	async doRefresh(event?: any) {
+		if (!event) {
+			await this.utils.createAndShowLoader('Loading...');
+		}
+		await this.getData();
+		(<HTMLIonSegmentElement>document.getElementById('sentences-filter-segment')).value = "all";
+		if (event) {
 			event.target.complete();
-			(<HTMLIonSegmentElement>document.getElementById('sentences-filter-segment')).value = "all";
-		});
-		setTimeout(() => {
-			event.target.complete();
-		}, 5000);
+			setTimeout(() => {
+				event.target.complete();
+			}, 5000);
+		} else {
+			await this.utils.dismissLoader();
+		}
 	}
 }

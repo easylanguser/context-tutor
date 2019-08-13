@@ -1,7 +1,7 @@
 ion-toolbar {
     --background: rgb(69, 184, 255);
 
-    ion-buttons {
+    #back-button {
         color: white;
         margin-left: 4%;
 
@@ -20,6 +20,19 @@ ion-toolbar {
             -webkit-padding-start: 200px;
             padding-inline-end: 200px;
             -webkit-padding-end: 200px;
+        }
+    }
+
+    #desktop-refresher {
+        cursor: pointer;
+        margin-right: 3%;
+        font-size: 32px;
+        color: white;
+        transition: color 150ms linear;
+        -webkit-transition: color 150ms linear;
+
+        &:hover {
+            color: var(--ion-color-secondary);
         }
     }
 
