@@ -1,4 +1,4 @@
-import { Platform, AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -26,13 +26,10 @@ export class AuthService {
 	constructor(
 		private http: HttpClient,
 		private helper: JwtHelperService,
-		private plt: Platform,
 		private alertController: AlertController,
 		private storage: StorageService,
 		private globals: Globals) {
-		this.plt.ready().then(() => {
-			this.checkToken();
-		});
+		this.checkToken();
 	}
 
 	checkToken(): Promise<any> {

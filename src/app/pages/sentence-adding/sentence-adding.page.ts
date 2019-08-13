@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
-import { NavController, Platform } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { Sentence } from 'src/app/models/sentence';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
@@ -24,26 +24,24 @@ export class SentenceAddingPage implements OnInit {
 	sentence: string;
 	lessonId: number;
 	sentenceToEditId: string;
+	textArea: HTMLElement;
 
 	constructor(
-		private platform: Platform,
 		private navController: NavController,
 		private sentenceHttpService: SentenceHttpService,
 		private lessonHttpService: LessonHttpService,
 		private route: ActivatedRoute,
 		private lessonsDataService: LessonsDataService,
 		private utils: UtilsService,
-		private globals: Globals) {
-		platform.ready().then(() => {
-			if (platform.is('android') || platform.is('ios')) {
-				selectionDelay = 700;
-			}
-		});
+		public globals: Globals) {
+		if (this.globals.platformName === 'android' ||
+			this.globals.platformName === 'ios') {
+			selectionDelay = 700;
+		}
 	}
 
 	ngOnInit() {
-		document.getElementById("selectable-sentence-div").focus();
-
+		this.textArea = document.getElementById('selectable-sentence-div');
 		this.sentenceToEditId = this.route.snapshot.queryParamMap.get('toEdit');
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
 
@@ -83,7 +81,7 @@ export class SentenceAddingPage implements OnInit {
 		this.lessonId ?
 			this.title = this.lessonsDataService.getLessonById(this.lessonId).name :
 			this.title = new Date().toJSON().slice(0, 10).replace(/-/g, '/') +
-				' ' + this.globals.sharedText[0].substr(0, 10);
+			' ' + this.globals.sharedText[0].substr(0, 10);
 	}
 
 	editTitle() {
@@ -96,7 +94,7 @@ export class SentenceAddingPage implements OnInit {
 
 		indexesArray.sort((el1, el2) => el1[0] - el2[0]);
 
-		const textAreaValue = document.getElementById("selectable-sentence-div").innerText;
+		const textAreaValue = this.textArea.innerText;
 		if (this.lessonId) { // Sentence is added to an existing lesson
 			if (this.sentenceToEditId) { // Existing sentence is being edited
 				this.sentenceHttpService.updateSentenceWords(this.sentenceToEditId, indexesArray, textAreaValue);
@@ -125,11 +123,10 @@ export class SentenceAddingPage implements OnInit {
 						new Date().toISOString(),
 						new Date().toISOString()));
 			} else {
-				const text = document.getElementById("selectable-sentence-div").innerText;
 				const newSentence = await this.sentenceHttpService.postNewSentence({
 					lessonId: this.lessonId,
 					words: indexesArray,
-					text: text
+					text: this.textArea.innerText
 				});
 				this.lessonsDataService.createNewStatisticRecord(
 					newSentence.id,
@@ -146,9 +143,9 @@ export class SentenceAddingPage implements OnInit {
 			});
 			const newLessonId = res.id;
 			const newSentence = await this.sentenceHttpService.postNewSentence({
-					lessonId: newLessonId,
-					words: indexesArray,
-					text: this.sentence
+				lessonId: newLessonId,
+				words: indexesArray,
+				text: this.sentence
 			});
 			this.lessonsDataService.createNewStatisticRecord(
 				newSentence.id,
@@ -169,7 +166,7 @@ export class SentenceAddingPage implements OnInit {
 	}
 
 	showSelectionButton() {
-		setTimeout(function () {
+		setTimeout(() => {
 			if (window.getSelection().toString() === "") return;
 			const selection: any = window.getSelection().getRangeAt(0).getClientRects()[0];
 			const left: string = String(selection.x) + 'px';
@@ -186,7 +183,7 @@ export class SentenceAddingPage implements OnInit {
 			lastSelOffsets[0] = window.getSelection().getRangeAt(0).startOffset;
 			lastSelOffsets[1] = window.getSelection().getRangeAt(0).endOffset;
 
-			if (document.getElementById("selectable-sentence-div").innerText.substring(lastSelOffsets[0], lastSelOffsets[1]) !== window.getSelection().toString()) {
+			if (this.textArea.innerText.substring(lastSelOffsets[0], lastSelOffsets[1]) !== window.getSelection().toString()) {
 				--lastSelOffsets[0];
 				--lastSelOffsets[1];
 			}
@@ -199,10 +196,9 @@ export class SentenceAddingPage implements OnInit {
 	}
 
 	addSelectedWord() {
-		const textArea = document.getElementById("selectable-sentence-div");
 		const start = lastSelOffsets[0];
 		const finish = lastSelOffsets[1];
-		const sel = textArea.innerText.substring(start, finish);
+		const sel = this.textArea.innerText.substring(start, finish);
 
 		if (finish <= start) {
 			return;
@@ -222,17 +218,17 @@ export class SentenceAddingPage implements OnInit {
 		}
 		indexesArray.push([start, finish - start]);
 
-		this.generateBorderForSelectedWord(textArea);
+		this.generateBorderForSelectedWord();
 	}
 
-	private generateBorderForSelectedWord(textArea: HTMLElement) {
+	private generateBorderForSelectedWord() {
 		const border = document.createElement('div');
 		const brdrStyle = border.style;
 		const topMargin = String(lastSelCoords[1]) + 'px';
 		brdrStyle.marginLeft = window.innerWidth < 992 ?
 			String(lastSelCoords[0] - 3) + 'px' :
 			'calc(' + String(lastSelCoords[0] - 3) + 'px - 28vw)';
-		border.id = 'calc(' + topMargin + ' + ' + String(textArea.scrollTop) + 'px)'
+		border.id = 'calc(' + topMargin + ' + ' + String(this.textArea.scrollTop) + 'px)'
 		border.className = 'border';
 		brdrStyle.marginTop = topMargin;
 		brdrStyle.width = String(lastSelCoords[2] + 7) + 'px';
@@ -242,17 +238,17 @@ export class SentenceAddingPage implements OnInit {
 		brdrStyle.opacity = '0.4';
 		brdrStyle.borderRadius = '10px';
 		const borders = document.getElementsByClassName('border');
-		const textAreaBonds = document.getElementById('selectable-sentence-div').getBoundingClientRect();
-		document.getElementById('selectable-sentence-div').onscroll = () => {
+		const textAreaBonds = this.textArea.getBoundingClientRect();
+		this.textArea.onscroll = () => {
 			Array.from(borders).forEach((brdr: HTMLDivElement) => {
-				brdr.style.marginTop = 'calc(' + brdr.id + ' - ' + String(textArea.scrollTop) + 'px)';
+				brdr.style.marginTop = 'calc(' + brdr.id + ' - ' + String(this.textArea.scrollTop) + 'px)';
 				const scrollPos = Number(brdr.style.marginTop.substr(5, brdr.style.marginTop.length - 8));
 				(scrollPos > textAreaBonds.bottom - Number(brdr.style.height.substr(0, brdr.style.height.length - 2)) || scrollPos < textAreaBonds.top) ?
 					brdr.style.background = 'none' :
 					brdr.style.background = 'blue';
 			});
 			const selBtn = <HTMLDivElement>document.getElementsByClassName("select-btn")[0];
-			selBtn.style.marginTop = 'calc(' + selBtn.id + ' - ' + String(textArea.scrollTop) + 'px)';
+			selBtn.style.marginTop = 'calc(' + selBtn.id + ' - ' + String(this.textArea.scrollTop) + 'px)';
 			const scrollPos = Number(selBtn.style.marginTop.substr(5, selBtn.style.marginTop.length - 8));
 			(scrollPos > textAreaBonds.bottom || scrollPos < textAreaBonds.top) ?
 				selBtn.style.display = 'none' :

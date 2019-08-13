@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform, AlertController, NavController } from '@ionic/angular';
+import { AlertController, NavController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
 import { BehaviorSubject } from 'rxjs';
@@ -11,7 +11,7 @@ import { Globals } from './services/globals/globals';
 import * as anime from 'animejs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { StorageService } from './services/storage/storage.service';
-import { SplashScreen } from '@capacitor/core';
+import { SplashScreen, Device } from '@capacitor/core';
 
 @Component({
 	selector: 'app-root',
@@ -67,65 +67,70 @@ export class AppComponent {
 
 	authenticationState = new BehaviorSubject(false);
 
-	async initializeApp(pathToGo: string) {
-		await this.platform.ready();
-		if (this.platform.is('android')) {
-			this.checkForIntent();
-		}
-		if (this.platform.is('mobile')) {
-			SplashScreen.hide();
-		}
-
-		const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} });
-		const themeName = (await this.storage.get(this.globals.THEME_ID_KEY)).value;
-		customEvent.detail.value = (themeName === "dark") ?
-			"dark" :
-			"light";
-		this.onChangeTheme(customEvent);
-		
-		this.authService.authenticationState.subscribe(async state => {
-			if (state) {
-				this.loggedIn = true;
-				if (this.globals.sharedText[0]) {
-					this.router.navigate(['share-adding-choice']);
-				} else {
-					if (pathToGo === '/login') {
-						pathToGo = 'lessons-list';
-					}
-
-					await this.loadAvatar();
-
-					const paramsOfUrl = this.getParams(pathToGo);
-					if (paramsOfUrl) {
-						this.navController.navigateForward(
-							[pathToGo.substring(0, pathToGo.indexOf('?'))],
-							{ queryParams: paramsOfUrl });
-					} else {
-						this.navController.navigateForward([pathToGo]);
-					}
-				}
-			} else {
-				this.loggedIn = false;
-				this.router.navigate(['login']);
+	initializeApp(pathToGo: string) {
+		this.platform.ready().then(async () => {
+			this.globals.platformName = this.platform.is('android') ?
+				'android' :
+				(this.platform.is('ios') ? 'ios' : (await Device.getInfo()).platform);
+			if (this.globals.platformName === 'android') {
+				this.checkForIntent();
 			}
-		});
 
-		this.globals.isDemo.subscribe(demo => {
-			if (demo && this.globals.isDemoHasChanged) {
-				const target = [document.querySelector('#demo-informer')];
-				anime({
-					targets: target,
-					translateX: '+=95vw',
-					duration: 1000
-				}).finished.then(() => {
+			if (this.globals.platformName === 'android' || this.globals.platformName === 'ios') {
+				await SplashScreen.hide();
+			}
+
+			const customEvent: CustomEvent = new CustomEvent("themeevent", { detail: {} });
+			const themeName = (await this.storage.get(this.globals.THEME_ID_KEY)).value;
+			customEvent.detail.value = (themeName === "dark") ?
+				"dark" :
+				"light";
+			this.onChangeTheme(customEvent);
+
+			this.authService.authenticationState.subscribe(async state => {
+				if (state) {
+					this.loggedIn = true;
+					if (this.globals.sharedText[0]) {
+						this.router.navigate(['share-adding-choice']);
+					} else {
+						if (pathToGo === '/login') {
+							pathToGo = 'lessons-list';
+						}
+
+						await this.loadAvatar();
+
+						const paramsOfUrl = this.getParams(pathToGo);
+						if (paramsOfUrl) {
+							this.navController.navigateForward(
+								[pathToGo.substring(0, pathToGo.indexOf('?'))],
+								{ queryParams: paramsOfUrl });
+						} else {
+							this.navController.navigateForward([pathToGo]);
+						}
+					}
+				} else {
+					this.loggedIn = false;
+					this.router.navigate(['login']);
+				}
+			});
+
+			this.globals.isDemo.subscribe(demo => {
+				if (demo && this.globals.isDemoHasChanged) {
+					const target = [document.querySelector('#demo-informer')];
 					anime({
 						targets: target,
-						translateX: '-=95vw',
-						delay: 1500,
+						translateX: '+=95vw',
 						duration: 1000
-					})
-				});
-			}
+					}).finished.then(() => {
+						anime({
+							targets: target,
+							translateX: '-=95vw',
+							delay: 1500,
+							duration: 1000
+						})
+					});
+				}
+			});
 		});
 	}
 

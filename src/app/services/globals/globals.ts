@@ -10,6 +10,8 @@ export class Globals {
 
 	userAvatar: SafeUrl;
 
+	platformName: string;
+
 	isDemo: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	isDemoHasChanged: boolean;
 	
