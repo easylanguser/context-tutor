@@ -110,6 +110,11 @@ export class AppComponent {
 					}
 				} else {
 					this.loggedIn = false;
+					await this.storage.clear();
+					this.globals.userAvatar = null;
+					this.authService.token = null;
+					parent.postMessage({ userLoggedOut: true }, '*');
+					this.navController.pop();
 					this.router.navigate(['login']);
 				}
 			});
@@ -154,9 +159,7 @@ export class AppComponent {
 	}
 
 	logout() {
-		this.authService.logout().then(() => {
-			this.loggedIn = false;
-		});
+		this.authService.authenticationState.next(false);
 	}
 
 	private checkForIntent() {

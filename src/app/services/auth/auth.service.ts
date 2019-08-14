@@ -80,14 +80,6 @@ export class AuthService {
 			);
 	}
 
-	async logout() {
-		await this.storage.clear();
-		this.globals.userAvatar = null;
-		this.token = null;
-		parent.postMessage({ userLoggedOut: true }, '*');
-		this.authenticationState.next(false);
-	}
-
 	isAuthenticated() {
 		return this.authenticationState.value;
 	}

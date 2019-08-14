@@ -103,10 +103,10 @@ export class AccountPage {
 						alert.dismiss(true);
 						this.httpService.doPost(environment.url + '/api/user/deleteAccount', data)
 							.subscribe(async () => {
-								return await this.authService.logout();
+								this.authService.authenticationState.next(false);
 							}, err => {
-								this.showAlert(err.error)
-							})
+								this.showAlert(err.error);
+							});
 					}
 				}, {
 					text: 'Cancel',
@@ -126,9 +126,7 @@ export class AccountPage {
 	}
 
 	logout() {
-		this.authService.logout().then(() => {
-			this.navController.pop().then(() => this.router.navigate(['login']));
-		});
+		this.authService.authenticationState.next(false);
 	}
 
 	showAlert(res) {
