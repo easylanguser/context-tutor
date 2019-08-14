@@ -127,7 +127,7 @@ export class AccountPage {
 
 	logout() {
 		this.authService.logout().then(() => {
-			this.navController.pop();
+			this.navController.pop().then(() => this.router.navigate(['login']));
 		});
 	}
 
