@@ -1,5 +1,5 @@
 ion-toolbar {
-    --background: rgb(69, 184, 255);
+    --background: var(--ion-color-primary);
 
     #menu-button {
         color: white;
@@ -22,7 +22,7 @@ ion-toolbar {
         }
     }
 
-    #desktop-refresher {
+    #desktop-refresher-lessons {
         cursor: pointer;
         margin-right: 3%;
         font-size: 32px;
@@ -160,6 +160,9 @@ ion-toolbar {
             max-height: 6vh;
             margin: 0;
             font-weight: bold;
+            @media (max-width: 350px) {
+                font-size: 2.5vh;
+            }
         }
 
         span {

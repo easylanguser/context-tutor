@@ -10,7 +10,7 @@
       <ion-title class="no-selection">
         My lessons
       </ion-title>
-      <ion-buttons slot="end" id="desktop-refresher" *ngIf="this.globals.platformName === 'web' ||
+      <ion-buttons slot="end" id="desktop-refresher-lessons" *ngIf="this.globals.platformName === 'web' ||
         this.globals.platformName === 'electron' ||
         this.globals.platformName === 'desktop'" (click)="doRefresh()">
         <ion-icon name="refresh-circle"></ion-icon>

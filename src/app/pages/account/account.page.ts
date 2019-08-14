@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { HttpService } from '../../services/http/rest/http.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { UserHttpService } from 'src/app/services/http/users/user-http.service';
@@ -32,6 +32,7 @@ export class AccountPage {
 		private utils: UtilsService,
 		private sanitizer: DomSanitizer,
 		private router: Router,
+		private navController: NavController,
 		private storage: StorageService,
 		public globals: Globals) { }
 
@@ -125,7 +126,9 @@ export class AccountPage {
 	}
 
 	logout() {
-		this.authService.logout().then();
+		this.authService.logout().then(() => {
+			this.navController.pop();
+		});
 	}
 
 	showAlert(res) {

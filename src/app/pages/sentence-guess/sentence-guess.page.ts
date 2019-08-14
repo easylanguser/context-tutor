@@ -6,11 +6,11 @@ import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
 import { Statistics } from 'src/app/models/statistics';
-import * as anime from 'animejs';
 import { Location } from '@angular/common';
 import { StatisticHttpService } from 'src/app/services/http/statistics/statistic-http.service';
 import { Globals } from 'src/app/services/globals/globals';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import anime from 'animejs/lib/anime.es';
 
 @Component({
 	selector: 'app-sentence-guess',

@@ -2,11 +2,12 @@ import { Component, OnInit, ViewChildren } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
-import { Chart } from 'chart.js';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import * as _ from 'lodash';
 import { Globals } from 'src/app/services/globals/globals';
 import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler.service';
+import { Chart } from 'chart.js';
+import * as _ from 'lodash';
+import anime from 'animejs/lib/anime.es';
 
 @Component({
 	selector: 'page-lessons-list',
@@ -160,7 +161,7 @@ export class LessonsListPage implements OnInit {
 				chartData[2] = 0;
 				for (const stats of lesson.statistics) {
 					if (stats && (stats.correctAnswers + stats.wrongAnswers +
-							stats.hintUsages + stats.giveUps > 0)) {
+						stats.hintUsages + stats.giveUps > 0)) {
 						chartData[0] += stats.correctAnswers;
 						chartData[1] += stats.wrongAnswers;
 						chartData[2] += stats.hintUsages + stats.giveUps;
@@ -182,6 +183,15 @@ export class LessonsListPage implements OnInit {
 
 	async doRefresh(event?: any) {
 		if (!event) {
+			anime({
+				targets: [
+					document.querySelector('#desktop-refresher-lessons')
+				],
+				rotate: '+=360',
+				elasticity: 50,
+				easing: 'easeOutElastic',
+				duration: 3000
+			});
 			await this.utils.createAndShowLoader('Loading...');
 		}
 		await this.getData();

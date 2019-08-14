@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
-import * as anime from 'animejs';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Globals } from 'src/app/services/globals/globals';
+import anime from 'animejs/lib/anime.es';
 
 @Component({
 	selector: 'app-add-lesson',
@@ -94,7 +94,7 @@ export class AddLessonPage implements OnInit {
 		if (this.lessonName) {
 			if (this.fileInput.files && this.fileInput.files.length > 0) {
 				await this.lessonHttpService.postNewLessonFile(
-					this.fileInput.files, 
+					this.fileInput.files,
 					this.lessonName,
 					this.globals.userId
 				);

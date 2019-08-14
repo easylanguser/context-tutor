@@ -5,10 +5,10 @@ import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
 import { NavController, ToastController } from '@ionic/angular';
-import * as anime from 'animejs';
-import * as _ from 'lodash';
 import { Globals } from 'src/app/services/globals/globals';
 import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler.service';
+import anime from 'animejs/lib/anime.es';
+import * as _ from 'lodash';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -48,15 +48,15 @@ export class SentencesListPage implements OnInit {
 			await this.lessonsDataService.refreshLessons();
 		}
 		await this.initData(showLoader);
-		
+
 		this.addFabHandler();
 		this.firstEnter = false;
-		
+
 		setTimeout(() => {
 			this.syncCharts();
 			this.pieCanvases.changes.subscribe(() => {
 				this.syncCharts();
-			});	
+			});
 		});
 	}
 
@@ -88,7 +88,7 @@ export class SentencesListPage implements OnInit {
 		this.lessonTitle = lesson.name.toString();
 		if (this.globals.getIsDemo()) {
 			this.displayedSentences = await lesson.sentences.sort(this.lessonsDataService.sortSentencesByAddingTime);
-		} else {			
+		} else {
 			this.displayedSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
 		}
 	}
@@ -285,6 +285,15 @@ export class SentencesListPage implements OnInit {
 
 	async doRefresh(event?: any) {
 		if (!event) {
+			anime({
+				targets: [
+					document.querySelector('#desktop-refresher-sentences')
+				],
+				rotate: '+=360',
+				elasticity: 50,
+				easing: 'easeOutElastic',
+				duration: 3000
+			});
 			await this.utils.createAndShowLoader('Loading...');
 		}
 		await this.getData();

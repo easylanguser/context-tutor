@@ -1,5 +1,5 @@
 ion-toolbar {
-    --background: rgb(69, 184, 255);
+    --background: var(--ion-color-primary);
 
     #back-button {
         color: white;
@@ -23,7 +23,7 @@ ion-toolbar {
         }
     }
 
-    #desktop-refresher {
+    #desktop-refresher-sentences {
         cursor: pointer;
         margin-right: 3%;
         font-size: 32px;
@@ -111,6 +111,9 @@ ion-toolbar {
     margin-top: 2vh;
     margin-bottom: 15vh;
 
+    @media (max-width: 350px) {
+        margin-bottom: 20vh;
+    }
     @media (min-width: 992px) {
         margin-bottom: 9vh;
     }
@@ -155,6 +158,9 @@ ion-toolbar {
             font-weight: bold;
             font-family: "Arial";
             font-size: 3.4vmin;
+            @media (max-width: 350px) {
+                font-size: 4vmin;
+            }
         }
     }
 

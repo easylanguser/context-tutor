@@ -8,10 +8,10 @@ import { Location } from '@angular/common';
 import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
 import { UserHttpService } from './services/http/users/user-http.service';
 import { Globals } from './services/globals/globals';
-import * as anime from 'animejs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { StorageService } from './services/storage/storage.service';
 import { SplashScreen, Device } from '@capacitor/core';
+import anime from 'animejs/lib/anime.es';
 
 @Component({
 	selector: 'app-root',
