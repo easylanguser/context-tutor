@@ -65,7 +65,6 @@ export class AuthService {
 				tap((res: AuthData) => {
 					this.storage.set(this.globals.TOKEN_KEY, res.token);
 					this.token = res.token;
-					parent.postMessage({ token: this.token }, '*');
 					this.storage.set(this.globals.USER_ID_KEY, res.id.toString());
 					this.globals.userId = res.id;
 					
