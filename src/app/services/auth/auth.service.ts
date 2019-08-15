@@ -35,7 +35,6 @@ export class AuthService {
 	checkToken(): Promise<any> {
 		return this.storage.get(this.globals.TOKEN_KEY).then(token => {
 			if (token.value) {
-				parent.postMessage({ token: token.value }, '*');
 				let isExpired = this.helper.isTokenExpired(token.value);
 
 				if (!isExpired) {
@@ -67,7 +66,6 @@ export class AuthService {
 				tap((res: AuthData) => {
 					this.storage.set(this.globals.TOKEN_KEY, res.token);
 					this.token = res.token;
-					parent.postMessage({ token: this.token }, '*');
 
 					this.storage.set(this.globals.USER_ID_KEY, res.id.toString());
 					this.globals.userId = res.id;

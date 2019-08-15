@@ -110,7 +110,6 @@ export class AppComponent {
 						
 						const token = await this.storage.get(this.globals.TOKEN_KEY)
 						if (token.value) {
-							console.log('threw token');
 							parent.postMessage({ token: token.value }, '*');
 						}
 					}
