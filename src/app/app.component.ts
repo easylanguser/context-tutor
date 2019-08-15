@@ -101,11 +101,17 @@ export class AppComponent {
 
 						const paramsOfUrl = this.getParams(pathToGo);
 						if (paramsOfUrl) {
-							this.navController.navigateForward(
+							await this.navController.navigateForward(
 								[pathToGo.substring(0, pathToGo.indexOf('?'))],
 								{ queryParams: paramsOfUrl });
 						} else {
-							this.navController.navigateForward([pathToGo]);
+							await this.navController.navigateForward([pathToGo]);
+						}
+						
+						const token = await this.storage.get(this.globals.TOKEN_KEY)
+						if (token.value) {
+							console.log('threw token');
+							parent.postMessage({ token: token.value }, '*');
 						}
 					}
 				} else {

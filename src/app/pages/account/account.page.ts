@@ -1,7 +1,7 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { HttpService } from '../../services/http/rest/http.service';
-import { AlertController, NavController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { UserHttpService } from 'src/app/services/http/users/user-http.service';
@@ -20,7 +20,7 @@ interface HTMLInputEvent extends Event {
 	styleUrls: ['./account.page.scss'],
 })
 
-export class AccountPage implements AfterViewInit {
+export class AccountPage {
 
 	userEmail: string;
 
@@ -38,14 +38,6 @@ export class AccountPage implements AfterViewInit {
 	ngOnInit() {
 		this.checkTokenAndGetInfo();
 		this.addAvatarClickHandler();
-	}
-
-	ngAfterViewInit() {
-		this.storage.get(this.globals.TOKEN_KEY).then(token => {
-			if (token.value) {
-				parent.postMessage({ token: token.value }, '*');
-			}
-		});
 	}
 
 	private async checkTokenAndGetInfo() {
