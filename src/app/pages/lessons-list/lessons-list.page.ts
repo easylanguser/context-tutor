@@ -8,11 +8,26 @@ import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler
 import { Chart } from 'chart.js';
 import * as _ from 'lodash';
 import anime from 'animejs/lib/anime.es';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
 	selector: 'page-lessons-list',
 	templateUrl: 'lessons-list.page.html',
-	styleUrls: ['lessons-list.page.scss']
+	styleUrls: ['lessons-list.page.scss'],
+	animations: [
+		trigger(
+			'enterAnimation', [
+				transition(':enter', [
+					style({ transform: 'scaleY(0)', opacity: 0 }),
+					animate('300ms ease-in-out', style({ transform: 'scaleY(1)', opacity: 1 }))
+				]),
+				transition(':leave', [
+					style({ transform: 'scaleY(1)', opacity: 1 }),
+					animate('300ms ease-in-out', style({ transform: 'scaleY(0)', opacity: 0 }))
+				])
+			]
+		)
+	]
 })
 export class LessonsListPage implements OnInit {
 

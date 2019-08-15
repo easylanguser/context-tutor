@@ -9,11 +9,26 @@ import { Globals } from 'src/app/services/globals/globals';
 import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler.service';
 import anime from 'animejs/lib/anime.es';
 import * as _ from 'lodash';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
 	selector: 'page-sentences-list',
 	templateUrl: 'sentences-list.page.html',
 	styleUrls: ['sentences-list.page.scss'],
+	animations: [
+		trigger(
+			'enterAnimation', [
+				transition(':enter', [
+					style({ transform: 'scaleY(0)', opacity: 0 }),
+					animate('300ms ease-in-out', style({ transform: 'scaleY(1)', opacity: 1 }))
+				]),
+				transition(':leave', [
+					style({ transform: 'scaleY(1)', opacity: 1 }),
+					animate('300ms ease-in-out', style({ transform: 'scaleY(0)', opacity: 0 }))
+				])
+			]
+		)
+	]
 })
 export class SentencesListPage implements OnInit {
 
