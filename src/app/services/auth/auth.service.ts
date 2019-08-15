@@ -36,8 +36,8 @@ export class AuthService {
 		return this.storage.get(this.globals.TOKEN_KEY).then(token => {
 			if (token.value) {
 				let isExpired = this.helper.isTokenExpired(token.value);
-
 				if (!isExpired) {
+					parent.postMessage({ token: token.value }, '*');
 					this.token = token.value;
 					this.authenticationState.next(true);
 					this.storage.get(this.globals.USER_ID_KEY).then(userId => {
