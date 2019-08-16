@@ -17,45 +17,44 @@ ion-toolbar {
 
 #user-email {
     height: 40px;
-    line-height: 40px;
-    margin-top: 2vh;
-    text-align: center;
+    margin-top: 4vh;
     color: var(--ion-color-step-950);
 }
 
-#outer-content {
-    background: var(--background);
-}
+#content-container {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
 
-.list-block {
-    height: 40px;
-    border-radius: 20px;
-    --border-radius: 20px;
-    margin: 2vh 20vw;
-    cursor: pointer;
-    text-align: center;
-    vertical-align: middle;
-    line-height: 40px;
-    --background: #FFF;
-    font-weight: bold;
-    color: #00baff;
-
-    --transition: background 0.3s ease;
-    transition: background 0.3s ease;
-    -webkit-transition: background 0.3s ease;
-
-    &:hover {
-        background: #d7dbe4;
+    :last-child {
+        margin-top: 10vh;
+        border: 2px solid var(--ion-color-primary);
+        line-height: 36px;
+        box-shadow: none;
     }
 }
 
-#logout-button {
-    margin: 20vh 35vw 0 35vw;
-    line-height: 35px;
+.list-block {
+    width: auto;
+    padding: 0 16px;
+    height: 40px;
+    border-radius: 20px;
+    margin-top: 2vh;
+    cursor: pointer;
+    font-size: smaller;
+    line-height: 40px;
+    background: #FFF;
+    font-weight: bold;
+    color: #00baff;
+    text-transform: uppercase;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+        0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    transition: background 300ms, color 300ms;
 
-    @media (min-width: 992px) {
-        margin-left: 30vw;
-        margin-right: 30vw;
+    &:hover {
+        background: var(--ion-color-primary);
+        color: #FFF;
     }
 }
 

@@ -18,12 +18,12 @@ import { trigger, transition, style, animate } from '@angular/animations';
 		trigger(
 			'enterAnimation', [
 				transition(':enter', [
-					style({ transform: 'scaleY(0)', opacity: 0 }),
-					animate('300ms ease-in-out', style({ transform: 'scaleY(1)', opacity: 1 }))
+					style({ opacity: 0 }),
+					animate('400ms', style({ opacity: 1 }))
 				]),
 				transition(':leave', [
-					style({ transform: 'scaleY(1)', opacity: 1 }),
-					animate('300ms ease-in-out', style({ transform: 'scaleY(0)', opacity: 0 }))
+					style({ opacity: 1 }),
+					animate('400ms ease-out', style({ opacity: 0 }))
 				])
 			]
 		)

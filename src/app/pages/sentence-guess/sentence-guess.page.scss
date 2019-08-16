@@ -1,5 +1,4 @@
 #toolbar {
-    height: 45px;
     --background: none;
 
     :first-child {
@@ -19,10 +18,11 @@
 }
 
 #sentence-content {
-    max-height: calc(100vh - 40vmin - 45px);
+    max-height: calc(100vh - 40vmin - 100px);
     overflow: auto;
     font-size: 2em;
-    padding: 2vh 5vw 0 5vw;
+    font-family: Georgia;
+    padding: 2vh 5vw;
 }
 
 #canvas-div {
