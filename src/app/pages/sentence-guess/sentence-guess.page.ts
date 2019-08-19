@@ -8,10 +8,18 @@ import { Chart } from 'chart.js';
 import { Statistics } from 'src/app/models/statistics';
 import { Location } from '@angular/common';
 import { StatisticHttpService } from 'src/app/services/http/statistics/statistic-http.service';
-import { Globals } from 'src/app/services/globals/globals';
+import { Globals, ProgressedWord } from 'src/app/services/globals/globals';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import * as _ from 'lodash';
 import anime from 'animejs/lib/anime.es';
+
+interface SentenceWord {
+	index: number;
+	allCharacters: any;
+	guessChar: string;
+	isActive: boolean;
+	fullWord: string;
+}
 
 @Component({
 	selector: 'app-sentence-guess',
@@ -33,6 +41,10 @@ export class SentenceGuessPage implements OnInit {
 	sentenceNumber: number;
 	sentencesTotal: number;
 
+	sentenceWords: SentenceWord[] = [];
+	curWordIndex: number;
+	isSolved: boolean = false;
+
 	statisticsDeltasArray: Array<[number, number, number, number]> = [];
 	hintsClicks: number = 0;
 
@@ -52,17 +64,6 @@ export class SentenceGuessPage implements OnInit {
 
 	groups = ['QWSD', 'RTFG', 'EAIO'];
 	unknownCharGroup = '!@#&';
-
-	sentenceWords: {
-		index: number,
-		allCharacters: any,
-		guessChar: string,
-		isActive: boolean,
-		fullWord: string
-	}[] = [];
-
-	curWordIndex: number;
-	isSolved: boolean = false;
 
 	constructor(private route: ActivatedRoute,
 		private alertController: AlertController,
@@ -107,7 +108,6 @@ export class SentenceGuessPage implements OnInit {
 
 	private getData() {
 		this.pieChart = new Chart(this.pieCanvas.nativeElement, this.utils.getNewChartObject());
-		this.updateChart();
 
 		this.sentenceNumber = this.lessonsDataService.getSentenceNumberByIds(this.lessonId, this.sentenceId) + 1;
 		this.sentencesTotal = this.lessonsDataService.getLessonById(this.lessonId).sentences.length;
@@ -183,6 +183,7 @@ export class SentenceGuessPage implements OnInit {
 			this.isSolved = true;
 		}
 		this.hideBottomControls();
+		this.updateChart();
 	}
 
 	removeAllTextNodes(node) {
@@ -378,7 +379,6 @@ export class SentenceGuessPage implements OnInit {
 		if (!this.isSolved) {
 			this.curStats().giveUps += 3;
 			this.hintsClicks += 3;
-			this.updateChart();
 
 			const button: HTMLIonButtonElement = <HTMLIonButtonElement>(document.getElementById('give-up-button'));
 
@@ -401,7 +401,6 @@ export class SentenceGuessPage implements OnInit {
 		if (!this.isSolved) {
 			this.curStats().hintUsages++;
 			this.hintsClicks++;
-			this.updateChart();
 			this.handleKeyboardEvent(this.correctCharEvent());
 		}
 	}
@@ -424,7 +423,7 @@ export class SentenceGuessPage implements OnInit {
 			if (progressedWord) {
 				progressedWord.index++;
 			} else {
-				this.globals.guessedWords.push({
+				this.globals.progressedWords.push({
 					fullWord: curWord.fullWord,
 					characters: curWord.allCharacters,
 					index: 1
@@ -438,7 +437,7 @@ export class SentenceGuessPage implements OnInit {
 
 			let sentenceIsGuessed: boolean = false;
 
-			const globalsProgressedWords = this.globals.guessedWords
+			const globalsProgressedWords = this.globals.progressedWords
 				.filter(word => this.sentenceWords
 					.findIndex(sentenceWord => sentenceWord.fullWord === word.fullWord &&
 						_.isEqual(sentenceWord.allCharacters, word.characters)) > -1);
@@ -476,6 +475,8 @@ export class SentenceGuessPage implements OnInit {
 			this.curStats().wrongAnswers++;
 			this.setRedHighlight(progress.toUpperCase());
 		}
+
+		this.updateChart();
 	}
 
 	handleKeyboardEvent(event: KeyboardEvent) {
@@ -505,14 +506,9 @@ export class SentenceGuessPage implements OnInit {
 		return curWord.allCharacters[0];
 	}
 
-	private curProgressedWord(allCharacters: string[], fullWord: string): {
-		fullWord: string;
-		characters: string[];
-		index: number;
-	} {
-		return this.globals.guessedWords.find(word =>
-			word.fullWord === fullWord &&
-			_.isEqual(word.characters, allCharacters));
+	private curProgressedWord(allCharacters: string[], fullWord: string): ProgressedWord {
+		return this.globals.progressedWords.find(word =>
+			word.fullWord === fullWord && _.isEqual(word.characters, allCharacters));
 	}
 
 	private generateRandomCharacters() {

@@ -2,6 +2,12 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { SafeUrl } from '@angular/platform-browser';
 
+export interface ProgressedWord {
+	fullWord: string;
+	characters: string[];
+	index: number;
+}
+
 @Injectable()
 export class Globals {
 
@@ -14,12 +20,8 @@ export class Globals {
 
 	isDemo: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	isDemoHasChanged: boolean;
-	
-	guessedWords: {
-		fullWord: string,
-		characters: string[],
-		index: number
-	}[] = [];
+
+	progressedWords: ProgressedWord[] = [];
 
 	updIsDemo(newVal: boolean) {
 		this.isDemoHasChanged = (newVal !== this.getIsDemo());
@@ -41,7 +43,7 @@ export class Globals {
 	TOKEN_KEY = 'access_token';
 	USER_ID_KEY = 'user_id';
 	THEME_ID_KEY = 'theme_id';
-	
+
 	charForHiding: string = '•';
 	redCharForHiding: string = '<span class=\'red-text\'>•</span>';
 	blueCharForHiding: string = '<span class=\'blue-text\'>•</span>';

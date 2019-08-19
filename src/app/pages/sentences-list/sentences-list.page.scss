@@ -152,17 +152,31 @@ ion-toolbar {
         width: 70%;
         max-height: 12vh;
         font-family: "Arial";
-        font-size: 3vh;
-        line-height: 3vh;
+        font-size: x-large;
+        line-height: 4vh;
         overflow: hidden;
+        @media (max-width: 400px) {
+            font-size: medium;
+        }
+        @media (min-width: 992px) {
+            font-size: xx-large;
+        }
+        @media (min-width: 1600px) {
+            line-height: 3vh;
+        }
     }
 
     >:last-child {
         height: 52px;
         width: 52px;
         @media (max-width: 400px) {
-            height: 34px;
-            width: 34px;
+            height: 32px;
+            width: 32px;
+        }
+
+        @media (max-width: 992px) {
+            height: 42px;
+            width: 42px;
         }
     }
 }
