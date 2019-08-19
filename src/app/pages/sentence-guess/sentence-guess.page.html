@@ -22,11 +22,11 @@
     <word-view
       *ngFor="let sentenceWord of sentenceWords; index as i"
       id="{{'word' + i}}"
-      [index]="sentenceWord.word.index"
-      [allCharacters]="sentenceWord.word.allCharacters"
-      [guessChar]="sentenceWord.word.guessChar"
-      [isActive]="sentenceWord.word.isActive"
-      [fullWord]="sentenceWord.word.fullWord"
+      [index]="sentenceWord.index"
+      [allCharacters]="sentenceWord.allCharacters"
+      [guessChar]="sentenceWord.guessChar"
+      [isActive]="sentenceWord.isActive"
+      [fullWord]="sentenceWord.fullWord"
       (guessProgress)="updateProgress($event)"
       (click)="makeActive(i)">
     </word-view>

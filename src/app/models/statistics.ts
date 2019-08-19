@@ -4,13 +4,10 @@ export class Statistics {
 		public sentenceId: number,
 		public lessonId: number,
 		public userId: number,
-		public curCharsIndexes: number[],
-		public curWordIndex: number,
-		public isSolved: boolean,
 		public correctAnswers: number,
 		public wrongAnswers: number,
 		public giveUps: number,
 		public hintUsages: number,
-		public created_at: string,
-		public updated_at: string) { }
+		public createdAt: string,
+		public updatedAt: string) { }
 }

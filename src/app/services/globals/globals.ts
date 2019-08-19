@@ -15,7 +15,11 @@ export class Globals {
 	isDemo: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	isDemoHasChanged: boolean;
 	
-	guessedWords: string[] = [];
+	guessedWords: {
+		fullWord: string,
+		characters: string[],
+		index: number
+	}[] = [];
 
 	updIsDemo(newVal: boolean) {
 		this.isDemoHasChanged = (newVal !== this.getIsDemo());

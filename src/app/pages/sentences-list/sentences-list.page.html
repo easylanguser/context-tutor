@@ -18,7 +18,7 @@
     </ion-toolbar>
 
     <div id="segments-div">
-      <ion-segment id="sentences-filter-segment" mode="ios" [(ngModel)]="filter" (ionChange)="filterClick()">
+      <ion-segment id="sentences-filter-segment" class="no-selection" mode="ios" [(ngModel)]="filter" (ionChange)="filterClick()">
         <ion-segment-button value="all" mode="ios" checked="true">
           All
         </ion-segment-button>

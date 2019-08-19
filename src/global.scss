@@ -159,3 +159,11 @@ ion-toast.toast-black {
     --background: var(--ion-color-step-950);
     --color: var(--ion-color-step-50);
 }
+
+.action-sheet-button-inner.sc-ion-action-sheet-md {
+    justify-content: center;
+}
+
+.action-sheet-button.sc-ion-action-sheet-md {
+    font-size: 22px;
+}

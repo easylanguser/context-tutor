@@ -20,7 +20,7 @@
           </div>
         </ion-menu-toggle>
         <div>
-          <ion-select placeholder="Theme" interface="popover" [(ngModel)]="themeName"
+          <ion-select placeholder="Theme" mode="md" interface="action-sheet" [(ngModel)]="themeName"
             (ionChange)="onChangeTheme($event)">
             <ion-select-option [selected]="this.themeName === 'dark'" value="dark">Dark</ion-select-option>
             <ion-select-option [selected]="this.themeName === 'light'" value="light">Light</ion-select-option>

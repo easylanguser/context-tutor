@@ -129,29 +129,8 @@ export class LessonsListPage implements OnInit {
 				this.globals.updateIsRequired[0] = false;
 			});
 		}
-		this.resetLocalStatistic();
+		this.globals.guessedWords = [];
 		this.updateCharts();
-	}
-
-	private resetLocalStatistic() {
-		this.lessonsDataService.lessons.forEach(lsn => {
-			lsn.sentences.forEach(sentence => {
-				const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
-				if (stat) {
-					stat.isSolved = false;
-					stat.curWordIndex = 0;
-					for (let i in stat.curCharsIndexes) {
-						stat.curCharsIndexes[i] = 0;
-					}
-					if (stat.curCharsIndexes.length === 0) {
-						for (let _ in sentence.hiddenChars) {
-							stat.curCharsIndexes.push(0);
-						}
-					}
-				}
-			});
-		});
-		this.globals.savedTemplates = [];
 	}
 
 	addLessonFile() {

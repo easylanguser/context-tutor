@@ -1,13 +1,12 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
 	selector: 'word-view',
 	templateUrl: './word-view.component.html',
 	styleUrls: ['./word-view.component.scss']
 })
-export class WordViewComponent implements OnInit {
+export class WordViewComponent implements OnInit, OnChanges {
 
-	alphabet: any;
 	guessWord: { char: string, type: number }[] = [];
 
 	@Input("index") index: number;
@@ -18,13 +17,11 @@ export class WordViewComponent implements OnInit {
 
 	@Output() guessProgress = new EventEmitter<string>();
 
-	constructor() { }
-
 	ngOnInit() {
 		if (typeof this.allCharacters === 'string') {
 			this.allCharacters = this.allCharacters.split('');
 		}
-		
+
 		for (let i = 0; i < this.allCharacters.length; i++) {
 			this.guessWord.push({
 				char: this.allCharacters[i],
@@ -37,11 +34,11 @@ export class WordViewComponent implements OnInit {
 		}
 	}
 
-	ngOnChanges() {	
-		if (this.isActive && this.guessChar) {
+	ngOnChanges() {
+		if (this.guessChar) {
 			if (this.allCharacters[this.index].toUpperCase() === this.guessChar.toUpperCase()) {
 				this.guessWord[this.index].type = 0;
-				if (this.index >= this.allCharacters.length - 1) {
+				if (this.index === this.allCharacters.length - 1) {
 					this.guessProgress.emit('full_guess');
 				} else {
 					this.guessWord[this.index + 1].type = 1;

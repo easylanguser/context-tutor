@@ -131,8 +131,7 @@ export class SentenceAddingPage implements OnInit {
 				this.lessonsDataService.createNewStatisticRecord(
 					newSentence.id,
 					this.lessonId,
-					this.globals.userId,
-					indexesArray
+					this.globals.userId
 				);
 			}
 		} else { // Sentence is added to a new lesson
@@ -150,8 +149,7 @@ export class SentenceAddingPage implements OnInit {
 			this.lessonsDataService.createNewStatisticRecord(
 				newSentence.id,
 				newLessonId,
-				this.globals.userId,
-				indexesArray
+				this.globals.userId
 			);
 		}
 

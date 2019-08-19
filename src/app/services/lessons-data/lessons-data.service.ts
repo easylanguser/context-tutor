@@ -136,10 +136,9 @@ export class LessonsDataService {
 		return lessonToSearchIn.statistics.find(stat => stat.sentenceId === sentence.id);
 	}
 
-	createNewStatisticRecord(sentenceId: number, lessonId: number, userId: number, words: [number, number][]) {
-		this.getLessonById(lessonId).statistics.push(new Statistics(sentenceId, sentenceId,
-			lessonId, userId, new Array(words.length).fill(0), 0, false, 0, 0, 0, 0,
-			new Date().toISOString(), new Date().toISOString()
+	createNewStatisticRecord(sentenceId: number, lessonId: number, userId: number) {
+		this.getLessonById(lessonId).statistics.push(new Statistics(sentenceId, sentenceId, lessonId, 
+			userId, 0, 0, 0, 0, new Date().toISOString(), new Date().toISOString()
 		));
 	}
 
@@ -177,11 +176,6 @@ export class LessonsDataService {
 			if (!lessonToFill.sentences.some(sntnc => sntnc.id === sentence.id)) {
 				lessonToFill.addSentence(sentence);
 			}
-
-			const sentenceStat = this.getStatisticsOfSentence(sentence);
-			if (sentenceStat) {
-				sentenceStat.curCharsIndexes = new Array(apiSentence.words.length).fill(0);
-			}
 		}
 		
 		lessonToFill.sentences.sort(this.sortSentencesByAddingTime);
@@ -202,7 +196,6 @@ export class LessonsDataService {
 						apiStatistic.sentenceId,
 						apiStatistic.lessonId,
 						apiStatistic.userId,
-						[], 0, false,
 						apiStatistic.correctAnswers,
 						apiStatistic.wrongAnswers,
 						apiStatistic.giveUps,
@@ -255,8 +248,6 @@ export class LessonsDataService {
 						const statStringArray = storageStat.split('|');
 						lesson.statistics.push(new Statistics(
 							sntc.id, sntc.id, lsn.id, this.globals.userId,
-							new Array(sntc.words.length).fill(0),
-							0, false,
 							Number(statStringArray[0]),
 							Number(statStringArray[1]),
 							Number(statStringArray[2]),
@@ -306,8 +297,8 @@ export class LessonsDataService {
 		if (second.statistics.length === 0) {
 			return -1;
 		}
-		const firstLatestUpd = new Date(Math.max.apply(null, first.statistics.map(elem => new Date(elem.updated_at))));
-		const secondLatestUpd = new Date(Math.max.apply(null, second.statistics.map(elem => new Date(elem.updated_at))));
+		const firstLatestUpd = new Date(Math.max.apply(null, first.statistics.map(elem => new Date(elem.updatedAt))));
+		const secondLatestUpd = new Date(Math.max.apply(null, second.statistics.map(elem => new Date(elem.updatedAt))));
 
 		return firstLatestUpd < secondLatestUpd ? 1 : -1;
 	}
