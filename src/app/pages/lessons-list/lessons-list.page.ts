@@ -18,12 +18,11 @@ import { trigger, transition, style, animate } from '@angular/animations';
 		trigger(
 			'enterAnimation', [
 				transition(':enter', [
-					style({ opacity: 0 }),
-					animate('400ms', style({ opacity: 1 }))
+					style({ height: 0 }),
+					animate('.7s cubic-bezier(.8, -.6, .2, 1.5)', style({ height: '13.6vh' }))
 				]),
 				transition(':leave', [
-					style({ opacity: 1 }),
-					animate('400ms ease-out', style({ opacity: 0 }))
+					animate('.5s ease-in-out', style({ transform: 'scale(0)', height: 0 }))
 				])
 			]
 		)
@@ -130,7 +129,7 @@ export class LessonsListPage implements OnInit {
 			});
 		}
 		this.globals.guessedWords = [];
-		this.updateCharts();
+		this.updateCharts(1000);
 	}
 
 	addLessonFile() {
@@ -142,10 +141,10 @@ export class LessonsListPage implements OnInit {
 		for (const canvas of this.pieCanvases._results) {
 			this.pieCharts.push(new Chart(canvas.nativeElement, this.utils.getNewChartObject()));
 		}
-		this.updateCharts();
+		this.updateCharts(0);
 	}
 
-	private updateCharts() {
+	private updateCharts(animationDuration: number) {
 		let i = 0;
 		for (const lesson of this.displayedLessons) {
 			if (lesson.statistics) {
@@ -168,7 +167,7 @@ export class LessonsListPage implements OnInit {
 					chart.backgroundColor[1] = this.globals.chartsColors[1];
 					chart.backgroundColor[2] = this.globals.chartsColors[2];
 					this.pieCharts[i].options.cutoutPercentage = 60;
-					this.pieCharts[i].update();
+					this.pieCharts[i].update(animationDuration);
 				}
 			}
 			++i;

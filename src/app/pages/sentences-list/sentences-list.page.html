@@ -44,17 +44,14 @@
     </ion-refresher>
 
     <ion-list id="sentences-list" #sentencesList no-padding no-margin>
-      <ion-item no-padding class="sentence-ion-item no-selection" *ngFor="let sentence of this.displayedSentences" [@enterAnimation]>
+      <ion-item no-padding class="sentence-ion-item no-selection"
+        *ngFor="let sentence of this.displayedSentences" [@enterAnimation]>
         <div (touchstart)="ionItemTouchDown($event, sentence)" (touchend)="ionItemTouchUp($event, sentence)"
           (mousedown)="ionItemTouchDown($event, sentence)" (mouseup)="ionItemTouchUp($event, sentence)"
           [ngClass]="{'dashed': this.globals.getIsDemo()}">
+          <div [innerHTML]="sentence.sentencesListSentence"></div>
           <div>
-            <p [innerHTML]="sentence.sentencesListSentence"></p>
-          </div>
-          <div>
-            <div>
-              <canvas #statsSentencesCanvases width="50" height="50"></canvas>
-            </div>
+            <canvas #statsSentencesCanvases width="50" height="50"></canvas>
           </div>
         </div>
       </ion-item>
