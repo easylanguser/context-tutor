@@ -128,7 +128,7 @@ export class LessonsListPage implements OnInit {
 				this.globals.updateIsRequired[0] = false;
 			});
 		}
-		this.globals.guessedWords = [];
+		this.globals.progressedWords = [];
 		this.updateCharts(1000);
 	}
 
