@@ -167,17 +167,8 @@ ion-toolbar {
     }
 
     >:last-child {
-        height: 52px;
-        width: 52px;
-        @media (max-width: 400px) {
-            height: 32px;
-            width: 32px;
-        }
-
-        @media (max-width: 992px) {
-            height: 42px;
-            width: 42px;
-        }
+        height: 4vh;
+        width: 4vh;
     }
 }
 

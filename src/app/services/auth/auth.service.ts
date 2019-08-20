@@ -10,7 +10,8 @@ import { StorageService } from '../storage/storage.service';
 
 interface AuthData {
 	token: string,
-	id: number
+	id: number,
+	email: string
 }
 
 @Injectable({
@@ -19,7 +20,6 @@ interface AuthData {
 export class AuthService {
 
 	url = environment.url;
-	user = null;
 	authenticationState = new BehaviorSubject(false);
 	public token;
 
@@ -42,9 +42,13 @@ export class AuthService {
 					this.storage.get(this.globals.USER_ID_KEY).then(userId => {
 						this.globals.userId = Number(userId.value);
 					});
+					this.storage.get(this.globals.USER_EMAIL_KEY).then(userEmail => {
+						this.globals.userEmail = userEmail.value;
+					});
 				} else {
 					this.storage.remove(this.globals.TOKEN_KEY);
 					this.storage.remove(this.globals.USER_ID_KEY);
+					this.storage.remove(this.globals.USER_EMAIL_KEY);
 				}
 			}
 		});
@@ -66,7 +70,9 @@ export class AuthService {
 					this.storage.set(this.globals.TOKEN_KEY, res.token);
 					this.token = res.token;
 					this.storage.set(this.globals.USER_ID_KEY, res.id.toString());
+					this.storage.set(this.globals.USER_EMAIL_KEY, res.email);
 					this.globals.userId = res.id;
+					this.globals.userEmail = res.email;
 					
 					this.authenticationState.next(true);
 				}),

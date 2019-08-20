@@ -24,7 +24,7 @@ export class UtilsService {
 				duration: 2500
 			});
 			this.toast.present();
-			setTimeout(() => { this.toast = null }, 2800);
+			setTimeout(() => this.toast = null, 2800);
 		}
 	}
 
@@ -73,7 +73,7 @@ export class UtilsService {
 		});
 	}
 
-	calculatePeriod(diff: number): [string, string] {
+	calculatePeriod(diff: number): string {
 		let label: string, flooredValue: string;
 
 		if (diff < 60) {
@@ -100,34 +100,18 @@ export class UtilsService {
 			if (flooredValue === '1') { label = ' month ago'; }
 		}
 
-		return [flooredValue, label];
+		return flooredValue + label;
 	}
 
-	hideChars(inputText: string, indexes: Array<[number, number]>, hiddenChar): string {
-		let textWithHiddenCharacters = inputText.substr(0, indexes[0][0]);
-		for (let i = 0; i < indexes.length - 1; i++) {
-			for (let j = 0; j < indexes[i][1]; j++) {
-				if (this.isEnglishChar(inputText.charAt(indexes[i][0] + j))) {
-					textWithHiddenCharacters += hiddenChar;
-				} else {
-					textWithHiddenCharacters += inputText.charAt(indexes[i][0] + j);
-				}
-			}
-			textWithHiddenCharacters += inputText.substr(
-				indexes[i][0] + indexes[i][1],
-				indexes[i + 1][0] - (indexes[i][0] + indexes[i][1]));
+	hideChars(inputText: string, indexes: Array<[number, number]>, hideChar: string): string {
+		let hiddenSentence: string = '', prevIndex: number = 0;
+		for (const index of indexes) {
+			hiddenSentence += inputText.substring(prevIndex, index[0]);
+			hiddenSentence += hideChar.repeat(index[1]);
+			prevIndex = index[0] + index[1];
 		}
-		for (let i = 0; i < indexes[indexes.length - 1][1]; i++) {
-			if (this.isEnglishChar(inputText.charAt(indexes[indexes.length - 1][0] + i))) {
-				textWithHiddenCharacters += hiddenChar;
-			} else {
-				textWithHiddenCharacters += inputText.charAt(indexes[indexes.length - 1][0] + i);
-			}
-		}
-		textWithHiddenCharacters += inputText.substr(
-			indexes[indexes.length - 1][0] + indexes[indexes.length - 1][1],
-			inputText.length - indexes[indexes.length - 1][0] + indexes[indexes.length - 1][1]);
-		return textWithHiddenCharacters;
+		hiddenSentence += inputText.substring(prevIndex);
+		return hiddenSentence;
 	}
 
 	addChar(input: string, replacement: string): string {

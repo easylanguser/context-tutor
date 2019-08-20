@@ -173,7 +173,7 @@ export class LessonsDataService {
 				sentencesListSentence,
 				apiSentence.createdAt,
 				apiSentence.updatedAt);
-			if (!lessonToFill.sentences.some(sntnc => sntnc.id === sentence.id)) {
+			if (!lessonToFill.sentences.some(sntn => sntn.id === sentence.id)) {
 				lessonToFill.addSentence(sentence);
 			}
 		}
@@ -232,14 +232,10 @@ export class LessonsDataService {
 						const hiddenSentence = this.utils.hideChars(sntc.text, sntc.words, this.globals.charForHiding);
 						const sentencesListSntc = this.utils.hideChars(sntc.text, sntc.words, this.globals.blueCharForHiding);
 						lesson.sentences.push(new Sentence(
-							sntc.id,
-							lesson.id,
-							sntc.words,
-							sntc.text,
-							hiddenSentence,
-							hiddenChars,
-							sentencesListSntc,
-							'', ''));
+							sntc.id, lesson.id,
+							sntc.words, sntc.text,
+							hiddenSentence, hiddenChars,
+							sentencesListSntc, '', ''));
 						let storageStat: string = (await this.storage.get('sentence-' + sntc.id)).value;
 						if (!storageStat) {
 							await this.storage.set('sentence-' + sntc.id, '0|0|0|0');
@@ -248,10 +244,8 @@ export class LessonsDataService {
 						const statStringArray = storageStat.split('|');
 						lesson.statistics.push(new Statistics(
 							sntc.id, sntc.id, lsn.id, this.globals.userId,
-							Number(statStringArray[0]),
-							Number(statStringArray[1]),
-							Number(statStringArray[2]),
-							Number(statStringArray[3]),
+							Number(statStringArray[0]), Number(statStringArray[1]),
+							Number(statStringArray[2]), Number(statStringArray[3]),
 							'', ''));
 					}
 					if (this.lessons.findIndex(lsn => lsn.id === lesson.id) === -1) {
@@ -270,15 +264,8 @@ export class LessonsDataService {
 
 		for (const lsn of apiLessons) {
 			const diff = (now - new Date(lsn.createdAt).getTime()) / 1000;
-			const period = this.utils.calculatePeriod(diff);
-			const lesson = new Lesson(
-				lsn.id,
-				lsn.name,
-				lsn.url,
-				lsn.parentId,
-				lsn.createdAt,
-				lsn.updatedAt,
-				period[0] + period[1]);
+			const lesson = new Lesson(lsn.id, lsn.name, lsn.url, lsn.parentId,
+				lsn.createdAt, lsn.updatedAt, this.utils.calculatePeriod(diff));
 
 			this.addLesson(lesson);
 		}
@@ -297,8 +284,10 @@ export class LessonsDataService {
 		if (second.statistics.length === 0) {
 			return -1;
 		}
-		const firstLatestUpd = new Date(Math.max.apply(null, first.statistics.map(elem => new Date(elem.updatedAt))));
-		const secondLatestUpd = new Date(Math.max.apply(null, second.statistics.map(elem => new Date(elem.updatedAt))));
+		const firstLatestUpd = new Date(Math.max.apply(null,
+			first.statistics.map(elem => new Date(elem.updatedAt))));
+		const secondLatestUpd = new Date(Math.max.apply(null,
+			second.statistics.map(elem => new Date(elem.updatedAt))));
 
 		return firstLatestUpd < secondLatestUpd ? 1 : -1;
 	}

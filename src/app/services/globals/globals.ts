@@ -13,7 +13,7 @@ export class Globals {
 
 	// VARIABLES 
 	userId: number;
-
+	userEmail: string;
 	userAvatar: SafeUrl;
 
 	platformName: string;

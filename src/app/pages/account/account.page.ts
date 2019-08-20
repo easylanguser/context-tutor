@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { HttpService } from '../../services/http/rest/http.service';
 import { AlertController } from '@ionic/angular';
@@ -22,7 +22,6 @@ interface HTMLInputEvent extends Event {
 
 export class AccountPage {
 
-	userEmail: string;
 
 	constructor(
 		private userHttpService: UserHttpService,
@@ -37,52 +36,33 @@ export class AccountPage {
 
 	ngOnInit() {
 		this.checkTokenAndGetInfo();
-		this.addAvatarClickHandler();
 	}
 
 	private async checkTokenAndGetInfo() {
 		if (!this.authService.token) {
 			await this.authService.checkToken()
 		}
-		this.getInfo();
 	}
 
-	private addAvatarClickHandler() {
-		document.getElementById('file-input').onchange = (event: HTMLInputEvent) => {
-			this.utils.createAndShowLoader('Avatar is being updated, please wait...');
-			this.userHttpService.postNewAvatar(event.target.files)
-				.then(_ => {
-					const reader = new FileReader();
-					reader.readAsDataURL(event.target.files[0]);
-					reader.onloadend = () => {
-						const image = String(reader.result);
-						this.storage.set(this.globals.USER_AVATAR_KEY, image);
-						this.globals.userAvatar = this.sanitizer.bypassSecurityTrustUrl(image);
-						this.utils.dismissLoader();
-					}
-				})
-				.catch(error => {
-					this.utils.showToast((error.status === 0 || error.status === 413) ?
-						'Please choose picture of smaller size(< 4 Mb).' :
-						error.error.msg);
+	avatarClickHandler(event: HTMLInputEvent) {
+		this.utils.createAndShowLoader('Avatar is being updated, please wait...');
+		this.userHttpService.postNewAvatar(event.target.files)
+			.then(() => {
+				const reader = new FileReader();
+				reader.readAsDataURL(event.target.files[0]);
+				reader.onloadend = () => {
+					const image = String(reader.result);
+					this.storage.set(this.globals.USER_AVATAR_KEY, image);
+					this.globals.userAvatar = this.sanitizer.bypassSecurityTrustUrl(image);
 					this.utils.dismissLoader();
-				});
-		}
-	}
-
-	openChooser() {
-		document.getElementById('file-input').click();
-	}
-
-	async getInfo() {
-		const email = (await this.storage.get(this.globals.USER_EMAIL_KEY)).value;
-		if (email) {
-			this.userEmail = email;
-		} else {
-			const userInfo = await this.userHttpService.getUserInfo();
-			this.userEmail = userInfo.email;
-			this.storage.set(this.globals.USER_EMAIL_KEY, userInfo.email);
-		}
+				}
+			})
+			.catch(error => {
+				this.utils.showToast((error.status === 0 || error.status === 413) ?
+					'Please choose picture of smaller size(< 4 Mb).' :
+					error.error.msg);
+				this.utils.dismissLoader();
+			});
 	}
 
 	async deleteAccount() {

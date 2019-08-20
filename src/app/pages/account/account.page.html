@@ -9,10 +9,10 @@
     </ion-toolbar>
   </ion-header>
   <div id="content-container">
-    <img id="user-avatar" class="avatar" (click)="openChooser()"
+    <img id="user-avatar" class="avatar" (click)="fileInput.click()"
       [src]="this.globals.userAvatar || 'assets/img/account_icon.svg'" alt="avatar">
-    <input id="file-input" type="file" name="name" style="display: none;" />
-    <div id="user-email">{{userEmail}}</div>
+    <input id="file-input" (change)="avatarClickHandler($event)" #fileInput type="file" name="name" style="display: none;" />
+    <div id="user-email">{{this.globals.userEmail}}</div>
     <button class="list-block" (click)="changePassword()">Change password</button>
     <button class="list-block" (click)="deleteAccount()">Delete account</button>
     <button class="list-block" (click)="logout()" id="logout-button">Logout</button>

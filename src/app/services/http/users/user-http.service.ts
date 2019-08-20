@@ -24,10 +24,6 @@ export class UserHttpService {
 	sendPassResetRequest(email: string): Promise<any> {
 		return this.httpService.doPost(environment.url + '/api/user/sendPassword', email).toPromise();
 	}
-	
-	getUserInfo(): Promise<any> {
-		return this.httpService.doGet(apiUrl + 'getUserInfo').toPromise();
-	}
 
 	getUserByEmail(userEmail: string): Promise<any> {
 		return this.httpService.doGet(apiUrl + 'getUserByEmail?userEmail=' + userEmail).toPromise();

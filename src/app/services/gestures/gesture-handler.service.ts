@@ -16,8 +16,7 @@ export class GestureHandlerService {
 	refresherIsPulled: boolean = false;
 	popover: HTMLIonPopoverElement = null;
 	alert: HTMLIonAlertElement = null;
-	pressDuration: number = 0;
-	interval: any;
+	longPressCancelled: boolean = false;
 
 	constructor(private popoverController: PopoverController,
 		private lessonsDataService: LessonsDataService,
@@ -35,8 +34,9 @@ export class GestureHandlerService {
 	}
 
 	ionContentTouchEnd(evt): boolean {
+		this.longPressCancelled = true;
 		evt.preventDefault();
-		let xDiff, yDiff, minDistance = 6;
+		let xDiff, yDiff, minDistance = 5;
 		if (evt.type === 'mouseup') {
 			xDiff = this.xDown - evt.clientX;
 			yDiff = this.yDown - evt.clientY;
@@ -60,9 +60,7 @@ export class GestureHandlerService {
 	}
 
 	ionItemTouchUp(evt): boolean {
-		this.refresherIsPulled = false;
-		clearInterval(this.interval);
-		this.pressDuration = 0;
+		this.refresherIsPulled = false;	
 
 		let xDiff, yDiff;
 		if (evt.type === 'mouseup') {
@@ -80,81 +78,72 @@ export class GestureHandlerService {
 	}
 
 	ionItemTouchDown(event: any, lessonOrSentence: Lesson | Sentence, parentId?: number) {
+		this.longPressCancelled = false;
 		if (lessonOrSentence instanceof Lesson) {
 			this.popover = null;
-			this.interval = setInterval(async () => {
-				this.pressDuration++;
-				if (this.pressDuration > 4) {
-					clearInterval(this.interval);
-					this.pressDuration = 0;
-					if (!this.popover && !this.refresherIsPulled) {
-						let x: number, y: number,
-							winWidth: number = window.innerWidth,
-							winHeight: number = window.innerHeight;
-						if (event instanceof MouseEvent) {
-							x = event.x;
-							y = event.y;
-						} else {
-							x = event.touches[0].clientX;
-							y = event.touches[0].clientY;
-						}
-						if (!x || !y) return;
-
-						if (winWidth < x + 260) {
-							x -= (280 - (winWidth - x));
-						}
-
-						if (winHeight < y + 200) {
-							y -= (220 - (winHeight - y));
-						}
-						
-						this.popover = await this.popoverController.create({
-							component: LongPressChooserComponent,
-							componentProps: {
-								lesson: lessonOrSentence,
-								x: x,
-								y: y + 20,
-							},
-							mode: 'ios',
-							animated: true,
-							showBackdrop: true
-						});
-						await this.popover.present();
+			setTimeout(async () => {
+				if (!this.popover && !this.refresherIsPulled && !this.longPressCancelled) {
+					let x: number, y: number,
+						winWidth: number = window.innerWidth,
+						winHeight: number = window.innerHeight;
+					if (event instanceof MouseEvent) {
+						x = event.x;
+						y = event.y;
+					} else {
+						x = event.touches[0].clientX;
+						y = event.touches[0].clientY;
 					}
+					if (!x || !y) return;
+
+					if (winWidth < x + 260) {
+						x -= (280 - (winWidth - x));
+					}
+
+					if (winHeight < y + 200) {
+						y -= (220 - (winHeight - y));
+					}
+
+					this.popover = await this.popoverController.create({
+						component: LongPressChooserComponent,
+						componentProps: {
+							lesson: lessonOrSentence,
+							x: x,
+							y: y + 20,
+						},
+						mode: 'ios',
+						animated: true,
+						showBackdrop: true
+					});
+					await this.popover.present();
 				}
-			}, 100);
+			}, 750);
 		} else {
 			if (!parentId) {
-				this.interval = setInterval(async () => {
-					this.pressDuration++;
-					if (this.pressDuration > 4) {
-						clearInterval(this.interval);
-						this.pressDuration = 0;
-						if (!this.refresherIsPulled) {
-							this.alert = await this.alertController.create({
-								message: 'Are you sure you want to delete this sentence?',
-								buttons: [
-									{
-										text: 'Cancel',
-										role: 'cancel'
-									},
-									{
-										text: 'Delete',
-										handler: async () => {
-											await this.sentenceHttpService.deleteSentence(lessonOrSentence.id);
-											this.lessonsDataService.removeSentence(
-												lessonOrSentence.lessonId,
-												lessonOrSentence.id
-											);
-										}
+				setTimeout(async () => {
+					if (!this.refresherIsPulled && !this.longPressCancelled) {
+						this.alert = await this.alertController.create({
+							message: 'Are you sure you want to delete this sentence?',
+							buttons: [
+								{
+									text: 'Cancel',
+									role: 'cancel'
+								},
+								{
+									text: 'Delete',
+									handler: async () => {
+										await this.sentenceHttpService.deleteSentence(lessonOrSentence.id);
+										this.lessonsDataService.removeSentence(
+											lessonOrSentence.lessonId,
+											lessonOrSentence.id
+										);
 									}
-								]
-							});
-							this.alert.onDidDismiss().then(() => this.alert = null);
-							this.alert.present();
-						}
+								}
+							]
+						});
+						this.alert.onDidDismiss().then(() => this.alert = null);
+						this.alert.present();
 					}
-				}, 100);
+				}, 750);
 			}
 		}
 	}

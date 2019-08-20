@@ -433,7 +433,15 @@ export class SentenceGuessPage implements OnInit {
 		} else if (progress === 'full_guess') {
 			this.hintsClicks > 0 ? this.hintsClicks-- : this.curStats().correctAnswers++;
 			this.sentenceWords[this.curWordIndex].guessChar = null;
-			progressedWord.index++;
+			if (progressedWord) {
+				progressedWord.index++;
+			} else {
+				this.globals.progressedWords.push({
+					fullWord: curWord.fullWord,
+					characters: curWord.allCharacters,
+					index: 1
+				});
+			}
 
 			let sentenceIsGuessed: boolean = false;
 
