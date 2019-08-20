@@ -32,7 +32,7 @@ export class Globals {
 		return this.isDemo.getValue();
 	}
 
-	sharedText = [];
+	sharedText: string;
 	updateIsRequired = [false];
 	savedTemplates: Array<[number, HTMLElement[]]> = [];
 

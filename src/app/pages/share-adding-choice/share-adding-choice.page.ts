@@ -27,7 +27,7 @@ export class ShareAddingChoicePage implements OnInit {
 	}
 
 	goBack() {
-		this.globals.sharedText[0] = undefined;
+		this.globals.sharedText = null;
 		this.navController.navigateBack(['lessons-list']);
 	}
 

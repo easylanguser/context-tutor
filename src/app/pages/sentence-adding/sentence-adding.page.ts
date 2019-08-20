@@ -48,7 +48,7 @@ export class SentenceAddingPage implements OnInit {
 		indexesArray = [];
 		this.sentence = this.sentenceToEditId ?
 			this.lessonsDataService.getSentenceByIds(this.lessonId, Number(this.sentenceToEditId)).text :
-			this.globals.sharedText[0];
+			this.globals.sharedText;
 
 		this.updateTitle();
 	}
@@ -81,7 +81,7 @@ export class SentenceAddingPage implements OnInit {
 		this.lessonId ?
 			this.title = this.lessonsDataService.getLessonById(this.lessonId).name :
 			this.title = new Date().toJSON().slice(0, 10).replace(/-/g, '/') +
-			' ' + this.globals.sharedText[0].substr(0, 10);
+			' ' + this.globals.sharedText.substr(0, 10);
 	}
 
 	editTitle() {
@@ -153,7 +153,7 @@ export class SentenceAddingPage implements OnInit {
 			);
 		}
 
-		this.globals.sharedText[0] = undefined;
+		this.globals.sharedText = null;
 		this.globals.updateIsRequired[0] = true;
 
 		this.navController.navigateBack(['sentences-list'], {

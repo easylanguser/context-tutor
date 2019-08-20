@@ -73,7 +73,7 @@ export class AppComponent {
 				'android' :
 				(this.platform.is('ios') ? 'ios' : (await Device.getInfo()).platform);
 			if (this.globals.platformName === 'android') {
-				this.checkForIntent();
+				await this.checkForIntent();
 			}
 
 			if (this.globals.platformName === 'android' || this.globals.platformName === 'ios') {
@@ -90,8 +90,8 @@ export class AppComponent {
 			this.authService.authenticationState.subscribe(async state => {
 				if (state) {
 					this.loggedIn = true;
-					if (this.globals.sharedText[0]) {
-						this.router.navigate(['share-adding-choice']);
+					if (this.globals.sharedText) {
+						this.navController.navigateForward(['share-adding-choice']);
 					} else {
 						if (pathToGo === '/login') {
 							pathToGo = 'lessons-list';
@@ -107,7 +107,7 @@ export class AppComponent {
 						} else {
 							await this.navController.navigateForward([pathToGo]);
 						}
-						
+
 						const token = await this.storage.get(this.globals.TOKEN_KEY)
 						if (token.value) {
 							parent.postMessage({ token: token.value }, '*');
@@ -167,19 +167,14 @@ export class AppComponent {
 		this.authService.authenticationState.next(false);
 	}
 
-	private checkForIntent() {
-		if (!(window.receiveContent)) {
-			return Promise.resolve();
+	private async checkForIntent() {
+		if (window.receiveContent) {
+			const text: string = await window.receiveContent.receiveText();
+			if (text) {
+				text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+				this.globals.sharedText = text;
+			}
 		}
-
-		return window.receiveContent.receiveText()
-			.then((text: string) => {
-				if (text) {
-					text.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
-					this.globals.sharedText.push(text);
-				}
-			})
-			.catch(err => console.error('ReceiveContent plugin error: ', err));
 	}
 
 	async showAbout() {

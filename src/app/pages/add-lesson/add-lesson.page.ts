@@ -27,7 +27,7 @@ export class AddLessonPage implements OnInit {
 
 	ngOnInit() {
 		this.fileInput = <HTMLInputElement>document.getElementById('file-input');
-		this.globals.sharedText[0] = undefined;
+		this.globals.sharedText = null;
 	}
 
 	goBack() {

@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-receive-content",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "cordova plugin for receiving content from the other apps",
   "cordova": {
     "id": "cordova-plugin-receive-content",

@@ -21,8 +21,7 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </config-file>
-        <source-file src="src/android/ReceiveContent.java"
-            target-dir="src/receiveContent" />
+        <source-file src="src/android/ReceiveContent.kt" target-dir="src/receiveContent" />
     </platform>
 
 </plugin>
