@@ -9,24 +9,28 @@ import { Globals } from 'src/app/services/globals/globals';
 import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler.service';
 import anime from 'animejs/lib/anime.es';
 import * as _ from 'lodash';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { trigger, transition, style, animate, query, stagger, keyframes } from '@angular/animations';
 
 @Component({
 	selector: 'page-sentences-list',
 	templateUrl: 'sentences-list.page.html',
 	styleUrls: ['sentences-list.page.scss'],
 	animations: [
-		trigger(
-			'enterAnimation', [
-				transition(':enter', [
-					style({ height: 0 }),
-					animate('.7s cubic-bezier(.8, -.6, .2, 1.5)', style({ height: '15vh' }))
-				]),
-				transition(':leave', [
-					animate('.5s ease-in-out', style({ transform: 'scale(0)', height: 0 }))
-				])
-			]
-		)
+		trigger('sentencesAnimation', [
+			transition('* => *', [
+			  query(':enter', style({ opacity: 0, height: 0 }), { optional: true }),
+			  query(':enter', stagger('150ms', [
+				animate('200ms ease-in', keyframes([
+				  style({ opacity: 0, transform: 'translateY(-50%)', offset: 0 }),
+				  style({ opacity: .5, transform: 'translateY(-10px) scale(1.1)', offset: 0.3 }),
+				  style({ opacity: 1, height: '15vh', transform: 'translateY(0)', offset: 1 }),
+				]))]), { optional: true }),
+			  query(':leave', stagger('150ms', [
+				animate('300ms ease-out', keyframes([
+				  style({ height: 0, transform: 'scale(0)' }),
+				]))]), { optional: true })
+			])
+		])
 	]
 })
 export class SentencesListPage implements OnInit {

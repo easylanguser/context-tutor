@@ -43,9 +43,8 @@
       </ion-refresher-content>
     </ion-refresher>
 
-    <ion-list id="sentences-list" #sentencesList no-padding no-margin>
-      <ion-item no-padding class="sentence-ion-item no-selection"
-        *ngFor="let sentence of this.displayedSentences" [@enterAnimation]>
+    <ion-list [@sentencesAnimation]="displayedSentences.length" id="sentences-list" #sentencesList no-padding no-margin>
+      <ion-item no-padding class="sentence-ion-item no-selection" *ngFor="let sentence of this.displayedSentences">
         <div (touchstart)="ionItemTouchDown($event, sentence)" (touchend)="ionItemTouchUp($event, sentence)"
           (mousedown)="ionItemTouchDown($event, sentence)" (mouseup)="ionItemTouchUp($event, sentence)"
           [ngClass]="{'dashed': this.globals.getIsDemo()}">

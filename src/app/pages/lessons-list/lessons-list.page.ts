@@ -8,25 +8,29 @@ import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler
 import { Chart } from 'chart.js';
 import * as _ from 'lodash';
 import anime from 'animejs/lib/anime.es';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { trigger, transition, style, animate, query, stagger, keyframes } from '@angular/animations';
 
 @Component({
 	selector: 'page-lessons-list',
 	templateUrl: 'lessons-list.page.html',
 	styleUrls: ['lessons-list.page.scss'],
 	animations: [
-		trigger(
-			'enterAnimation', [
-				transition(':enter', [
-					style({ height: 0 }),
-					animate('.7s cubic-bezier(.8, -.6, .2, 1.5)', style({ height: '13.6vh' }))
-				]),
-				transition(':leave', [
-					animate('.5s ease-in-out', style({ transform: 'scale(0)', height: 0 }))
+		trigger('lessonsAnimation', [
+			transition('* => *', [
+			  query(':enter', style({ opacity: 0, height: 0 }), { optional: true }),
+			  query(':enter', stagger('200ms', [
+				animate('300ms ease-in', keyframes([
+				  style({ opacity: 0, transform: 'translateY(-50%)', offset: 0 }),
+				  style({ opacity: .5, transform: 'translateY(-10px) scale(1.1)', offset: 0.3 }),
+				  style({ opacity: 1, height: '13.6vh', transform: 'translateY(0)', offset: 1 }),
+				]))]), { optional: true }),
+			  query(':leave', stagger('100ms', [
+				animate('400ms ease-out', keyframes([
+				  style({ height: 0, transform: 'scale(0)' }),
+				]))]), { optional: true })
+			])
 				])
 			]
-		)
-	]
 })
 export class LessonsListPage implements OnInit {
 
