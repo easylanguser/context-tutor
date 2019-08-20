@@ -154,7 +154,7 @@ export class SentenceAddingPage implements OnInit {
 		}
 
 		this.globals.sharedText = null;
-		this.globals.updateIsRequired[0] = true;
+		this.globals.updateIsRequired = true;
 
 		this.navController.navigateBack(['sentences-list'], {
 			queryParams: {

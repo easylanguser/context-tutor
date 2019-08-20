@@ -108,7 +108,7 @@ export class AddLessonPage implements OnInit {
 			this.globals.updIsDemo(false);
 			this.utils.showToast('New lesson was added');
 			this.fileInput.value = "";
-			this.globals.updateIsRequired[0] = true;
+			this.globals.updateIsRequired = true;
 			this.navController.navigateBack(['lessons-list']);
 		}
 	}

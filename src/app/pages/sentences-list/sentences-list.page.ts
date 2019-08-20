@@ -18,17 +18,16 @@ import { trigger, transition, style, animate, query, stagger, keyframes } from '
 	animations: [
 		trigger('sentencesAnimation', [
 			transition('* => *', [
-			  query(':enter', style({ opacity: 0, height: 0 }), { optional: true }),
-			  query(':enter', stagger('150ms', [
-				animate('200ms ease-in', keyframes([
-				  style({ opacity: 0, transform: 'translateY(-50%)', offset: 0 }),
-				  style({ opacity: .5, transform: 'translateY(-10px) scale(1.1)', offset: 0.3 }),
-				  style({ opacity: 1, height: '15vh', transform: 'translateY(0)', offset: 1 }),
-				]))]), { optional: true }),
-			  query(':leave', stagger('150ms', [
-				animate('300ms ease-out', keyframes([
-				  style({ height: 0, transform: 'scale(0)' }),
-				]))]), { optional: true })
+				query(':enter', style({ opacity: 0, height: 0 }), { optional: true }),
+				query(':enter', stagger('100ms', [
+					animate('300ms ease-in', keyframes([
+						style({ opacity: 0, offset: 0 }),
+						style({ opacity: .5, transform: 'scale(1.1)', offset: 0.4 }),
+						style({ opacity: 1, height: '15vh', transform: 'scale(1)', offset: 1 })
+					]))]), { optional: true }),
+				query(':leave', stagger('100ms', [
+					animate('500ms ease-out', style({ height: 0 }))
+				]), { optional: true })
 			])
 		])
 	]
@@ -116,10 +115,10 @@ export class SentencesListPage implements OnInit {
 	}
 
 	ionViewDidEnter() {
-		if (this.globals.updateIsRequired[0]) {
+		if (this.globals.updateIsRequired) {
 			this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId).then(() => {
 				this.getData();
-				this.globals.updateIsRequired[0] = false;
+				this.globals.updateIsRequired = false;
 			});
 		}
 		this.updateCharts(1000);

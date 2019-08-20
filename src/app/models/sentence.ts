@@ -1,5 +1,3 @@
-import { Statistics } from './statistics';
-
 export class Sentence {
 	constructor(
 		public id: number,
@@ -9,6 +7,6 @@ export class Sentence {
 		public textUnderscored: string,
 		public hiddenChars: Array<string[]>,
 		public sentencesListSentence: string,
-		public created_at: string,
-		public updated_at: string) { }
+		public createdAt: string,
+		public updatedAt: string) { }
 }

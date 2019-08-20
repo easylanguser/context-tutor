@@ -33,7 +33,7 @@ export class Globals {
 	}
 
 	sharedText: string;
-	updateIsRequired = [false];
+	updateIsRequired: boolean = false;
 	savedTemplates: Array<[number, HTMLElement[]]> = [];
 
 	// CONSTANTS

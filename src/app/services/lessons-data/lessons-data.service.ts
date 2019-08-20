@@ -285,8 +285,8 @@ export class LessonsDataService {
 	}
 
 	sortSentencesByAddingTime(first: Sentence, second: Sentence): number {
-		const firstTime = new Date(first.created_at);
-		const secondTime = new Date(second.created_at);
+		const firstTime = new Date(first.createdAt);
+		const secondTime = new Date(second.createdAt);
 		return firstTime > secondTime ? 1 : -1;
 	}
 
