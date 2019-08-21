@@ -122,7 +122,7 @@ export class LessonsListPage implements OnInit {
 					this.contentIsScrolled = false;
 				}
 			}
-		}, 250));
+		}, 250), { passive: true });
 	}
 
 	ionViewDidEnter() {

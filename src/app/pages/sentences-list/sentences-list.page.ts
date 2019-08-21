@@ -87,7 +87,7 @@ export class SentencesListPage implements OnInit {
 			} else if (ev.detail.velocityY < -0.1) {
 				this.contentIsScrolled = false;
 			}
-		}, 250));
+		}, 250), { passive: true });
 	}
 
 	async initData(showLoader) {
