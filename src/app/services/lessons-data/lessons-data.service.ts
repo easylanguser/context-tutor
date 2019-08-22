@@ -92,10 +92,6 @@ export class LessonsDataService {
 		}
 	}
 
-	removeAllLessonSentences(lessonId: number) {
-		this.getLessonById(lessonId).sentences = [];
-	}
-
 	getLessonById(id: number): Lesson {
 		return this.lessons.find(lesson => lesson.id === id);
 	}
@@ -110,10 +106,6 @@ export class LessonsDataService {
 		return this.getLessonById(lessonId).sentences.find(
 			(sentence: Sentence) => sentence.id === sentenceId
 		);
-	}
-
-	getRangeOfLessonSentences(lessonId: number, from: number, to: number): Sentence[] {
-		return this.getLessonById(lessonId).sentences.slice(from, to);
 	}
 
 	editLesson(lesson: Lesson) {

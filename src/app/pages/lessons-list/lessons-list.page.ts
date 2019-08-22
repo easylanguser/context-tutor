@@ -95,9 +95,7 @@ export class LessonsListPage implements OnInit {
 			this.firstEnter = false;
 			return;
 		}
-		await this.utils.createAndShowLoader('Loading...');
-
-		const allLessons = this.lessonsDataService.lessons;
+		const allLessons: Lesson[] = this.lessonsDataService.lessons;
 		if (this.filter === 'all') {
 			this.displayedLessons = allLessons;
 		} else if (this.filter === 'almost-correct') {
@@ -107,8 +105,6 @@ export class LessonsListPage implements OnInit {
 				lesson.statistics.some(stat => stat.wrongAnswers > 0)
 			);
 		}
-
-		await this.utils.dismissLoader();
 	}
 
 	private addFabsHandler() {
@@ -180,9 +176,7 @@ export class LessonsListPage implements OnInit {
 	async doRefresh(event?: any) {
 		if (!event) {
 			anime({
-				targets: [
-					document.querySelector('#desktop-refresher-lessons')
-				],
+				targets: [document.querySelector('#desktop-refresher-lessons')],
 				rotate: '+=360',
 				elasticity: 50,
 				easing: 'easeOutElastic',
@@ -191,7 +185,7 @@ export class LessonsListPage implements OnInit {
 			await this.utils.createAndShowLoader('Loading...');
 		}
 		await this.getData();
-		(<HTMLIonSegmentElement>document.getElementById('lessons-filter-segment')).value = "all";
+		this.filter = "all";
 		if (event) {
 			event.target.complete();
 			setTimeout(() => {
@@ -212,8 +206,7 @@ export class LessonsListPage implements OnInit {
 			['sentences-list'], {
 				queryParams: {
 					lessonId: lesson.id,
-					parentId: lesson.parentId,
-					showLoader: lesson.statistics.length > 20
+					parentId: lesson.parentId
 				}
 			});
 	}

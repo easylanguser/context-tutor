@@ -56,15 +56,11 @@ export class SentencesListPage implements OnInit {
 		public globals: Globals) { }
 
 	async ngOnInit() {
-		const showLoader = this.route.snapshot.queryParamMap.get('showLoader');
-		if (showLoader === 'true') {
-			await this.utils.createAndShowLoader('Loading...<br>Please, wait');
-		}
-
+		await this.utils.createAndShowLoader('Loading...');
 		if (!this.lessonsDataService.lessons.length) {
 			await this.lessonsDataService.refreshLessons();
 		}
-		await this.initData(showLoader);
+		await this.initData();
 
 		this.addFabHandler();
 		this.firstEnter = false;
@@ -75,6 +71,7 @@ export class SentencesListPage implements OnInit {
 				this.syncCharts();
 			});
 		});
+		this.utils.dismissLoader();
 	}
 
 	private addFabHandler() {
@@ -90,15 +87,12 @@ export class SentencesListPage implements OnInit {
 		}, 250), { passive: true });
 	}
 
-	async initData(showLoader) {
+	async initData() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
 		this.parentId = Number(this.route.snapshot.queryParamMap.get('parentId'));
 
 		await this.getData();
-		if (showLoader === 'true') {
-			await this.utils.dismissLoader();
 		}
-	}
 
 	private async getData() {
 		const lesson = this.lessonsDataService.getLessonById(this.lessonId);
@@ -162,18 +156,15 @@ export class SentencesListPage implements OnInit {
 		}
 	}
 
-	async filterClick() {
+	async filterChanged() {
 		if (this.firstEnter) {
 			this.firstEnter = false;
 			return;
 		}
-		await this.utils.createAndShowLoader('Loading');
-
+		const allSentences: Sentence[] = await this.lessonsDataService.getLessonById(this.lessonId).sentences;
 		if (this.filter === 'all') {
-			await this.getData();
-		} else {
-			const allSentences = await this.lessonsDataService.getSentencesByLessonId(this.lessonId, this.parentId);
-			if (this.filter === 'not-correct') {
+			this.displayedSentences = allSentences;
+		} else if (this.filter === 'not-correct') {
 				this.displayedSentences = allSentences.filter(sentence => {
 					const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
 					return stat && stat.wrongAnswers > 0;
@@ -188,8 +179,6 @@ export class SentencesListPage implements OnInit {
 				});
 			}
 		}
-		await this.utils.dismissLoader();
-	}
 
 	private syncCharts() {
 		this.pieCharts = [];
@@ -303,9 +292,7 @@ export class SentencesListPage implements OnInit {
 	async doRefresh(event?: any) {
 		if (!event) {
 			anime({
-				targets: [
-					document.querySelector('#desktop-refresher-sentences')
-				],
+				targets: [document.querySelector('#desktop-refresher-sentences')],
 				rotate: '+=360',
 				elasticity: 50,
 				easing: 'easeOutElastic',
@@ -314,7 +301,7 @@ export class SentencesListPage implements OnInit {
 			await this.utils.createAndShowLoader('Loading...');
 		}
 		await this.getData();
-		(<HTMLIonSegmentElement>document.getElementById('sentences-filter-segment')).value = "all";
+		this.filter = "all";
 		if (event) {
 			event.target.complete();
 			setTimeout(() => {

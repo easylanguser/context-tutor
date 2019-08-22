@@ -50,7 +50,7 @@
       </ion-refresher-content>
     </ion-refresher>
 
-    <ion-list [@lessonsAnimation]="displayedLessons.length" no-padding no-margin style="padding-top: 2vh; padding-bottom: 8em;" #lessonsList>
+    <ion-list id="lessons-list" [@lessonsAnimation]="displayedLessons.length" no-padding no-margin style="padding-top: 2vh; padding-bottom: 8em;">
       <ion-item *ngFor="let lesson of this.displayedLessons" class="lesson-ion-item no-selection" no-padding>
         <div
           (touchstart)="ionItemTouchDown($event, lesson)"

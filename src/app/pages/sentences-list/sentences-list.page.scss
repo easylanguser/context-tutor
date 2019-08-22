@@ -108,6 +108,8 @@ ion-toolbar {
 }
 
 #sentences-list {
+    margin-left: 3vw;
+    width: 94vw;
     margin-top: 2vh;
     margin-bottom: 15vh;
 
@@ -125,7 +127,7 @@ ion-toolbar {
 }
 
 .sentence-ion-item> :first-child {
-    width: 94vw;
+    width: -webkit-fill-available;
     height: 13.4vh;
     display: flex;
     flex-flow: row;
