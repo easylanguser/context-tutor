@@ -15,7 +15,7 @@
     "ios:prod": "ionic capacitor run ios --prod",
     "electron:dev": "ionic capacitor run electron",
     "electron:prod": "ionic capacitor run electron --prod",
-    "npm:install": "npm install"
+    "npm:install": "rm -f package-lock.json && rm -rf node_modules && npm update && npm install"
   },
   "dependencies": {
     "@angular/animations": "8.1.1",
@@ -28,7 +28,7 @@
     "@angular/router": "8.1.1",
     "@auth0/angular-jwt": "^3.0.0",
     "@capacitor/android": "^1.1.1",
-    "@capacitor/core": "1.1.1",
+    "@capacitor/core": "^1.1.1",
     "@capacitor/ios": "^1.1.1",
     "@ionic/angular": "4.7.4",
     "@ionic/storage": "^2.2.0",
@@ -37,7 +37,7 @@
     "core-js": "^2.6.9",
     "lodash": "^4.17.15",
     "rxjs": "^6.5.2",
-    "zone.js": "^0.10.1",
+    "zone.js": "^0.10.2",
     "cordova-plugin-receive-content": "file:plugins-local/cordova-plugin-receive-content"
   },
   "devDependencies": {
@@ -49,8 +49,8 @@
     "@angular/compiler": "^7.2.15",
     "@angular/compiler-cli": "^7.2.15",
     "@angular/language-service": "^7.2.15",
-    "@capacitor/cli": "1.1.1",
-    "@ionic/angular-toolkit": "~1.2.0",
+    "@capacitor/cli": "^1.1.1",
+    "@ionic/angular-toolkit": "^2.0.0",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/lodash": "^4.14.136",
