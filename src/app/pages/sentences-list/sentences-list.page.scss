@@ -117,6 +117,8 @@ ion-toolbar {
         margin-bottom: 20vh;
     }
     @media (min-width: 992px) {
+        margin-left: 0;
+        width: auto;
         margin-bottom: 9vh;
     }
 }
