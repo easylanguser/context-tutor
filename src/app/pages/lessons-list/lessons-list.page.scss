@@ -236,18 +236,13 @@ ion-item-option {
     transition: transform 0.3s ease-in-out;
     -webkit-transition: transform 0.3s ease-in-out;
 
-    :first-child {
-        --background: rgb(69, 184, 255);
+    ion-fab-button {
+        --background: #FFF;
     }
 
-    :last-child {
-        :first-child {
-            --background: rgb(221, 221, 221);
-        }
-
-        :last-child {
-            --background: rgb(211, 152, 26);
-        }
+    ion-icon {
+        font-size: 30px;
+        color: var(--ion-color-primary);
     }
 }
 

@@ -188,8 +188,11 @@ ion-toolbar {
     -webkit-transition: transform 0.3s ease-in-out;
 
     :first-child {
-        --background: rgb(69, 184, 255);
+        --background: #FFF;
         font-size: 30px;
+    }
+    ion-icon {
+        color: var(--ion-color-primary);
     }
 }
 
@@ -205,8 +208,12 @@ ion-toolbar {
     -webkit-transition: transform 0.3s ease-in-out;
 
     :first-child {
-        --background: rgb(69, 184, 255);
+        --background: #FFF;
         font-size: 30px;
+    }
+
+    ion-icon {
+        color: var(--ion-color-primary);
     }
 }
 
