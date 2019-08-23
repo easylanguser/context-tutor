@@ -110,7 +110,9 @@ export class AppComponent {
 
 						const token = await this.storage.get(this.globals.TOKEN_KEY)
 						if (token.value) {
-							parent.postMessage({ token: token.value }, '*');
+							setTimeout(() => {
+								parent.postMessage({ token: token.value }, '*');
+							}, 1000);
 						}
 					}
 				} else {
