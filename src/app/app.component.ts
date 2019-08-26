@@ -107,12 +107,11 @@ export class AppComponent {
 						} else {
 							await this.navController.navigateForward([pathToGo]);
 						}
-
 						const token = await this.storage.get(this.globals.TOKEN_KEY)
 						if (token.value) {
 							setTimeout(() => {
 								parent.postMessage({ token: token.value }, '*');
-							}, 1000);
+							}, 500);
 						}
 					}
 				} else {

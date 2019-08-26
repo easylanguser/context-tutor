@@ -64,13 +64,8 @@ export class SentencesListPage implements OnInit {
 
 		this.addFabHandler();
 		this.firstEnter = false;
-
-		setTimeout(() => {
-			this.syncCharts();
-			this.pieCanvases.changes.subscribe(() => {
-				this.syncCharts();
-			});
-		});
+		this.pieCanvases.changes.subscribe(() => this.syncCharts());
+		
 		this.utils.dismissLoader();
 	}
 

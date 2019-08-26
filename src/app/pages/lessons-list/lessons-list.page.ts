@@ -53,9 +53,7 @@ export class LessonsListPage implements OnInit {
 		this.addFabsHandler();
 		await this.utils.dismissLoader();
 		this.syncCharts();
-		this.pieCanvases.changes.subscribe(() => {
-			this.syncCharts();
-		});
+		this.pieCanvases.changes.subscribe(() => this.syncCharts());
 		this.firstEnter = false;
 	}
 
