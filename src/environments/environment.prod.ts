@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  url: 'http://157.230.107.251'
+  url: 'https://easy4learn.com'
 };
