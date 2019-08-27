@@ -138,7 +138,7 @@ export class SentenceAddingPage implements OnInit {
 			const res = await this.lessonHttpService.postNewLesson({
 				userId: this.globals.userId,
 				name: this.title,
-				url: 'http://easy4learn.com/tutor'
+				url: 'https://easy4learn.com/tutor'
 			});
 			const newLessonId = res.id;
 			const newSentence = await this.sentenceHttpService.postNewSentence({

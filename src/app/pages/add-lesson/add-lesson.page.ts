@@ -102,7 +102,7 @@ export class AddLessonPage implements OnInit {
 				await this.lessonHttpService.postNewLesson({
 					userId: this.globals.userId,
 					name: this.lessonName,
-					url: 'http://easy4learn.com/tutor'
+					url: 'https://easy4learn.com/tutor'
 				});
 			}
 			this.globals.updIsDemo(false);
