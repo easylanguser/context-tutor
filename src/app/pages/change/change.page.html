@@ -18,8 +18,8 @@
       <ion-input type="password" formControlName="oldPassword"></ion-input>
     </ion-item>
 
-    <div *ngIf="submitted && f.email.errors" class="auth-forms">
-      <div *ngIf="f.email.errors.required">this field is required</div>
+    <div *ngIf="submitted && f.email && f.email.errors" class="auth-forms">
+      <div *ngIf="f.email && f.email.errors.required">this field is required</div>
     </div>
 
     <ion-item>
@@ -27,8 +27,8 @@
       <ion-input type="password" formControlName="newPassword" required></ion-input>
     </ion-item>
 
-    <div *ngIf="submitted && f.password.errors" class="auth-forms">
-      <div *ngIf="f.password.errors.required">this field is required</div>
+    <div *ngIf="submitted && f.password && f.password.errors" class="auth-forms">
+      <div *ngIf="f.password && f.password.errors.required">this field is required</div>
     </div>
 
     <ion-item>
@@ -36,8 +36,8 @@
       <ion-input type="password" formControlName="passwordConfirm" required></ion-input>
     </ion-item>
 
-    <div *ngIf="submitted && f.password.errors" class="auth-forms">
-      <div *ngIf="f.password.errors.required">this field is required</div>
+    <div *ngIf="submitted && f.password && f.password.errors" class="auth-forms">
+      <div *ngIf="f.password && f.password.errors.required">this field is required</div>
     </div>
 
     <ion-button expand="full" type="submit">Change password</ion-button>
