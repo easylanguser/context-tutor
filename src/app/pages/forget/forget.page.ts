@@ -28,8 +28,11 @@ export class ForgetPage implements OnInit {
 	onSubmit() {
 		this.submitted = true;
 		if (this.credentialsForm.valid) {
-			this.userHttpService.sendPassResetRequest(this.credentialsForm.value).then(res => {
+			this.userHttpService.sendPassResetRequest(this.credentialsForm.value)
+			.then(res => {
 				this.showAlert(res);
+			}).catch(err => {
+				this.showAlert(err.message);
 			})
 		}
 	}

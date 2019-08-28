@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpService } from '../rest/http.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const apiUrl = environment.url + '/api/users/';
 
@@ -9,9 +10,10 @@ const apiUrl = environment.url + '/api/users/';
 })
 export class UserHttpService {
 
-	constructor(private httpService: HttpService) { }
+	constructor(private httpService: HttpService,
+		private http: HttpClient) { }
 
-	getAvatar(userId ?: number): Promise<Blob> {
+	getAvatar(userId?: number): Promise<Blob> {
 		return this.httpService.doGetImage(apiUrl + 'getUserAvatar' + (userId ? ('?userId=' + userId) : '')).toPromise();
 	}
 
@@ -21,8 +23,10 @@ export class UserHttpService {
 		return this.httpService.doPostForm(apiUrl + 'uploadAvatar', formData).toPromise();
 	}
 
-	sendPassResetRequest(email: string): Promise<any> {
-		return this.httpService.doPost(environment.url + '/api/user/sendPassword', email).toPromise();
+	sendPassResetRequest(email): Promise<any> {
+		return this.http.post(environment.url + '/api/user/sendPassword', email, {
+			headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+		}).toPromise();
 	}
 
 	getUserByEmail(userEmail: string): Promise<any> {
