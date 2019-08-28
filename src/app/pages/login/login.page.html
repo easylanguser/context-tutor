@@ -13,9 +13,9 @@
   <form [formGroup]="credentialsForm" id="credentials-form" (ngSubmit)="onSubmit()">
 
     <div id="form-div">
-      <ion-label id="email-label" position="floating">Email</ion-label>
+      <ion-label id="email-label">Email</ion-label>
       <div style="margin-top: 4px;">
-        <input id="email-input" class="credentials-inputs" type="email" formControlName="email" required />
+        <input id="email-input" class="credentials-inputs" type="email" autocomplete="email" formControlName="email" required />
       </div>
 
       <div *ngIf="submitted && formData.email.errors"
@@ -36,9 +36,9 @@
 
       <div style="margin-bottom: 4vh;"></div>
 
-      <ion-label id="password-label" position="floating">Password</ion-label>
+      <ion-label id="password-label">Password</ion-label>
       <div style="border-bottom: 2px solid rgb(196, 196, 196); margin-top: 4px;">
-        <input id="password-input" class="credentials-inputs" type="password" formControlName="password" required />
+        <input id="password-input" class="credentials-inputs" autocomplete="password" type="password" formControlName="password" required />
         <ion-icon id="lock-icon" name="eye" (click)="togglePasswordVisibility()"></ion-icon>
       </div>
       
