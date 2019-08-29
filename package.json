@@ -1,6 +1,6 @@
 {
   "name": "context_tutor",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "author": "Taqtile",
   "homepage": "https://github.com/easably",
   "description": "Easy Lang project",
@@ -18,7 +18,7 @@
     "npm:install": "rm -f package-lock.json && rm -rf node_modules && npm update && npm install"
   },
   "dependencies": {
-    "@angular/animations": "8.1.1",
+    "@angular/animations": "8.2.4",
     "@angular/common": "8.1.1",
     "@angular/core": "8.1.1",
     "@angular/forms": "8.1.1",
@@ -30,7 +30,7 @@
     "@capacitor/android": "^1.1.1",
     "@capacitor/core": "^1.1.1",
     "@capacitor/ios": "^1.1.1",
-    "@ionic/angular": "4.7.4",
+    "@ionic/angular": "4.8.1",
     "@ionic/storage": "^2.2.0",
     "animejs": "^3.1.0",
     "chart.js": "^2.8.0",
