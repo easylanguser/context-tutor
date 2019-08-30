@@ -1,6 +1,6 @@
 {
   "name": "context_tutor",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "author": "Taqtile",
   "homepage": "https://github.com/easably",
   "description": "Easy Lang project",
@@ -19,9 +19,9 @@
   },
   "dependencies": {
     "@angular/animations": "8.2.4",
-    "@angular/common": "8.1.1",
-    "@angular/core": "8.1.1",
-    "@angular/forms": "8.1.1",
+    "@angular/common": "8.2.4",
+    "@angular/core": "8.2.4",
+    "@angular/forms": "8.2.4",
     "@angular/http": "7.2.15",
     "@angular/platform-browser": "8.1.1",
     "@angular/platform-browser-dynamic": "7.2.15",
