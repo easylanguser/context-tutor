@@ -62,8 +62,11 @@
             <p>
               {{lesson.name}}
             </p>
-            <span>
+            <span class="date">
               {{lesson.displayedDate}}
+            </span>
+            <span class="sentences-number">
+              ({{lesson.sentencesCount}})
             </span>
           </div>
           <ion-icon id="share-icon" *ngIf="lesson.parentId" name="md-share"></ion-icon>

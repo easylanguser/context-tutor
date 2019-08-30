@@ -16,6 +16,7 @@ interface ILesson {
 	name: string;
 	url: string;
 	parentId: number;
+	sentencesCount: number;
 	createdAt: string;
 	updatedAt: string;
 }
@@ -210,7 +211,7 @@ export class LessonsDataService {
 		if (this.globals.getIsDemo()) {
 			await this.http.get('assets/demo-lessons.json').toPromise().then(async (lessons: IDemoLesson[]) => {
 				for (const lsn of lessons) {
-					const lesson = new Lesson(lsn.id, lsn.name, lsn.url, null, '', '', 'Demo lesson');
+					const lesson = new Lesson(lsn.id, lsn.name, lsn.url, 1, null, '', '', 'Demo lesson');
 					for (const sntc of lsn.sentences) {
 						const hiddenChars: Array<string[]> = [];
 						sntc.words.sort((a, b) => a[0] - b[0]);
@@ -256,7 +257,7 @@ export class LessonsDataService {
 
 		for (const lsn of apiLessons) {
 			const diff = (now - new Date(lsn.createdAt).getTime()) / 1000;
-			const lesson = new Lesson(lsn.id, lsn.name, lsn.url, lsn.parentId,
+			const lesson = new Lesson(lsn.id, lsn.name, lsn.url, lsn.parentId, lsn.sentencesCount,
 				lsn.createdAt, lsn.updatedAt, this.utils.calculatePeriod(diff));
 
 			this.addLesson(lesson);

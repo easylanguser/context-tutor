@@ -128,6 +128,7 @@ export class SentenceAddingPage implements OnInit {
 					words: indexesArray,
 					text: this.textArea.innerText
 				});
+				this.lessonsDataService.getLessonById(this.lessonId).sentencesCount++;
 				this.lessonsDataService.createNewStatisticRecord(
 					newSentence.id,
 					this.lessonId,
@@ -146,6 +147,7 @@ export class SentenceAddingPage implements OnInit {
 				words: indexesArray,
 				text: this.sentence
 			});
+			this.lessonsDataService.getLessonById(newLessonId).sentencesCount++;
 			this.lessonsDataService.createNewStatisticRecord(
 				newSentence.id,
 				newLessonId,

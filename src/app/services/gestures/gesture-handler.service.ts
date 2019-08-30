@@ -132,6 +132,7 @@ export class GestureHandlerService {
 									text: 'Delete',
 									handler: async () => {
 										await this.sentenceHttpService.deleteSentence(lessonOrSentence.id);
+										this.lessonsDataService.getLessonById(lessonOrSentence.lessonId).sentencesCount--;
 										this.lessonsDataService.removeSentence(
 											lessonOrSentence.lessonId,
 											lessonOrSentence.id

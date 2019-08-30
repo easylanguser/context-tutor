@@ -170,15 +170,22 @@ ion-toolbar {
 
         span {
             bottom: 3.5vh;
-            position: absolute;
             font-size: 3vmin;
             font-weight: bold;
             font-family: "Arial";
-            color: #D3DBE7;
-
+            
             @media (min-width: 650px) {
                 font-size: 1.5vmin;
             }
+        }
+
+        .date {
+            color: #D3DBE7;
+            margin-right: 4px;
+        }
+
+        .sentences-number {
+            color: orange;
         }
     }
 

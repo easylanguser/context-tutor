@@ -10,6 +10,7 @@ export class Lesson {
 		public name: string,
 		public url: string,
 		public parentId: number,
+		public sentencesCount: number,
 		public createdAt: string,
 		public updatedAt: string,
 		public displayedDate: string) { }
