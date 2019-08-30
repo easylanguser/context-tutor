@@ -285,9 +285,9 @@ export class SentenceGuessPage implements OnInit {
 		const redDelta = stats.wrongAnswers - savedStats[1];
 		if (greenDelta + yellowDelta + redDelta !== 0) {
 			await this.alertController.create({
-				message: '<p class="green-text">Green: +' + greenDelta +
-					'</p><p class="yellow-text">Yellow: +' + yellowDelta +
-					'</p><p class="red-text">Red: +' + redDelta + '</p>',
+				message: '<p class="green-text">Guessed: ' + greenDelta +
+					'</p><p class="yellow-text">With used hint: ' + yellowDelta +
+					'</p><p class="red-text">Mistakes: ' + redDelta + '</p>',
 				buttons: this.sentencesTotal > 1
 					?
 					[
