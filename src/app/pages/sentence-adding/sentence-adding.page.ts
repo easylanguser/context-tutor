@@ -89,12 +89,20 @@ export class SentenceAddingPage implements OnInit {
 	}
 
 	async submitSelections() {
-		if (indexesArray.length === 0)
+		const textAreaValue = this.textArea.innerText;
+		if (!textAreaValue) {
+			this.utils.showToast('Please add sentence to the text area.');
 			return;
+		}
+
+		if (indexesArray.length === 0) {
+			this.utils.showToast('Please select at least one word to be guessed.');
+			return;
+		}
 
 		indexesArray.sort((el1, el2) => el1[0] - el2[0]);
 
-		const textAreaValue = this.textArea.innerText;
+		
 		if (this.lessonId) { // Sentence is added to an existing lesson
 			if (this.sentenceToEditId) { // Existing sentence is being edited
 				this.sentenceHttpService.updateSentenceWords(this.sentenceToEditId, indexesArray, textAreaValue);
