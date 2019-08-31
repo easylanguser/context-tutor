@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { NavController, AlertController } from '@ionic/angular';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
 	selector: 'page-login',
@@ -31,7 +32,7 @@ export class LoginPage implements OnInit {
 		private formBuilder: FormBuilder,
 		private authService: AuthService,
 		private navController: NavController,
-		private alertController: AlertController) { }
+		private utils: UtilsService) { }
 
 	get formData() {
 		return this.credentialsForm.controls;
@@ -46,7 +47,7 @@ export class LoginPage implements OnInit {
 
 	togglePasswordVisibility() {
 		const input = document.getElementById('password-input');
-		const button = document.getElementById('lock-icon');	
+		const button = document.getElementById('lock-icon');
 		if (input.hasAttribute('type')) {
 			input.removeAttribute('type');
 			button.setAttribute('name', 'eye-off');
@@ -63,7 +64,10 @@ export class LoginPage implements OnInit {
 				if (res['already_signed_up']) {
 					this.authService.login(this.credentialsForm.value).subscribe();
 				} else {
-					const alert = await this.alertController.create({
+					this.utils.showToast('We\'ve sent a confirmation link to <b>' +
+						this.credentialsForm.value.email + '</b>.<br>But you can already start using EasyLang!');
+					this.authService.login(this.credentialsForm.value).subscribe();
+					/* const alert = await this.alertController.create({
 						message: 'We have sent an email with a confirmation link to <b>' + this.credentialsForm.value.email + '</b>',
 						header: 'Email confirmation',
 						buttons: [{
@@ -73,7 +77,7 @@ export class LoginPage implements OnInit {
 							}
 						}]
 					});
-					await alert.present();
+					await alert.present(); */
 				}
 			});
 		}

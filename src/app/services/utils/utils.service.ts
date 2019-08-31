@@ -20,8 +20,11 @@ export class UtilsService {
 	public async showToast(message: string) {
 		if (!this.toast) {
 			this.toast = await this.toastController.create({
+				mode: 'ios',
 				message: message,
-				duration: 2500
+				duration: 2500,
+				cssClass: 'toast-black',
+				color: 'dark'
 			});
 			this.toast.present();
 			setTimeout(() => this.toast = null, 2800);

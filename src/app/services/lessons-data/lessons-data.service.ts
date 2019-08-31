@@ -211,7 +211,7 @@ export class LessonsDataService {
 		if (this.globals.getIsDemo()) {
 			await this.http.get('assets/demo-lessons.json').toPromise().then(async (lessons: IDemoLesson[]) => {
 				for (const lsn of lessons) {
-					const lesson = new Lesson(lsn.id, lsn.name, lsn.url, 1, null, '', '', 'Demo lesson');
+					const lesson = new Lesson(lsn.id, lsn.name, lsn.url, 1, lsn.id === 2 ? 2 : 1, '', '', 'Demo lesson');
 					for (const sntc of lsn.sentences) {
 						const hiddenChars: Array<string[]> = [];
 						sntc.words.sort((a, b) => a[0] - b[0]);

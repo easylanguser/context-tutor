@@ -16,7 +16,6 @@ export class AddLessonPage implements OnInit {
 	sentences: any[] = [];
 	lessonNameInputIsValidated: boolean = true;
 	fileImportIsOpened: boolean = false;
-
 	fileInput: HTMLInputElement;
 
 	constructor(
@@ -91,25 +90,28 @@ export class AddLessonPage implements OnInit {
 	}
 
 	async addNewLesson() {
-		if (this.lessonName) {
-			if (this.fileInput.files && this.fileInput.files.length > 0) {
-				await this.lessonHttpService.postNewLessonFile(
-					this.fileInput.files,
-					this.lessonName,
-					this.globals.userId
-				);
-			} else {
-				await this.lessonHttpService.postNewLesson({
-					userId: this.globals.userId,
-					name: this.lessonName,
-					url: 'https://easy4learn.com/tutor'
-				});
-			}
-			this.globals.updIsDemo(false);
-			this.utils.showToast('New lesson was added');
-			this.fileInput.value = "";
-			this.globals.updateIsRequired = true;
-			this.navController.navigateBack(['lessons-list']);
+		if (!this.lessonName || !this.lessonName.trim()) {
+			this.utils.showToast('Please enter name of a new lesson.');
+			return;
 		}
+
+		if (this.fileInput.files && this.fileInput.files.length > 0) {
+			await this.lessonHttpService.postNewLessonFile(
+				this.fileInput.files,
+				this.lessonName,
+				this.globals.userId
+			);
+		} else {
+			await this.lessonHttpService.postNewLesson({
+				userId: this.globals.userId,
+				name: this.lessonName,
+				url: 'https://easy4learn.com/tutor'
+			});
+		}
+		this.globals.updIsDemo(false);
+		this.utils.showToast('New lesson was added');
+		this.fileInput.value = "";
+		this.globals.updateIsRequired = true;
+		this.navController.navigateBack(['lessons-list']);
 	}
 }

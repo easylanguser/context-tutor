@@ -96,7 +96,7 @@ export class SentenceAddingPage implements OnInit {
 		}
 
 		if (indexesArray.length === 0) {
-			this.utils.showToast('Please select at least one word to be guessed.');
+			this.utils.showToast('Please select at least one word for guessing.');
 			return;
 		}
 

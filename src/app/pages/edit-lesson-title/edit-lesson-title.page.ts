@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { NavController } from '@ionic/angular';
 import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
 	selector: 'app-edit-lesson-title',
@@ -18,6 +19,7 @@ export class EditLessonTitlePage implements OnInit {
 		private lessonHttpService: LessonHttpService,
 		private navController: NavController,
 		private route: ActivatedRoute,
+		private utils: UtilsService,
 		private lessonsDataService: LessonsDataService) { }
 
 	ngOnInit() {
@@ -26,6 +28,10 @@ export class EditLessonTitlePage implements OnInit {
 	}
 
 	submitNewTitle() {
+		if (!this.lessonTitle || !this.lessonTitle.trim()) {
+			this.utils.showToast('Lesson\' name can\'t be empty.');
+			return;
+		}
 		const lessonToEdit = this.lessonsDataService.getLessonById(this.lessonId);
 		lessonToEdit.name = this.lessonTitle;
 		this.lessonsDataService.editLesson(lessonToEdit);
