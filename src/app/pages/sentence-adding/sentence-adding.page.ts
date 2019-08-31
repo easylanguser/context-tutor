@@ -40,15 +40,20 @@ export class SentenceAddingPage implements OnInit {
 		}
 	}
 
-	ngOnInit() {
+	async ngOnInit() {
 		this.textArea = document.getElementById('selectable-sentence-div');
 		this.sentenceToEditId = this.route.snapshot.queryParamMap.get('toEdit');
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
 
+		if (!this.lessonsDataService.lessons.length) {
+			await this.lessonsDataService.refreshLessons();
+			await this.lessonsDataService.getSentencesByLessonId(this.lessonId, null);
+		}
+
 		indexesArray = [];
 		this.sentence = this.sentenceToEditId ?
-			this.lessonsDataService.getSentenceByIds(this.lessonId, Number(this.sentenceToEditId)).text :
-			this.globals.sharedText;
+			this.lessonsDataService.getSentenceByIds(this.lessonId, Number(this.sentenceToEditId)).text.replace(/^\s+|\s+$|\s+(?=\s)/g, "") :
+			this.globals.sharedText ? this.globals.sharedText.replace(/^\s+|\s+$|\s+(?=\s)/g, "") : null;
 
 		this.updateTitle();
 	}
@@ -57,14 +62,10 @@ export class SentenceAddingPage implements OnInit {
 		this.navController.navigateBack(['sentences-list'], { queryParams: { lessonId: this.lessonId } });
 	}
 
-	ionViewDidEnter() {
-		this.updateTitle();
-	}
-
 	formatInsertedText(event: ClipboardEvent) {
 		event.preventDefault();
-		const text = event.clipboardData.getData("text/plain");
-		document.execCommand("insertText", false, text.replace(/^\s+|\s+$|\s+(?=\s)/g, ""));
+		const text = event.clipboardData.getData("text/plain").replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+		document.execCommand("insertText", false, text);
 	}
 
 	removeHighlights() {

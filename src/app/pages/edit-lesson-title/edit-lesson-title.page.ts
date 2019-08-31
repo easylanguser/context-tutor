@@ -22,8 +22,11 @@ export class EditLessonTitlePage implements OnInit {
 		private utils: UtilsService,
 		private lessonsDataService: LessonsDataService) { }
 
-	ngOnInit() {
+	async ngOnInit() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
+		if (!this.lessonsDataService.lessons.length) {
+			await this.lessonsDataService.refreshLessons();
+		}
 		this.lessonTitle = this.lessonsDataService.getLessonById(this.lessonId).name;
 	}
 
