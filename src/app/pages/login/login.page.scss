@@ -114,6 +114,11 @@ ion-title {
     &:hover {
         background: linear-gradient(rgb(69, 184, 255), rgb(68, 207, 255));
     }
+
+    @media(min-width: 992px) and (min-height: 1600px) {
+        height: 3vh;
+        font-size: 1.5vh;
+    }
 }
 
 .error-label {

@@ -104,6 +104,12 @@ ion-toast {
     text-align: center;
 }
 
+@media(min-width: 992px) and (min-height: 1600px) {
+    ion-title {
+        font-size: 1.2vh !important;
+    }
+}
+
 @media (min-width: 992px) {
 
     ion-toast {
