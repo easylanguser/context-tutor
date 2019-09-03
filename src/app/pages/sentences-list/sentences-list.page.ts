@@ -29,16 +29,6 @@ import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-ht
 					animate('500ms ease-out', style({ height: 0 }))
 				]), { optional: true })
 			])
-		]),
-		trigger('fadeAnimation', [
-			transition(':enter', [
-				style({ opacity: 0 }),
-				animate('500ms', style({ opacity: 1 }))
-			]),
-			transition(':leave', [
-				style({ opacity: 1 }),
-				animate('500ms', style({ opacity: 0 }))
-			])
 		])
 	]
 })
@@ -76,7 +66,7 @@ export class SentencesListPage implements OnInit {
 		this.addFabHandler();
 		this.firstEnter = false;
 		this.pieCanvases.changes.subscribe(() => this.syncCharts());
-		
+
 		this.utils.dismissLoader();
 	}
 
@@ -185,20 +175,20 @@ export class SentencesListPage implements OnInit {
 		if (this.filter === 'all') {
 			this.displayedSentences = allSentences;
 		} else if (this.filter === 'not-correct') {
-				this.displayedSentences = allSentences.filter(sentence => {
-					const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
-					return stat && stat.wrongAnswers > 0;
-				});
-			} else {
-				this.displayedSentences = allSentences.filter(sentence => {
-					const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
-					if (!stat) {
-						return false;
-					}
-					return this.utils.redAndYellowFilterSentence(stat);
-				});
-			}
+			this.displayedSentences = allSentences.filter(sentence => {
+				const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
+				return stat && stat.wrongAnswers > 0;
+			});
+		} else {
+			this.displayedSentences = allSentences.filter(sentence => {
+				const stat = this.lessonsDataService.getStatisticsOfSentence(sentence);
+				if (!stat) {
+					return false;
+				}
+				return this.utils.redAndYellowFilterSentence(stat);
+			});
 		}
+	}
 
 	private syncCharts() {
 		this.pieCharts = [];

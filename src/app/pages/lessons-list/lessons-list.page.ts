@@ -32,16 +32,6 @@ const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-
 					animate('400ms ease-out', style({ height: 0 }))
 				]), { optional: true })
 			])
-		]),
-		trigger('fadeAnimation', [
-			transition(':enter', [
-				style({ opacity: 0 }),
-				animate('500ms', style({ opacity: 1 }))
-			]),
-			transition(':leave', [
-				style({ opacity: 1 }),
-				animate('500ms', style({ opacity: 0 }))
-			])
 		])
 	]
 })

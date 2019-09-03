@@ -11,8 +11,8 @@
         My lessons
       </ion-title>
       <ion-buttons slot="end" id="desktop-refresher-lessons">
-        <ion-button id="edit-lessons-button" (click)="toggleEditingMode()"
-          *ngIf="this.globals.platformName === 'ios' || this.globals.platformName === 'android'">Edit</ion-button>
+        <button id="edit-lessons-button" (click)="toggleEditingMode()" [ngStyle]="{'color': editModeOn ? 'var(--ion-color-warning)' : 'white'}"
+          *ngIf="this.globals.platformName === 'ios' || this.globals.platformName === 'android'">Edit</button>
         <ion-icon *ngIf="this.globals.platformName === 'web' ||
         this.globals.platformName === 'electron' ||
         this.globals.platformName === 'desktop'" name="refresh-circle" (click)="doRefresh()" id="refresher-button">
@@ -52,23 +52,25 @@
     <ion-list id="lessons-list" [@lessonsAnimation]="displayedLessons.length" no-padding no-margin
       style="padding-top: 2vh; padding-bottom: 8em;">
       <ion-item *ngFor="let lesson of this.displayedLessons" class="lesson-ion-item no-selection" no-padding>
-        <div [@fadeAnimation] class="mobile-controls" *ngIf="(this.globals.platformName === 'ios' || this.globals.platformName === 'android') && this.editModeOn">
+        <div *ngIf="(this.globals.platformName === 'ios' || this.globals.platformName === 'android')"
+          class="mobile-controls">
           <ion-icon (click)="openLink(lesson.url)" name="globe" color="secondary"></ion-icon>
           <ion-icon (click)="shareLesson(lesson.id)" name="share-alt" color="primary"></ion-icon>
           <ion-icon (click)="editItem(lesson.id)" name="create" color="warning"></ion-icon>
           <ion-icon (click)="deleteItem(lesson.id)" name="trash" color="danger"></ion-icon>
         </div>
-        <div [ngStyle]="{'transform': this.editModeOn ? 'translateX(30%)' : 'translateX(0)'}" [ngClass]="{'dashed': this.globals.getIsDemo()}" (click)="openLesson(lesson, $event)">
+        <div [ngStyle]="{'transform': this.editModeOn ? 'translateX(30%)' : 'translateX(0)'}"
+          [ngClass]="{'dashed': this.globals.getIsDemo()}" (click)="openLesson(lesson, $event)">
           <div>
             <p>
               {{lesson.name}}
             </p>
-            <span class="date">
+            <div class="date">
               {{lesson.displayedDate}}
-            </span>
-            <span class="sentences-number">
+            </div>
+            <div class="sentences-number">
               ({{lesson.sentencesCount}})
-            </span>
+            </div>
             <div class="desktop-controls" *ngIf="this.globals.platformName === 'web' || 
               this.globals.platformName === 'electron' || this.globals.platformName === 'desktop'">
               <ion-icon (click)="openLink(lesson.url)" name="globe" color="secondary"></ion-icon>

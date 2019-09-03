@@ -27,20 +27,28 @@ ion-toolbar {
         margin-right: 4%;
         font-size: 32px;
         color: white;
-        
+
         ion-button {
             color: white;
             font-weight: bold;
         }
 
-        #edit-lessons-button, #refresher-button {
+        #edit-lessons-button {
+            outline: none;
+            font-size: 17px;
+            font-weight: bold;
+            background: transparent;
+        }
+
+        #edit-lessons-button,
+        #refresher-button {
             transition: color 150ms linear;
             -webkit-transition: color 150ms linear;
         }
 
         @media (min-width: 992px) {
             #edit-lessons-button {
-                margin-right: 20px; 
+                margin-right: 20px;
             }
         }
 
@@ -137,10 +145,13 @@ ion-toolbar {
 
     .mobile-controls {
         position: absolute;
-        width: 30%;
-        font-size: 3vh;
+        width: 25%;
         display: flex;
         justify-content: space-evenly;
+        padding-left: 3vw;
+        ion-icon {
+            font-size: 5vh;
+        }
     }
 }
 
@@ -175,6 +186,20 @@ ion-toolbar {
         vertical-align: top;
         padding: 1vh 4vw 0 4vw;
 
+        .desktop-controls {
+            display: inline-block;
+            font-size: 3vmin;
+            height: 40px;
+
+            @media (max-width: 650px) {
+                font-size: 5vmin;
+            }
+
+            ion-icon {
+                margin: 0 3px;
+            }
+        }
+
         p {
             overflow: hidden;
             white-space: nowrap;
@@ -185,42 +210,44 @@ ion-toolbar {
             max-height: 6vh;
             margin: 0;
             font-weight: bold;
+
             @media (max-width: 350px) {
                 font-size: 2.5vh;
             }
         }
 
-        span {
+        div {
+            vertical-align: top;
+            line-height: 20px;
+            display: inline-block;
             bottom: 3.5vh;
             font-size: 3vmin;
             font-weight: bold;
             font-family: "Arial";
-            
+            height: 20px;
+
             @media (min-width: 650px) {
+                line-height: 40px;
+                height: 40px;
                 font-size: 1.5vmin;
+            }
+        }
+
+        ion-icon {
+            height: 20px;
+            @media (min-width: 650px) {
+                height: 40px;
             }
         }
 
         .date {
             color: rgba(0, 0, 0, 0.5);
-            margin-right: 4px;
+            margin-right: 8px;
         }
 
         .sentences-number {
             color: orange;
-            margin-right: 8px;
-        }
-
-        .desktop-controls {
-            display: inline-block;
-            font-size: 3vmin;
-            @media (min-width: 650px) {
-                font-size: 1.5vmin;
-            }
-
-            ion-icon {
-                margin: 0 2px;
-            }
+            margin-right: 16px;
         }
     }
 
@@ -244,31 +271,14 @@ ion-toolbar {
 .dashed {
     background-color: #F8F9F9 !important;
     border: 2px dashed;
+
     &:hover {
         box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.4) !important;
     }
+
     span {
         color: var(--ion-color-primary) !important;
     }
-}
-
-ion-item-option {
-    height: 12vh;
-    width: 20vw;
-    z-index: 90;
-    max-width: 160px;
-    border-radius: 25px;
-    margin: 1vh 0.5vw 1vh 0;
-    text-align: center;
-    font-weight: bold;
-
-    @media (min-width: 992px) {
-        width: 12vw;
-    }
-}
-
-.item-options-ios.item-options-end {
-    border-bottom-width: 0;
 }
 
 #add-lesson-fab {

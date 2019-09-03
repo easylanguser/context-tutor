@@ -11,9 +11,9 @@
         {{lessonTitle}}
       </ion-title>
       <ion-buttons slot="end" id="desktop-refresher-sentences">
-        <ion-button id="edit-sentences-button" (click)="toggleEditingMode()" *ngIf="!parentId">Edit</ion-button>
+        <button id="edit-sentences-button" [ngStyle]="{'color': editModeOn ? 'var(--ion-color-warning)' : 'white'}" (click)="toggleEditingMode()" *ngIf="!parentId">Edit</button>
         <ion-icon name="refresh-circle" *ngIf="globals.platformName === 'web' || globals.platformName === 'electron' ||
-        globals.platformName === 'desktop'" (click)="doRefresh()" id="refresher-button"></ion-icon>
+          globals.platformName === 'desktop'" (click)="doRefresh()" id="refresher-button"></ion-icon>
       </ion-buttons>
     </ion-toolbar>
 
@@ -44,7 +44,7 @@
 
     <ion-list [@sentencesAnimation]="displayedSentences.length" id="sentences-list" no-padding no-margin>
       <ion-item no-padding class="sentence-ion-item no-selection" *ngFor="let sentence of displayedSentences">
-        <div [@fadeAnimation] class="controls" *ngIf="editModeOn && !parentId">
+        <div class="controls" *ngIf="!parentId">
           <ion-icon (click)="editItem(sentence.id)" name="create" color="warning"></ion-icon>
           <ion-icon (click)="deleteItem(sentence)" name="trash" color="danger"></ion-icon>
         </div>
@@ -60,8 +60,8 @@
 
   </ion-content>
 
-  <ion-fab id="add-sentence-fab" *ngIf="!globals.getIsDemo() && !parentId"
-    [ngClass]="{'hidden-btn': contentIsScrolled}" vertical="bottom" horizontal="end">
+  <ion-fab id="add-sentence-fab" *ngIf="!globals.getIsDemo() && !parentId" [ngClass]="{'hidden-btn': contentIsScrolled}"
+    vertical="bottom" horizontal="end">
     <ion-fab-button (click)="addSentenceToLesson()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
