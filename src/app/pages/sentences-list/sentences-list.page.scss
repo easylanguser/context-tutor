@@ -153,8 +153,14 @@ ion-toolbar {
         padding-left: 3vw;
 
         ion-icon {
-            font-size: 5vh;
+            font-size: 4vh;
             cursor: pointer;
+            border-radius: 4px;
+            transition: background 300ms;
+            -webkit-transition: background 300ms;
+            &:hover {
+                background: var(--ion-color-step-100);
+            }
         }
     }
 }

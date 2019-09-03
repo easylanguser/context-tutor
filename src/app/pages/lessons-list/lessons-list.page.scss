@@ -235,13 +235,21 @@ ion-toolbar {
 
         ion-icon {
             height: 20px;
+            border-radius: 4px;
+            transition: background 300ms;
+            -webkit-transition: background 300ms;
+
+            &:hover {
+                background: var(--ion-color-step-100);
+            }
+
             @media (min-width: 650px) {
                 height: 40px;
             }
         }
 
         .date {
-            color: rgba(0, 0, 0, 0.5);
+            color: var(--ion-color-step-500);
             margin-right: 8px;
         }
 
