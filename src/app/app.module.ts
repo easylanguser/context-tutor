@@ -16,7 +16,6 @@ import { environment } from 'src/environments/environment';
 import { Globals } from './services/globals/globals';
 import { ShareLessonModal } from './modals/share-lesson/share-lesson.modal';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { LongPressChooserComponent } from './components/long-press-chooser/long-press-chooser.component';
 
 export function jwtOptionsFactory(storage) {
 	return {
@@ -28,8 +27,8 @@ export function jwtOptionsFactory(storage) {
 }
 
 @NgModule({
-	declarations: [AppComponent, ShareLessonModal, LongPressChooserComponent],
-	entryComponents: [ShareLessonModal, LongPressChooserComponent],
+	declarations: [AppComponent, ShareLessonModal],
+	entryComponents: [ShareLessonModal],
 	imports: [BrowserModule, IonicModule.forRoot(),
 		AppRoutingModule,
 		ReactiveFormsModule,

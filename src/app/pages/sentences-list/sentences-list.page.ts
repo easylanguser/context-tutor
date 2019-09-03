@@ -4,12 +4,12 @@ import { UtilsService } from '../../services/utils/utils.service';
 import { Sentence } from 'src/app/models/sentence';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { Chart } from 'chart.js';
-import { NavController, ToastController } from '@ionic/angular';
+import { NavController, ToastController, AlertController } from '@ionic/angular';
 import { Globals } from 'src/app/services/globals/globals';
-import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler.service';
 import anime from 'animejs/lib/anime.es';
 import * as _ from 'lodash';
 import { trigger, transition, style, animate, query, stagger, keyframes } from '@angular/animations';
+import { SentenceHttpService } from 'src/app/services/http/sentences/sentence-http.service';
 
 @Component({
 	selector: 'page-sentences-list',
@@ -29,6 +29,16 @@ import { trigger, transition, style, animate, query, stagger, keyframes } from '
 					animate('500ms ease-out', style({ height: 0 }))
 				]), { optional: true })
 			])
+		]),
+		trigger('fadeAnimation', [
+			transition(':enter', [
+				style({ opacity: 0 }),
+				animate('500ms', style({ opacity: 1 }))
+			]),
+			transition(':leave', [
+				style({ opacity: 1 }),
+				animate('500ms', style({ opacity: 0 }))
+			])
 		])
 	]
 })
@@ -45,14 +55,15 @@ export class SentencesListPage implements OnInit {
 	addButtonIsAnimating: boolean = false;
 	contentIsScrolled: boolean = false;
 	firstEnter: boolean = true;
+	editModeOn: boolean = false;
 
 	constructor(
-		private toastController: ToastController,
 		private utils: UtilsService,
 		private route: ActivatedRoute,
+		private alertController: AlertController,
 		private navController: NavController,
 		private lessonsDataService: LessonsDataService,
-		public gestureHandler: GestureHandlerService,
+		private sentenceHttpService: SentenceHttpService,
 		public globals: Globals) { }
 
 	async ngOnInit() {
@@ -82,12 +93,47 @@ export class SentencesListPage implements OnInit {
 		}, 250), { passive: true });
 	}
 
+	toggleEditingMode() {
+		this.editModeOn = !this.editModeOn;
+	}
+
+	async deleteItem(sentence: Sentence) {
+		(await this.alertController.create({
+			message: 'Are you sure you want to delete this sentence?',
+			buttons: [
+				{
+					text: 'Cancel',
+					role: 'cancel'
+				},
+				{
+					text: 'Delete',
+					handler: async () => {
+						await this.sentenceHttpService.deleteSentence(sentence.id);
+						this.lessonsDataService.getLessonById(sentence.lessonId).sentencesCount--;
+						this.lessonsDataService.removeSentence(
+							sentence.lessonId,
+							sentence.id
+						);
+					}
+				}
+			]
+		})).present();
+	}
+
+	editItem(sentenceId: number) {
+		this.navController.navigateForward(['sentence-adding'], {
+			queryParams: {
+				toEdit: sentenceId,
+				lessonId: this.lessonId
+			}
+		});
+	}
+
 	async initData() {
 		this.lessonId = Number(this.route.snapshot.queryParamMap.get('lessonId'));
 		this.parentId = Number(this.route.snapshot.queryParamMap.get('parentId'));
-
 		await this.getData();
-		}
+	}
 
 	private async getData() {
 		const lesson = this.lessonsDataService.getLessonById(this.lessonId);
@@ -117,27 +163,6 @@ export class SentencesListPage implements OnInit {
 		if (this.toast) {
 			await this.toast.dismiss();
 			this.toast = null;
-		}
-	}
-
-	ionItemTouchDown(event: any, sentence: Sentence) {
-		this.gestureHandler.ionItemTouchDown(event, sentence, this.parentId);
-	}
-
-	ionItemTouchUp(evt, sentence: Sentence) {
-		if (this.gestureHandler.ionItemTouchUp(evt)) {
-			this.openSentence(sentence.id);
-		}
-	}
-
-	ionContentTouchStart = (evt) => this.gestureHandler.ionContentTouchStart(evt);
-
-	ionContentTouchEnd(evt) {
-		const filterRes = this.gestureHandler.ionContentTouchEnd(evt);
-		if (filterRes === true) {
-			this.changeFilter(true);
-		} else if (filterRes === false) {
-			this.changeFilter(false);
 		}
 	}
 
@@ -223,71 +248,20 @@ export class SentencesListPage implements OnInit {
 		});
 	}
 
-	async editSentence() {
-		if (this.addButtonIsAnimating)
-			return;
-		this.addButtonIsAnimating = true;
-
-		if (!this.toast) {
-			anime({
-				targets: ['#edit-sentence-icon'],
-				rotate: 180,
-				easing: 'easeInOutBack',
-				duration: 500
-			});
-
-			this.toast = await this.toastController.create({
-				message: 'Select sentence to edit, or click button again to dismiss',
-				mode: 'ios',
-				cssClass: 'toast-black',
-				position: 'top'
-			});
-
-			await this.toast.present();
-			this.addButtonIsAnimating = false;
-		} else {
-			anime({
-				targets: ['#edit-sentence-icon'],
-				rotate: 0,
-				easing: 'easeInOutBack',
-				duration: 500
-			});
-
-			this.toast.dismiss().then(() => {
-				this.toast = null;
-				this.addButtonIsAnimating = false;
-			});
-		}
-	}
-
 	openSentence(sentenceId: number) {
-		if (!this.toast) {
-			this.navController.navigateForward(['sentence-guess'], {
-				queryParams: {
-					current: sentenceId,
-					lessonId: this.lessonId,
-					parentId: this.parentId
-				}
-			});
-		} else {
-			this.navController.navigateForward(['sentence-adding'], {
-				queryParams: {
-					toEdit: sentenceId,
-					lessonId: this.lessonId
-				}
-			});
-			anime({
-				targets: ['#edit-sentence-icon'],
-				rotate: 0,
-				duration: 0
-			});
-		}
+		this.navController.navigateForward(['sentence-guess'], {
+			queryParams: {
+				current: sentenceId,
+				lessonId: this.lessonId,
+				parentId: this.parentId
+			}
+		});
 	}
 
 	async doRefresh(event?: any) {
 		if (!event) {
 			anime({
-				targets: [document.querySelector('#desktop-refresher-sentences')],
+				targets: [document.querySelector('#refresher-button')],
 				rotate: '+=360',
 				elasticity: 50,
 				easing: 'easeOutElastic',

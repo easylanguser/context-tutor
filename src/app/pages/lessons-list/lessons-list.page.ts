@@ -1,14 +1,18 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, AlertController, ModalController } from '@ionic/angular';
 import { Lesson } from 'src/app/models/lesson';
 import { LessonsDataService } from 'src/app/services/lessons-data/lessons-data.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Globals } from 'src/app/services/globals/globals';
-import { GestureHandlerService } from 'src/app/services/gestures/gesture-handler.service';
 import { Chart } from 'chart.js';
 import * as _ from 'lodash';
 import anime from 'animejs/lib/anime.es';
 import { trigger, transition, style, animate, query, stagger, keyframes } from '@angular/animations';
+import { Browser } from '@capacitor/core';
+import { ShareLessonModal } from 'src/app/modals/share-lesson/share-lesson.modal';
+import { LessonHttpService } from 'src/app/services/http/lessons/lesson-http.service';
+
+const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
 
 @Component({
 	selector: 'page-lessons-list',
@@ -28,6 +32,16 @@ import { trigger, transition, style, animate, query, stagger, keyframes } from '
 					animate('400ms ease-out', style({ height: 0 }))
 				]), { optional: true })
 			])
+		]),
+		trigger('fadeAnimation', [
+			transition(':enter', [
+				style({ opacity: 0 }),
+				animate('500ms', style({ opacity: 1 }))
+			]),
+			transition(':leave', [
+				style({ opacity: 1 }),
+				animate('500ms', style({ opacity: 0 }))
+			])
 		])
 	]
 })
@@ -39,12 +53,15 @@ export class LessonsListPage implements OnInit {
 	filter: string = 'all';
 	contentIsScrolled: boolean = false;
 	firstEnter: boolean = true;
+	editModeOn: boolean = false;
 
 	constructor(
 		private navController: NavController,
 		private lessonsDataService: LessonsDataService,
+		private lessonHttpService: LessonHttpService,
 		private utils: UtilsService,
-		public gestureHandler: GestureHandlerService,
+		private alertController: AlertController,
+		private modalController: ModalController,
 		public globals: Globals) { }
 
 	async ngOnInit() {
@@ -57,25 +74,8 @@ export class LessonsListPage implements OnInit {
 		this.firstEnter = false;
 	}
 
-	ionItemTouchDown(lesson: Lesson, event: any) {
-		this.gestureHandler.ionItemTouchDown(lesson, event);
-	}
-
-	ionItemTouchUp(evt, lesson: Lesson) {
-		if (this.gestureHandler.ionItemTouchUp(evt)) {
-			this.openLesson(lesson);
-		}
-	}
-
-	ionContentTouchStart = (evt) => this.gestureHandler.ionContentTouchStart(evt);
-
-	ionContentTouchEnd(evt) {
-		const filterRes = this.gestureHandler.ionContentTouchEnd(evt);
-		if (filterRes === true) {
-			this.changeFilter(true);
-		} else if (filterRes === false) {
-			this.changeFilter(false);
-		}
+	toggleEditingMode() {
+		this.editModeOn = !this.editModeOn;
 	}
 
 	changeFilter(isLeftSwipe: boolean) {
@@ -131,6 +131,48 @@ export class LessonsListPage implements OnInit {
 
 	addLessonFile() {
 		this.navController.navigateForward(['add-lesson']);
+	}
+
+	openLink(lessonUrl: string) {
+		lessonUrl.match(urlRegex) ?
+			Browser.open({ url: lessonUrl }) :
+			this.utils.showToast('Lesson URL is not valid');
+	}
+
+	async deleteItem(lessonId: number) {
+		const alert = await this.alertController.create({
+			message: 'Are you sure you want to delete this lesson?',
+			buttons: [
+				{
+					text: 'Cancel',
+					role: 'cancel'
+				},
+				{
+					text: 'Delete',
+					handler: async () => {
+						await this.lessonHttpService.deleteLesson(lessonId);
+						this.lessonsDataService.removeLesson(lessonId);
+					}
+				}
+			]
+		});
+		alert.present();
+	}
+
+	async shareLesson(lessonId: number) {
+		const modal = await this.modalController.create({
+			component: ShareLessonModal,
+			componentProps: {
+				'lessonId': lessonId
+			}
+		});
+		modal.present();
+	}
+
+	editItem(lessonId: number) {
+		this.navController.navigateForward(['edit-lesson-title'],
+			{ queryParams: { lessonId: lessonId } }
+		);
 	}
 
 	private syncCharts() {
@@ -199,7 +241,10 @@ export class LessonsListPage implements OnInit {
 		this.displayedLessons = this.lessonsDataService.lessons.sort(this.lessonsDataService.sortLessonsByTime);
 	}
 
-	openLesson(lesson: Lesson) {
+	openLesson(lesson: Lesson, ev: any) {
+		if (ev.target.tagName === 'ION-ICON')
+			return;
+
 		this.navController.navigateForward(
 			['sentences-list'], {
 				queryParams: {

@@ -10,16 +10,19 @@
       <ion-title class="no-selection">
         My lessons
       </ion-title>
-      <ion-buttons slot="end" id="desktop-refresher-lessons" *ngIf="this.globals.platformName === 'web' ||
+      <ion-buttons slot="end" id="desktop-refresher-lessons">
+        <ion-button id="edit-lessons-button" (click)="toggleEditingMode()"
+          *ngIf="this.globals.platformName === 'ios' || this.globals.platformName === 'android'">Edit</ion-button>
+        <ion-icon *ngIf="this.globals.platformName === 'web' ||
         this.globals.platformName === 'electron' ||
-        this.globals.platformName === 'desktop'" (click)="doRefresh()">
-        <ion-icon name="refresh-circle"></ion-icon>
+        this.globals.platformName === 'desktop'" name="refresh-circle" (click)="doRefresh()" id="refresher-button">
+        </ion-icon>
       </ion-buttons>
     </ion-toolbar>
 
     <div id="segments-div">
-      <ion-segment id="lessons-filter-segment" class="no-selection" mode="ios"
-        [(ngModel)]="filter" (ionChange)="filterChanged()">
+      <ion-segment id="lessons-filter-segment" class="no-selection" mode="ios" [(ngModel)]="filter"
+        (ionChange)="filterChanged()">
         <ion-segment-button value="all" mode="ios">
           All
         </ion-segment-button>
@@ -38,26 +41,24 @@
     Click button &#8680; <br>to add your own <b> lesson</b>
   </span>
 
-  <ion-content id="list-scroll"
-    (touchstart)="ionContentTouchStart($event)"
-    (touchend)="ionContentTouchEnd($event)"
-    (mousedown)="ionContentTouchStart($event)"
-    (mouseup)="ionContentTouchEnd($event)">
+  <ion-content id="list-scroll">
 
     <ion-refresher *ngIf="this.globals.platformName === 'ios' || this.globals.platformName === 'android'"
-      (ionPull)="this.gestureHandler.refresherIsPulled = true" (ionRefresh)="doRefresh($event)">
+      (ionRefresh)="doRefresh($event)">
       <ion-refresher-content pullingIcon="arrow-dropdown-circle" refreshingSpinner="bubbles">
       </ion-refresher-content>
     </ion-refresher>
 
-    <ion-list id="lessons-list" [@lessonsAnimation]="displayedLessons.length" no-padding no-margin style="padding-top: 2vh; padding-bottom: 8em;">
+    <ion-list id="lessons-list" [@lessonsAnimation]="displayedLessons.length" no-padding no-margin
+      style="padding-top: 2vh; padding-bottom: 8em;">
       <ion-item *ngFor="let lesson of this.displayedLessons" class="lesson-ion-item no-selection" no-padding>
-        <div
-          (touchstart)="ionItemTouchDown($event, lesson)"
-          (touchend)="ionItemTouchUp($event, lesson)"
-          (mousedown)="ionItemTouchDown($event, lesson)"
-          (mouseup)="ionItemTouchUp($event, lesson)"
-          [ngClass]="{'dashed': this.globals.getIsDemo()}">
+        <div [@fadeAnimation] class="mobile-controls" *ngIf="(this.globals.platformName === 'ios' || this.globals.platformName === 'android') && this.editModeOn">
+          <ion-icon (click)="openLink(lesson.url)" name="globe" color="secondary"></ion-icon>
+          <ion-icon (click)="shareLesson(lesson.id)" name="share-alt" color="primary"></ion-icon>
+          <ion-icon (click)="editItem(lesson.id)" name="create" color="warning"></ion-icon>
+          <ion-icon (click)="deleteItem(lesson.id)" name="trash" color="danger"></ion-icon>
+        </div>
+        <div [ngStyle]="{'transform': this.editModeOn ? 'translateX(30%)' : 'translateX(0)'}" [ngClass]="{'dashed': this.globals.getIsDemo()}" (click)="openLesson(lesson, $event)">
           <div>
             <p>
               {{lesson.name}}
@@ -68,6 +69,13 @@
             <span class="sentences-number">
               ({{lesson.sentencesCount}})
             </span>
+            <div class="desktop-controls" *ngIf="this.globals.platformName === 'web' || 
+              this.globals.platformName === 'electron' || this.globals.platformName === 'desktop'">
+              <ion-icon (click)="openLink(lesson.url)" name="globe" color="secondary"></ion-icon>
+              <ion-icon (click)="shareLesson(lesson.id)" name="share-alt" color="primary"></ion-icon>
+              <ion-icon (click)="editItem(lesson.id)" name="create" color="warning"></ion-icon>
+              <ion-icon (click)="deleteItem(lesson.id)" name="trash" color="danger"></ion-icon>
+            </div>
           </div>
           <ion-icon id="share-icon" *ngIf="lesson.parentId" name="md-share"></ion-icon>
           <div>
