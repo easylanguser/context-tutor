@@ -62,14 +62,16 @@
         <div [ngStyle]="{'transform': this.editModeOn ? 'translateX(30%)' : 'translateX(0)'}"
           [ngClass]="{'dashed': this.globals.getIsDemo()}" (click)="openLesson(lesson, $event)">
           <div>
-            <p>
-              {{lesson.name}}
-            </p>
+            <div>
+              <p>
+                {{lesson.name}}
+              </p>
+              <div class="sentences-number">
+                ({{lesson.sentencesCount}})
+              </div>
+            </div>
             <div class="date">
               {{lesson.displayedDate}}
-            </div>
-            <div class="sentences-number">
-              ({{lesson.sentencesCount}})
             </div>
             <div class="desktop-controls" *ngIf="this.globals.platformName === 'web' || 
               this.globals.platformName === 'electron' || this.globals.platformName === 'desktop'">

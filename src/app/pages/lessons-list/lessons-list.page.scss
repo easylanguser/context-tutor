@@ -186,18 +186,9 @@ ion-toolbar {
         vertical-align: top;
         padding: 1vh 4vw 0 4vw;
 
-        .desktop-controls {
-            display: inline-block;
-            font-size: 3vmin;
-            height: 40px;
-
-            @media (max-width: 650px) {
-                font-size: 5vmin;
-            }
-
-            ion-icon {
-                margin: 0 3px;
-            }
+        >:first-child {
+            display: flex;
+            flex-flow: row;
         }
 
         p {
@@ -210,18 +201,17 @@ ion-toolbar {
             max-height: 6vh;
             margin: 0;
             font-weight: bold;
+            margin-right: 12px;
 
             @media (max-width: 350px) {
                 font-size: 2.5vh;
             }
         }
 
-        div {
+        .date, .desktop-controls {
             vertical-align: top;
             line-height: 20px;
             display: inline-block;
-            bottom: 3.5vh;
-            font-size: 3vmin;
             font-weight: bold;
             font-family: "Arial";
             height: 20px;
@@ -229,13 +219,20 @@ ion-toolbar {
             @media (min-width: 650px) {
                 line-height: 40px;
                 height: 40px;
-                font-size: 1.5vmin;
+            }
+        }
+
+        .date, .desktop-controls {
+            font-size: 4.5vmin;
+            @media (min-width: 992px) {
+                font-size: 2vmin;
             }
         }
 
         ion-icon {
             height: 20px;
             border-radius: 4px;
+            margin: 0 3px;
             transition: background 300ms;
             -webkit-transition: background 300ms;
 
@@ -255,7 +252,9 @@ ion-toolbar {
 
         .sentences-number {
             color: orange;
-            margin-right: 16px;
+            font-size: 2vh;
+            line-height: 5.8vh;
+            font-weight: bold;
         }
     }
 
