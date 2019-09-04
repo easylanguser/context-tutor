@@ -222,7 +222,14 @@ ion-toolbar {
             }
         }
 
-        .date, .desktop-controls {
+        .date {
+            font-size: 3vmin;
+            @media (min-width: 992px) {
+                font-size: 1.5vmin;
+            }
+        }
+
+        .desktop-controls {
             font-size: 4.5vmin;
             @media (min-width: 992px) {
                 font-size: 2vmin;
